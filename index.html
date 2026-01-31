@@ -1,45 +1,298 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MAKER3D</title>
-  <link rel="stylesheet" href="./assets/style.css">
-</head>
-<body>
-  <header class="nav">
-    <div class="nav-inner">
-      <div class="brand"><a href="./index.html">MAKER3D</a></div>
 
-      <div class="links">
-        <a class="link" href="./catalogo.html">Catálogo</a>
-        <a class="link" href="./contato.html">Contato</a>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+
+  <!-- Model Viewer (3D) -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+
+<body>
+  <!-- Background -->
+  <div class="bg">
+    <div class="bg__grain"></div>
+    <div class="bg__glow"></div>
+    <div class="bg__watermark" aria-hidden="true">
+      <span>MAKER3D</span><span>MAKER3D</span><span>MAKER3D</span>
+      <span>MAKER3D</span><span>MAKER3D</span><span>MAKER3D</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="#home" data-nav="home" aria-label="MAKER3D - Home">
+        <!-- Troque pelo seu SVG real (mantendo viewBox) -->
+        <svg class="brand__logo" viewBox="0 0 128 128" role="img" aria-label="Logo Maker3D" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="var(--a-1)"/>
+              <stop offset="50%" stop-color="var(--a-2)"/>
+              <stop offset="100%" stop-color="var(--a-3)"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#g)" d="M64 10c29.8 0 54 24.2 54 54s-24.2 54-54 54S10 93.8 10 64 34.2 10 64 10zm0 14C42 24 24 42 24 64s18 40 40 40 40-18 40-40S86 24 64 24zm0 18c12.2 0 22 9.8 22 22s-9.8 22-22 22-22-9.8-22-22 9.8-22 22-22z"/>
+        </svg>
+
+        <div class="brand__text">
+          <div class="brand__name">MAKER3D</div>
+          <div class="brand__tag">Projetos • Impressão 3D • Tecnologia</div>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <button class="pill pill--ghost nav__link" data-nav="catalogo" type="button">Catálogo</button>
+        <button class="pill pill--ghost nav__link" data-nav="contato" type="button">Contato</button>
+        <button class="pill nav__menu" id="btnMenu" type="button" aria-label="Abrir menu">
+          <span class="icon">
+            <span></span><span></span><span></span>
+          </span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Menu mobile -->
+    <div class="mobileMenu" id="mobileMenu" hidden>
+      <div class="wrap mobileMenu__inner">
+        <button class="pill pill--ghost mobileMenu__item" data-nav="home" type="button">Home</button>
+        <button class="pill pill--ghost mobileMenu__item" data-nav="catalogo" type="button">Catálogo</button>
+        <button class="pill pill--ghost mobileMenu__item" data-nav="contato" type="button">Contato</button>
       </div>
     </div>
   </header>
 
-  <main class="container">
-    <section class="hero">
-      <h1>MAKER3D</h1>
-      <p>Projetos • Impressão 3D • Tecnologia</p>
-      <div style="height:18px"></div>
-      <div class="row" style="justify-content:center">
-        <a class="btn btn-primary" href="./catalogo.html">Ver Catálogo</a>
-        <a class="btn" href="./contato.html">Fazer Contato</a>
+  <!-- Main -->
+  <main class="wrap main">
+    <!-- HOME -->
+    <section class="view" id="home" data-view="home">
+      <div class="hero">
+        <div class="hero__content">
+          <div class="badge">
+            <span class="dot"></span>
+            Catálogo inteligente • Orçamento rápido • Modelos 3D
+          </div>
+
+          <h1 class="hero__title">MAKER3D</h1>
+          <p class="hero__subtitle">
+            Uma vitrine limpa e moderna para suas peças, serviços e projetos.
+            Tudo com estilo “pill”, sem preto e com visual premium.
+          </p>
+
+          <div class="hero__actions">
+            <button class="pill pill--primary" data-nav="catalogo" type="button">Ver Catálogo</button>
+            <button class="pill pill--soft" data-nav="contato" type="button">Fazer Contato</button>
+          </div>
+
+          <div class="infoBox">
+            <div class="infoBox__title">Como vai funcionar</div>
+            <div class="infoBox__text">
+              Você coloca seus produtos em <code>assets/products.json</code>.
+              O catálogo filtra automaticamente por busca, categoria e ordenação.
+              Ao clicar em um item, abre um painel com <b>opções</b> e o <b>modelo 3D</b>.
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__side">
+          <div class="glassCard">
+            <div class="glassCard__kicker">Destaques</div>
+            <div class="glassCard__title">Padrão premium</div>
+            <ul class="glassCard__list">
+              <li>Mobile-first (celular antes do PC)</li>
+              <li>Cards novos, uniformes e minimalistas</li>
+              <li>Filtros em pílulas (sem “barra estranha”)</li>
+              <li>Detalhes com opções + visualizador 3D</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
-    <div class="card">
-      <div class="pad">
-        <h3>Como vai funcionar</h3>
-        <div class="small">
-          Você coloca seus produtos no arquivo <b>assets/products.json</b>.
-          O catálogo filtra automaticamente por busca, categoria e preço.
+    <!-- CATALOGO -->
+    <section class="view" id="catalogo" data-view="catalogo" hidden>
+      <div class="sectionHead">
+        <div>
+          <h2 class="sectionHead__title">Catálogo</h2>
+          <p class="sectionHead__desc">Busque, filtre e clique para ver opções e o modelo 3D.</p>
+        </div>
+        <div class="sectionHead__actions">
+          <button class="pill pill--ghost" id="btnFilters" type="button">Filtros</button>
+          <button class="pill pill--soft" data-nav="home" type="button">Voltar</button>
+        </div>
+      </div>
+
+      <!-- Linha principal: search + sort -->
+      <div class="toolbar">
+        <div class="search">
+          <span class="search__icon" aria-hidden="true">⌕</span>
+          <input id="q" class="search__input" type="search" placeholder="Buscar: ex. engrenagem, suporte, case..." autocomplete="off"/>
+        </div>
+
+        <div class="sortPill">
+          <label class="sortPill__label" for="sort">Ordenar</label>
+          <select id="sort" class="sortPill__select">
+            <option value="featured">Destaques</option>
+            <option value="priceAsc">Preço ↑</option>
+            <option value="priceDesc">Preço ↓</option>
+            <option value="nameAsc">Nome A→Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Chips de categoria (pill) -->
+      <div class="chips" id="chips"></div>
+
+      <!-- Grid -->
+      <div class="grid" id="grid" aria-live="polite"></div>
+
+      <div class="empty" id="empty" hidden>
+        <div class="empty__title">Nada encontrado</div>
+        <div class="empty__text">Tente outra busca ou selecione “Todas”.</div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section class="view" id="contato" data-view="contato" hidden>
+      <div class="sectionHead">
+        <div>
+          <h2 class="sectionHead__title">Contato</h2>
+          <p class="sectionHead__desc">Deixe seus canais aqui (WhatsApp, Instagram, e-mail).</p>
+        </div>
+        <div class="sectionHead__actions">
+          <button class="pill pill--soft" data-nav="home" type="button">Voltar</button>
+        </div>
+      </div>
+
+      <div class="contactGrid">
+        <div class="panel">
+          <div class="panel__title">Mensagem rápida</div>
+          <p class="panel__text">
+            Você pode ligar o botão “Pedir orçamento” direto pro WhatsApp com o ID do produto e a opção escolhida.
+          </p>
+
+          <div class="contactPills">
+            <a class="pill pill--primary" href="#" id="ctaWhatsapp" role="button">WhatsApp</a>
+            <a class="pill pill--soft" href="#" id="ctaInstagram" role="button">Instagram</a>
+            <a class="pill pill--ghost" href="mailto:seuemail@dominio.com" role="button">E-mail</a>
+          </div>
+        </div>
+
+        <div class="panel panel--soft">
+          <div class="panel__title">Dica</div>
+          <p class="panel__text">
+            Se você imprimir na Ender 3 V3 SE, dá pra colocar no produto o material, tempo de impressão e acabamento como “opções”
+            — e o cliente já pede orçamento exatamente do jeito certo.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Sheet: Filtros (mobile) -->
+  <div class="sheet" id="sheetFilters" hidden>
+    <div class="sheet__backdrop" data-close="sheet"></div>
+    <div class="sheet__panel" role="dialog" aria-modal="true" aria-label="Filtros do catálogo">
+      <div class="sheet__head">
+        <div class="sheet__title">Filtros</div>
+        <button class="pill pill--ghost" data-close="sheet" type="button">Fechar</button>
+      </div>
+
+      <div class="sheet__body">
+        <div class="field">
+          <div class="field__label">Categoria</div>
+          <select id="catSelect" class="field__control"></select>
+        </div>
+
+        <div class="field">
+          <div class="field__label">Preço máximo (opcional)</div>
+          <input id="maxPrice" class="field__control" type="number" min="0" step="1" placeholder="Ex: 60" />
+          <div class="field__hint">Se deixar vazio, não filtra por preço.</div>
+        </div>
+
+        <button class="pill pill--primary sheet__apply" id="applyFilters" type="button">Aplicar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Detalhes -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal__backdrop" data-close="modal"></div>
+
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
+      <div class="modal__head">
+        <div class="modal__title" id="mTitle">Produto</div>
+        <button class="pill pill--ghost" data-close="modal" type="button">Fechar</button>
+      </div>
+
+      <div class="modal__body">
+        <div class="modalGrid">
+          <!-- Preview -->
+          <div class="preview">
+            <div class="preview__frame">
+              <img id="mImage" class="preview__img" alt="" />
+            </div>
+
+            <div class="pillRow">
+              <span class="pillTag" id="mCat">Categoria</span>
+              <span class="pillTag pillTag--accent" id="mPrice">R$ 0,00</span>
+              <span class="pillTag pillTag--soft" id="mId">ID: -</span>
+            </div>
+
+            <div class="desc" id="mDesc"></div>
+          </div>
+
+          <!-- Options + 3D -->
+          <div class="detail">
+            <div class="tabs">
+              <button class="pill pill--soft tab is-active" data-tab="opcoes" type="button">Opções</button>
+              <button class="pill pill--soft tab" data-tab="model3d" type="button">Modelo 3D</button>
+            </div>
+
+            <div class="tabView" id="tab-opcoes">
+              <div class="optList" id="mOptions"></div>
+
+              <div class="ctaRow">
+                <button class="pill pill--primary" id="mQuote" type="button">Pedir orçamento</button>
+                <button class="pill pill--ghost" id="mCopy" type="button">Copiar resumo</button>
+              </div>
+
+              <div class="hint">
+                Dica: configure o WhatsApp/Instagram no <code>app.js</code> (links de contato).
+              </div>
+            </div>
+
+            <div class="tabView" id="tab-model3d" hidden>
+              <div class="modelBox">
+                <model-viewer
+                  id="mModel"
+                  src=""
+                  ar
+                  camera-controls
+                  touch-action="pan-y"
+                  exposure="0.9"
+                  shadow-intensity="0.35"
+                  alt="Modelo 3D do produto">
+                </model-viewer>
+              </div>
+              <div class="hint">
+                Use <code>.glb</code> ou <code>.gltf</code>. Se não tiver modelo, essa aba some automaticamente.
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="footer-space"></div>
-  </main>
+  <script src="./app.js"></script>
 </body>
 </html>
