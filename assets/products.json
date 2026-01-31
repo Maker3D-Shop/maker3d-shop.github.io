@@ -1,0 +1,37 @@
+[
+  {
+    "id": "p1",
+    "nome": "Suporte para Celular",
+    "categoria": "Acessórios",
+    "preco": 19.90,
+    "imagem": "https://picsum.photos/seed/maker3d1/800/500"
+  },
+  {
+    "id": "p2",
+    "nome": "Engrenagem Decorativa",
+    "categoria": "Decoração",
+    "preco": 34.90,
+    "imagem": "https://picsum.photos/seed/maker3d2/800/500"
+  },
+  {
+    "id": "p3",
+    "nome": "Case Eletrônica (RP2040)",
+    "categoria": "Eletrônica",
+    "preco": 49.90,
+    "imagem": "https://picsum.photos/seed/maker3d3/800/500"
+  },
+  {
+    "id": "p4",
+    "nome": "Organizador de Ferramentas",
+    "categoria": "Oficina",
+    "preco": 59.90,
+    "imagem": "https://picsum.photos/seed/maker3d4/800/500"
+  },
+  {
+    "id": "p5",
+    "nome": "Peça Custom (sob medida)",
+    "categoria": "Serviços",
+    "preco": 0,
+    "imagem": "https://picsum.photos/seed/maker3d5/800/500"
+  }
+]
