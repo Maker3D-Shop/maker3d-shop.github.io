@@ -1,10 +1,11 @@
-:root{
-  --bg:#070a0f;
-  --card:#0e1420cc;
-  --text:#e8eefc;
-  --muted:#9aa4b2;
-  --accent:#ffb000;
-  --border:#1f2a3a;
+:root {
+  --bg-main: #ffb36a;     /* laranja base */
+  --bg-accent: #ff6a3d;  /* coral */
+  --bg-pink: #ff5fa2;    /* magenta */
+  --bg-yellow: #ffd166;  /* amarelo */
+  --text-main: #5a2a00;  /* marrom quente (no lugar do preto) */
+  --text-soft: #7a3f10;
+  --card-bg: rgba(255,255,255,0.65);
 }
 
 *{box-sizing:border-box}
