@@ -1,379 +1,164 @@
-/* ========= CONFIG RÁPIDA =========
-  Coloque seus links aqui:
-*/
-const CONTACT = {
-  whatsapp: "https://wa.me/5500000000000?text=", // <- TROQUE
-  instagram: "https://instagram.com/seuuser",     // <- TROQUE
-};
+// Maker3D — catálogo + modal + 3D viewer
 
-const state = {
-  products: [],
-  query: "",
-  category: "Todas",
-  maxPrice: null,
-  sort: "featured",
-};
+const PRODUCTS = [
+  {
+    id: "keychain",
+    name: "Chaveiro 3D Premium",
+    category: "Acessórios",
+    desc: "Acabamento limpo, ideal para presente e marcas.",
+    priceFrom: "a partir de R$ 14,90",
+    // coloque a imagem real em assets/img/...
+    image: "assets/img/prod-1.jpg",
+    // coloque o .glb em assets/models/...
+    model: "assets/models/prod-1.glb",
+    options: [
+      { label: "Tamanho", values: ["P", "M", "G"] },
+      { label: "Cor", values: ["Âmbar", "Creme", "Coral"] },
+      { label: "Personalização", values: ["Sem nome", "Com nome"] }
+    ],
+    note: "Prazo médio: 2–4 dias. Personalização pode variar."
+  },
+  {
+    id: "miniature",
+    name: "Miniatura Decorativa",
+    category: "Decoração",
+    desc: "Modelo detalhado com visual sofisticado.",
+    priceFrom: "sob consulta",
+    image: "assets/img/prod-2.jpg",
+    model: "assets/models/prod-2.glb",
+    options: [
+      { label: "Altura", values: ["8cm", "12cm", "18cm"] },
+      { label: "Acabamento", values: ["Fosco", "Semi-brilho"] }
+    ],
+    note: "Se quiser, mando prévia em foto antes do envio."
+  },
+  {
+    id: "prototype",
+    name: "Protótipo Técnico",
+    category: "Engenharia",
+    desc: "Impressão precisa para testes e encaixes.",
+    priceFrom: "a partir de R$ 49,90",
+    image: "assets/img/prod-3.jpg",
+    model: "assets/models/prod-3.glb",
+    options: [
+      { label: "Material", values: ["PLA", "PETG"] },
+      { label: "Qualidade", values: ["Rápida", "Padrão", "Detalhada"] }
+    ],
+    note: "Envie medidas/arquivo STL para orçamento exato."
+  },
+  {
+    id: "kit",
+    name: "Kit Organizadores",
+    category: "Utilidades",
+    desc: "Padrão modular, encaixe e estética clean.",
+    priceFrom: "a partir de R$ 29,90",
+    image: "assets/img/prod-4.jpg",
+    model: "assets/models/prod-4.glb",
+    options: [
+      { label: "Quantidade", values: ["2 peças", "4 peças", "8 peças"] }
+    ],
+    note: "Também faço sob medida pro seu espaço."
+  }
+];
 
-const $ = (sel, root=document) => root.querySelector(sel);
-const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+function $(sel){ return document.querySelector(sel); }
 
-function brl(n){
-  if (typeof n !== "number") return "Sob consulta";
-  return n.toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
-}
+function renderCatalog(targetId){
+  const root = document.getElementById(targetId);
+  if(!root) return;
 
-function unique(arr){ return [...new Set(arr)]; }
-
-function bySort(list, sort){
-  const copy = [...list];
-  if (sort === "priceAsc") return copy.sort((a,b)=>(a.price ?? 1e18) - (b.price ?? 1e18));
-  if (sort === "priceDesc") return copy.sort((a,b)=>(b.price ?? -1) - (a.price ?? -1));
-  if (sort === "nameAsc") return copy.sort((a,b)=>a.name.localeCompare(b.name));
-  // featured: mantém a ordem do JSON (você controla)
-  return copy;
-}
-
-function matches(p){
-  const q = state.query.trim().toLowerCase();
-  const catOk = state.category === "Todas" || p.category === state.category;
-
-  const priceOk = (state.maxPrice == null)
-    ? true
-    : (typeof p.price === "number" ? p.price <= state.maxPrice : true);
-
-  const qOk = !q
-    ? true
-    : (
-      p.name.toLowerCase().includes(q) ||
-      (p.tags || []).join(" ").toLowerCase().includes(q) ||
-      (p.description || "").toLowerCase().includes(q)
-    );
-
-  return catOk && priceOk && qOk;
-}
-
-/* ---------- NAV (1 página com views) ---------- */
-function showView(name){
-  $$(".view").forEach(v => v.hidden = v.dataset.view !== name);
-  // fecha menu mobile se aberto
-  const mm = $("#mobileMenu");
-  if (!mm.hidden) mm.hidden = true;
-  history.replaceState(null, "", `#${name}`);
-}
-
-function setupNav(){
-  function go(name){ showView(name); }
-
-  document.body.addEventListener("click", (e)=>{
-    const btn = e.target.closest("[data-nav]");
-    if (!btn) return;
-    const name = btn.dataset.nav;
-    go(name);
-  });
-
-  $("#btnMenu").addEventListener("click", ()=>{
-    const mm = $("#mobileMenu");
-    mm.hidden = !mm.hidden;
-  });
-
-  // hash init
-  const h = (location.hash || "#home").replace("#","");
-  if (["home","catalogo","contato"].includes(h)) showView(h);
-}
-
-/* ---------- FILTROS UI ---------- */
-function buildChips(categories){
-  const box = $("#chips");
-  box.innerHTML = "";
-
-  const all = ["Todas", ...categories];
-  all.forEach(cat=>{
-    const b = document.createElement("button");
-    b.className = "chip" + (state.category === cat ? " is-active" : "");
-    b.type = "button";
-    b.textContent = cat;
-    b.addEventListener("click", ()=>{
-      state.category = cat;
-      render();
-      buildChips(categories);
-      // sincroniza sheet select
-      $("#catSelect").value = cat;
-    });
-    box.appendChild(b);
-  });
-}
-
-function buildSheetCategories(categories){
-  const sel = $("#catSelect");
-  sel.innerHTML = "";
-  ["Todas", ...categories].forEach(c=>{
-    const o = document.createElement("option");
-    o.value = c;
-    o.textContent = c;
-    sel.appendChild(o);
-  });
-  sel.value = state.category;
-}
-
-function openSheet(){
-  $("#sheetFilters").hidden = false;
-}
-function closeSheet(){
-  $("#sheetFilters").hidden = true;
-}
-function openModal(){
-  $("#modal").hidden = false;
-}
-function closeModal(){
-  $("#modal").hidden = true;
-}
-
-/* ---------- RENDER GRID ---------- */
-function cardTemplate(p){
-  const priceLabel = (typeof p.price === "number") ? brl(p.price) : "Sob consulta";
-
-  return `
-    <article class="card" data-open="${p.id}">
-      <div class="card__media">
-        <img class="card__img" src="${p.image}" alt="${p.name}">
-        <div class="card__overlay"></div>
-      </div>
-
-      <div class="card__body">
-        <h3 class="card__title">${p.name}</h3>
-
-        <div class="card__meta">
-          <span class="pillTag">${p.category}</span>
-          <span class="pillTag pillTag--accent">${priceLabel}</span>
+  root.innerHTML = PRODUCTS.map(p => `
+    <article class="card">
+      <div class="product">
+        <div class="thumb">
+          <img src="${p.image}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'">
         </div>
 
-        <div class="card__footer">
-          <button class="pill pill--primary card__cta" data-open="${p.id}" type="button">Ver opções</button>
-          <span class="card__ghost">ID: ${p.id}</span>
+        <div class="pmeta">
+          <div class="top">
+            <p class="pname">${escapeHtml(p.name)}</p>
+            <span class="tag">${escapeHtml(p.category)}</span>
+          </div>
+          <p class="pdesc">${escapeHtml(p.desc)}</p>
+        </div>
+
+        <div class="pactions">
+          <button class="btn primary" data-open="${p.id}">Ver opções</button>
+          <a class="btn ghost" href="contato.html">Comprar</a>
         </div>
       </div>
     </article>
-  `;
-}
+  `).join("");
 
-function render(){
-  const list = bySort(state.products.filter(matches), state.sort);
-
-  const grid = $("#grid");
-  const empty = $("#empty");
-
-  grid.innerHTML = list.map(cardTemplate).join("");
-
-  empty.hidden = list.length !== 0;
-
-  // events: abrir modal
-  $$("[data-open]", grid).forEach(el=>{
-    el.addEventListener("click", (e)=>{
-      const id = el.dataset.open;
-      openProduct(id);
-    });
+  root.addEventListener("click", (e)=>{
+    const btn = e.target.closest("[data-open]");
+    if(!btn) return;
+    const id = btn.getAttribute("data-open");
+    const product = PRODUCTS.find(x=>x.id===id);
+    if(product) openModal(product);
   });
 }
 
-/* ---------- MODAL: opções + 3D ---------- */
-let selected = {
-  id: null,
-  choices: {} // optionName -> choice
-};
-
-function setTab(tabName){
-  $$(".tab").forEach(t => t.classList.toggle("is-active", t.dataset.tab === tabName));
-  $("#tab-opcoes").hidden = tabName !== "opcoes";
-  $("#tab-model3d").hidden = tabName !== "model3d";
-}
-
-function openProduct(id){
-  const p = state.products.find(x=>x.id===id);
-  if (!p) return;
-
-  selected.id = id;
-  selected.choices = {};
-
+function openModal(p){
   $("#mTitle").textContent = p.name;
-  $("#mImage").src = p.image;
-  $("#mImage").alt = p.name;
-  $("#mCat").textContent = p.category;
-  $("#mId").textContent = `ID: ${p.id}`;
-  $("#mDesc").textContent = p.description || "";
+  $("#mCategory").textContent = p.category;
+  $("#mDesc").textContent = p.desc;
+  $("#mPrice").textContent = p.priceFrom;
+  $("#mNote").textContent = p.note || "";
 
-  $("#mPrice").textContent = (typeof p.price === "number") ? brl(p.price) : "Sob consulta";
+  // options
+  const box = $("#mOptions");
+  box.innerHTML = p.options.map((opt, i) => `
+    <div class="panel">
+      <p class="small" style="margin:0 0 8px; font-weight:900">${escapeHtml(opt.label)}</p>
+      <select class="select" aria-label="${escapeHtml(opt.label)}">
+        ${opt.values.map(v=>`<option>${escapeHtml(v)}</option>`).join("")}
+      </select>
+    </div>
+  `).join("");
 
-  // Opções
-  const optBox = $("#mOptions");
-  optBox.innerHTML = "";
-
-  const options = Array.isArray(p.options) ? p.options : [];
-  if (options.length === 0){
-    optBox.innerHTML = `
-      <div class="opt">
-        <div class="opt__title">Sem opções configuradas</div>
-        <div style="color: rgba(255,255,255,.74); font-weight:700;">
-          Você pode adicionar opções no <code>assets/products.json</code>.
-        </div>
-      </div>
-    `;
-  } else {
-    options.forEach(opt=>{
-      const wrap = document.createElement("div");
-      wrap.className = "opt";
-      wrap.innerHTML = `
-        <div class="opt__title">${opt.name}</div>
-        <div class="opt__choices"></div>
-      `;
-      const choicesBox = $(".opt__choices", wrap);
-
-      (opt.values || []).forEach((val, idx)=>{
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "choice" + (idx===0 ? " is-active" : "");
-        b.textContent = val;
-        b.addEventListener("click", ()=>{
-          // marcar ativo
-          $$(".choice", choicesBox).forEach(x=>x.classList.remove("is-active"));
-          b.classList.add("is-active");
-          selected.choices[opt.name] = val;
-        });
-        choicesBox.appendChild(b);
-
-        // default: primeira escolha
-        if (idx===0) selected.choices[opt.name] = val;
-      });
-
-      optBox.appendChild(wrap);
-    });
+  // model viewer
+  const viewer = $("#mViewer");
+  if(p.model){
+    viewer.setAttribute("src", p.model);
+    viewer.style.display = "";
+  }else{
+    viewer.style.display = "none";
   }
 
-  // Modelo 3D
-  const hasModel = !!p.modelUrl;
-  const modelTabBtn = $$(".tab").find(t=>t.dataset.tab==="model3d");
+  // whatsapp message
+  const wpp = $("#mWhats");
+  wpp.onclick = () => {
+    const selects = [...box.querySelectorAll("select")];
+    const picked = selects.map((s, idx) => `${p.options[idx].label}: ${s.value}`).join(" | ");
+    const text = `Olá! Quero comprar: ${p.name}. Opções: ${picked}.`;
+    const phone = "5531984566047"; // seu número
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, "_blank");
+  };
 
-  if (hasModel){
-    $("#mModel").src = p.modelUrl;
-    modelTabBtn.hidden = false;
-  } else {
-    $("#mModel").src = "";
-    modelTabBtn.hidden = true;
-  }
-
-  // Tab inicial
-  setTab("opcoes");
-
-  // botões
-  $("#mQuote").onclick = ()=> requestQuote(p);
-  $("#mCopy").onclick = ()=> copySummary(p);
-
-  // tabs
-  $$(".tab").forEach(t=>{
-    t.onclick = ()=> setTab(t.dataset.tab);
-  });
-
-  openModal();
+  $("#modal").classList.add("open");
+  document.body.style.overflow = "hidden";
 }
 
-function buildSummary(p){
-  const choiceLines = Object.entries(selected.choices)
-    .map(([k,v])=>`- ${k}: ${v}`)
-    .join("\n");
-
-  const priceLine = (typeof p.price === "number") ? brl(p.price) : "Sob consulta";
-
-  return `MAKER3D • Orçamento
-Produto: ${p.name}
-ID: ${p.id}
-Categoria: ${p.category}
-Preço: ${priceLine}
-Opções:
-${choiceLines || "- (nenhuma)"}
-`;
+function closeModal(){
+  $("#modal").classList.remove("open");
+  document.body.style.overflow = "";
 }
 
-async function copySummary(p){
-  const txt = buildSummary(p);
-  try{
-    await navigator.clipboard.writeText(txt);
-    $("#mCopy").textContent = "Copiado ✓";
-    setTimeout(()=> $("#mCopy").textContent = "Copiar resumo", 900);
-  } catch {
-    alert(txt);
-  }
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+  }[m]));
 }
 
-function requestQuote(p){
-  const msg = encodeURIComponent(buildSummary(p));
-  const url = CONTACT.whatsapp + msg;
-  window.open(url, "_blank", "noopener,noreferrer");
-}
+document.addEventListener("click", (e)=>{
+  if(e.target.matches("[data-close]")) closeModal();
+  if(e.target.id==="modal") closeModal();
+});
 
-/* ---------- INICIALIZA ---------- */
-async function loadProducts(){
-  const res = await fetch("./assets/products.json");
-  const data = await res.json();
-  state.products = Array.isArray(data) ? data : [];
+document.addEventListener("keydown", (e)=>{
+  if(e.key==="Escape") closeModal();
+});
 
-  const categories = unique(state.products.map(p=>p.category)).sort((a,b)=>a.localeCompare(b));
-
-  buildChips(categories);
-  buildSheetCategories(categories);
-
-  // contatos
-  $("#ctaWhatsapp").href = CONTACT.whatsapp + encodeURIComponent("Olá! Quero um orçamento 🙂");
-  $("#ctaInstagram").href = CONTACT.instagram;
-
-  render();
-}
-
-function setupControls(){
-  $("#q").addEventListener("input", (e)=>{
-    state.query = e.target.value || "";
-    render();
-  });
-
-  $("#sort").addEventListener("change", (e)=>{
-    state.sort = e.target.value;
-    render();
-  });
-
-  // abrir sheet
-  $("#btnFilters").addEventListener("click", openSheet);
-
-  // fechar sheet / modal clicando fora e no botão
-  document.body.addEventListener("click", (e)=>{
-    const close = e.target.closest("[data-close]");
-    if (!close) return;
-    const what = close.dataset.close;
-    if (what === "sheet") closeSheet();
-    if (what === "modal") closeModal();
-  });
-
-  // aplicar sheet
-  $("#applyFilters").addEventListener("click", ()=>{
-    state.category = $("#catSelect").value;
-
-    const mp = $("#maxPrice").value;
-    state.maxPrice = (mp === "" ? null : Number(mp));
-
-    closeSheet();
-
-    // re-render + chips sync
-    const categories = unique(state.products.map(p=>p.category)).sort((a,b)=>a.localeCompare(b));
-    buildChips(categories);
-    render();
-  });
-
-  // ESC fecha modal/sheet
-  window.addEventListener("keydown", (e)=>{
-    if (e.key === "Escape"){
-      if (!$("#modal").hidden) closeModal();
-      if (!$("#sheetFilters").hidden) closeSheet();
-    }
-  });
-}
-
-setupNav();
-setupControls();
-loadProducts();
+// init
+renderCatalog("catalogGrid");
