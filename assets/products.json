@@ -1,37 +1,73 @@
 [
   {
     "id": "p1",
-    "nome": "Suporte para Celular",
-    "categoria": "Acessórios",
-    "preco": 19.90,
-    "imagem": "https://picsum.photos/seed/maker3d1/800/500"
+    "name": "Suporte para Celular",
+    "category": "Acessórios",
+    "price": 19.9,
+    "image": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=1200&q=60",
+    "description": "Suporte impresso em 3D com encaixe firme e design minimalista.",
+    "tags": ["suporte", "celular", "mesa", "acessório"],
+    "options": [
+      { "name": "Material", "values": ["PLA", "PETG"] },
+      { "name": "Cor", "values": ["Âmbar", "Magenta", "Laranja", "Fumê"] }
+    ],
+    "modelUrl": "assets/models/suporte.glb"
   },
   {
     "id": "p2",
-    "nome": "Engrenagem Decorativa",
-    "categoria": "Decoração",
-    "preco": 34.90,
-    "imagem": "https://picsum.photos/seed/maker3d2/800/500"
+    "name": "Engrenagem Decorativa",
+    "category": "Decoração",
+    "price": 34.9,
+    "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=60",
+    "description": "Peça decorativa com acabamento suave e bordas arredondadas.",
+    "tags": ["engrenagem", "decor", "gears"],
+    "options": [
+      { "name": "Acabamento", "values": ["Fosco", "Semi-brilho"] },
+      { "name": "Tamanho", "values": ["Pequeno", "Médio", "Grande"] }
+    ],
+    "modelUrl": "assets/models/engrenagem.glb"
   },
   {
     "id": "p3",
-    "nome": "Case Eletrônica (RP2040)",
-    "categoria": "Eletrônica",
-    "preco": 49.90,
-    "imagem": "https://picsum.photos/seed/maker3d3/800/500"
+    "name": "Case Eletrônica (RP2040)",
+    "category": "Eletrônica",
+    "price": 49.9,
+    "image": "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1200&q=60",
+    "description": "Case com encaixe preciso para placa e passagem de cabo.",
+    "tags": ["rp2040", "case", "eletrônica"],
+    "options": [
+      { "name": "Tampa", "values": ["Com ventilação", "Fechada"] },
+      { "name": "Fixação", "values": ["Parafuso", "Snap-fit"] }
+    ],
+    "modelUrl": "assets/models/case-rp2040.glb"
   },
   {
     "id": "p4",
-    "nome": "Organizador de Ferramentas",
-    "categoria": "Oficina",
-    "preco": 59.90,
-    "imagem": "https://picsum.photos/seed/maker3d4/800/500"
+    "name": "Organizador de Ferramentas",
+    "category": "Oficina",
+    "price": 59.9,
+    "image": "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1200&q=60",
+    "description": "Organizador modular para bancada, com encaixes e pílulas de etiqueta.",
+    "tags": ["oficina", "organizador", "ferramentas"],
+    "options": [
+      { "name": "Módulos", "values": ["1x", "2x", "3x"] },
+      { "name": "Cor", "values": ["Âmbar", "Magenta", "Laranja"] }
+    ],
+    "modelUrl": ""
   },
   {
     "id": "p5",
-    "nome": "Peça Custom (sob medida)",
-    "categoria": "Serviços",
-    "preco": 0,
-    "imagem": "https://picsum.photos/seed/maker3d5/800/500"
+    "name": "Peça Custom (sob medida)",
+    "category": "Serviços",
+    "price": null,
+    "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=60",
+    "description": "Projeto e impressão sob medida. Clique para escolher material, tolerância e acabamento.",
+    "tags": ["custom", "sob medida", "projeto"],
+    "options": [
+      { "name": "Material", "values": ["PLA", "PETG", "ABS"] },
+      { "name": "Tolerância", "values": ["Padrão", "Ajuste fino"] },
+      { "name": "Acabamento", "values": ["Bruto", "Lixado", "Pintado"] }
+    ],
+    "modelUrl": ""
   }
 ]
