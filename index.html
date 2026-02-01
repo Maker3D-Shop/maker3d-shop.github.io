@@ -11,11 +11,11 @@
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Maker3D Home">
-         <div class="mark" aria-hidden="true">
-           <img src="assets/brand/logo.png" alt="" />
-         </div>
+          <div class="mark" aria-hidden="true">
+            <img src="assets/brand/logo.png" alt="" />
+          </div>
           <div class="name">
-            <strong>Maker3D</strong><br/>
+            <strong>MAKER3D</strong><br/>
             <span>impressão 3D sob medida</span>
           </div>
         </a>
@@ -33,7 +33,7 @@
     <section class="hero">
       <div class="heroCard">
         <div class="heroInner">
-          <div class="kicker">Só na região</div>
+          <div class="kicker">✨ Profissional • Clean • Sem preto</div>
           <h1 class="heroTitle">Impressão 3D com estética premium</h1>
           <p class="heroSub">
             Produtos de impressão 3D com acabamento limpo, opções claras e visualização em 3D antes de comprar.
@@ -53,7 +53,6 @@
         <p>Toque para ver opções e modelo 3D</p>
       </div>
 
-      <!-- mini catálogo reaproveitando a mesma grid -->
       <div class="grid" id="catalogGrid"></div>
     </section>
 
@@ -84,7 +83,6 @@
       <div class="modalBody">
         <div class="modalGrid">
           <div class="panel">
-            <!-- 3D Viewer -->
             <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
             <model-viewer
               id="mViewer"
@@ -95,6 +93,7 @@
               shadow-intensity="0.6">
             </model-viewer>
             <p class="small" style="margin:10px 0 0" id="mDesc"></p>
+            <p class="small" style="margin:6px 0 0" id="mDim"></p>
           </div>
 
           <div class="panel">
@@ -107,13 +106,21 @@
             </div>
 
             <div style="height:10px"></div>
+            <button class="btn ghost" id="btnShowPix" style="width:100%;">Ver chave PIX</button>
+
+            <div class="pixBox" id="pixBox">
+              <p class="small" style="margin:0 0 8px; font-weight:900;">Chave PIX</p>
+              <div class="pixKey">
+                <span id="pixKeyText"></span>
+                <button class="btn primary" id="btnCopyPix" style="padding:10px 14px;">Copiar PIX</button>
+              </div>
+              <p class="small" style="margin:10px 0 0;">
+                Após o pagamento, envie o comprovante no WhatsApp.
+              </p>
+            </div>
+
+            <div style="height:10px"></div>
             <div id="mOptions"></div>
-
-            <div style="height:10px"></div>
-            <p class="small" id="mNote"></p>
-
-            <div style="height:10px"></div>
-            <a class="btn ghost" href="catalogo.html" style="display:block; text-align:center;">Ver mais produtos</a>
           </div>
         </div>
       </div>
