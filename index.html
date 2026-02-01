@@ -11,9 +11,6 @@
     <div class="container">
       <div class="nav">
         <a class="brand" href="index.html" aria-label="Maker3D Home">
-          <div class="mark" aria-hidden="true">
-            <img src="assets/brand/logo.png" alt="" />
-          </div>
           <div class="name">
             <strong>Maker3D</strong><br/>
             <span>impressão 3D sob medida</span>
@@ -34,13 +31,11 @@
       <div class="heroCard">
         <div class="heroInner">
           <h1 class="heroTitle">Impressão 3D com estética premium</h1>
-          <p class="heroSub">
-            Produtos com acabamento limpo, opções claras e visualização em 3D.
-          </p>
+          <p class="heroSub">Produtos com acabamento limpo, opções claras e visualização em 3D.</p>
 
           <div class="heroActions">
             <a class="btn primary" href="catalogo.html">Ver catálogo</a>
-            <a class="btn ghost" href="contato.html">Fazer orçamento</a>
+            <a class="btn ghost" href="catalogo.html#catalogo">Peça personalizada</a>
           </div>
         </div>
       </div>
@@ -49,7 +44,7 @@
     <section class="section">
       <div class="sectionTitle">
         <h2>Destaques</h2>
-        <p><a class="hintLink" href="catalogo.html#catalogo">Clique no produto para ver opções</a></p>
+        <p><a class="hintLink" href="catalogo.html#catalogo">Ver destaques</a></p>
       </div>
 
       <div class="grid" id="catalogGrid"></div>
@@ -86,10 +81,7 @@
             <model-viewer
               id="mViewer"
               style="width:100%; height:340px; border-radius:18px; border:1px solid rgba(90,59,31,.14); background:rgba(255,255,255,.25);"
-              camera-controls
-              auto-rotate
-              ar
-              shadow-intensity="0.6">
+              camera-controls auto-rotate ar shadow-intensity="0.6">
             </model-viewer>
             <p class="small" style="margin:10px 0 0" id="mDesc"></p>
             <p class="small" style="margin:6px 0 0" id="mDim"></p>
