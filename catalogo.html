@@ -6,7 +6,7 @@
   <title>Maker3D — Catálogo</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
-<body>
+<body data-page="catalog">
   <header>
     <div class="container">
       <div class="nav">
@@ -15,7 +15,7 @@
             <img src="assets/brand/logo.png" alt="" />
           </div>
           <div class="name">
-            <strong>MAKER3D</strong><br/>
+            <strong>Maker3D</strong><br/>
             <span>catálogo</span>
           </div>
         </a>
@@ -30,10 +30,17 @@
   </header>
 
   <main class="container">
-    <section class="section">
+    <section class="section" id="catalogo">
       <div class="sectionTitle">
         <h2>Catálogo</h2>
-        <p>Clique no produto para ver opções, 3D e PIX</p>
+        <p>Clique no produto para ver opções</p>
+      </div>
+
+      <div class="catalogTools">
+        <div class="searchPill">
+          <input id="searchInput" type="search" placeholder="Pesquisar no catálogo…" autocomplete="off" />
+          <button class="searchClear" id="searchClear" type="button" aria-label="Limpar">✕</button>
+        </div>
       </div>
 
       <div class="grid" id="catalogGrid"></div>
