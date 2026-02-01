@@ -37,7 +37,7 @@
       </div>
 
       <div class="catalogTools">
-        <div class="searchPill">
+        <div class="searchPill" role="search">
           <input id="searchInput" type="search" placeholder="Pesquisar no catálogo…" autocomplete="off" />
           <button class="searchClear" id="searchClear" type="button" aria-label="Limpar">✕</button>
         </div>
@@ -47,7 +47,7 @@
     </section>
   </main>
 
-  <!-- Modal (igual do index) -->
+  <!-- Modal -->
   <div class="modalBackdrop" id="modal" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modalHeader">
@@ -64,7 +64,7 @@
             <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
             <model-viewer
               id="mViewer"
-              style="width:100%; height:360px; border-radius:18px; border:1px solid rgba(90,59,31,.14); background:rgba(255,255,255,.25);"
+              style="width:100%; height:340px; border-radius:18px; border:1px solid rgba(90,59,31,.14); background:rgba(255,255,255,.25);"
               camera-controls auto-rotate ar shadow-intensity="0.6">
             </model-viewer>
             <p class="small" style="margin:10px 0 0" id="mDesc"></p>
@@ -80,22 +80,15 @@
               <button class="btn primary" id="mWhats">Comprar no WhatsApp</button>
             </div>
 
-            <div style="height:10px"></div>
-            <button class="btn ghost" id="btnShowPix" style="width:100%;">Ver chave PIX</button>
-
-            <div class="pixBox" id="pixBox">
-              <p class="small" style="margin:0 0 8px; font-weight:900;">Chave PIX</p>
-              <div class="pixKey">
-                <span id="pixKeyText"></span>
-                <button class="btn primary" id="btnCopyPix" style="padding:10px 14px;">Copiar PIX</button>
-              </div>
-              <p class="small" style="margin:10px 0 0;">
-                Após o pagamento, envie o comprovante no WhatsApp.
-              </p>
-            </div>
-
-            <div style="height:10px"></div>
+            <div style="height:12px"></div>
             <div id="mOptions"></div>
+
+            <div style="height:12px"></div>
+            <div class="panel">
+              <p class="small" style="margin:0 0 10px; font-weight:900;">Comprar</p>
+              <button class="btn primary" id="mBuyInside" style="width:100%;">Comprar no WhatsApp</button>
+              <p class="small" style="margin:10px 0 0;">Você escolhe as opções acima e finaliza pelo WhatsApp.</p>
+            </div>
           </div>
         </div>
       </div>
