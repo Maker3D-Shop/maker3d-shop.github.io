@@ -1,222 +1,265 @@
-// Maker3D — Catálogo via products.json + modal + 3D + WhatsApp
-const WHATS_PHONE = "5531984566047";
-let PRODUCTS = [];
+// Maker3D — app.js (sem PIX, WhatsApp only)
+const WHATSAPP_NUMBER = "5531984566047";
 
-function $(sel){ return document.querySelector(sel); }
+const $ = (q, el=document) => el.querySelector(q);
+const $$ = (q, el=document) => [...el.querySelectorAll(q)];
+
+function moneyBRL(v){
+  if (v === null || v === undefined) return "Sob consulta";
+  try { return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(v); }
+  catch { return `R$ ${v}`; }
+}
+
+function buildWhatsMsg(product, selections){
+  const lines = [
+    `Olá! Quero comprar: ${product.name}`,
+    product.category ? `Categoria: ${product.category}` : null,
+    product.price != null ? `Preço: ${moneyBRL(product.price)}` : "Preço: sob consulta",
+    selections?.length ? `Opções: ${selections.join(" • ")}` : null,
+  ].filter(Boolean);
+  return lines.join("\n");
+}
+
+function openWhats(product, selections){
+  const text = encodeURIComponent(buildWhatsMsg(product, selections));
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+}
 
 async function loadProducts(){
-  try{
-    const res = await fetch("assets/products.json", { cache: "no-store" });
-    if(!res.ok) throw new Error("Falha ao carregar products.json");
-    const data = await res.json();
-    PRODUCTS = Array.isArray(data) ? data : [];
-  }catch(e){
-    console.error(e);
-    PRODUCTS = [];
-  }
+  const r = await fetch("assets/products.json", { cache: "no-store" });
+  if (!r.ok) throw new Error("products.json não carregou");
+  return await r.json();
 }
 
-function formatPriceBRL(value){
-  if(value === null || value === undefined || value === "") return "sob consulta";
-  const num = Number(value);
-  if(Number.isNaN(num)) return "sob consulta";
-  return num.toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+/* ---------- Modal ---------- */
+function ensureModelViewer(){
+  if (window.customElements && window.customElements.get("model-viewer")) return;
+  const s = document.createElement("script");
+  s.type = "module";
+  s.src = "https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js";
+  document.head.appendChild(s);
 }
 
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-  }[m]));
-}
+function wireModal(productsById){
+  const modal = $("#modal");
+  if (!modal) return;
 
-function norm(s){
-  return String(s || "")
-    .toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
+  const closeAll = () => modal.classList.remove("open");
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeAll();
+    if (e.target.closest("[data-close]")) closeAll();
+  });
 
-function getFilteredProducts(query){
-  const q = norm(query).trim();
-  if(!q) return PRODUCTS.slice();
-  return PRODUCTS.filter(p=>{
-    const hay = [
-      p.name, p.category, p.description, p.dimensions
-    ].map(norm).join(" ");
-    return hay.includes(q);
+  window.openProductById = (id) => {
+    const p = productsById.get(id);
+    if (!p) return;
+
+    ensureModelViewer();
+
+    $("#mTitle").textContent = p.name || "Produto";
+    $("#mCategory").textContent = p.category || "";
+    $("#mDesc").textContent = p.description || "";
+    $("#mDim").textContent = p.dimensions ? `Dimensões: ${p.dimensions}` : "";
+    $("#mPrice").textContent = moneyBRL(p.price);
+
+    const viewer = $("#mViewer");
+    if (viewer){
+      if (p.modelUrl){
+        viewer.setAttribute("src", p.modelUrl);
+        viewer.style.display = "";
+      } else {
+        viewer.removeAttribute("src");
+        viewer.style.display = "none";
+      }
+    }
+
+    const optsWrap = $("#mOptions");
+    optsWrap.innerHTML = "";
+    const selections = [];
+
+    (p.options || []).forEach((opt, idx) => {
+      const label = document.createElement("div");
+      label.className = "small";
+      label.style.fontWeight = "900";
+      label.style.margin = "0 0 6px";
+      label.textContent = opt.name;
+
+      const sel = document.createElement("select");
+      sel.className = "select";
+      (opt.values || []).forEach(v => {
+        const o = document.createElement("option");
+        o.value = v;
+        o.textContent = v;
+        sel.appendChild(o);
+      });
+
+      selections[idx] = `${opt.name}: ${sel.value}`;
+      sel.addEventListener("change", () => {
+        selections[idx] = `${opt.name}: ${sel.value}`;
+      });
+
+      optsWrap.appendChild(label);
+      optsWrap.appendChild(sel);
+
+      const spacer = document.createElement("div");
+      spacer.style.height = "10px";
+      optsWrap.appendChild(spacer);
+    });
+
+    const buyBtn = $("#mBuyInside");
+    if (buyBtn){
+      buyBtn.onclick = () => openWhats(p, selections.filter(Boolean));
+    }
+
+    modal.classList.add("open");
+  };
+
+  // Abrir modal clicando em cards
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-open]");
+    if (!b) return;
+    const id = b.getAttribute("data-open");
+    window.openProductById(id);
   });
 }
 
-function renderCatalog(targetId, opts = {}){
-  const root = document.getElementById(targetId);
-  if(!root) return;
-
-  const page = document.body.dataset.page || "";
-  const limitDefault = (page === "home") ? 4 : null;
-
-  const query = opts.query ?? "";
-  const limit = (opts.limit ?? limitDefault);
-
-  const list = getFilteredProducts(query);
-  const view = (limit ? list.slice(0, limit) : list);
-
-  if(!PRODUCTS.length){
-    root.innerHTML = `<div class="card" style="padding:14px;">
-      <p class="small" style="margin:0;">Nenhum produto cadastrado ainda em <b>assets/products.json</b>.</p>
-    </div>`;
-    return;
-  }
-
-  if(!view.length){
-    root.innerHTML = `<div class="card" style="padding:14px;">
-      <p class="small" style="margin:0;">Nada encontrado para <b>${escapeHtml(query)}</b>.</p>
-    </div>`;
-    return;
-  }
-
-  root.innerHTML = view.map(p => `
-    <article class="card">
+/* ---------- Renderers ---------- */
+function productCard(p){
+  return `
+    <div class="card">
       <div class="product">
-        <div class="thumb" role="button" tabindex="0" data-open="${escapeHtml(p.id)}" aria-label="Abrir ${escapeHtml(p.name)}">
-          <img src="${escapeHtml(p.image || "")}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'">
-        </div>
+        <div class="thumb">${p.image ? `<img src="${p.image}" alt="${p.name}">` : ""}</div>
 
-        <div class="pmeta" role="button" tabindex="0" data-open="${escapeHtml(p.id)}" aria-label="Ver opções de ${escapeHtml(p.name)}">
+        <div class="pmeta">
           <div class="top">
-            <p class="pname">${escapeHtml(p.name)}</p>
-            <span class="tag">${escapeHtml(p.category || "")}</span>
+            <p class="pname">${p.name || ""}</p>
+            <span class="tag">${p.category || ""}</span>
           </div>
-          <p class="pdesc">${escapeHtml(p.description || "")}</p>
+          <p class="pdesc">${p.description || ""}</p>
         </div>
 
         <div class="pactions">
-          <button class="btn primary" data-open="${escapeHtml(p.id)}">Ver opções</button>
-          <button class="btn ghost" data-open="${escapeHtml(p.id)}" data-focusbuy="1">Comprar</button>
+          <button class="btn primary" data-open="${p.id}">Ver opções</button>
+          <button class="btn ghost" data-open="${p.id}">Comprar</button>
         </div>
       </div>
-    </article>
-  `).join("");
+    </div>
+  `;
+}
 
-  if(root.dataset.bound !== "1"){
-    root.dataset.bound = "1";
+function renderHome(products){
+  const grid = $("#highlightsGrid");
+  if (!grid) return;
+  const highlights = products.slice(0, 4);
+  grid.innerHTML = highlights.map(productCard).join("");
 
-    root.addEventListener("click", (e)=>{
-      const openBtn = e.target.closest("[data-open]");
-      if(openBtn){
-        const id = openBtn.getAttribute("data-open");
-        const focusBuy = openBtn.getAttribute("data-focusbuy") === "1";
-        const product = PRODUCTS.find(x=>x.id===id);
-        if(product) openModal(product, { focusBuy });
-      }
-    });
-
-    root.addEventListener("keydown", (e)=>{
-      if(e.key !== "Enter") return;
-      const openable = e.target.closest("[data-open]");
-      if(!openable) return;
-      const id = openable.getAttribute("data-open");
-      const product = PRODUCTS.find(x=>x.id===id);
-      if(product) openModal(product, { focusBuy:false });
-    });
+  const btnCustom = $("#btnCustom");
+  if (btnCustom){
+    btnCustom.onclick = () => {
+      const custom = products.find(p => p.id === "p5") || products[products.length - 1];
+      if (custom) window.openProductById(custom.id);
+    };
   }
 }
 
-function openModal(p, opts = { focusBuy:false }){
-  $("#mTitle").textContent = p.name || "Produto";
-  $("#mCategory").textContent = p.category || "";
-  $("#mDesc").textContent = p.description || "";
-  $("#mDim").textContent = p.dimensions ? `Dimensões: ${p.dimensions}` : "";
-  $("#mPrice").textContent = formatPriceBRL(p.price);
+function renderCatalog(products){
+  const grid = $("#catalogGrid");
+  if (!grid) return;
 
-  const box = $("#mOptions");
-  const options = Array.isArray(p.options) ? p.options : [];
+  const input = $("#catalogSearch");
+  const clear = $("#searchClear");
 
-  box.innerHTML = options.map((opt) => `
-    <div class="panel">
-      <p class="small" style="margin:0 0 8px; font-weight:900">${escapeHtml(opt.name || "")}</p>
-      <select class="select" aria-label="${escapeHtml(opt.name || "")}">
-        ${(opt.values || []).map(v=>`<option>${escapeHtml(v)}</option>`).join("")}
-      </select>
+  const draw = (q="") => {
+    const s = q.trim().toLowerCase();
+    const filtered = !s ? products : products.filter(p => {
+      const blob = `${p.name} ${p.category} ${p.description}`.toLowerCase();
+      return blob.includes(s);
+    });
+    grid.innerHTML = filtered.map(productCard).join("");
+  };
+
+  if (input){
+    input.addEventListener("input", () => draw(input.value));
+  }
+  if (clear && input){
+    clear.addEventListener("click", () => { input.value = ""; draw(""); input.focus(); });
+  }
+
+  draw("");
+}
+
+function renderHighlightsCarousel(products){
+  const track = $("#track");
+  const dotsWrap = $("#dots");
+  const prevBtn = $("#prevBtn");
+  const nextBtn = $("#nextBtn");
+  if (!track || !dotsWrap) return;
+
+  const items = products.slice(0, 4);
+  let idx = 0;
+  let timer = null;
+
+  track.innerHTML = items.map(p => `
+    <div class="carouselSlide">
+      ${productCard(p)}
     </div>
   `).join("");
 
-  // 3D
-  const viewer = $("#mViewer");
-  if(p.modelUrl){
-    viewer.setAttribute("src", p.modelUrl);
-    viewer.style.display = "";
-  }else{
-    viewer.style.display = "none";
-  }
+  dotsWrap.innerHTML = items.map((_, i) =>
+    `<button class="dot ${i===0?"active":""}" data-dot="${i}" aria-label="Ir para ${i+1}"></button>`
+  ).join("");
 
-  // WhatsApp msg
-  const makeWhatsText = () => {
-    const selects = [...box.querySelectorAll("select")];
-    const picked = selects.map((s, idx) => `${options[idx]?.name || "Opção"}: ${s.value}`).join(" | ");
-    return `Olá! Quero comprar: ${p.name}.${picked ? " Opções: " + picked + "." : ""}`;
+  const setIndex = (n) => {
+    idx = (n + items.length) % items.length;
+    track.style.transform = `translateX(${-idx * 100}%)`;
+    $$(".dot", dotsWrap).forEach((d,i)=>d.classList.toggle("active", i===idx));
   };
 
-  const openWhats = () => {
-    const text = makeWhatsText();
-    window.open(`https://wa.me/${WHATS_PHONE}?text=${encodeURIComponent(text)}`, "_blank");
-  };
+  const stop = () => { if (timer) clearInterval(timer); timer=null; };
+  const start = () => { stop(); timer = setInterval(()=>setIndex(idx+1), 4500); };
 
-  const wpp = $("#mWhats");
-  wpp.onclick = openWhats;
-
-  const buyInside = $("#mBuyInside");
-  if(buyInside) buyInside.onclick = openWhats;
-
-  $("#modal").classList.add("open");
-  document.body.style.overflow = "hidden";
-
-  // se clicou em "Comprar" no card, rola até a área comprar
-  if(opts.focusBuy){
-    setTimeout(()=>{
-      buyInside?.scrollIntoView({ behavior:"smooth", block:"center" });
-      buyInside?.focus?.();
-    }, 120);
-  }
-}
-
-function closeModal(){
-  $("#modal").classList.remove("open");
-  document.body.style.overflow = "";
-}
-
-document.addEventListener("click", (e)=>{
-  if(e.target.matches("[data-close]")) closeModal();
-  if(e.target.id==="modal") closeModal();
-});
-
-document.addEventListener("keydown", (e)=>{
-  if(e.key==="Escape") closeModal();
-});
-
-function initSearch(){
-  const input = $("#searchInput");
-  const clear = $("#searchClear");
-  if(!input) return;
-
-  const rerender = () => renderCatalog("catalogGrid", { query: input.value });
-
-  input.addEventListener("input", rerender);
-  clear?.addEventListener("click", ()=>{
-    input.value = "";
-    input.focus();
-    rerender();
+  dotsWrap.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-dot]");
+    if (!b) return;
+    stop();
+    setIndex(parseInt(b.dataset.dot,10)||0);
+    start();
   });
 
-  rerender();
+  if (prevBtn) prevBtn.onclick = () => { stop(); setIndex(idx-1); start(); };
+  if (nextBtn) nextBtn.onclick = () => { stop(); setIndex(idx+1); start(); };
+
+  const carousel = $("#carousel");
+  if (carousel){
+    carousel.addEventListener("mouseenter", stop);
+    carousel.addEventListener("mouseleave", start);
+    carousel.addEventListener("touchstart", stop, {passive:true});
+    carousel.addEventListener("touchend", start, {passive:true});
+  }
+
+  setIndex(0);
+  start();
 }
 
-(async function init(){
-  await loadProducts();
+/* ---------- Boot ---------- */
+(async function main(){
+  try{
+    const products = await loadProducts();
+    const byId = new Map(products.map(p => [p.id, p]));
 
-  const page = document.body.dataset.page || "";
-  if(page === "home"){
-    renderCatalog("catalogGrid", { limit: 4, query: "" });
-  }else{
-    renderCatalog("catalogGrid", { query: "" });
-    initSearch();
+    wireModal(byId);
+
+    const page = document.body?.dataset?.page || "";
+    if (page === "home") renderHome(products);
+    if (page === "catalog") renderCatalog(products);
+    if (page === "highlights") renderHighlightsCarousel(products);
+
+  } catch(err){
+    console.error(err);
+    const target = $("#highlightsGrid") || $("#catalogGrid") || $("#track");
+    if (target){
+      target.innerHTML = `<div class="panel"><p class="small">Não foi possível carregar o catálogo.</p></div>`;
+    }
   }
 })();
