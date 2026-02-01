@@ -1,7 +1,5 @@
-// Maker3D — Catálogo via products.json + modal + 3D + PIX
-const PIX_KEY = "5531984566047"; // sua chave pix (telefone)
+// Maker3D — Catálogo via products.json + modal + 3D + WhatsApp
 const WHATS_PHONE = "5531984566047";
-
 let PRODUCTS = [];
 
 function $(sel){ return document.querySelector(sel); }
@@ -35,12 +33,6 @@ function norm(s){
   return String(s || "")
     .toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
-function maskPix(key){
-  // esconde tudo menos os 3 últimos dígitos
-  const k = String(key || "");
-  return k.replace(/\d(?=\d{3})/g, "•");
 }
 
 function getFilteredProducts(query){
@@ -98,55 +90,46 @@ function renderCatalog(targetId, opts = {}){
 
         <div class="pactions">
           <button class="btn primary" data-open="${escapeHtml(p.id)}">Ver opções</button>
-          <button class="btn ghost" data-buy="${escapeHtml(p.id)}">Comprar</button>
+          <button class="btn ghost" data-open="${escapeHtml(p.id)}" data-focusbuy="1">Comprar</button>
         </div>
       </div>
     </article>
   `).join("");
 
-  // Delegação de eventos (apenas 1x)
   if(root.dataset.bound !== "1"){
     root.dataset.bound = "1";
 
     root.addEventListener("click", (e)=>{
       const openBtn = e.target.closest("[data-open]");
-      const buyBtn  = e.target.closest("[data-buy]");
-
       if(openBtn){
         const id = openBtn.getAttribute("data-open");
+        const focusBuy = openBtn.getAttribute("data-focusbuy") === "1";
         const product = PRODUCTS.find(x=>x.id===id);
-        if(product) openModal(product, { showPix:false });
-      }
-
-      if(buyBtn){
-        const id = buyBtn.getAttribute("data-buy");
-        const product = PRODUCTS.find(x=>x.id===id);
-        if(product) openModal(product, { showPix:true });
+        if(product) openModal(product, { focusBuy });
       }
     });
 
-    // Enter abre quando o foco está no bloco clicável
     root.addEventListener("keydown", (e)=>{
       if(e.key !== "Enter") return;
       const openable = e.target.closest("[data-open]");
       if(!openable) return;
       const id = openable.getAttribute("data-open");
       const product = PRODUCTS.find(x=>x.id===id);
-      if(product) openModal(product, { showPix:false });
+      if(product) openModal(product, { focusBuy:false });
     });
   }
 }
 
-function openModal(p, opts = { showPix:false }){
+function openModal(p, opts = { focusBuy:false }){
   $("#mTitle").textContent = p.name || "Produto";
   $("#mCategory").textContent = p.category || "";
   $("#mDesc").textContent = p.description || "";
   $("#mDim").textContent = p.dimensions ? `Dimensões: ${p.dimensions}` : "";
   $("#mPrice").textContent = formatPriceBRL(p.price);
 
-  // options
   const box = $("#mOptions");
   const options = Array.isArray(p.options) ? p.options : [];
+
   box.innerHTML = options.map((opt) => `
     <div class="panel">
       <p class="small" style="margin:0 0 8px; font-weight:900">${escapeHtml(opt.name || "")}</p>
@@ -156,7 +139,7 @@ function openModal(p, opts = { showPix:false }){
     </div>
   `).join("");
 
-  // model viewer
+  // 3D
   const viewer = $("#mViewer");
   if(p.modelUrl){
     viewer.setAttribute("src", p.modelUrl);
@@ -165,61 +148,34 @@ function openModal(p, opts = { showPix:false }){
     viewer.style.display = "none";
   }
 
-  // Whats message (com opções)
-  const wpp = $("#mWhats");
-  wpp.onclick = () => {
+  // WhatsApp msg
+  const makeWhatsText = () => {
     const selects = [...box.querySelectorAll("select")];
     const picked = selects.map((s, idx) => `${options[idx]?.name || "Opção"}: ${s.value}`).join(" | ");
-    const text = `Olá! Quero comprar: ${p.name}. ${picked ? "Opções: " + picked + "." : ""}`;
+    return `Olá! Quero comprar: ${p.name}.${picked ? " Opções: " + picked + "." : ""}`;
+  };
+
+  const openWhats = () => {
+    const text = makeWhatsText();
     window.open(`https://wa.me/${WHATS_PHONE}?text=${encodeURIComponent(text)}`, "_blank");
   };
 
-  // PIX (oculta -> revela)
-  const pixBox = $("#pixBox");
-  const pixText = $("#pixKeyText");
-  const copyBtn = $("#btnCopyPix");
-  const showBtn = $("#btnShowPix");
+  const wpp = $("#mWhats");
+  wpp.onclick = openWhats;
 
-  const setMasked = (masked) => {
-    pixText.textContent = masked ? maskPix(PIX_KEY) : PIX_KEY;
-    pixText.classList.toggle("masked", !!masked);
-    copyBtn.disabled = !!masked;
-    copyBtn.classList.toggle("disabled", !!masked);
-  };
-
-  copyBtn.textContent = "Copiar PIX";
-  copyBtn.onclick = async () => {
-    try{
-      await navigator.clipboard.writeText(PIX_KEY);
-      copyBtn.textContent = "Copiado ✅";
-      setTimeout(()=> (copyBtn.textContent = "Copiar PIX"), 1200);
-    }catch{
-      alert("Não deu pra copiar automaticamente. Copie manualmente: " + PIX_KEY);
-    }
-  };
-
-  // Estado inicial
-  setMasked(true);
-  pixBox.classList.remove("open");
-
-  if(opts.showPix){
-    // Comprar: já abre PIX, mas revela depois de um instante (efeito “premium”)
-    showBtn.style.display = "none";
-    pixBox.classList.add("open");
-    setTimeout(()=> setMasked(false), 700);
-  }else{
-    // Ver opções: PIX fica escondido até a pessoa pedir
-    showBtn.style.display = "";
-  }
-
-  showBtn.onclick = () => {
-    pixBox.classList.add("open");
-    setMasked(false);
-    pixBox.scrollIntoView({ behavior:"smooth", block:"nearest" });
-  };
+  const buyInside = $("#mBuyInside");
+  if(buyInside) buyInside.onclick = openWhats;
 
   $("#modal").classList.add("open");
   document.body.style.overflow = "hidden";
+
+  // se clicou em "Comprar" no card, rola até a área comprar
+  if(opts.focusBuy){
+    setTimeout(()=>{
+      buyInside?.scrollIntoView({ behavior:"smooth", block:"center" });
+      buyInside?.focus?.();
+    }, 120);
+  }
 }
 
 function closeModal(){
@@ -250,7 +206,6 @@ function initSearch(){
     rerender();
   });
 
-  // estado inicial
   rerender();
 }
 
