@@ -31,9 +31,41 @@ function escapeHtml(s){
   }[m]));
 }
 
-function renderCatalog(targetId){
+function norm(s){
+  return String(s || "")
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function maskPix(key){
+  // esconde tudo menos os 3 últimos dígitos
+  const k = String(key || "");
+  return k.replace(/\d(?=\d{3})/g, "•");
+}
+
+function getFilteredProducts(query){
+  const q = norm(query).trim();
+  if(!q) return PRODUCTS.slice();
+  return PRODUCTS.filter(p=>{
+    const hay = [
+      p.name, p.category, p.description, p.dimensions
+    ].map(norm).join(" ");
+    return hay.includes(q);
+  });
+}
+
+function renderCatalog(targetId, opts = {}){
   const root = document.getElementById(targetId);
   if(!root) return;
+
+  const page = document.body.dataset.page || "";
+  const limitDefault = (page === "home") ? 4 : null;
+
+  const query = opts.query ?? "";
+  const limit = (opts.limit ?? limitDefault);
+
+  const list = getFilteredProducts(query);
+  const view = (limit ? list.slice(0, limit) : list);
 
   if(!PRODUCTS.length){
     root.innerHTML = `<div class="card" style="padding:14px;">
@@ -42,14 +74,21 @@ function renderCatalog(targetId){
     return;
   }
 
-  root.innerHTML = PRODUCTS.map(p => `
+  if(!view.length){
+    root.innerHTML = `<div class="card" style="padding:14px;">
+      <p class="small" style="margin:0;">Nada encontrado para <b>${escapeHtml(query)}</b>.</p>
+    </div>`;
+    return;
+  }
+
+  root.innerHTML = view.map(p => `
     <article class="card">
       <div class="product">
-        <div class="thumb">
+        <div class="thumb" role="button" tabindex="0" data-open="${escapeHtml(p.id)}" aria-label="Abrir ${escapeHtml(p.name)}">
           <img src="${escapeHtml(p.image || "")}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'">
         </div>
 
-        <div class="pmeta">
+        <div class="pmeta" role="button" tabindex="0" data-open="${escapeHtml(p.id)}" aria-label="Ver opções de ${escapeHtml(p.name)}">
           <div class="top">
             <p class="pname">${escapeHtml(p.name)}</p>
             <span class="tag">${escapeHtml(p.category || "")}</span>
@@ -65,22 +104,37 @@ function renderCatalog(targetId){
     </article>
   `).join("");
 
-  root.addEventListener("click", (e)=>{
-    const openBtn = e.target.closest("[data-open]");
-    const buyBtn  = e.target.closest("[data-buy]");
+  // Delegação de eventos (apenas 1x)
+  if(root.dataset.bound !== "1"){
+    root.dataset.bound = "1";
 
-    if(openBtn){
-      const id = openBtn.getAttribute("data-open");
+    root.addEventListener("click", (e)=>{
+      const openBtn = e.target.closest("[data-open]");
+      const buyBtn  = e.target.closest("[data-buy]");
+
+      if(openBtn){
+        const id = openBtn.getAttribute("data-open");
+        const product = PRODUCTS.find(x=>x.id===id);
+        if(product) openModal(product, { showPix:false });
+      }
+
+      if(buyBtn){
+        const id = buyBtn.getAttribute("data-buy");
+        const product = PRODUCTS.find(x=>x.id===id);
+        if(product) openModal(product, { showPix:true });
+      }
+    });
+
+    // Enter abre quando o foco está no bloco clicável
+    root.addEventListener("keydown", (e)=>{
+      if(e.key !== "Enter") return;
+      const openable = e.target.closest("[data-open]");
+      if(!openable) return;
+      const id = openable.getAttribute("data-open");
       const product = PRODUCTS.find(x=>x.id===id);
       if(product) openModal(product, { showPix:false });
-    }
-
-    if(buyBtn){
-      const id = buyBtn.getAttribute("data-buy");
-      const product = PRODUCTS.find(x=>x.id===id);
-      if(product) openModal(product, { showPix:true });
-    }
-  });
+    });
+  }
 }
 
 function openModal(p, opts = { showPix:false }){
@@ -120,23 +174,47 @@ function openModal(p, opts = { showPix:false }){
     window.open(`https://wa.me/${WHATS_PHONE}?text=${encodeURIComponent(text)}`, "_blank");
   };
 
-  // PIX
-  $("#pixKeyText").textContent = PIX_KEY;
-  $("#btnCopyPix").onclick = async () => {
+  // PIX (oculta -> revela)
+  const pixBox = $("#pixBox");
+  const pixText = $("#pixKeyText");
+  const copyBtn = $("#btnCopyPix");
+  const showBtn = $("#btnShowPix");
+
+  const setMasked = (masked) => {
+    pixText.textContent = masked ? maskPix(PIX_KEY) : PIX_KEY;
+    pixText.classList.toggle("masked", !!masked);
+    copyBtn.disabled = !!masked;
+    copyBtn.classList.toggle("disabled", !!masked);
+  };
+
+  copyBtn.textContent = "Copiar PIX";
+  copyBtn.onclick = async () => {
     try{
       await navigator.clipboard.writeText(PIX_KEY);
-      $("#btnCopyPix").textContent = "Copiado ✅";
-      setTimeout(()=> $("#btnCopyPix").textContent = "Copiar PIX", 1200);
+      copyBtn.textContent = "Copiado ✅";
+      setTimeout(()=> (copyBtn.textContent = "Copiar PIX"), 1200);
     }catch{
       alert("Não deu pra copiar automaticamente. Copie manualmente: " + PIX_KEY);
     }
   };
 
-  const pixBox = $("#pixBox");
-  pixBox.classList.toggle("open", !!opts.showPix);
+  // Estado inicial
+  setMasked(true);
+  pixBox.classList.remove("open");
 
-  $("#btnShowPix").onclick = () => {
+  if(opts.showPix){
+    // Comprar: já abre PIX, mas revela depois de um instante (efeito “premium”)
+    showBtn.style.display = "none";
     pixBox.classList.add("open");
+    setTimeout(()=> setMasked(false), 700);
+  }else{
+    // Ver opções: PIX fica escondido até a pessoa pedir
+    showBtn.style.display = "";
+  }
+
+  showBtn.onclick = () => {
+    pixBox.classList.add("open");
+    setMasked(false);
     pixBox.scrollIntoView({ behavior:"smooth", block:"nearest" });
   };
 
@@ -158,7 +236,32 @@ document.addEventListener("keydown", (e)=>{
   if(e.key==="Escape") closeModal();
 });
 
+function initSearch(){
+  const input = $("#searchInput");
+  const clear = $("#searchClear");
+  if(!input) return;
+
+  const rerender = () => renderCatalog("catalogGrid", { query: input.value });
+
+  input.addEventListener("input", rerender);
+  clear?.addEventListener("click", ()=>{
+    input.value = "";
+    input.focus();
+    rerender();
+  });
+
+  // estado inicial
+  rerender();
+}
+
 (async function init(){
   await loadProducts();
-  renderCatalog("catalogGrid");
+
+  const page = document.body.dataset.page || "";
+  if(page === "home"){
+    renderCatalog("catalogGrid", { limit: 4, query: "" });
+  }else{
+    renderCatalog("catalogGrid", { query: "" });
+    initSearch();
+  }
 })();
