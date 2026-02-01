@@ -12,10 +12,7 @@
       <div class="nav">
         <a class="brand" href="index.html">
           <div class="mark" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2l1.2 2.9 3.1.3-2.4 2.1.7 3.1L12 8.9 9.4 10.4l.7-3.1L7.7 5.2l3.1-.3L12 2Z" stroke="currentColor" stroke-width="1.6"/>
-              <path d="M4 14c2.4 4.7 13.6 4.7 16 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-            </svg>
+            <img src="assets/brand/logo.png" alt="" />
           </div>
           <div class="name">
             <strong>MAKER3D</strong><br/>
@@ -36,14 +33,14 @@
     <section class="section">
       <div class="sectionTitle">
         <h2>Catálogo</h2>
-        <p>Clique no produto para ver opções e 3D</p>
+        <p>Clique no produto para ver opções, 3D e PIX</p>
       </div>
 
       <div class="grid" id="catalogGrid"></div>
     </section>
   </main>
 
-  <!-- modal (mesmo do index) -->
+  <!-- Modal (igual do index) -->
   <div class="modalBackdrop" id="modal" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modalHeader">
@@ -64,6 +61,7 @@
               camera-controls auto-rotate ar shadow-intensity="0.6">
             </model-viewer>
             <p class="small" style="margin:10px 0 0" id="mDesc"></p>
+            <p class="small" style="margin:6px 0 0" id="mDim"></p>
           </div>
 
           <div class="panel">
@@ -76,10 +74,21 @@
             </div>
 
             <div style="height:10px"></div>
-            <div id="mOptions"></div>
+            <button class="btn ghost" id="btnShowPix" style="width:100%;">Ver chave PIX</button>
+
+            <div class="pixBox" id="pixBox">
+              <p class="small" style="margin:0 0 8px; font-weight:900;">Chave PIX</p>
+              <div class="pixKey">
+                <span id="pixKeyText"></span>
+                <button class="btn primary" id="btnCopyPix" style="padding:10px 14px;">Copiar PIX</button>
+              </div>
+              <p class="small" style="margin:10px 0 0;">
+                Após o pagamento, envie o comprovante no WhatsApp.
+              </p>
+            </div>
 
             <div style="height:10px"></div>
-            <p class="small" id="mNote"></p>
+            <div id="mOptions"></div>
           </div>
         </div>
       </div>
