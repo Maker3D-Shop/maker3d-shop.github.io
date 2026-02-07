@@ -22,7 +22,6 @@
         <nav class="menu" aria-label="Menu">
           <a href="index.html">Início</a>
           <a class="active" href="catalogo.html">Catálogo</a>
-          <a href="destaques.html">Destaques</a>
           <a href="contato.html">Contato</a>
         </nav>
       </div>
@@ -41,7 +40,7 @@
 
         <div class="catalogTools">
           <div class="searchPill">
-            <input id="catalogSearch" type="search" placeholder="Buscar… (ex: suporte, decoração, case)" />
+            <input id="catalogSearch" type="search" placeholder="Buscar… (ex: suporte, dragão, decoração)" />
             <button class="searchClear" id="searchClear" type="button" aria-label="Limpar">✕</button>
           </div>
         </div>
@@ -53,7 +52,7 @@
 
   <!-- Modal -->
   <div class="modalBackdrop" id="modal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Detalhes">
       <div class="modalHeader">
         <div>
           <h3 id="mTitle">Produto</h3>
@@ -64,8 +63,9 @@
 
       <div class="modalBody">
         <div class="modalGrid">
-          <div class="panel">
+          <div class="panel" id="leftPanel">
             <model-viewer id="mViewer" camera-controls autoplay exposure="1" shadow-intensity="0.8" alt="Modelo 3D"></model-viewer>
+            <div id="mTextBlock" style="display:none;"></div>
           </div>
 
           <div class="panel">
