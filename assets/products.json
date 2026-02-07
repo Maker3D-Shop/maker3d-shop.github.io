@@ -29,6 +29,7 @@
       { "name": "Tamanho", "values": ["Pequeno", "Médio", "Grande"] }
     ]
   },
+  
   {
     "id": "p3",
     "name": "Case Eletrônica (RP2040)",
@@ -37,13 +38,14 @@
     "currency": "BRL",
     "dimensions": "9 × 6 × 2.5 cm",
     "image": "assets/products/images/case-rp2040.jpg",
-    "modelUrl": "assets/products/models/case-rp2040.glb",
+    "modelUrl": "assets/products/models/case-rp2040.3mf",
     "description": "Case com encaixe preciso para placa e passagem de cabo.",
     "options": [
       { "name": "Tampa", "values": ["Com ventilação", "Fechada"] },
       { "name": "Fixação", "values": ["Parafuso", "Snap-fit"] }
     ]
   },
+  
   {
     "id": "p4",
     "name": "Organizador de Ferramentas",
