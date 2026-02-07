@@ -49,12 +49,16 @@
       </div>
     </section>
 
-    <!-- Carrossel (no lugar dos 4 cards) -->
+    <!-- Carrossel -->
     <section class="section">
       <div class="container">
         <div class="carousel" id="carousel">
           <div class="carouselTop">
-            <h2>Em alta</h2>
+            <div class="carouselLeft">
+              <h2>Destaques</h2>
+              <a class="miniLink" href="catalogo.html">Ver destaques</a>
+            </div>
+
             <div class="carouselNav">
               <button class="carouselBtn" id="prevBtn" aria-label="Anterior">‹</button>
               <button class="carouselBtn" id="nextBtn" aria-label="Próximo">›</button>
@@ -68,7 +72,7 @@
     </section>
   </main>
 
-  <!-- Modal (reutilizado no site todo) -->
+  <!-- Modal -->
   <div class="modalBackdrop" id="modal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Detalhes">
       <div class="modalHeader">
@@ -81,13 +85,11 @@
 
       <div class="modalBody">
         <div class="modalGrid">
-          <!-- Esquerda: model 3D OU bloco de texto (encomenda) -->
           <div class="panel" id="leftPanel">
             <model-viewer id="mViewer" camera-controls autoplay exposure="1" shadow-intensity="0.8" alt="Modelo 3D"></model-viewer>
             <div id="mTextBlock" style="display:none;"></div>
           </div>
 
-          <!-- Direita: infos e opções -->
           <div class="panel">
             <p class="small" id="mDesc"></p>
             <p class="small" id="mDim"></p>
