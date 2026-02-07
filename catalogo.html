@@ -31,24 +31,17 @@
   <main>
     <section class="section">
       <div class="container">
-        <div class="sectionTitle">
-          <div>
-            <h2>Catálogo</h2>
-            <p>Busque e filtre por categoria.</p>
-          </div>
-        </div>
-
         <div class="catalogTools">
-          <div class="searchPill">
-            <input id="catalogSearch" type="search" placeholder="Buscar… (ex: suporte, dragão, decoração)" />
+          <!-- botão filtro (esquerda) -->
+          <button class="filterFab" id="filterBtn" type="button" aria-label="Filtrar">
+            <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+          </button>
+
+          <!-- busca -->
+          <div class="searchPill" role="search">
+            <input id="catalogSearch" type="search" placeholder="Buscar… (ex: suporte, decoração)" />
             <button class="searchClear" id="searchClear" type="button" aria-label="Limpar">✕</button>
           </div>
-
-          <button class="filterFab" id="filterBtn" type="button" aria-label="Filtrar">
-            <span class="bars" aria-hidden="true">
-              <i></i><i></i><i></i>
-            </span>
-          </button>
         </div>
 
         <div class="grid" id="catalogGrid"></div>
@@ -56,17 +49,14 @@
     </section>
   </main>
 
-  <!-- Drawer de filtro -->
+  <!-- Drawer filtro -->
   <div class="drawerBackdrop" id="drawerBackdrop" aria-hidden="true">
     <aside class="drawer" role="dialog" aria-modal="true" aria-label="Filtrar">
       <div class="drawerHeader">
         <strong>Filtrar</strong>
         <button class="iconBtn" id="drawerClose" type="button" aria-label="Fechar">✕</button>
       </div>
-
-      <div class="drawerBody" id="drawerCats">
-        <!-- JS injeta botões aqui -->
-      </div>
+      <div class="drawerBody" id="drawerCats"></div>
     </aside>
   </div>
 
@@ -91,6 +81,7 @@
           <div class="panel">
             <p class="small" id="mDesc"></p>
             <p class="small" id="mDim"></p>
+
             <div style="height:10px"></div>
 
             <div class="priceLine">
