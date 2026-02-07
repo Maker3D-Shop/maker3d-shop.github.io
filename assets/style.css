@@ -426,16 +426,12 @@ model-viewer{
   transform: translateY(-1px);
   box-shadow: var(--shadow);
 }
-.ico{
-  width: 46px;
-  height: 46px;
-  border-radius: 16px;
-  display:grid;
-  place-items:center;
-  background: rgba(255,159,28,.12);
-  border: 1px solid rgba(255,159,28,.25);
+/* Ícones SVG no contato */
+.ico svg{
+  width: 22px;
+  height: 22px;
+  display:block;
   color: #3c3f44;
-  font-weight: 900;
 }
 .contactText{
   min-width:0;
