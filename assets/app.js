@@ -67,8 +67,8 @@ function productCard(p){
       </div>
 
       <div class="pactions">
-        <button class="btn primary" data-open="${p.id}">Ver opções</button>
         <div class="pill" aria-label="Dimensões">${dims}</div>
+        <button class="btn primary" data-open="${p.id}">Ver opções</button>
       </div>
     </div>
   </article>`;
@@ -218,156 +218,81 @@ function renderHomeCarousel(products){
   let timer = null;
 
   track.innerHTML = items.map(p => `<div class="carouselSlide">${productCard(p)}</div>`).join("");
-  dotsWrap.innerHTML = items.map((_, i) => `<button class="dot" data-dot="${i}" aria-label="Ir para ${i+1}"></button>`).join("");
 
-  const setIndex = (n) => {
-    idx = Math.max(0, Math.min(items.length - 1, n));
-    track.style.transform = `translateX(${-idx * 100}%)`;
-    $$(".dot", dotsWrap).forEach((d,i)=>d.classList.toggle("active", i===idx));
+  dotsWrap.innerHTML = items.map((_,i)=>`<button class="dot ${i===0?'on':''}" aria-label="slide ${i+1}"></button>`).join("");
+  const dots = $$(".dot", dotsWrap);
+
+  const set = (i) => {
+    idx = Math.max(0, Math.min(items.length-1, i));
+    track.style.transform = `translateX(-${idx*100}%)`;
+    dots.forEach((d,di)=>d.classList.toggle("on", di===idx));
   };
 
-  const stop = () => { if (timer) clearInterval(timer); timer = null; };
-  const start = () => {
-    stop();
-    timer = setInterval(() => {
-      if (idx >= items.length - 1) dir = -1;
-      if (idx <= 0) dir = 1;
-      setIndex(idx + dir);
-    }, 4200);
+  dots.forEach((d,i)=>d.addEventListener("click",()=>{ dir = (i>idx?1:-1); set(i); restart(); }));
+
+  prevBtn?.addEventListener("click",()=>{ dir=-1; set(idx-1); restart(); });
+  nextBtn?.addEventListener("click",()=>{ dir= 1; set(idx+1); restart(); });
+
+  const tick = () => {
+    if (items.length <= 1) return;
+    let next = idx + dir;
+    if (next >= items.length){ dir = -1; next = idx + dir; }
+    if (next < 0){ dir = 1; next = idx + dir; }
+    set(next);
   };
 
-  dotsWrap.addEventListener("click", (e) => {
-    const b = e.target.closest("[data-dot]");
-    if (!b) return;
-    stop();
-    setIndex(parseInt(b.dataset.dot,10) || 0);
-    start();
-  });
+  const restart = () => {
+    if (timer) clearInterval(timer);
+    timer = setInterval(tick, 4200);
+  };
 
-  if (prevBtn) prevBtn.onclick = () => { stop(); setIndex(idx - 1); start(); };
-  if (nextBtn) nextBtn.onclick = () => { stop(); setIndex(idx + 1); start(); };
+  restart();
 
-  if (carousel){
-    carousel.addEventListener("mouseenter", stop);
-    carousel.addEventListener("mouseleave", start);
-    carousel.addEventListener("touchstart", stop, {passive:true});
-    carousel.addEventListener("touchend", start, {passive:true});
-  }
-
-  setIndex(0);
-  start();
+  // pausa no hover (desktop)
+  carousel?.addEventListener("mouseenter", ()=> timer && clearInterval(timer));
+  carousel?.addEventListener("mouseleave", restart);
 }
 
-/* ---------- Catalog (search + drawer categorias) ---------- */
+/* ---------- Catalog List ---------- */
 function renderCatalog(products){
   const grid = $("#catalogGrid");
   if (!grid) return;
 
-  const input = $("#catalogSearch");
-  const clear = $("#searchClear");
+  const show = products.filter(p => p.id !== "custom");
+  grid.innerHTML = show.map(productCard).join("");
 
-  const backdrop = $("#drawerBackdrop");
-  const btn = $("#filterBtn");
-  const close = $("#drawerClose");
-  const catsWrap = $("#drawerCats");
-
-  let activeCategory = "__ALL__";
-
-  const categories = [...new Set(
-    products.filter(p => p.id !== "custom").map(p => (p.category || "").trim()).filter(Boolean)
-  )].sort((a,b)=>a.localeCompare(b,"pt-BR"));
-
-  const openDrawer = () => backdrop?.classList.add("open");
-  const closeDrawer = () => backdrop?.classList.remove("open");
-
-  if (btn) btn.onclick = openDrawer;
-  if (close) close.onclick = closeDrawer;
-  if (backdrop){
-    backdrop.addEventListener("click", (e) => { if (e.target === backdrop) closeDrawer(); });
-  }
-
-  function renderDrawer(){
-    if (!catsWrap) return;
-
-    const mk = (label, value) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "filterChip";
-      b.textContent = label;
-      b.dataset.value = value;
-      return b;
+  // botão "Peça sob medida" (se existir na página)
+  const customSlot = $("#customSlot");
+  if (customSlot){
+    const custom = products.find(p=>p.id==="custom") || {
+      id:"custom",
+      name:"Peça Custom (sob medida)",
+      category:"Serviços",
+      price:null,
+      dimensions:"Sob medida",
+      description:"Projeto e impressão sob medida. Clique para escolher material, tolerância e acabamento."
     };
-
-    catsWrap.innerHTML = "";
-    catsWrap.appendChild(mk("Ver tudo", "__ALL__"));
-    categories.forEach(c => catsWrap.appendChild(mk(c, c)));
-
-    const setActive = () => {
-      $$(".filterChip", catsWrap).forEach(x => x.classList.toggle("active", x.dataset.value === activeCategory));
-    };
-
-    catsWrap.addEventListener("click", (e) => {
-      const chip = e.target.closest(".filterChip");
-      if (!chip) return;
-      activeCategory = chip.dataset.value;
-      setActive();
-      draw(input?.value || "");
-      closeDrawer();
-    });
-
-    setActive();
+    customSlot.innerHTML = productCard(custom);
   }
-
-  const draw = (q="") => {
-    const s = q.trim().toLowerCase();
-
-    const filtered = products.filter(p => {
-      if (p.id === "custom") return false;
-
-      const catOK = (activeCategory === "__ALL__") || (p.category === activeCategory);
-      if (!catOK) return false;
-
-      if (!s) return true;
-      const blob = `${p.name} ${p.category} ${p.description}`.toLowerCase();
-      return blob.includes(s);
-    });
-
-    grid.innerHTML = filtered.map(productCard).join("");
-  };
-
-  if (input) input.addEventListener("input", () => draw(input.value));
-  if (clear && input){
-    clear.addEventListener("click", () => { input.value=""; draw(""); input.focus(); });
-  }
-
-  renderDrawer();
-  draw("");
 }
 
 /* ---------- Boot ---------- */
 (async function main(){
   try{
     const products = await loadProducts();
-    const byId = new Map(products.map(p => [p.id, p]));
-    wireModal(byId);
+    const productsById = new Map(products.map(p => [p.id, p]));
 
-    const page = document.body?.dataset?.page || "";
-    if (page === "home") renderHomeCarousel(products);
-    if (page === "catalog") renderCatalog(products);
+    wireModal(productsById);
 
-  } catch(err){
+    // home
+    renderHomeCarousel(products);
+
+    // catalog
+    renderCatalog(products);
+
+  }catch(err){
     console.error(err);
-    const target = $("#track") || $("#catalogGrid");
-    if (target){
-      target.innerHTML = `
-        <article class="card">
-          <div class="product">
-            <div class="pmeta" style="grid-column:1 / -1;">
-              <h3 class="pname">Não foi possível carregar o catálogo.</h3>
-              <p class="pdesc">Verifique o arquivo <b>assets/products.json</b>.</p>
-            </div>
-          </div>
-        </article>`;
-    }
+    const grid = $("#catalogGrid");
+    if (grid) grid.innerHTML = `<p class="small">Erro carregando produtos.</p>`;
   }
 })();
