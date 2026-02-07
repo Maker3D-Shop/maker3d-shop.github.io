@@ -2,96 +2,93 @@
 <html lang="pt-br">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Maker3D — Catálogo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MAKER3D — Catálogo</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
+
 <body data-page="catalog">
   <header>
     <div class="container">
       <div class="nav">
-        <a class="brand" href="index.html">
-          <div class="name">
-            <strong>Maker3D</strong><br/>
+        <a class="brand" href="index.html" aria-label="MAKER3D - Início">
+          <img src="assets/brand/logo.png" alt="Logo MAKER3D" />
+          <div class="btxt">
+            <strong>MAKER3D</strong>
             <span>catálogo</span>
           </div>
         </a>
 
-        <nav class="menu">
+        <nav class="menu" aria-label="Menu">
           <a href="index.html">Início</a>
           <a class="active" href="catalogo.html">Catálogo</a>
+          <a href="destaques.html">Destaques</a>
           <a href="contato.html">Contato</a>
         </nav>
       </div>
     </div>
   </header>
 
-  <main class="container">
-    <section class="section" id="catalogo">
-      <div class="sectionTitle">
-        <div>
-          <h2>Catálogo</h2>
-          <p>Clique no produto para ver opções</p>
-        </div>
-      </div>
-
-      <div class="catalogTools">
-        <div class="searchPill">
-          <input id="catalogSearch" type="search" placeholder="Pesquisar no catálogo..." />
-          <button class="searchClear" id="searchClear" type="button" aria-label="Limpar">✕</button>
-        </div>
-      </div>
-
-      <div class="grid" id="catalogGrid"></div>
-    </section>
-
-    <!-- Modal -->
-    <div class="modalBackdrop" id="modal" role="dialog" aria-modal="true">
-      <div class="modal">
-        <div class="modalHeader">
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="sectionTitle">
           <div>
-            <h3 id="mTitle">Produto</h3>
-            <p class="small" style="margin:4px 0 0"><span id="mCategory"></span></p>
+            <h2>Catálogo</h2>
+            <p>Digite para filtrar por nome, categoria ou descrição.</p>
           </div>
-          <button class="iconBtn" data-close aria-label="Fechar">✕</button>
         </div>
 
-        <div class="modalBody">
-          <div class="modalGrid">
-            <div class="panel">
-              <model-viewer
-                id="mViewer"
-                style="width:100%; height:340px; border-radius:18px; border:1px solid rgba(90,59,31,.14); background:rgba(255,245,235,.22);"
-                camera-controls auto-rotate ar shadow-intensity="0.6">
-              </model-viewer>
-              <p class="small" style="margin:10px 0 0" id="mDesc"></p>
-              <p class="small" style="margin:6px 0 0" id="mDim"></p>
+        <div class="catalogTools">
+          <div class="searchPill">
+            <input id="catalogSearch" type="search" placeholder="Buscar… (ex: suporte, decoração, case)" />
+            <button class="searchClear" id="searchClear" type="button" aria-label="Limpar">✕</button>
+          </div>
+        </div>
+
+        <div class="grid" id="catalogGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modalBackdrop" id="modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
+      <div class="modalHeader">
+        <div>
+          <h3 id="mTitle">Produto</h3>
+          <p class="small" id="mCategory"></p>
+        </div>
+        <button class="iconBtn" data-close aria-label="Fechar">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="modalGrid">
+          <div class="panel">
+            <model-viewer id="mViewer" camera-controls autoplay exposure="1" shadow-intensity="0.8" alt="Modelo 3D"></model-viewer>
+          </div>
+
+          <div class="panel">
+            <p class="small" id="mDesc"></p>
+            <p class="small" id="mDim"></p>
+            <div style="height:10px"></div>
+
+            <div class="priceLine">
+              <span class="price" id="mPrice">Preço</span>
+              <span class="small">Checkout pelo WhatsApp</span>
             </div>
 
-            <div class="panel">
-              <div class="row">
-                <div>
-                  <div class="small" style="font-weight:900; margin-bottom:4px;">Preço</div>
-                  <div class="price" id="mPrice"></div>
-                </div>
-              </div>
+            <div style="height:12px"></div>
+            <div id="mOptions"></div>
 
-              <div style="height:12px"></div>
-              <div id="mOptions"></div>
-
-              <div style="height:12px"></div>
-              <div class="panel">
-                <p class="small" style="margin:0 0 10px; font-weight:900;">Comprar</p>
-                <button class="btn primary bigBuy" id="mBuyInside" style="width:100%;">Comprar no WhatsApp</button>
-                <p class="small" style="margin:10px 0 0;">Você escolhe as opções acima e finaliza pelo WhatsApp.</p>
-              </div>
-            </div>
+            <button class="btn primary" id="mBuyInside" type="button" style="width:100%; margin-top:8px;">
+              Comprar no WhatsApp
+            </button>
           </div>
         </div>
       </div>
     </div>
-
-  </main>
+  </div>
 
   <script src="assets/app.js"></script>
 </body>
