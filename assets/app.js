@@ -1,4 +1,3 @@
-// MAKER3D — app.js (WhatsApp checkout)
 const WHATSAPP_NUMBER = "5531984566047";
 
 const $  = (q, el=document) => el.querySelector(q);
@@ -6,11 +5,8 @@ const $$ = (q, el=document) => [...el.querySelectorAll(q)];
 
 function moneyBRL(v){
   if (v === null || v === undefined) return "Sob consulta";
-  try {
-    return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(v);
-  } catch {
-    return `R$ ${v}`;
-  }
+  try { return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(v); }
+  catch { return `R$ ${v}`; }
 }
 
 function ensureModelViewer(){
@@ -22,7 +18,7 @@ function ensureModelViewer(){
 }
 
 async function loadProducts(){
-  const r = await fetch("assets/products.json", { cache: "no-store" });
+  const r = await fetch("assets/products.json", { cache:"no-store" });
   if (!r.ok) throw new Error("products.json não carregou");
   return await r.json();
 }
@@ -40,11 +36,45 @@ function buildWhatsMsg(product, selections){
 
 function openWhats(product, selections){
   const text = encodeURIComponent(buildWhatsMsg(product, selections));
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
-  window.open(url, "_blank", "noopener,noreferrer");
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank", "noopener,noreferrer");
 }
 
-/* ---------------- Modal ---------------- */
+/* ---------- Product Card (1 botão + pill dimensões, mesmo tamanho) ---------- */
+function productCard(p){
+  const img = p.image
+    ? `<div class="thumb"><img src="${p.image}" alt="${p.name || "Produto"}"></div>`
+    : `<div class="thumb"></div>`;
+
+  const dims = p.dimensions ? p.dimensions : "—";
+
+  return `
+  <article class="card">
+    <div class="product">
+      ${img}
+
+      <div class="pmeta">
+        <div class="pmetaTop">
+          <h3 class="pname" title="${p.name || ""}">${p.name || ""}</h3>
+          ${p.category ? `<span class="tag">${p.category}</span>` : ``}
+        </div>
+
+        ${p.description ? `<p class="pdesc">${p.description}</p>` : ``}
+
+        <div class="priceLine">
+          <span class="price">${moneyBRL(p.price)}</span>
+          <span class="small">${dims}</span>
+        </div>
+      </div>
+
+      <div class="pactions">
+        <button class="btn primary" data-open="${p.id}">Ver opções</button>
+        <div class="pill" aria-label="Dimensões">${dims}</div>
+      </div>
+    </div>
+  </article>`;
+}
+
+/* ---------- Modal ---------- */
 function wireModal(productsById){
   const modal = $("#modal");
   if (!modal) return;
@@ -66,26 +96,17 @@ function wireModal(productsById){
         if (modelUrl) viewer.setAttribute("src", modelUrl);
         else viewer.removeAttribute("src");
       }
-      if (textBlock){
-        textBlock.style.display = "none";
-        textBlock.innerHTML = "";
-      }
+      if (textBlock){ textBlock.style.display = "none"; textBlock.innerHTML = ""; }
       return;
     }
 
-    if (viewer){
-      viewer.style.display = "none";
-      viewer.removeAttribute("src");
-    }
-    if (textBlock){
-      textBlock.style.display = "";
-      textBlock.innerHTML = textHtml || "";
-    }
+    if (viewer){ viewer.style.display = "none"; viewer.removeAttribute("src"); }
+    if (textBlock){ textBlock.style.display = ""; textBlock.innerHTML = textHtml || ""; }
   }
 
   function renderOptions(opts, selections){
-    const optsWrap = $("#mOptions");
-    optsWrap.innerHTML = "";
+    const wrap = $("#mOptions");
+    wrap.innerHTML = "";
 
     (opts || []).forEach((opt, idx) => {
       const label = document.createElement("p");
@@ -98,69 +119,60 @@ function wireModal(productsById){
       sel.className = "select";
       (opt.values || []).forEach(v => {
         const o = document.createElement("option");
-        o.value = v;
-        o.textContent = v;
+        o.value = v; o.textContent = v;
         sel.appendChild(o);
       });
 
       selections[idx] = `${opt.name}: ${sel.value}`;
-      sel.addEventListener("change", () => {
-        selections[idx] = `${opt.name}: ${sel.value}`;
-      });
+      sel.addEventListener("change", () => selections[idx] = `${opt.name}: ${sel.value}`);
 
-      optsWrap.appendChild(label);
-      optsWrap.appendChild(sel);
+      wrap.appendChild(label);
+      wrap.appendChild(sel);
 
       const spacer = document.createElement("div");
       spacer.style.height = "10px";
-      optsWrap.appendChild(spacer);
+      wrap.appendChild(spacer);
     });
   }
 
+  // Sob encomenda: texto no lugar do 3D
   function openCustomOrder(){
-    const customProduct = {
-      id: "__custom__",
-      name: "Peça sob encomenda",
-      category: "Sob medida",
-      description: "Conta pra gente o que você quer fazer — a gente te orienta e imprime do jeito certo.",
-      dimensions: "",
-      price: null
+    const custom = productsById.get("custom") || {
+      id:"custom", name:"Peça sob encomenda", category:"Serviços",
+      price:null, dimensions:"Sob medida",
+      description:"Você manda a ideia e a gente imprime do jeito certo.",
+      options:[
+        { name:"Material", values:["PLA (padrão)","PETG (mais resistente)","TPU (flexível)"] },
+        { name:"Cor", values:["Colorido (sortido)","Preto","Branco","Cinza","Laranja","Azul","Vermelho"] }
+      ]
     };
 
-    $("#mTitle").textContent = customProduct.name;
-    $("#mCategory").textContent = customProduct.category;
-    $("#mDesc").textContent = customProduct.description;
-    $("#mDim").textContent = "";
+    $("#mTitle").textContent = custom.name;
+    $("#mCategory").textContent = custom.category || "";
+    $("#mDesc").textContent = custom.description || "";
+    $("#mDim").textContent = custom.dimensions ? `Dimensões: ${custom.dimensions}` : "";
     $("#mPrice").textContent = "Sob consulta";
 
     setLeftPanelMode({
-      mode: "text",
+      mode:"text",
       textHtml: `
         <div style="display:grid; gap:10px;">
-          <p class="small"><b>Como funciona:</b> você manda uma ideia (foto, desenho ou arquivo STL) e a gente responde com o melhor caminho.</p>
-          <p class="small"><b>Você pode pedir:</b> peça funcional, decoração, suporte, reposição, presente, protótipo, etc.</p>
-          <p class="small"><b>Pra agilizar:</b> diga o uso, tamanho aproximado, material e a cor desejada.</p>
-          <p class="small" style="opacity:.9;">(A compra é feita pelo WhatsApp — rapidinho)</p>
-        </div>
-      `
+          <p class="small"><b>Como funciona:</b> você manda uma ideia (foto, desenho ou STL) e a gente te orienta.</p>
+          <p class="small"><b>Pra agilizar:</b> diga o uso, tamanho aproximado, material e cor.</p>
+          <p class="small" style="opacity:.9;">(A finalização é pelo WhatsApp.)</p>
+        </div>`
     });
 
     const selections = [];
-    const customOptions = [
-      { name: "Material", values: ["PLA (padrão)", "PETG (mais resistente)", "TPU (flexível)"] },
-      { name: "Cor", values: ["Colorido (sortido)", "Preto", "Branco", "Cinza", "Laranja", "Azul", "Vermelho"] }
-    ];
-    renderOptions(customOptions, selections);
+    renderOptions(custom.options || [], selections);
 
-    const buyBtn = $("#mBuyInside");
-    if (buyBtn){
-      buyBtn.onclick = () => openWhats(customProduct, selections.filter(Boolean));
-    }
-
+    $("#mBuyInside").onclick = () => openWhats(custom, selections.filter(Boolean));
     modal.classList.add("open");
   }
 
   window.openProductById = (id) => {
+    if (id === "custom") return openCustomOrder();
+
     const p = productsById.get(id);
     if (!p) return;
 
@@ -171,171 +183,27 @@ function wireModal(productsById){
     $("#mPrice").textContent = moneyBRL(p.price);
 
     if (p.modelUrl){
-      setLeftPanelMode({ mode: "model", modelUrl: p.modelUrl });
+      setLeftPanelMode({ mode:"model", modelUrl:p.modelUrl });
     } else {
-      setLeftPanelMode({
-        mode: "text",
-        textHtml: `<p class="small">Esse item não tem visualização 3D no site, mas você pode pedir no WhatsApp e a gente te manda detalhes.</p>`
-      });
+      setLeftPanelMode({ mode:"text", textHtml:`<p class="small">Sem visualização 3D aqui — pede no WhatsApp que a gente manda mais detalhes.</p>` });
     }
 
     const selections = [];
     renderOptions(p.options || [], selections);
-
-    const buyBtn = $("#mBuyInside");
-    if (buyBtn){
-      buyBtn.onclick = () => openWhats(p, selections.filter(Boolean));
-    }
-
+    $("#mBuyInside").onclick = () => openWhats(p, selections.filter(Boolean));
     modal.classList.add("open");
   };
 
   document.addEventListener("click", (e) => {
     const open = e.target.closest("[data-open]");
-    if (!open) return;
-    const id = open.getAttribute("data-open");
-    window.openProductById(id);
+    if (open) window.openProductById(open.getAttribute("data-open"));
   });
 
   const btnCustom = $("#btnCustom");
-  if (btnCustom){
-    btnCustom.onclick = openCustomOrder;
-  }
+  if (btnCustom) btnCustom.onclick = openCustomOrder;
 }
 
-/* ---------------- UI helpers ---------------- */
-function productCard(p){
-  const img = p.image
-    ? `<div class="thumb"><img src="${p.image}" alt="${p.name || "Produto"}"></div>`
-    : `<div class="thumb"></div>`;
-
-  return `
-  <article class="card">
-    <div class="product">
-      ${img}
-
-      <div class="pmeta">
-        <div class="pmetaTop">
-          <h3 class="pname" title="${p.name || ""}">${p.name || ""}</h3>
-          ${p.category ? `<span class="tag">${p.category}</span>` : ``}
-        </div>
-
-        ${p.description ? `<p class="pdesc">${p.description}</p>` : ``}
-
-        <div class="priceLine">
-          <span class="price">${moneyBRL(p.price)}</span>
-          <span class="small">${p.dimensions ? p.dimensions : ""}</span>
-        </div>
-      </div>
-
-      <div class="pactions">
-        <button class="btn primary" data-open="${p.id}">Ver opções</button>
-      </div>
-    </div>
-  </article>
-  `;
-}
-
-/* ---------------- Catalog (search + category drawer) ---------------- */
-function renderCatalog(products){
-  const grid = $("#catalogGrid");
-  if (!grid) return;
-
-  const input = $("#catalogSearch");
-  const clear = $("#searchClear");
-
-  // Drawer elements
-  const backdrop = $("#drawerBackdrop");
-  const btn = $("#filterBtn");
-  const close = $("#drawerClose");
-  const catsWrap = $("#drawerCats");
-
-  let activeCategory = "__ALL__";
-
-  const categories = [...new Set(
-    products.map(p => (p.category || "").trim()).filter(Boolean)
-  )].sort((a,b)=>a.localeCompare(b,"pt-BR"));
-
-  const openDrawer = () => backdrop?.classList.add("open");
-  const closeDrawer = () => backdrop?.classList.remove("open");
-
-  if (btn && backdrop){
-    btn.onclick = openDrawer;
-  }
-  if (close){
-    close.onclick = closeDrawer;
-  }
-  if (backdrop){
-    backdrop.addEventListener("click", (e) => {
-      if (e.target === backdrop) closeDrawer();
-    });
-  }
-
-  function renderDrawer(){
-    if (!catsWrap) return;
-
-    const makeChip = (label, value) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "filterChip";
-      b.textContent = label;
-      b.dataset.value = value;
-      return b;
-    };
-
-    catsWrap.innerHTML = "";
-    catsWrap.appendChild(makeChip("Ver tudo", "__ALL__"));
-    categories.forEach(c => catsWrap.appendChild(makeChip(c, c)));
-
-    const setActive = () => {
-      $$(".filterChip", catsWrap).forEach(x => {
-        x.classList.toggle("active", x.dataset.value === activeCategory);
-      });
-    };
-
-    catsWrap.addEventListener("click", (e) => {
-      const chip = e.target.closest(".filterChip");
-      if (!chip) return;
-      activeCategory = chip.dataset.value;
-      setActive();
-      draw(input?.value || "");
-      closeDrawer();
-    });
-
-    setActive();
-  }
-
-  const draw = (q="") => {
-    const s = q.trim().toLowerCase();
-
-    const filtered = products.filter(p => {
-      const catOK = (activeCategory === "__ALL__") || (p.category === activeCategory);
-      if (!catOK) return false;
-
-      if (!s) return true;
-      const blob = `${p.name} ${p.category} ${p.description}`.toLowerCase();
-      return blob.includes(s);
-    });
-
-    grid.innerHTML = filtered.map(productCard).join("");
-  };
-
-  if (input){
-    input.addEventListener("input", () => draw(input.value));
-  }
-  if (clear && input){
-    clear.addEventListener("click", () => {
-      input.value = "";
-      draw("");
-      input.focus();
-    });
-  }
-
-  renderDrawer();
-  draw("");
-}
-
-/* ---------------- Home carousel (ping-pong, 1 by 1) ---------------- */
+/* ---------- Home Carousel (ping-pong 1 por 1) ---------- */
 function renderHomeCarousel(products){
   const track = $("#track");
   const dotsWrap = $("#dots");
@@ -344,16 +212,16 @@ function renderHomeCarousel(products){
   const carousel = $("#carousel");
   if (!track || !dotsWrap) return;
 
-  const items = products.slice(0, 6);
+  const items = products.filter(p => p.id !== "custom").slice(0, 6);
   let idx = 0;
+  let dir = 1;
   let timer = null;
-  let dir = 1; // ping-pong direction
 
   track.innerHTML = items.map(p => `<div class="carouselSlide">${productCard(p)}</div>`).join("");
   dotsWrap.innerHTML = items.map((_, i) => `<button class="dot" data-dot="${i}" aria-label="Ir para ${i+1}"></button>`).join("");
 
   const setIndex = (n) => {
-    idx = Math.max(0, Math.min(items.length - 1, n)); // clamp (no wrap)
+    idx = Math.max(0, Math.min(items.length - 1, n));
     track.style.transform = `translateX(${-idx * 100}%)`;
     $$(".dot", dotsWrap).forEach((d,i)=>d.classList.toggle("active", i===idx));
   };
@@ -362,7 +230,6 @@ function renderHomeCarousel(products){
   const start = () => {
     stop();
     timer = setInterval(() => {
-      // ping-pong: goes 1 by 1 and reverses at ends
       if (idx >= items.length - 1) dir = -1;
       if (idx <= 0) dir = 1;
       setIndex(idx + dir);
@@ -391,7 +258,93 @@ function renderHomeCarousel(products){
   start();
 }
 
-/* ---------------- Boot ---------------- */
+/* ---------- Catalog (search + drawer categorias) ---------- */
+function renderCatalog(products){
+  const grid = $("#catalogGrid");
+  if (!grid) return;
+
+  const input = $("#catalogSearch");
+  const clear = $("#searchClear");
+
+  const backdrop = $("#drawerBackdrop");
+  const btn = $("#filterBtn");
+  const close = $("#drawerClose");
+  const catsWrap = $("#drawerCats");
+
+  let activeCategory = "__ALL__";
+
+  const categories = [...new Set(
+    products.filter(p => p.id !== "custom").map(p => (p.category || "").trim()).filter(Boolean)
+  )].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+
+  const openDrawer = () => backdrop?.classList.add("open");
+  const closeDrawer = () => backdrop?.classList.remove("open");
+
+  if (btn) btn.onclick = openDrawer;
+  if (close) close.onclick = closeDrawer;
+  if (backdrop){
+    backdrop.addEventListener("click", (e) => { if (e.target === backdrop) closeDrawer(); });
+  }
+
+  function renderDrawer(){
+    if (!catsWrap) return;
+
+    const mk = (label, value) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "filterChip";
+      b.textContent = label;
+      b.dataset.value = value;
+      return b;
+    };
+
+    catsWrap.innerHTML = "";
+    catsWrap.appendChild(mk("Ver tudo", "__ALL__"));
+    categories.forEach(c => catsWrap.appendChild(mk(c, c)));
+
+    const setActive = () => {
+      $$(".filterChip", catsWrap).forEach(x => x.classList.toggle("active", x.dataset.value === activeCategory));
+    };
+
+    catsWrap.addEventListener("click", (e) => {
+      const chip = e.target.closest(".filterChip");
+      if (!chip) return;
+      activeCategory = chip.dataset.value;
+      setActive();
+      draw(input?.value || "");
+      closeDrawer();
+    });
+
+    setActive();
+  }
+
+  const draw = (q="") => {
+    const s = q.trim().toLowerCase();
+
+    const filtered = products.filter(p => {
+      if (p.id === "custom") return false;
+
+      const catOK = (activeCategory === "__ALL__") || (p.category === activeCategory);
+      if (!catOK) return false;
+
+      if (!s) return true;
+      const blob = `${p.name} ${p.category} ${p.description}`.toLowerCase();
+      return blob.includes(s);
+    });
+
+    grid.innerHTML = filtered.map(productCard).join("");
+  };
+
+  if (input) input.addEventListener("input", () => draw(input.value));
+  if (clear && input){
+    clear.addEventListener("click", () => { input.value=""; draw(""); input.focus(); });
+  }
+
+  renderDrawer();
+  draw("");
+}
+
+/* ---------- Boot ---------- */
 (async function main(){
   try{
     const products = await loadProducts();
@@ -411,11 +364,10 @@ function renderHomeCarousel(products){
           <div class="product">
             <div class="pmeta" style="grid-column:1 / -1;">
               <h3 class="pname">Não foi possível carregar o catálogo.</h3>
-              <p class="pdesc">Verifique o caminho de <b>assets/products.json</b> e tente novamente.</p>
+              <p class="pdesc">Verifique o arquivo <b>assets/products.json</b>.</p>
             </div>
           </div>
-        </article>
-      `;
+        </article>`;
     }
   }
 })();
