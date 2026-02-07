@@ -29,7 +29,7 @@ async function loadProducts(){
 
 function buildWhatsMsg(product, selections){
   const lines = [
-    `Olá! Quero comprar: ${product.name}`,
+    `Olá! Quero: ${product.name}`,
     product.category ? `Categoria: ${product.category}` : null,
     product.price != null ? `Preço: ${moneyBRL(product.price)}` : "Preço: sob consulta",
     selections?.length ? `Opções: ${selections.join(" • ")}` : null,
@@ -55,35 +55,40 @@ function wireModal(productsById){
     if (e.target.closest("[data-close]")) closeAll();
   });
 
-  window.openProductById = (id) => {
-    const p = productsById.get(id);
-    if (!p) return;
-
-    ensureModelViewer();
-
-    $("#mTitle").textContent = p.name || "Produto";
-    $("#mCategory").textContent = p.category || "";
-    $("#mDesc").textContent = p.description || "";
-    $("#mDim").textContent = p.dimensions ? `Dimensões: ${p.dimensions}` : "";
-    $("#mPrice").textContent = moneyBRL(p.price);
-
+  function setLeftPanelMode({ mode, textHtml, modelUrl }){
     const viewer = $("#mViewer");
-    if (viewer){
-      if (p.modelUrl){
-        viewer.setAttribute("src", p.modelUrl);
+    const textBlock = $("#mTextBlock");
+
+    if (mode === "model"){
+      ensureModelViewer();
+      if (viewer){
         viewer.style.display = "";
-      } else {
-        viewer.removeAttribute("src");
-        viewer.style.display = "none";
+        if (modelUrl) viewer.setAttribute("src", modelUrl);
+        else viewer.removeAttribute("src");
       }
+      if (textBlock){
+        textBlock.style.display = "none";
+        textBlock.innerHTML = "";
+      }
+      return;
     }
 
-    // Options
+    // mode === "text"
+    if (viewer){
+      viewer.style.display = "none";
+      viewer.removeAttribute("src");
+    }
+    if (textBlock){
+      textBlock.style.display = "";
+      textBlock.innerHTML = textHtml || "";
+    }
+  }
+
+  function renderOptions(opts, selections){
     const optsWrap = $("#mOptions");
     optsWrap.innerHTML = "";
-    const selections = [];
 
-    (p.options || []).forEach((opt, idx) => {
+    (opts || []).forEach((opt, idx) => {
       const label = document.createElement("p");
       label.className = "small";
       label.style.fontWeight = "800";
@@ -111,6 +116,76 @@ function wireModal(productsById){
       spacer.style.height = "10px";
       optsWrap.appendChild(spacer);
     });
+  }
+
+  function openCustomOrder(){
+    const customProduct = {
+      id: "__custom__",
+      name: "Peça sob encomenda",
+      category: "Sob medida",
+      description: "Conta pra gente o que você quer fazer — a gente te orienta e imprime do jeito certo.",
+      dimensions: "",
+      price: null
+    };
+
+    $("#mTitle").textContent = customProduct.name;
+    $("#mCategory").textContent = customProduct.category;
+    $("#mDesc").textContent = customProduct.description;
+    $("#mDim").textContent = "";
+    $("#mPrice").textContent = "Sob consulta";
+
+    // BLOCO DE TEXTO no lugar do 3D
+    setLeftPanelMode({
+      mode: "text",
+      textHtml: `
+        <div style="display:grid; gap:10px;">
+          <p class="small"><b>Como funciona:</b> você manda uma ideia (foto, desenho ou arquivo STL) e a gente te responde com o melhor caminho.</p>
+          <p class="small"><b>Você pode pedir:</b> peça funcional, decoração, suporte, reposição, presente, protótipo, etc.</p>
+          <p class="small"><b>Pra agilizar:</b> me diga o uso, tamanho aproximado e a cor desejada.</p>
+          <p class="small" style="opacity:.9;">(A compra é feita pelo WhatsApp — rapidinho)</p>
+        </div>
+      `
+    });
+
+    // Opções (Material + Cor) — sem tolerância, sem acabamento
+    const selections = [];
+    const customOptions = [
+      { name: "Material", values: ["PLA (padrão)", "PETG (mais resistente)", "TPU (flexível)"] },
+      { name: "Cor", values: ["Colorido (sortido)", "Preto", "Branco", "Cinza", "Laranja", "Azul", "Vermelho"] }
+    ];
+    renderOptions(customOptions, selections);
+
+    const buyBtn = $("#mBuyInside");
+    if (buyBtn){
+      buyBtn.onclick = () => openWhats(customProduct, selections.filter(Boolean));
+    }
+
+    modal.classList.add("open");
+  }
+
+  window.openProductById = (id) => {
+    const p = productsById.get(id);
+    if (!p) return;
+
+    $("#mTitle").textContent = p.name || "Produto";
+    $("#mCategory").textContent = p.category || "";
+    $("#mDesc").textContent = p.description || "";
+    $("#mDim").textContent = p.dimensions ? `Dimensões: ${p.dimensions}` : "";
+    $("#mPrice").textContent = moneyBRL(p.price);
+
+    // Se tiver modelo, mostra. Se não tiver, mostra texto simples.
+    if (p.modelUrl){
+      setLeftPanelMode({ mode: "model", modelUrl: p.modelUrl });
+    } else {
+      setLeftPanelMode({
+        mode: "text",
+        textHtml: `<p class="small">Esse item não tem visualização 3D no site, mas você pode pedir no WhatsApp e a gente te manda detalhes.</p>`
+      });
+    }
+
+    // Opções do JSON (aqui você pode incluir Cor nos produtos também, se quiser)
+    const selections = [];
+    renderOptions(p.options || [], selections);
 
     const buyBtn = $("#mBuyInside");
     if (buyBtn){
@@ -127,6 +202,12 @@ function wireModal(productsById){
     const id = open.getAttribute("data-open");
     window.openProductById(id);
   });
+
+  // Botão sob encomenda (Home)
+  const btnCustom = $("#btnCustom");
+  if (btnCustom){
+    btnCustom.onclick = openCustomOrder;
+  }
 }
 
 /* ---------------- UI helpers ---------------- */
@@ -163,21 +244,6 @@ function productCard(p){
   `;
 }
 
-function renderHome(products){
-  const grid = $("#highlightsGrid");
-  if (!grid) return;
-  const highlights = products.slice(0, 4);
-  grid.innerHTML = highlights.map(productCard).join("");
-
-  const btnCustom = $("#btnCustom");
-  if (btnCustom){
-    btnCustom.onclick = () => {
-      const custom = products.find(p => (p.name || "").toLowerCase().includes("custom")) || products[products.length - 1];
-      if (custom) window.openProductById(custom.id);
-    };
-  }
-}
-
 function renderCatalog(products){
   const grid = $("#catalogGrid");
   if (!grid) return;
@@ -208,7 +274,7 @@ function renderCatalog(products){
   draw("");
 }
 
-function renderHighlightsCarousel(products){
+function renderHomeCarousel(products){
   const track = $("#track");
   const dotsWrap = $("#dots");
   const prevBtn = $("#prevBtn");
@@ -216,7 +282,7 @@ function renderHighlightsCarousel(products){
   const carousel = $("#carousel");
   if (!track || !dotsWrap) return;
 
-  const items = products.slice(0, 4);
+  const items = products.slice(0, 6); // 6 itens no carrossel
   let idx = 0;
   let timer = null;
 
@@ -230,7 +296,7 @@ function renderHighlightsCarousel(products){
   };
 
   const stop = () => { if (timer) clearInterval(timer); timer = null; };
-  const start = () => { stop(); timer = setInterval(()=>setIndex(idx+1), 4500); };
+  const start = () => { stop(); timer = setInterval(()=>setIndex(idx+1), 4200); };
 
   dotsWrap.addEventListener("click", (e) => {
     const b = e.target.closest("[data-dot]");
@@ -262,13 +328,12 @@ function renderHighlightsCarousel(products){
     wireModal(byId);
 
     const page = document.body?.dataset?.page || "";
-    if (page === "home") renderHome(products);
+    if (page === "home") renderHomeCarousel(products);
     if (page === "catalog") renderCatalog(products);
-    if (page === "highlights") renderHighlightsCarousel(products);
 
   } catch(err){
     console.error(err);
-    const target = $("#highlightsGrid") || $("#catalogGrid") || $("#track");
+    const target = $("#track") || $("#catalogGrid");
     if (target){
       target.innerHTML = `
         <article class="card">
