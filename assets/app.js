@@ -73,7 +73,6 @@ function wireModal(productsById){
       return;
     }
 
-    // mode === "text"
     if (viewer){
       viewer.style.display = "none";
       viewer.removeAttribute("src");
@@ -134,20 +133,18 @@ function wireModal(productsById){
     $("#mDim").textContent = "";
     $("#mPrice").textContent = "Sob consulta";
 
-    // BLOCO DE TEXTO no lugar do 3D
     setLeftPanelMode({
       mode: "text",
       textHtml: `
         <div style="display:grid; gap:10px;">
-          <p class="small"><b>Como funciona:</b> você manda uma ideia (foto, desenho ou arquivo STL) e a gente te responde com o melhor caminho.</p>
+          <p class="small"><b>Como funciona:</b> você manda uma ideia (foto, desenho ou arquivo STL) e a gente responde com o melhor caminho.</p>
           <p class="small"><b>Você pode pedir:</b> peça funcional, decoração, suporte, reposição, presente, protótipo, etc.</p>
-          <p class="small"><b>Pra agilizar:</b> me diga o uso, tamanho aproximado e a cor desejada.</p>
+          <p class="small"><b>Pra agilizar:</b> diga o uso, tamanho aproximado, material e a cor desejada.</p>
           <p class="small" style="opacity:.9;">(A compra é feita pelo WhatsApp — rapidinho)</p>
         </div>
       `
     });
 
-    // Opções (Material + Cor) — sem tolerância, sem acabamento
     const selections = [];
     const customOptions = [
       { name: "Material", values: ["PLA (padrão)", "PETG (mais resistente)", "TPU (flexível)"] },
@@ -173,7 +170,6 @@ function wireModal(productsById){
     $("#mDim").textContent = p.dimensions ? `Dimensões: ${p.dimensions}` : "";
     $("#mPrice").textContent = moneyBRL(p.price);
 
-    // Se tiver modelo, mostra. Se não tiver, mostra texto simples.
     if (p.modelUrl){
       setLeftPanelMode({ mode: "model", modelUrl: p.modelUrl });
     } else {
@@ -183,7 +179,6 @@ function wireModal(productsById){
       });
     }
 
-    // Opções do JSON (aqui você pode incluir Cor nos produtos também, se quiser)
     const selections = [];
     renderOptions(p.options || [], selections);
 
@@ -195,7 +190,6 @@ function wireModal(productsById){
     modal.classList.add("open");
   };
 
-  // Delegation: abrir modal clicando em botões/cards
   document.addEventListener("click", (e) => {
     const open = e.target.closest("[data-open]");
     if (!open) return;
@@ -203,7 +197,6 @@ function wireModal(productsById){
     window.openProductById(id);
   });
 
-  // Botão sob encomenda (Home)
   const btnCustom = $("#btnCustom");
   if (btnCustom){
     btnCustom.onclick = openCustomOrder;
@@ -236,14 +229,14 @@ function productCard(p){
       </div>
 
       <div class="pactions">
-        <button class="btn ghost" data-open="${p.id}">Ver opções</button>
-        <button class="btn primary" data-open="${p.id}">Comprar</button>
+        <button class="btn primary" data-open="${p.id}">Ver opções</button>
       </div>
     </div>
   </article>
   `;
 }
 
+/* ---------------- Catalog (search + category drawer) ---------------- */
 function renderCatalog(products){
   const grid = $("#catalogGrid");
   if (!grid) return;
@@ -251,12 +244,79 @@ function renderCatalog(products){
   const input = $("#catalogSearch");
   const clear = $("#searchClear");
 
+  // Drawer elements
+  const backdrop = $("#drawerBackdrop");
+  const btn = $("#filterBtn");
+  const close = $("#drawerClose");
+  const catsWrap = $("#drawerCats");
+
+  let activeCategory = "__ALL__";
+
+  const categories = [...new Set(
+    products.map(p => (p.category || "").trim()).filter(Boolean)
+  )].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+
+  const openDrawer = () => backdrop?.classList.add("open");
+  const closeDrawer = () => backdrop?.classList.remove("open");
+
+  if (btn && backdrop){
+    btn.onclick = openDrawer;
+  }
+  if (close){
+    close.onclick = closeDrawer;
+  }
+  if (backdrop){
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) closeDrawer();
+    });
+  }
+
+  function renderDrawer(){
+    if (!catsWrap) return;
+
+    const makeChip = (label, value) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "filterChip";
+      b.textContent = label;
+      b.dataset.value = value;
+      return b;
+    };
+
+    catsWrap.innerHTML = "";
+    catsWrap.appendChild(makeChip("Ver tudo", "__ALL__"));
+    categories.forEach(c => catsWrap.appendChild(makeChip(c, c)));
+
+    const setActive = () => {
+      $$(".filterChip", catsWrap).forEach(x => {
+        x.classList.toggle("active", x.dataset.value === activeCategory);
+      });
+    };
+
+    catsWrap.addEventListener("click", (e) => {
+      const chip = e.target.closest(".filterChip");
+      if (!chip) return;
+      activeCategory = chip.dataset.value;
+      setActive();
+      draw(input?.value || "");
+      closeDrawer();
+    });
+
+    setActive();
+  }
+
   const draw = (q="") => {
     const s = q.trim().toLowerCase();
-    const filtered = !s ? products : products.filter(p => {
+
+    const filtered = products.filter(p => {
+      const catOK = (activeCategory === "__ALL__") || (p.category === activeCategory);
+      if (!catOK) return false;
+
+      if (!s) return true;
       const blob = `${p.name} ${p.category} ${p.description}`.toLowerCase();
       return blob.includes(s);
     });
+
     grid.innerHTML = filtered.map(productCard).join("");
   };
 
@@ -271,9 +331,11 @@ function renderCatalog(products){
     });
   }
 
+  renderDrawer();
   draw("");
 }
 
+/* ---------------- Home carousel (ping-pong, 1 by 1) ---------------- */
 function renderHomeCarousel(products){
   const track = $("#track");
   const dotsWrap = $("#dots");
@@ -282,21 +344,30 @@ function renderHomeCarousel(products){
   const carousel = $("#carousel");
   if (!track || !dotsWrap) return;
 
-  const items = products.slice(0, 6); // 6 itens no carrossel
+  const items = products.slice(0, 6);
   let idx = 0;
   let timer = null;
+  let dir = 1; // ping-pong direction
 
   track.innerHTML = items.map(p => `<div class="carouselSlide">${productCard(p)}</div>`).join("");
   dotsWrap.innerHTML = items.map((_, i) => `<button class="dot" data-dot="${i}" aria-label="Ir para ${i+1}"></button>`).join("");
 
   const setIndex = (n) => {
-    idx = (n + items.length) % items.length;
+    idx = Math.max(0, Math.min(items.length - 1, n)); // clamp (no wrap)
     track.style.transform = `translateX(${-idx * 100}%)`;
     $$(".dot", dotsWrap).forEach((d,i)=>d.classList.toggle("active", i===idx));
   };
 
   const stop = () => { if (timer) clearInterval(timer); timer = null; };
-  const start = () => { stop(); timer = setInterval(()=>setIndex(idx+1), 4200); };
+  const start = () => {
+    stop();
+    timer = setInterval(() => {
+      // ping-pong: goes 1 by 1 and reverses at ends
+      if (idx >= items.length - 1) dir = -1;
+      if (idx <= 0) dir = 1;
+      setIndex(idx + dir);
+    }, 4200);
+  };
 
   dotsWrap.addEventListener("click", (e) => {
     const b = e.target.closest("[data-dot]");
@@ -306,8 +377,8 @@ function renderHomeCarousel(products){
     start();
   });
 
-  if (prevBtn) prevBtn.onclick = () => { stop(); setIndex(idx-1); start(); };
-  if (nextBtn) nextBtn.onclick = () => { stop(); setIndex(idx+1); start(); };
+  if (prevBtn) prevBtn.onclick = () => { stop(); setIndex(idx - 1); start(); };
+  if (nextBtn) nextBtn.onclick = () => { stop(); setIndex(idx + 1); start(); };
 
   if (carousel){
     carousel.addEventListener("mouseenter", stop);
