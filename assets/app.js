@@ -32,7 +32,6 @@ function buildWhatsMsg(product, selections) {
     product.category ? `Categoria: ${product.category}` : null,
     product.price != null ? `Preço: ${moneyBRL(product.price)}` : "Preço: sob consulta",
     selections?.length ? `Opções: ${selections.join(" • ")}` : null,
-    product.dimensions ? `Dimensões: ${product.dimensions}` : null
   ].filter(Boolean);
 
   return lines.join("\n");
@@ -43,7 +42,17 @@ function openWhats(product, selections) {
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank", "noopener,noreferrer");
 }
 
-/* ---------- Card ---------- */
+/* ---------------- Utils ---------------- */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ---------------- Card ---------------- */
 function productCard(p) {
   const img = p.image
     ? `<div class="thumb"><img src="${p.image}" alt="${(p.name || "").replaceAll('"', "")}"></div>`
@@ -76,7 +85,97 @@ function productCard(p) {
   `;
 }
 
-/* ---------- Drawer (Filtros) ---------- */
+/* ---------------- Modal: Fotos + 3D (abas) ---------------- */
+function ensureMediaUI() {
+  const textBlock = $("#mTextBlock");
+  const viewer = $("#mViewer");
+  if (!textBlock && !viewer) return null;
+
+  let wrap = $("#mMediaWrap");
+  if (wrap) return wrap;
+
+  wrap = document.createElement("div");
+  wrap.id = "mMediaWrap";
+  wrap.className = "mediaWrap";
+
+  wrap.innerHTML = `
+    <div class="mediaTabs">
+      <button type="button" class="mediaTab active" data-tab="photos">Fotos</button>
+      <button type="button" class="mediaTab" data-tab="model">3D</button>
+    </div>
+
+    <div id="mPhotos" class="mediaPane">
+      <img id="mPhotoMain" class="photoMain" alt="Foto do produto">
+      <div id="mPhotoThumbs" class="photoThumbs"></div>
+    </div>
+
+    <div id="mModelPane" class="mediaPane" style="display:none;"></div>
+  `;
+
+  // injeta no lado esquerdo do modal (antes do texto, se existir)
+  if (textBlock && textBlock.parentElement) {
+    textBlock.parentElement.insertBefore(wrap, textBlock);
+  } else if (viewer && viewer.parentElement) {
+    viewer.parentElement.insertBefore(wrap, viewer);
+  } else {
+    $(".modalBody")?.prepend(wrap);
+  }
+
+  // move o model-viewer existente pra dentro do pane do 3D
+  const modelPane = $("#mModelPane");
+  if (viewer && modelPane) modelPane.appendChild(viewer);
+
+  return wrap;
+}
+
+function setActiveTab(tab) {
+  const wrap = $("#mMediaWrap");
+  if (!wrap) return;
+
+  $$(".mediaTab", wrap).forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
+
+  const photos = $("#mPhotos");
+  const modelPane = $("#mModelPane");
+  if (photos) photos.style.display = tab === "photos" ? "" : "none";
+  if (modelPane) modelPane.style.display = tab === "model" ? "" : "none";
+}
+
+function renderPhotos(gallery) {
+  const main = $("#mPhotoMain");
+  const thumbs = $("#mPhotoThumbs");
+  if (!main || !thumbs) return;
+
+  const imgs = (gallery || []).filter(Boolean);
+
+  if (!imgs.length) {
+    main.style.display = "none";
+    thumbs.innerHTML = "";
+    return;
+  }
+
+  main.style.display = "";
+  main.src = imgs[0];
+
+  thumbs.innerHTML = imgs
+    .map(
+      (src, i) => `
+        <button type="button" class="thumbBtn ${i === 0 ? "active" : ""}" data-src="${src}">
+          <img src="${src}" alt="miniatura">
+        </button>
+      `
+    )
+    .join("");
+
+  thumbs.onclick = (e) => {
+    const btn = e.target.closest(".thumbBtn");
+    if (!btn) return;
+    const src = btn.getAttribute("data-src");
+    if (src) main.src = src;
+    $$(".thumbBtn", thumbs).forEach((b) => b.classList.toggle("active", b === btn));
+  };
+}
+
+/* ---------------- Drawer (Filtros) — só ativa no catálogo se existir ---------------- */
 function wireDrawer(allProducts, onFilterChange) {
   const backdrop = $("#drawerBackdrop");
   const openBtn = $("#openDrawer");
@@ -94,17 +193,23 @@ function wireDrawer(allProducts, onFilterChange) {
     if (e.target === backdrop) close();
   });
 
-  const categories = [...new Set(allProducts.map(p => p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  const categories = [...new Set(allProducts.map((p) => p.category).filter(Boolean))].sort((a, b) =>
+    a.localeCompare(b)
+  );
   const chips = ["Tudo", ...categories];
 
   let active = "Tudo";
 
   function renderChips() {
-    list.innerHTML = chips.map((c) => `
+    list.innerHTML = chips
+      .map(
+        (c) => `
       <button class="filterChip ${c === active ? "active" : ""}" type="button" data-cat="${c}">
         ${c}
       </button>
-    `).join("");
+    `
+      )
+      .join("");
   }
 
   list.addEventListener("click", (e) => {
@@ -113,14 +218,13 @@ function wireDrawer(allProducts, onFilterChange) {
     active = btn.getAttribute("data-cat");
     renderChips();
     onFilterChange(active);
-    // fecha em mobile (sensação boa)
     close();
   });
 
   renderChips();
 }
 
-/* ---------- Modal ---------- */
+/* ---------------- Modal ---------------- */
 function wireModal(productsById) {
   const modal = $("#modal");
   if (!modal) return;
@@ -132,28 +236,57 @@ function wireModal(productsById) {
     if (e.target.closest("[data-close]")) closeAll();
   });
 
-  function setLeftPanelMode({ mode, textHtml, modelUrl }) {
+  function setLeftPanelMode({ mode, modelUrl, gallery, textHtml }) {
+    const ui = ensureMediaUI();
     const viewer = $("#mViewer");
     const textBlock = $("#mTextBlock");
 
+    // clique nas abas
+    if (ui) {
+      const btns = $$(".mediaTab", ui);
+      btns.forEach((b) => (b.onclick = () => setActiveTab(b.dataset.tab)));
+    }
+
+    // fotos sempre tentam renderizar (se tiver)
+    renderPhotos(gallery || []);
+
     if (mode === "model") {
       ensureModelViewer();
+
+      // garante que a aba 3D aparece
+      const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
+      if (btn3d) btn3d.style.display = "";
+
       if (viewer) {
         viewer.style.display = "";
         if (modelUrl) viewer.setAttribute("src", modelUrl);
         else viewer.removeAttribute("src");
       }
+
+      // texto some
       if (textBlock) {
         textBlock.style.display = "none";
         textBlock.innerHTML = "";
       }
+
+      // se tiver pelo menos uma foto, você pode preferir iniciar em "Fotos".
+      // Mas como você pediu “aba de galeria e vista 3D”, vamos iniciar no 3D quando tiver.
+      setActiveTab("model");
       return;
     }
 
+    // sem 3D
     if (viewer) {
       viewer.style.display = "none";
       viewer.removeAttribute("src");
     }
+
+    // esconde a aba 3D quando não tem model
+    const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
+    if (btn3d) btn3d.style.display = "none";
+
+    setActiveTab("photos");
+
     if (textBlock) {
       textBlock.style.display = "";
       textBlock.innerHTML = textHtml || "";
@@ -194,62 +327,26 @@ function wireModal(productsById) {
     });
   }
 
-  function openCustomOrder() {
-    const custom =
-      productsById.get("custom") || {
-        id: "custom",
-        name: "Peça sob encomenda",
-        category: "Serviços",
-        price: null,
-        dimensions: "Sob medida",
-        description: "Você manda a ideia e a gente imprime do jeito certo.",
-        options: [
-          { name: "Material", values: ["PLA (padrão)", "PETG (mais resistente)", "TPU (flexível)"] },
-          { name: "Cor", values: ["Colorido (sortido)", "Preto", "Branco", "Cinza", "Laranja", "Azul", "Vermelho"] }
-        ]
-      };
-
-    $("#mTitle").textContent = custom.name;
-    $("#mCategory").textContent = custom.category || "";
-    $("#mDesc").textContent = custom.description || "";
-    $("#mDim").textContent = ""; // se quiser tirar dimensões aqui também
-    $("#mPrice").textContent = "Sob consulta";
-
-    setLeftPanelMode({
-      mode: "text",
-      textHtml: `
-        <div class="panel">
-          <p class="small"><strong>Como funciona:</strong> você manda a ideia (foto, desenho ou STL) e a gente te orienta.</p>
-          <p class="small"><strong>Pra agilizar:</strong> diga o uso, tamanho aproximado, material e cor.</p>
-          <p class="small">(A finalização é pelo WhatsApp.)</p>
-        </div>
-      `
-    });
-
-    const selections = [];
-    renderOptions(custom.options || [], selections);
-
-    $("#mBuyInside").onclick = () => openWhats(custom, selections.filter(Boolean));
-    modal.classList.add("open");
-  }
-
   window.openProductById = (id) => {
-    if (id === "custom") return openCustomOrder();
-
     const p = productsById.get(id);
     if (!p) return;
 
     $("#mTitle").textContent = p.name || "Produto";
     $("#mCategory").textContent = p.category || "";
     $("#mDesc").textContent = p.description || "";
-    $("#mDim").textContent = ""; // ✅ remove o bloco de dimensões do lado das opções (se quiser, deixa vazio)
+    // se você quiser sumir com dimensões no modal:
+    const mDim = $("#mDim");
+    if (mDim) mDim.style.display = "none";
     $("#mPrice").textContent = moneyBRL(p.price);
 
+    const gallery = p.gallery && p.gallery.length ? p.gallery : (p.image ? [p.image] : []);
+
     if (p.modelUrl) {
-      setLeftPanelMode({ mode: "model", modelUrl: p.modelUrl });
+      setLeftPanelMode({ mode: "model", modelUrl: p.modelUrl, gallery });
     } else {
       setLeftPanelMode({
         mode: "text",
+        gallery,
         textHtml: `<div class="panel"><p class="small">Sem visualização 3D aqui — pede no WhatsApp que a gente manda mais detalhes.</p></div>`
       });
     }
@@ -278,7 +375,83 @@ function wireModal(productsById) {
   });
 }
 
-/* ---------- Render Catálogo + Busca + Filtro ---------- */
+/* ---------------- Início: Carrossel 4 aleatórios (ping-pong) ---------------- */
+function renderHomeCarouselRandom4(products) {
+  const track = $("#track");
+  const dotsWrap = $("#dots");
+  const prevBtn = $("#prevBtn");
+  const nextBtn = $("#nextBtn");
+  const carousel = $("#carousel");
+
+  if (!track || !dotsWrap) return;
+
+  const candidates = products.filter((p) => p.id !== "custom");
+  const chosen = shuffle(candidates).slice(0, 4);
+
+  let idx = 0;
+  let dir = 1;
+  let timer = null;
+
+  track.innerHTML = chosen.map((p) => `<div class="carouselSlide">${productCard(p)}</div>`).join("");
+
+  dotsWrap.innerHTML = chosen
+    .map((_, i) => `<button class="dot ${i === 0 ? "active" : ""}" aria-label="slide ${i + 1}"></button>`)
+    .join("");
+
+  const dots = $$(".dot", dotsWrap);
+
+  const set = (i) => {
+    idx = Math.max(0, Math.min(chosen.length - 1, i));
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    dots.forEach((d, di) => d.classList.toggle("active", di === idx));
+  };
+
+  const tick = () => {
+    if (chosen.length <= 1) return;
+    let next = idx + dir;
+    if (next >= chosen.length) {
+      dir = -1;
+      next = idx + dir;
+    }
+    if (next < 0) {
+      dir = 1;
+      next = idx + dir;
+    }
+    set(next);
+  };
+
+  const restart = () => {
+    if (timer) clearInterval(timer);
+    timer = setInterval(tick, 4200);
+  };
+
+  dots.forEach((d, i) =>
+    d.addEventListener("click", () => {
+      dir = i > idx ? 1 : -1;
+      set(i);
+      restart();
+    })
+  );
+
+  prevBtn?.addEventListener("click", () => {
+    dir = -1;
+    set(idx - 1);
+    restart();
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    dir = 1;
+    set(idx + 1);
+    restart();
+  });
+
+  restart();
+
+  carousel?.addEventListener("mouseenter", () => timer && clearInterval(timer));
+  carousel?.addEventListener("mouseleave", restart);
+}
+
+/* ---------------- Catálogo: grid + busca + filtro ---------------- */
 function renderCatalogIntoGrid(products) {
   const grid = $("#catalogGrid");
   if (!grid) return;
@@ -295,9 +468,8 @@ function wireSearch(allProducts, getActiveCategory, onResult) {
     const cat = getActiveCategory();
 
     const filtered = allProducts.filter((p) => {
-      const matchesCat = (cat === "Tudo") || ((p.category || "") === cat);
+      const matchesCat = cat === "Tudo" || (p.category || "") === cat;
       if (!matchesCat) return false;
-
       if (!q) return true;
       const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
       return hay.includes(q);
@@ -315,26 +487,27 @@ function wireSearch(allProducts, getActiveCategory, onResult) {
   apply();
 }
 
-/* ---------- Boot ---------- */
+/* ---------------- Boot ---------------- */
 (async function main() {
   try {
     const productsAll = await loadProducts();
     const productsById = new Map(productsAll.map((p) => [p.id, p]));
 
-    // modal
+    // modal com abas (vale pra todas as páginas que tiverem o modal)
     wireModal(productsById);
 
-    // estado do filtro
+    // INÍCIO: carrossel 4 aleatórios (se existir estrutura)
+    renderHomeCarouselRandom4(productsAll);
+
+    // CATÁLOGO: drawer + busca (se existir estrutura)
     let activeCategory = "Tudo";
     const getActiveCategory = () => activeCategory;
 
-    // drawer chips
     wireDrawer(productsAll, (cat) => {
       activeCategory = cat;
-      // reaplica busca + filtro
       const q = ($("#searchInput")?.value || "").trim().toLowerCase();
       const filtered = productsAll.filter((p) => {
-        const matchesCat = (activeCategory === "Tudo") || ((p.category || "") === activeCategory);
+        const matchesCat = activeCategory === "Tudo" || (p.category || "") === activeCategory;
         if (!matchesCat) return false;
         if (!q) return true;
         const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
@@ -343,11 +516,12 @@ function wireSearch(allProducts, getActiveCategory, onResult) {
       renderCatalogIntoGrid(filtered);
     });
 
-    // busca
     wireSearch(productsAll, getActiveCategory, renderCatalogIntoGrid);
 
-    // render inicial
-    renderCatalogIntoGrid(productsAll.filter(p => p.id !== "custom"));
+    // render inicial do catálogo (se existir grid)
+    if ($("#catalogGrid")) {
+      renderCatalogIntoGrid(productsAll.filter((p) => p.id !== "custom"));
+    }
   } catch (err) {
     console.error(err);
     const grid = $("#catalogGrid");
