@@ -31,8 +31,7 @@ function buildWhatsMsg(product, selections) {
     `Olá! Quero: ${product.name}`,
     product.category ? `Categoria: ${product.category}` : null,
     product.price != null ? `Preço: ${moneyBRL(product.price)}` : "Preço: sob consulta",
-    selections?.length ? `Opções: ${selections.join(" • ")}` : null,
-    product.dimensions ? `Dimensões: ${product.dimensions}` : null,
+    selections?.length ? `Opções: ${selections.join(" • ")}` : null
   ].filter(Boolean);
 
   return lines.join("\n");
@@ -63,7 +62,7 @@ function productCard(p) {
         ${p.description ? `<p class="pdesc">${p.description}</p>` : ``}
         <div class="priceLine">
           <span class="price">${moneyBRL(p.price)}</span>
-          <span class="dimPill">${dims}</span>
+          <span class="pill">${dims}</span>
         </div>
       </div>
 
@@ -76,76 +75,58 @@ function productCard(p) {
   `;
 }
 
-/* ---------- Modal helpers: criar UI de Fotos/3D via JS (sem mexer no HTML) ---------- */
+/* ---------- Modal: Fotos + 3D ---------- */
 function ensureMediaUI() {
-  const leftPanel = $("#mLeft") || $("#mLeftPanel") || $(".modalGrid .panel"); // fallback
-  // Se não achar um container específico, a gente injeta no body do modal antes do viewer
-  const viewer = $("#mViewer");
+  // injeta UI dentro do lado esquerdo do modal
   const textBlock = $("#mTextBlock");
+  const viewer = $("#mViewer");
+  if (!textBlock && !viewer) return null;
 
-  if (!viewer && !textBlock) return null;
+  let wrap = $("#mMediaWrap");
+  if (wrap) return wrap;
 
-  // container
-  let mediaWrap = $("#mMediaWrap");
-  if (!mediaWrap) {
-    mediaWrap = document.createElement("div");
-    mediaWrap.id = "mMediaWrap";
-    mediaWrap.className = "mediaWrap";
+  wrap = document.createElement("div");
+  wrap.id = "mMediaWrap";
+  wrap.className = "mediaWrap";
 
-    // tabs
-    const tabs = document.createElement("div");
-    tabs.className = "mediaTabs";
-    tabs.innerHTML = `
+  wrap.innerHTML = `
+    <div class="mediaTabs">
       <button type="button" class="mediaTab active" data-tab="photos">Fotos</button>
       <button type="button" class="mediaTab" data-tab="model">3D</button>
-    `;
+    </div>
 
-    // photos
-    const photos = document.createElement("div");
-    photos.id = "mPhotos";
-    photos.className = "mediaPane";
-    photos.innerHTML = `
+    <div id="mPhotos" class="mediaPane">
       <img id="mPhotoMain" class="photoMain" alt="Foto do produto">
       <div id="mPhotoThumbs" class="photoThumbs"></div>
-    `;
+    </div>
 
-    // model pane: a gente reaproveita o model-viewer existente
-    let modelPane = document.createElement("div");
-    modelPane.id = "mModelPane";
-    modelPane.className = "mediaPane";
-    modelPane.style.display = "none";
+    <div id="mModelPane" class="mediaPane" style="display:none;"></div>
+  `;
 
-    // move viewer para dentro do pane do model
-    if (viewer) modelPane.appendChild(viewer);
-
-    // se existir bloco de texto, mantém separado (vai ser usado quando não tiver 3D)
-    // (não move o textBlock; ele continua sendo controlado pela lógica antiga)
-
-    mediaWrap.appendChild(tabs);
-    mediaWrap.appendChild(photos);
-    mediaWrap.appendChild(modelPane);
-
-    // injeta antes do textBlock se existir, senão no começo do modal body
-    if (textBlock && textBlock.parentElement) {
-      textBlock.parentElement.insertBefore(mediaWrap, textBlock);
-    } else if (viewer && viewer.parentElement) {
-      viewer.parentElement.insertBefore(mediaWrap, viewer);
-    } else {
-      const modalBody = $(".modalBody");
-      modalBody?.prepend(mediaWrap);
-    }
+  // coloca a UI antes do bloco de texto (quando existir)
+  if (textBlock && textBlock.parentElement) {
+    textBlock.parentElement.insertBefore(wrap, textBlock);
+  } else if (viewer && viewer.parentElement) {
+    viewer.parentElement.insertBefore(wrap, viewer);
+  } else {
+    $(".modalBody")?.prepend(wrap);
   }
 
-  return mediaWrap;
+  // move o model-viewer existente pra dentro do pane "3D"
+  const modelPane = $("#mModelPane");
+  if (viewer && modelPane) modelPane.appendChild(viewer);
+
+  return wrap;
 }
 
 function setActiveTab(tab) {
-  const tabs = $$(".mediaTab", $("#mMediaWrap") || document);
-  tabs.forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  const wrap = $("#mMediaWrap");
+  if (!wrap) return;
+
+  $$(".mediaTab", wrap).forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
 
   const photos = $("#mPhotos");
   const modelPane = $("#mModelPane");
-
   if (photos) photos.style.display = tab === "photos" ? "" : "none";
   if (modelPane) modelPane.style.display = tab === "model" ? "" : "none";
 }
@@ -167,10 +148,11 @@ function renderPhotos(gallery) {
 
   thumbs.innerHTML = imgs
     .map(
-      (src, i) =>
-        `<button type="button" class="thumbBtn ${i === 0 ? "active" : ""}" data-src="${src}">
+      (src, i) => `
+        <button type="button" class="thumbBtn ${i === 0 ? "active" : ""}" data-src="${src}">
           <img src="${src}" alt="miniatura">
-        </button>`
+        </button>
+      `
     )
     .join("");
 
@@ -179,7 +161,7 @@ function renderPhotos(gallery) {
     if (!btn) return;
     const src = btn.getAttribute("data-src");
     if (src) main.src = src;
-    $$(".thumbBtn", thumbs).forEach(b => b.classList.toggle("active", b === btn));
+    $$(".thumbBtn", thumbs).forEach((b) => b.classList.toggle("active", b === btn));
   };
 }
 
@@ -195,8 +177,7 @@ function wireModal(productsById) {
     if (e.target.closest("[data-close]")) closeAll();
   });
 
-  // Remove o “bloco Dimensões” do lado das opções:
-  // (se existir no HTML, some; se não existir, ok)
+  // ✅ remove o bloco "Dimensões" ao lado das opções (some pra sempre)
   const dimEl = $("#mDim");
   if (dimEl) {
     dimEl.textContent = "";
@@ -204,65 +185,53 @@ function wireModal(productsById) {
   }
 
   function setLeftPanelMode({ mode, textHtml, modelUrl, gallery }) {
-    // Monta UI de fotos/3D
     const ui = ensureMediaUI();
-
     const viewer = $("#mViewer");
     const textBlock = $("#mTextBlock");
 
-    // Sempre renderiza fotos (se tiver)
-    const finalGallery = (gallery && gallery.length ? gallery : []).filter(Boolean);
-    renderPhotos(finalGallery);
+    // tabs click
+    if (ui) {
+      const btns = $$(".mediaTab", ui);
+      btns.forEach((b) => (b.onclick = () => setActiveTab(b.dataset.tab)));
+    }
 
-    // Tabs click
-    const wrap = $("#mMediaWrap");
-    const tabs = wrap ? $$(".mediaTab", wrap) : [];
-    tabs.forEach((b) => {
-      b.onclick = () => setActiveTab(b.dataset.tab);
-    });
+    // fotos
+    renderPhotos(gallery || []);
 
-    // Caso 1: modo model (tem GLB)
+    // modo 3D
     if (mode === "model") {
       ensureModelViewer();
 
-      // Esconde textBlock
       if (textBlock) {
         textBlock.style.display = "none";
         textBlock.innerHTML = "";
       }
 
-      // Mostra tabs e panes
-      if (ui) ui.style.display = "";
+      // garante que o botão 3D aparece
+      const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
+      if (btn3d) btn3d.style.display = "";
 
-      // Configura model
       if (viewer) {
         viewer.style.display = "";
         if (modelUrl) viewer.setAttribute("src", modelUrl);
         else viewer.removeAttribute("src");
       }
 
-      // Se tiver 3D E fotos, começa em 3D (fica mais “uau”)
-      // Se não tiver foto, começa em 3D mesmo.
       setActiveTab("model");
       return;
     }
 
-    // Caso 2: modo texto (sem 3D)
-    // Esconde pane do model e deixa apenas fotos (se tiver) + texto
+    // modo texto (sem 3D)
     if (viewer) {
       viewer.style.display = "none";
       viewer.removeAttribute("src");
     }
 
-    if (ui) {
-      ui.style.display = "";
-      // sem 3D → esconde o botão “3D”
-      const btn3d = $('.mediaTab[data-tab="model"]', ui);
-      if (btn3d) btn3d.style.display = "none";
-      const btnFotos = $('.mediaTab[data-tab="photos"]', ui);
-      if (btnFotos) btnFotos.style.display = "";
-      setActiveTab("photos");
-    }
+    // esconde aba 3D quando não tem model
+    const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
+    if (btn3d) btn3d.style.display = "none";
+
+    setActiveTab("photos");
 
     if (textBlock) {
       textBlock.style.display = "";
@@ -273,8 +242,8 @@ function wireModal(productsById) {
   function renderOptions(opts, selections) {
     const wrap = $("#mOptions");
     if (!wrap) return;
-    wrap.innerHTML = "";
 
+    wrap.innerHTML = "";
     (opts || []).forEach((opt, idx) => {
       const label = document.createElement("p");
       label.className = "small";
@@ -304,24 +273,6 @@ function wireModal(productsById) {
     });
   }
 
-  function renderDownloads(p) {
-    const wrap = $("#mOptions");
-    if (!wrap) return;
-
-    // STL download (se tiver)
-    if (p.stlUrl) {
-      const div = document.createElement("div");
-      div.style.marginTop = "6px";
-      div.innerHTML = `
-        <a class="btn ghost" href="${p.stlUrl}" target="_blank" rel="noopener noreferrer" style="width:100%;">
-          Baixar STL
-        </a>
-      `;
-      wrap.appendChild(div);
-    }
-  }
-
-  // Sob encomenda
   function openCustomOrder() {
     const custom =
       productsById.get("custom") || {
@@ -334,8 +285,8 @@ function wireModal(productsById) {
         gallery: ["assets/products/images/custom.jpg"],
         options: [
           { name: "Material", values: ["PLA (padrão)", "PETG (mais resistente)", "TPU (flexível)"] },
-          { name: "Cor", values: ["Colorido (sortido)", "Preto", "Branco", "Cinza", "Laranja", "Azul", "Vermelho"] },
-        ],
+          { name: "Cor", values: ["Colorido (sortido)", "Preto", "Branco", "Cinza", "Laranja", "Azul", "Vermelho"] }
+        ]
       };
 
     $("#mTitle").textContent = custom.name;
@@ -352,14 +303,13 @@ function wireModal(productsById) {
           <p class="small">(A finalização é pelo WhatsApp.)</p>
         </div>
       `,
-      gallery: custom.gallery || (custom.image ? [custom.image] : []),
+      gallery: custom.gallery || []
     });
 
     const selections = [];
     renderOptions(custom.options || [], selections);
 
     $("#mBuyInside").onclick = () => openWhats(custom, selections.filter(Boolean));
-
     modal.classList.add("open");
   }
 
@@ -369,19 +319,13 @@ function wireModal(productsById) {
     const p = productsById.get(id);
     if (!p) return;
 
-    // reabilita botão 3D (caso tenha sido oculto no custom)
-    const ui = ensureMediaUI();
-    if (ui) {
-      const btn3d = $('.mediaTab[data-tab="model"]', ui);
-      if (btn3d) btn3d.style.display = "";
-    }
-
     $("#mTitle").textContent = p.name || "Produto";
     $("#mCategory").textContent = p.category || "";
     $("#mDesc").textContent = p.description || "";
     $("#mPrice").textContent = moneyBRL(p.price);
 
-    const gallery = (p.gallery && p.gallery.length ? p.gallery : (p.image ? [p.image] : []));
+    const gallery =
+      (p.gallery && p.gallery.length ? p.gallery : (p.image ? [p.image] : []));
 
     if (p.modelUrl) {
       setLeftPanelMode({ mode: "model", modelUrl: p.modelUrl, gallery });
@@ -395,20 +339,18 @@ function wireModal(productsById) {
 
     const selections = [];
     renderOptions(p.options || [], selections);
-    renderDownloads(p);
 
     $("#mBuyInside").onclick = () => openWhats(p, selections.filter(Boolean));
-
     modal.classList.add("open");
   };
 
-  // Clique "Ver opções"
+  // abrir modal
   document.addEventListener("click", (e) => {
     const open = e.target.closest("[data-open]");
     if (open) window.openProductById(open.getAttribute("data-open"));
   });
 
-  // Clique "Comprar" direto (sem abrir modal)
+  // comprar direto
   document.addEventListener("click", (e) => {
     const buy = e.target.closest("[data-buy]");
     if (!buy) return;
@@ -422,7 +364,7 @@ function wireModal(productsById) {
   if (btnCustom) btnCustom.onclick = openCustomOrder;
 }
 
-/* ---------- Home Carousel ---------- */
+/* ---------- Home Carousel (ping-pong 1 por 1) ---------- */
 function renderHomeCarousel(products) {
   const track = $("#track");
   const dotsWrap = $("#dots");
@@ -440,7 +382,9 @@ function renderHomeCarousel(products) {
 
   track.innerHTML = items.map((p) => `<div class="carouselSlide">${productCard(p)}</div>`).join("");
 
-  dotsWrap.innerHTML = items.map((_, i) => `<button class="dot ${i === 0 ? "active" : ""}" aria-label="slide ${i+1}"></button>`).join("");
+  dotsWrap.innerHTML = items
+    .map((_, i) => `<button class="dot ${i === 0 ? "active" : ""}" aria-label="slide ${i + 1}"></button>`)
+    .join("");
 
   const dots = $$(".dot", dotsWrap);
 
@@ -458,14 +402,29 @@ function renderHomeCarousel(products) {
     })
   );
 
-  prevBtn?.addEventListener("click", () => { dir = -1; set(idx - 1); restart(); });
-  nextBtn?.addEventListener("click", () => { dir = 1; set(idx + 1); restart(); });
+  prevBtn?.addEventListener("click", () => {
+    dir = -1;
+    set(idx - 1);
+    restart();
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    dir = 1;
+    set(idx + 1);
+    restart();
+  });
 
   const tick = () => {
     if (items.length <= 1) return;
     let next = idx + dir;
-    if (next >= items.length) { dir = -1; next = idx + dir; }
-    if (next < 0) { dir = 1; next = idx + dir; }
+    if (next >= items.length) {
+      dir = -1;
+      next = idx + dir;
+    }
+    if (next < 0) {
+      dir = 1;
+      next = idx + dir;
+    }
     set(next);
   };
 
@@ -497,9 +456,7 @@ function renderCatalog(products) {
         category: "Serviços",
         price: null,
         dimensions: "Sob medida",
-        image: "assets/products/images/custom.jpg",
-        description:
-          "Projeto e impressão sob medida. Clique para escolher material, tolerância e acabamento.",
+        description: "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento."
       };
     customSlot.innerHTML = productCard(custom);
   }
@@ -512,7 +469,6 @@ function renderCatalog(products) {
     const productsById = new Map(products.map((p) => [p.id, p]));
 
     wireModal(productsById);
-
     renderHomeCarousel(products);
     renderCatalog(products);
   } catch (err) {
