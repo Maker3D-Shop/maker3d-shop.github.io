@@ -11,7 +11,6 @@
       "assets/products/images/suporte.jpg"
     ],
     "modelUrl": "assets/products/models/suporte.glb",
-    "stlUrl": "",
     "description": "Suporte impresso em 3D com encaixe firme e design minimalista.",
     "options": [
       { "name": "Material", "values": ["PLA", "PETG"] },
@@ -30,7 +29,6 @@
       "assets/products/images/engrenagem.jpg"
     ],
     "modelUrl": "assets/products/models/engrenagem.glb",
-    "stlUrl": "",
     "description": "Peça decorativa com acabamento suave e bordas arredondadas.",
     "options": [
       { "name": "Acabamento", "values": ["Fosco", "Semi-brilho"] },
@@ -49,7 +47,6 @@
       "assets/products/images/case-rp2040.jpg"
     ],
     "modelUrl": "assets/products/models/box-opener.glb",
-    "stlUrl": "",
     "description": "Case com encaixe preciso para placa e passagem de cabo.",
     "options": [
       { "name": "Tampa", "values": ["Com ventilação", "Fechada"] },
@@ -68,7 +65,6 @@
       "assets/products/images/organizador.jpg"
     ],
     "modelUrl": "assets/products/models/organizador.glb",
-    "stlUrl": "",
     "description": "Organizador modular para bancada, com encaixes e estética clean.",
     "options": [
       { "name": "Módulos", "values": ["1x", "2x", "3x"] },
@@ -87,7 +83,6 @@
       "assets/products/images/custom.jpg"
     ],
     "modelUrl": "",
-    "stlUrl": "",
     "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
     "options": [
       { "name": "Material", "values": ["PLA", "PETG", "ABS"] },
