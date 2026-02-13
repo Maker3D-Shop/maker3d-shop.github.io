@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MAKER3D — Calculadora (privado)</title>
+
+  <!-- ✅ não aparecer em busca -->
+  <meta name="robots" content="noindex,nofollow" />
+
+  <link rel="icon" href="assets/brand/logo.png" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html">
+          <img src="assets/brand/logo.png" alt="MAKER3D">
+          <div class="btxt">
+            <strong>MAKER3D</strong>
+            <span>calculadora (privado)</span>
+          </div>
+        </a>
+
+        <!-- ✅ mantém igual ao site (sem link pra calculadora) -->
+        <nav class="menu">
+          <a href="index.html">Início</a>
+          <a href="catalogo.html">Catálogo</a>
+          <a href="contato.html">Contato</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <div class="heroCard">
+        <div class="heroInner">
+          <h1 class="heroTitle" style="margin-bottom:2px;">Calculadora PRO (InfinityPay)</h1>
+          <p class="heroSub">
+            Página privada pra você calcular custo, lucro e preço ideal (Pix/Crédito) para modelos 3D.
+            <br><strong>Dica:</strong> não tem link em lugar nenhum — só acessa quem souber o endereço.
+          </p>
+
+          <div class="grid" style="grid-template-columns:repeat(2,1fr);">
+            <!-- ENTRADAS PRODUTO -->
+            <div class="card" style="padding:14px;">
+              <div class="panel" style="margin-bottom:10px;">
+                <p class="small"><strong>Entradas do Produto</strong></p>
+                <p class="small" style="opacity:.9;">(Preencha só isso por peça e ele calcula tudo.)</p>
+              </div>
+
+              <p class="small"><strong>Nome do produto</strong></p>
+              <input class="select" id="produtoNome" type="text" placeholder="Ex: Suporte para Celular" value="Modelo 3D">
+
+              <div style="height:10px;"></div>
+
+              <p class="small"><strong>Peso (g)</strong></p>
+              <input class="select" id="pesoG" type="number" step="1" value="120">
+
+              <div style="height:10px;"></div>
+
+              <p class="small"><strong>Tempo (h)</strong></p>
+              <input class="select" id="tempoH" type="number" step="1" value="6">
+
+              <div style="height:10px;"></div>
+
+              <p class="small"><strong>Tempo (min)</strong></p>
+              <input class="select" id="tempoMin" type="number" step="1" value="30">
+
+              <div style="height:10px;"></div>
+
+              <p class="small"><strong>Outros custos (R$)</strong></p>
+              <input class="select" id="outros" type="number" step="0.01" value="0">
+
+              <div style="height:10px;"></div>
+
+              <p class="small"><strong>Margem alvo (%)</strong></p>
+              <input class="select" id="margem" type="number" step="1" value="40">
+            </div>
+
+            <!-- CONFIG -->
+            <div class="card" style="padding:14px;">
+              <div class="panel" style="margin-bottom:10px;">
+                <p class="small"><strong>Config (salva no seu navegador)</strong></p>
+                <p class="small" style="opacity:.9;">(Ajuste 1 vez e pronto.)</p>
+              </div>
+
+              <p class="small"><strong>Preço do filamento (R$/kg)</strong></p>
+              <input class="select" id="filamentoKg" type="number" step="0.01" value="120">
+
+              <div style="height:10px;"></div>
+
+              <p class="small"><strong>Energia (R$/kWh)</strong></p>
+              <input class="select" id="energiaKwh" type="number" step="0.01" value="0.95">
+
+              <div style="height:10px;"></div>
+
+              <p class="small"><strong>Potência média da impressora (W)</strong></p>
+              <input class="select" id="potenciaW" type="number" step="1" value="120">
+
+              <div style="height:10px;"></div>
+
+              <p class="small"><strong>Taxa Pix InfinityPay (%)</strong></p>
+              <input class="select" id="taxaPix" type="number" step="0.01" value="1.99">
+
+              <div style="height:10px;"></div>
+
+              <p class="small"><strong>Taxa Crédito InfinityPay (%)</strong></p>
+              <input class="select" id="taxaCred" type="number" step="0.01" value="4.99">
+
+              <div style="height:12px;"></div>
+
+              <button class="btn primary" id="calcularBtn" type="button" style="width:100%;">Calcular</button>
+
+              <div style="height:10px;"></div>
+
+              <button class="btn" id="salvarBtn" type="button" style="width:100%;">Salvar config</button>
+            </div>
+          </div>
+
+          <!-- RESULTADOS -->
+          <div class="card" style="padding:14px;">
+            <div class="panel" style="margin-bottom:10px;">
+              <p class="small"><strong>Resultados</strong></p>
+              <p class="small" style="opacity:.9;">Preço sugerido + quanto cai líquido + preço pra repassar taxa.</p>
+            </div>
+
+            <div class="grid" style="grid-template-columns:repeat(2,1fr);">
+              <div class="panel">
+                <p class="small" id="resCusto" style="margin:0;"></p>
+              </div>
+              <div class="panel">
+                <p class="small" id="resPreco" style="margin:0;"></p>
+              </div>
+            </div>
+
+            <div style="height:10px;"></div>
+
+            <div class="grid" style="grid-template-columns:repeat(2,1fr);">
+              <div class="panel">
+                <p class="small" id="resLiquidos" style="margin:0;"></p>
+              </div>
+              <div class="panel">
+                <p class="small" id="resRepassar" style="margin:0;"></p>
+              </div>
+            </div>
+          </div>
+
+          <p class="small" style="opacity:.75; margin-top:6px;">
+            URL privada: <strong>.../calculadora.html</strong> (não tem link público).
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const KEY = "maker3d_calc_config_v1";
+
+    const brl = (n) => (isFinite(n) ? n : 0).toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+    const pct = (n) => ((isFinite(n) ? n : 0) * 100).toFixed(2) + "%";
+
+    function getNum(id, fallback=0){
+      const v = parseFloat(document.getElementById(id).value);
+      return isFinite(v) ? v : fallback;
+    }
+
+    function loadConfig(){
+      try{
+        const raw = localStorage.getItem(KEY);
+        if(!raw) return;
+        const c = JSON.parse(raw);
+
+        for(const k of ["filamentoKg","energiaKwh","potenciaW","taxaPix","taxaCred","margem"]){
+          if(c[k] !== undefined) document.getElementById(k).value = c[k];
+        }
+      }catch(e){}
+    }
+
+    function saveConfig(){
+      const c = {
+        filamentoKg: getNum("filamentoKg", 0),
+        energiaKwh: getNum("energiaKwh", 0),
+        potenciaW: getNum("potenciaW", 0),
+        taxaPix: getNum("taxaPix", 0),
+        taxaCred: getNum("taxaCred", 0),
+        margem: getNum("margem", 0),
+      };
+      localStorage.setItem(KEY, JSON.stringify(c));
+    }
+
+    function calc(){
+      const pesoG = getNum("pesoG", 0);
+      const tempoH = getNum("tempoH", 0);
+      const tempoMin = getNum("tempoMin", 0);
+      const outros = getNum("outros", 0);
+      const margemAlvo = getNum("margem", 0) / 100;
+
+      const filamentoKg = getNum("filamentoKg", 0);
+      const energiaKwh = getNum("energiaKwh", 0);
+      const potenciaW = getNum("potenciaW", 0);
+
+      const taxaPix = getNum("taxaPix", 0) / 100;
+      const taxaCred = getNum("taxaCred", 0) / 100;
+
+      const custoFilamento = (pesoG / 1000) * filamentoKg;
+
+      const horasTotais = tempoH + (tempoMin / 60);
+      const kwh = (potenciaW / 1000) * horasTotais;
+      const custoEnergia = kwh * energiaKwh;
+
+      const custoTotal = custoFilamento + custoEnergia + outros;
+
+      const precoSugerido = (margemAlvo >= 1) ? 0 : (custoTotal / (1 - margemAlvo));
+      const lucro = precoSugerido - custoTotal;
+      const margemReal = precoSugerido ? (lucro / precoSugerido) : 0;
+
+      const liquidoPix = precoSugerido * (1 - taxaPix);
+      const liquidoCred = precoSugerido * (1 - taxaCred);
+
+      const precoPraPix = (1 - taxaPix) > 0 ? (precoSugerido / (1 - taxaPix)) : 0;
+      const precoPraCred = (1 - taxaCred) > 0 ? (precoSugerido / (1 - taxaCred)) : 0;
+
+      document.getElementById("resCusto").innerHTML =
+        `<strong>Custo filamento:</strong> ${brl(custoFilamento)}<br>` +
+        `<strong>Energia usada:</strong> ${kwh.toFixed(3)} kWh<br>` +
+        `<strong>Custo energia:</strong> ${brl(custoEnergia)}<br>` +
+        `<strong>Outros custos:</strong> ${brl(outros)}<br>` +
+        `<strong>Custo total:</strong> ${brl(custoTotal)}`;
+
+      document.getElementById("resPreco").innerHTML =
+        `<strong>Preço sugerido:</strong> ${brl(precoSugerido)}<br>` +
+        `<strong>Lucro:</strong> ${brl(lucro)}<br>` +
+        `<strong>Margem alvo:</strong> ${pct(margemAlvo)}<br>` +
+        `<strong>Margem real:</strong> ${pct(margemReal)}`;
+
+      document.getElementById("resLiquidos").innerHTML =
+        `<strong>Líquido Pix (cobrando sugerido):</strong> ${brl(liquidoPix)}<br>` +
+        `<strong>Líquido Crédito (cobrando sugerido):</strong> ${brl(liquidoCred)}`;
+
+      document.getElementById("resRepassar").innerHTML =
+        `<strong>Preço p/ bater margem via Pix:</strong> ${brl(precoPraPix)}<br>` +
+        `<strong>Preço p/ bater margem via Crédito:</strong> ${brl(precoPraCred)}`;
+    }
+
+    document.getElementById("calcularBtn").addEventListener("click", calc);
+    document.getElementById("salvarBtn").addEventListener("click", () => { saveConfig(); calc(); });
+
+    // recalcula e salva “na prática”
+    [
+      "pesoG","tempoH","tempoMin","outros","margem",
+      "filamentoKg","energiaKwh","potenciaW","taxaPix","taxaCred"
+    ].forEach(id => document.getElementById(id).addEventListener("input", calc));
+
+    loadConfig();
+    calc();
+  </script>
+</body>
+</html>
