@@ -188,9 +188,7 @@ function applyViewerTint(viewer, colorName, tintPreset) {
   orange_soft: {
     // #ff9f1c com transparência (alpha)
     background: "rgba(255, 159, 28, 0.10)",
-
-    // aproximação bem forte pro tom #ff9f1c
-    filter: "sepia(1) saturate(3.8) hue-rotate(-8deg) brightness(1.05) contrast(1.02)"
+    filter: "sepia(0.6) saturate(1.8) hue-rotate(-8deg) brightness(0.98) contrast(1.05)"
   }
 };
 
