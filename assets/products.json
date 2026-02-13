@@ -15,10 +15,11 @@
       "assets/products/images/P1/p5.png"
     ],
     "modelUrl": "assets/products/models/suporte.glb",
-    "description": "Suporte impresso em 3D com encaixe firme e design minimalista.",
+    "description": "*Esse objeto oferece opçao multicor.*",
     "options": [
       { "name": "Material", "values": ["PLA", "PETG"] },
-      { "name": "Cor", "values": ["Âmbar", "Magenta", "Laranja", "Fumê"] }
+      { "name": "Cor1", "values": ["Amarelo", "Laranja", "Marrom", "Azul", "Verde"] }
+      { "name": "Cor2 (Opcional)", "values": ["Amarelo", "Laranja", "Marrom", "Azul", "Verde"] }
     ]
   },
   {
