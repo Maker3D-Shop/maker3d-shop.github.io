@@ -8,10 +8,10 @@
     "dimensions":"Encantador 🐙✨",
     "image": "assets/products/images/P1/p1.png",
     "gallery": [
-      "assets/products/images/P1/p1.png"
-      "assets/products/images/P1/p2.png"
-      "assets/products/images/P1/p3.png"
-      "assets/products/images/P1/p4.png"
+      "assets/products/images/P1/p1.png",
+      "assets/products/images/P1/p2.png",
+      "assets/products/images/P1/p3.png",
+      "assets/products/images/P1/p4.png",
       "assets/products/images/P1/p5.png"
     ],
     "modelUrl": "assets/products/models/suporte.glb",
