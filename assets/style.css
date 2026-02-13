@@ -26,13 +26,13 @@ a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 .container{max-width:var(--container);margin:0 auto;padding:0 16px}
 
+/* Header */
 header{
   position:sticky;top:0;z-index:50;
   background:rgba(250,250,250,.92);
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--border);
 }
-
 .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}
 .brand{display:flex;align-items:center;gap:10px}
 .brand img{width:44px;height:44px;object-fit:contain}
@@ -51,6 +51,7 @@ header{
 .menu a:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
 .menu a.active{border-color:rgba(255,159,28,.45);background:rgba(255,159,28,.10)}
 
+/* Hero */
 .hero{padding:18px 0 10px}
 .heroCard{
   border:1px solid var(--border);
@@ -64,6 +65,7 @@ header{
 .heroSub{margin:0;font-size:14px;line-height:1.55}
 .heroActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
 
+/* Buttons */
 .btn{
   border:1px solid var(--border);
   background:var(--white);
@@ -81,8 +83,10 @@ header{
 .btn.primary{border-color:rgba(255,159,28,.55);background:var(--orange);color:#fff}
 .btn.ghost{background:rgba(255,159,28,.08);border-color:rgba(255,159,28,.30)}
 
+/* Sections */
 .section{padding:14px 0 26px}
 
+/* Carousel */
 .carousel{
   border:1px solid var(--border);
   border-radius:18px;
@@ -121,6 +125,7 @@ header{
 }
 .dot.active{background:rgba(255,159,28,.55)}
 
+/* Grid & Cards */
 .grid{display:grid;grid-template-columns:1fr;gap:12px}
 .card{
   border:1px solid var(--border);
@@ -259,13 +264,13 @@ header{
 .small{margin:0;font-size:12px;line-height:1.5}
 .select{width:100%;padding:12px 14px;border-radius:var(--pill);border:1px solid var(--border);background:var(--white);font-weight:700;color:#3c3f44}
 
-/* ✅ FUNDO DO VISUALIZADOR 3D MAIS SUAVE (menos laranja) */
+/* Visualizador 3D */
 model-viewer{
   width:100%;
   height:320px;
   border-radius:18px;
   border:1px solid var(--border);
-  background: rgba(255, 159, 28, 0.05); /* <- laranja bem leve */
+  background: rgba(255, 159, 28, 0.05);
 }
 
 /* Abas fotos/3D */
@@ -284,7 +289,6 @@ model-viewer{
 }
 .mediaTab.active{border-color:rgba(255,159,28,.55);background:rgba(255,159,28,.14)}
 .mediaPane{display:block}
-
 .photoMain{
   width:100%;
   height:320px;
@@ -307,6 +311,34 @@ model-viewer{
 .thumbBtn img{width:100%;height:100%;object-fit:cover}
 .thumbBtn.active{border-color:rgba(255,159,28,.55);box-shadow:var(--shadow2)}
 
+/* ✅ CONTATO (isso resolve os ícones gigantes) */
+.contactGrid{display:grid;gap:12px;margin-top:10px}
+.contactItem{
+  display:flex;align-items:center;gap:12px;
+  padding:14px;border-radius:18px;
+  border:1px solid var(--border);
+  background:var(--white);
+  box-shadow:var(--shadow2);
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.contactItem:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+.ico{
+  width:46px;height:46px;border-radius:16px;
+  display:grid;place-items:center;
+  background:rgba(255,159,28,.12);
+  border:1px solid rgba(255,159,28,.25);
+  color:#3c3f44;
+  flex:0 0 auto;
+}
+.ico svg{
+  width:22px;height:22px;display:block;
+  color:#3c3f44;
+}
+.contactText{min-width:0;display:grid;gap:2px}
+.contactText strong{color:#3c3f44}
+.contactText span{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.go{margin-left:auto;opacity:.8;font-weight:900}
+
 /* Responsive */
 @media(min-width:900px){
   .heroInner{padding:26px}
@@ -316,6 +348,7 @@ model-viewer{
   .modalGrid{grid-template-columns:1.1fr .9fr}
   model-viewer{height:380px}
   .photoMain{height:380px}
+  .contactGrid{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:520px){
   .heroTitle{font-size:22px}
