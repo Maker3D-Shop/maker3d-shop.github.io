@@ -185,12 +185,14 @@ function applyViewerTint(viewer, colorName, tintPreset) {
 
   // Preset suave para “laranja da paleta”
   const presets = {
-    orange_soft: {
-      background: "rgba(255, 159, 28, 0.08)",
-      // Tinta o render (aproxima o laranja sem precisar mexer no .glb)
-      filter: "sepia(0.7) saturate(2.2) hue-rotate(-6deg) brightness(1.05)"
-    }
-  };
+  orange_soft: {
+    // #ff9f1c com transparência (alpha)
+    background: "rgba(255, 159, 28, 0.10)",
+
+    // aproximação bem forte pro tom #ff9f1c
+    filter: "sepia(1) saturate(3.8) hue-rotate(-8deg) brightness(1.05) contrast(1.02)"
+  }
+};
 
   const p = presets[tintPreset];
   if (p) {
