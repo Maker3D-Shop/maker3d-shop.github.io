@@ -8,7 +8,11 @@
     "dimensions":"Encantador 🐙✨",
     "image": "assets/products/images/P1/p1.png",
     "gallery": [
-      "assets/products/images/suporte.jpg"
+      "assets/products/images/P1/p1.png"
+      "assets/products/images/P1/p2.png"
+      "assets/products/images/P1/p3.png"
+      "assets/products/images/P1/p4.png"
+      "assets/products/images/P1/p5.png"
     ],
     "modelUrl": "assets/products/models/suporte.glb",
     "description": "Suporte impresso em 3D com encaixe firme e design minimalista.",
