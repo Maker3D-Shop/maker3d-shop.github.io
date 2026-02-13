@@ -18,11 +18,11 @@
     "description": "*Esse objeto oferece opçao multicor.*",
     "options": [
       { "name": "Material", "values": [ "PLA", "PETG"] }
-    ],
     "colorConfig": { "palette": [ "Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde" ],
       "default": "Laranja (Paleta)",
       "multicolor": true,
       "maxColors": 3
+      ],
     },
     "viewerTint": "orange_soft"
   },
