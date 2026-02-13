@@ -5,7 +5,7 @@
     "category": "Articulado",
     "price": 9.49,
     "currency": "BRL",
-    "dimensions":"Encantador 🐙✨",
+    "dimensions": "Encantador 🐙✨",
     "image": "assets/products/images/P1/p1.png",
     "gallery": [
       "assets/products/images/P1/p1.png",
@@ -17,10 +17,27 @@
     "modelUrl": "assets/products/models/p1.glb",
     "description": "*Esse objeto oferece opçao multicor.*",
     "options": [
-      { "name": "Material", "values": ["PLA", "PETG"] },
-      { "name": "Cor1", "values": ["Amarelo", "Laranja", "Marrom", "Azul", "Verde"] },
-      { "name": "Cor2 (Opcional)", "values": ["Amarelo", "Laranja", "Marrom", "Azul", "Verde"] }
-    ]
+      {
+        "name": "Material",
+        "values": [
+          "PLA",
+          "PETG"
+        ]
+      }
+    ],
+    "colorConfig": {
+      "palette": [
+        "Amarelo",
+        "Laranja (Paleta)",
+        "Marrom",
+        "Azul",
+        "Verde"
+      ],
+      "default": "Laranja (Paleta)",
+      "multicolor": true,
+      "maxColors": 3
+    },
+    "viewerTint": "orange_soft"
   },
   {
     "id": "p2",
@@ -36,8 +53,21 @@
     "modelUrl": "assets/products/models/engrenagem.glb",
     "description": "Peça decorativa com acabamento suave e bordas arredondadas.",
     "options": [
-      { "name": "Acabamento", "values": ["Fosco", "Semi-brilho"] },
-      { "name": "Tamanho", "values": ["Pequeno", "Médio", "Grande"] }
+      {
+        "name": "Acabamento",
+        "values": [
+          "Fosco",
+          "Semi-brilho"
+        ]
+      },
+      {
+        "name": "Tamanho",
+        "values": [
+          "Pequeno",
+          "Médio",
+          "Grande"
+        ]
+      }
     ]
   },
   {
@@ -54,8 +84,20 @@
     "modelUrl": "assets/products/models/box-opener.glb",
     "description": "Case com encaixe preciso para placa e passagem de cabo.",
     "options": [
-      { "name": "Tampa", "values": ["Com ventilação", "Fechada"] },
-      { "name": "Fixação", "values": ["Parafuso", "Snap-fit"] }
+      {
+        "name": "Tampa",
+        "values": [
+          "Com ventilação",
+          "Fechada"
+        ]
+      },
+      {
+        "name": "Fixação",
+        "values": [
+          "Parafuso",
+          "Snap-fit"
+        ]
+      }
     ]
   },
   {
@@ -72,9 +114,26 @@
     "modelUrl": "assets/products/models/organizador.glb",
     "description": "Organizador modular para bancada, com encaixes e estética clean.",
     "options": [
-      { "name": "Módulos", "values": ["1x", "2x", "3x"] },
-      { "name": "Cor", "values": ["Âmbar", "Magenta", "Laranja"] }
-    ]
+      {
+        "name": "Módulos",
+        "values": [
+          "1x",
+          "2x",
+          "3x"
+        ]
+      }
+    ],
+    "colorConfig": {
+      "palette": [
+        "Âmbar",
+        "Magenta",
+        "Laranja (Paleta)"
+      ],
+      "default": "Laranja (Paleta)",
+      "multicolor": false,
+      "maxColors": 1
+    },
+    "viewerTint": "orange_soft"
   },
   {
     "id": "p5",
@@ -90,9 +149,29 @@
     "modelUrl": "",
     "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
     "options": [
-      { "name": "Material", "values": ["PLA", "PETG", "ABS"] },
-      { "name": "Tolerância", "values": ["Padrão", "Ajuste fino"] },
-      { "name": "Acabamento", "values": ["Bruto", "Lixado", "Pintado"] }
+      {
+        "name": "Material",
+        "values": [
+          "PLA",
+          "PETG",
+          "ABS"
+        ]
+      },
+      {
+        "name": "Tolerância",
+        "values": [
+          "Padrão",
+          "Ajuste fino"
+        ]
+      },
+      {
+        "name": "Acabamento",
+        "values": [
+          "Bruto",
+          "Lixado",
+          "Pintado"
+        ]
+      }
     ]
   }
 ]
