@@ -175,6 +175,171 @@ function renderPhotos(gallery) {
   };
 }
 
+/* ---------------- Cores / Multicor (controlado por products.json) ---------------- */
+function applyViewerTint(viewer, colorName, tintPreset) {
+  if (!viewer) return;
+
+  // reset
+  viewer.style.filter = "";
+  viewer.style.background = "rgba(255, 159, 28, 0.05)";
+
+  // Preset suave para “laranja da paleta”
+  const presets = {
+    orange_soft: {
+      background: "rgba(255, 159, 28, 0.08)",
+      // Tinta o render (aproxima o laranja sem precisar mexer no .glb)
+      filter: "sepia(0.7) saturate(2.2) hue-rotate(-6deg) brightness(1.05)"
+    }
+  };
+
+  const p = presets[tintPreset];
+  if (p) {
+    viewer.style.background = p.background;
+    viewer.style.filter = p.filter;
+  }
+
+  // Ajuste leve baseado na cor escolhida
+  if (colorName) {
+    const name = String(colorName).toLowerCase();
+    if (name.includes("magenta")) viewer.style.filter = "sepia(0.6) saturate(2.4) hue-rotate(280deg) brightness(1.02)";
+    if (name.includes("azul")) viewer.style.filter = "sepia(0.5) saturate(2.2) hue-rotate(170deg) brightness(1.02)";
+    if (name.includes("verde")) viewer.style.filter = "sepia(0.6) saturate(2.2) hue-rotate(90deg) brightness(1.02)";
+    if (name.includes("marrom")) viewer.style.filter = "sepia(0.9) saturate(1.8) hue-rotate(10deg) brightness(0.98)";
+    if (name.includes("amarelo")) viewer.style.filter = "sepia(0.7) saturate(2.0) hue-rotate(5deg) brightness(1.10)";
+    if (name.includes("laranja")) viewer.style.filter = "sepia(0.7) saturate(2.2) hue-rotate(-6deg) brightness(1.05)";
+    if (name.includes("âmbar") || name.includes("ambar")) viewer.style.filter = "sepia(0.8) saturate(2.1) hue-rotate(-2deg) brightness(1.02)";
+    if (name.includes("fumê") || name.includes("fume")) viewer.style.filter = "grayscale(0.1) contrast(1.02) brightness(0.98)";
+  }
+}
+
+function renderOptionsForProduct(product) {
+  const wrap = $("#mOptions");
+  if (!wrap) return { selections: [], getPrimaryColor: () => null };
+
+  const selections = [];
+  let primaryColor = null;
+
+  function addSelect({ name, values, defaultValue }) {
+    const label = document.createElement("p");
+    label.className = "small";
+    label.style.fontWeight = "800";
+    label.style.margin = "0 0 6px";
+    label.textContent = name;
+
+    const sel = document.createElement("select");
+    sel.className = "select";
+
+    (values || []).forEach((v) => {
+      const o = document.createElement("option");
+      o.value = v;
+      o.textContent = v;
+      sel.appendChild(o);
+    });
+
+    if (defaultValue && values?.includes(defaultValue)) sel.value = defaultValue;
+
+    const idx = selections.length;
+    selections[idx] = `${name}: ${sel.value}`;
+    sel.addEventListener("change", () => (selections[idx] = `${name}: ${sel.value}`));
+
+    wrap.appendChild(label);
+    wrap.appendChild(sel);
+
+    const spacer = document.createElement("div");
+    spacer.style.height = "10px";
+    wrap.appendChild(spacer);
+
+    return sel;
+  }
+
+  function rebuildColorArea(multicolorOn) {
+    // apaga só os selects de cor (mantém outros)
+    $$(".js-color-block", wrap).forEach((n) => n.remove());
+
+    const cfg = product.colorConfig;
+    if (!cfg) return;
+
+    const count = multicolorOn && cfg.multicolor ? Math.max(1, Number(cfg.maxColors || 1)) : 1;
+
+    for (let i = 1; i <= count; i++) {
+      const block = document.createElement("div");
+      block.className = "js-color-block";
+
+      const name = `Cor${i}`;
+      const label = document.createElement("p");
+      label.className = "small";
+      label.style.fontWeight = "800";
+      label.style.margin = "0 0 6px";
+      label.textContent = name;
+
+      const sel = document.createElement("select");
+      sel.className = "select";
+
+      (cfg.palette || []).forEach((v) => {
+        const o = document.createElement("option");
+        o.value = v;
+        o.textContent = v;
+        sel.appendChild(o);
+      });
+
+      // default só na cor 1
+      if (i === 1 && cfg.default && (cfg.palette || []).includes(cfg.default)) sel.value = cfg.default;
+
+      const idx = selections.length;
+      selections[idx] = `${name}: ${sel.value}`;
+      sel.addEventListener("change", () => {
+        selections[idx] = `${name}: ${sel.value}`;
+        if (i === 1) primaryColor = sel.value;
+      });
+
+      if (i === 1) primaryColor = sel.value;
+
+      block.appendChild(label);
+      block.appendChild(sel);
+
+      const spacer = document.createElement("div");
+      spacer.style.height = "10px";
+      block.appendChild(spacer);
+
+      wrap.appendChild(block);
+    }
+  }
+
+  wrap.innerHTML = "";
+
+  // 1) opções normais
+  (product.options || []).forEach((opt) => addSelect({ name: opt.name, values: opt.values }));
+
+  // 2) multicor + cores (controlado por products.json)
+  if (product.colorConfig) {
+    if (product.colorConfig.multicolor) {
+      const multiSel = addSelect({
+        name: "Multicor",
+        values: ["Não", "Sim"],
+        defaultValue: "Não"
+      });
+
+      rebuildColorArea(multiSel.value === "Sim");
+
+      multiSel.addEventListener("change", () => {
+        const idx = selections.findIndex((s) => String(s).startsWith("Multicor:"));
+        if (idx >= 0) selections[idx] = `Multicor: ${multiSel.value}`;
+
+        // remove cores antigas do array de selections
+        for (let i = selections.length - 1; i >= 0; i--) {
+          if (String(selections[i]).startsWith("Cor")) selections.splice(i, 1);
+        }
+
+        rebuildColorArea(multiSel.value === "Sim");
+      });
+    } else {
+      rebuildColorArea(false);
+    }
+  }
+
+  return { selections, getPrimaryColor: () => primaryColor };
+}
+
 /* ---------------- Drawer (Filtros) — só ativa no catálogo se existir ---------------- */
 function wireDrawer(allProducts, onFilterChange) {
   const backdrop = $("#drawerBackdrop");
@@ -241,19 +406,16 @@ function wireModal(productsById) {
     const viewer = $("#mViewer");
     const textBlock = $("#mTextBlock");
 
-    // clique nas abas
     if (ui) {
       const btns = $$(".mediaTab", ui);
       btns.forEach((b) => (b.onclick = () => setActiveTab(b.dataset.tab)));
     }
 
-    // fotos sempre tentam renderizar (se tiver)
     renderPhotos(gallery || []);
 
     if (mode === "model") {
       ensureModelViewer();
 
-      // garante que a aba 3D aparece
       const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
       if (btn3d) btn3d.style.display = "";
 
@@ -263,25 +425,20 @@ function wireModal(productsById) {
         else viewer.removeAttribute("src");
       }
 
-      // texto some
       if (textBlock) {
         textBlock.style.display = "none";
         textBlock.innerHTML = "";
       }
 
-      // se tiver pelo menos uma foto, você pode preferir iniciar em "Fotos".
-      // Mas como você pediu “aba de galeria e vista 3D”, vamos iniciar no 3D quando tiver.
       setActiveTab("model");
       return;
     }
 
-    // sem 3D
     if (viewer) {
       viewer.style.display = "none";
       viewer.removeAttribute("src");
     }
 
-    // esconde a aba 3D quando não tem model
     const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
     if (btn3d) btn3d.style.display = "none";
 
@@ -293,40 +450,6 @@ function wireModal(productsById) {
     }
   }
 
-  function renderOptions(opts, selections) {
-    const wrap = $("#mOptions");
-    if (!wrap) return;
-
-    wrap.innerHTML = "";
-    (opts || []).forEach((opt, idx) => {
-      const label = document.createElement("p");
-      label.className = "small";
-      label.style.fontWeight = "800";
-      label.style.margin = "0 0 6px";
-      label.textContent = opt.name;
-
-      const sel = document.createElement("select");
-      sel.className = "select";
-
-      (opt.values || []).forEach((v) => {
-        const o = document.createElement("option");
-        o.value = v;
-        o.textContent = v;
-        sel.appendChild(o);
-      });
-
-      selections[idx] = `${opt.name}: ${sel.value}`;
-      sel.addEventListener("change", () => (selections[idx] = `${opt.name}: ${sel.value}`));
-
-      wrap.appendChild(label);
-      wrap.appendChild(sel);
-
-      const spacer = document.createElement("div");
-      spacer.style.height = "10px";
-      wrap.appendChild(spacer);
-    });
-  }
-
   window.openProductById = (id) => {
     const p = productsById.get(id);
     if (!p) return;
@@ -334,7 +457,6 @@ function wireModal(productsById) {
     $("#mTitle").textContent = p.name || "Produto";
     $("#mCategory").textContent = p.category || "";
     $("#mDesc").textContent = p.description || "";
-    // se você quiser sumir com dimensões no modal:
     const mDim = $("#mDim");
     if (mDim) mDim.style.display = "none";
     $("#mPrice").textContent = moneyBRL(p.price);
@@ -351,20 +473,21 @@ function wireModal(productsById) {
       });
     }
 
-    const selections = [];
-    renderOptions(p.options || [], selections);
+    const { selections, getPrimaryColor } = renderOptionsForProduct(p);
+
+    // ✅ aplica “laranja da paleta” no viewer (suave)
+    const viewer = $("#mViewer");
+    applyViewerTint(viewer, getPrimaryColor(), p.viewerTint);
 
     $("#mBuyInside").onclick = () => openWhats(p, selections.filter(Boolean));
     modal.classList.add("open");
   };
 
-  // abrir modal
   document.addEventListener("click", (e) => {
     const open = e.target.closest("[data-open]");
     if (open) window.openProductById(open.getAttribute("data-open"));
   });
 
-  // comprar direto
   document.addEventListener("click", (e) => {
     const buy = e.target.closest("[data-buy]");
     if (!buy) return;
@@ -493,13 +616,9 @@ function wireSearch(allProducts, getActiveCategory, onResult) {
     const productsAll = await loadProducts();
     const productsById = new Map(productsAll.map((p) => [p.id, p]));
 
-    // modal com abas (vale pra todas as páginas que tiverem o modal)
     wireModal(productsById);
-
-    // INÍCIO: carrossel 4 aleatórios (se existir estrutura)
     renderHomeCarouselRandom4(productsAll);
 
-    // CATÁLOGO: drawer + busca (se existir estrutura)
     let activeCategory = "Tudo";
     const getActiveCategory = () => activeCategory;
 
@@ -518,7 +637,6 @@ function wireSearch(allProducts, getActiveCategory, onResult) {
 
     wireSearch(productsAll, getActiveCategory, renderCatalogIntoGrid);
 
-    // render inicial do catálogo (se existir grid)
     if ($("#catalogGrid")) {
       renderCatalogIntoGrid(productsAll.filter((p) => p.id !== "custom"));
     }
