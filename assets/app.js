@@ -112,7 +112,6 @@ function ensureMediaUI() {
     <div id="mModelPane" class="mediaPane" style="display:none;"></div>
   `;
 
-  // injeta no lado esquerdo do modal (antes do texto, se existir)
   if (textBlock && textBlock.parentElement) {
     textBlock.parentElement.insertBefore(wrap, textBlock);
   } else if (viewer && viewer.parentElement) {
@@ -121,7 +120,6 @@ function ensureMediaUI() {
     $(".modalBody")?.prepend(wrap);
   }
 
-  // move o model-viewer existente pra dentro do pane do 3D
   const modelPane = $("#mModelPane");
   if (viewer && modelPane) modelPane.appendChild(viewer);
 
@@ -175,169 +173,32 @@ function renderPhotos(gallery) {
   };
 }
 
-/* ---------------- Cores / Multicor (controlado por products.json) ---------------- */
-function applyViewerTint(viewer, colorName, tintPreset) {
-  if (!viewer) return;
-
-  // reset
-  viewer.style.filter = "";
-  viewer.style.background = "rgba(255, 159, 28, 0.05)";
-
-  // Preset suave para “laranja da paleta”
-  const presets = {
-  orange_soft: {
-    // #ff9f1c com transparência (alpha)
-    background: "rgba(255, 159, 28, 0.10)",
-    filter: "sepia(0.6) saturate(1.8) hue-rotate(-8deg) brightness(0.50) contrast(1.05)"
+/* ---------------- ✅ LOOK INVERTIDO: modelo branco + fundo laranja ---------------- */
+const presets = {
+  // fundo laranja + modelo "puxado pro branco"
+  bg_orange_model_white: {
+    background: "rgba(255, 159, 28, 0.18)", // #ff9f1c com alpha
+    filter: "grayscale(1) brightness(1.35) contrast(1.10)" // controla aqui!
   }
 };
 
-  const p = presets[tintPreset];
-  if (p) {
-    viewer.style.background = p.background;
-    viewer.style.filter = p.filter;
-  }
+// aplica no <model-viewer>
+function applyViewerPreset(viewer, presetName = "bg_orange_model_white") {
+  if (!viewer) return;
 
-  // Ajuste leve baseado na cor escolhida
-  if (colorName) {
-    const name = String(colorName).toLowerCase();
-    if (name.includes("magenta")) viewer.style.filter = "sepia(0.6) saturate(2.4) hue-rotate(280deg) brightness(1.02)";
-    if (name.includes("azul")) viewer.style.filter = "sepia(0.5) saturate(2.2) hue-rotate(170deg) brightness(1.02)";
-    if (name.includes("verde")) viewer.style.filter = "sepia(0.6) saturate(2.2) hue-rotate(90deg) brightness(1.02)";
-    if (name.includes("marrom")) viewer.style.filter = "sepia(0.9) saturate(1.8) hue-rotate(10deg) brightness(0.98)";
-    if (name.includes("amarelo")) viewer.style.filter = "sepia(0.7) saturate(2.0) hue-rotate(5deg) brightness(1.10)";
-    if (name.includes("laranja")) viewer.style.filter = "sepia(0.7) saturate(2.2) hue-rotate(-6deg) brightness(1.05)";
-    if (name.includes("âmbar") || name.includes("ambar")) viewer.style.filter = "sepia(0.8) saturate(2.1) hue-rotate(-2deg) brightness(1.02)";
-    if (name.includes("fumê") || name.includes("fume")) viewer.style.filter = "grayscale(0.1) contrast(1.02) brightness(0.98)";
-  }
-}
+  const p = presets[presetName] || presets.bg_orange_model_white;
 
-function renderOptionsForProduct(product) {
-  const wrap = $("#mOptions");
-  if (!wrap) return { selections: [], getPrimaryColor: () => null };
+  // fundo laranja
+  viewer.style.background = p.background;
 
-  const selections = [];
-  let primaryColor = null;
+  // deixa o modelo branco (sem “incandescência”)
+  viewer.style.filter = p.filter;
 
-  function addSelect({ name, values, defaultValue }) {
-    const label = document.createElement("p");
-    label.className = "small";
-    label.style.fontWeight = "800";
-    label.style.margin = "0 0 6px";
-    label.textContent = name;
-
-    const sel = document.createElement("select");
-    sel.className = "select";
-
-    (values || []).forEach((v) => {
-      const o = document.createElement("option");
-      o.value = v;
-      o.textContent = v;
-      sel.appendChild(o);
-    });
-
-    if (defaultValue && values?.includes(defaultValue)) sel.value = defaultValue;
-
-    const idx = selections.length;
-    selections[idx] = `${name}: ${sel.value}`;
-    sel.addEventListener("change", () => (selections[idx] = `${name}: ${sel.value}`));
-
-    wrap.appendChild(label);
-    wrap.appendChild(sel);
-
-    const spacer = document.createElement("div");
-    spacer.style.height = "10px";
-    wrap.appendChild(spacer);
-
-    return sel;
-  }
-
-  function rebuildColorArea(multicolorOn) {
-    // apaga só os selects de cor (mantém outros)
-    $$(".js-color-block", wrap).forEach((n) => n.remove());
-
-    const cfg = product.colorConfig;
-    if (!cfg) return;
-
-    const count = multicolorOn && cfg.multicolor ? Math.max(1, Number(cfg.maxColors || 1)) : 1;
-
-    for (let i = 1; i <= count; i++) {
-      const block = document.createElement("div");
-      block.className = "js-color-block";
-
-      const name = `Cor${i}`;
-      const label = document.createElement("p");
-      label.className = "small";
-      label.style.fontWeight = "800";
-      label.style.margin = "0 0 6px";
-      label.textContent = name;
-
-      const sel = document.createElement("select");
-      sel.className = "select";
-
-      (cfg.palette || []).forEach((v) => {
-        const o = document.createElement("option");
-        o.value = v;
-        o.textContent = v;
-        sel.appendChild(o);
-      });
-
-      // default só na cor 1
-      if (i === 1 && cfg.default && (cfg.palette || []).includes(cfg.default)) sel.value = cfg.default;
-
-      const idx = selections.length;
-      selections[idx] = `${name}: ${sel.value}`;
-      sel.addEventListener("change", () => {
-        selections[idx] = `${name}: ${sel.value}`;
-        if (i === 1) primaryColor = sel.value;
-      });
-
-      if (i === 1) primaryColor = sel.value;
-
-      block.appendChild(label);
-      block.appendChild(sel);
-
-      const spacer = document.createElement("div");
-      spacer.style.height = "10px";
-      block.appendChild(spacer);
-
-      wrap.appendChild(block);
-    }
-  }
-
-  wrap.innerHTML = "";
-
-  // 1) opções normais
-  (product.options || []).forEach((opt) => addSelect({ name: opt.name, values: opt.values }));
-
-  // 2) multicor + cores (controlado por products.json)
-  if (product.colorConfig) {
-    if (product.colorConfig.multicolor) {
-      const multiSel = addSelect({
-        name: "Multicor",
-        values: ["Não", "Sim"],
-        defaultValue: "Não"
-      });
-
-      rebuildColorArea(multiSel.value === "Sim");
-
-      multiSel.addEventListener("change", () => {
-        const idx = selections.findIndex((s) => String(s).startsWith("Multicor:"));
-        if (idx >= 0) selections[idx] = `Multicor: ${multiSel.value}`;
-
-        // remove cores antigas do array de selections
-        for (let i = selections.length - 1; i >= 0; i--) {
-          if (String(selections[i]).startsWith("Cor")) selections.splice(i, 1);
-        }
-
-        rebuildColorArea(multiSel.value === "Sim");
-      });
-    } else {
-      rebuildColorArea(false);
-    }
-  }
-
-  return { selections, getPrimaryColor: () => primaryColor };
+  // ajustes de "foto de vitrine" (ajuda muito sem estourar)
+  viewer.setAttribute("exposure", "0.9");
+  viewer.setAttribute("shadow-intensity", "1");
+  viewer.setAttribute("camera-controls", "");
+  viewer.setAttribute("touch-action", "pan-y");
 }
 
 /* ---------------- Drawer (Filtros) — só ativa no catálogo se existir ---------------- */
@@ -346,7 +207,6 @@ function wireDrawer(allProducts, onFilterChange) {
   const openBtn = $("#openDrawer");
   const closeBtn = $("#closeDrawer");
   const list = $("#filterList");
-
   if (!backdrop || !openBtn || !closeBtn || !list) return;
 
   const open = () => backdrop.classList.add("open");
@@ -423,6 +283,9 @@ function wireModal(productsById) {
         viewer.style.display = "";
         if (modelUrl) viewer.setAttribute("src", modelUrl);
         else viewer.removeAttribute("src");
+
+        // ✅ aplica look invertido aqui
+        applyViewerPreset(viewer, "bg_orange_model_white");
       }
 
       if (textBlock) {
@@ -450,6 +313,40 @@ function wireModal(productsById) {
     }
   }
 
+  function renderOptions(opts, selections) {
+    const wrap = $("#mOptions");
+    if (!wrap) return;
+
+    wrap.innerHTML = "";
+    (opts || []).forEach((opt, idx) => {
+      const label = document.createElement("p");
+      label.className = "small";
+      label.style.fontWeight = "800";
+      label.style.margin = "0 0 6px";
+      label.textContent = opt.name;
+
+      const sel = document.createElement("select");
+      sel.className = "select";
+
+      (opt.values || []).forEach((v) => {
+        const o = document.createElement("option");
+        o.value = v;
+        o.textContent = v;
+        sel.appendChild(o);
+      });
+
+      selections[idx] = `${opt.name}: ${sel.value}`;
+      sel.addEventListener("change", () => (selections[idx] = `${opt.name}: ${sel.value}`));
+
+      wrap.appendChild(label);
+      wrap.appendChild(sel);
+
+      const spacer = document.createElement("div");
+      spacer.style.height = "10px";
+      wrap.appendChild(spacer);
+    });
+  }
+
   window.openProductById = (id) => {
     const p = productsById.get(id);
     if (!p) return;
@@ -457,8 +354,10 @@ function wireModal(productsById) {
     $("#mTitle").textContent = p.name || "Produto";
     $("#mCategory").textContent = p.category || "";
     $("#mDesc").textContent = p.description || "";
+
     const mDim = $("#mDim");
     if (mDim) mDim.style.display = "none";
+
     $("#mPrice").textContent = moneyBRL(p.price);
 
     const gallery = p.gallery && p.gallery.length ? p.gallery : (p.image ? [p.image] : []);
@@ -473,11 +372,8 @@ function wireModal(productsById) {
       });
     }
 
-    const { selections, getPrimaryColor } = renderOptionsForProduct(p);
-
-    // ✅ aplica “laranja da paleta” no viewer (suave)
-    const viewer = $("#mViewer");
-    applyViewerTint(viewer, getPrimaryColor(), p.viewerTint);
+    const selections = [];
+    renderOptions(p.options || [], selections);
 
     $("#mBuyInside").onclick = () => openWhats(p, selections.filter(Boolean));
     modal.classList.add("open");
@@ -532,14 +428,8 @@ function renderHomeCarouselRandom4(products) {
   const tick = () => {
     if (chosen.length <= 1) return;
     let next = idx + dir;
-    if (next >= chosen.length) {
-      dir = -1;
-      next = idx + dir;
-    }
-    if (next < 0) {
-      dir = 1;
-      next = idx + dir;
-    }
+    if (next >= chosen.length) { dir = -1; next = idx + dir; }
+    if (next < 0) { dir = 1; next = idx + dir; }
     set(next);
   };
 
@@ -556,17 +446,8 @@ function renderHomeCarouselRandom4(products) {
     })
   );
 
-  prevBtn?.addEventListener("click", () => {
-    dir = -1;
-    set(idx - 1);
-    restart();
-  });
-
-  nextBtn?.addEventListener("click", () => {
-    dir = 1;
-    set(idx + 1);
-    restart();
-  });
+  prevBtn?.addEventListener("click", () => { dir = -1; set(idx - 1); restart(); });
+  nextBtn?.addEventListener("click", () => { dir = 1; set(idx + 1); restart(); });
 
   restart();
 
