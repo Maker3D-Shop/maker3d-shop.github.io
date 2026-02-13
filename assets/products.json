@@ -19,10 +19,7 @@
     "options": [
       {
         "name": "Material",
-        "values": [
-          "PLA",
-          "PETG"
-        ]
+        "values": [ "PLA", "PETG"]
       }
     ],
     "colorConfig": {
