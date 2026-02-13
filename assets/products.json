@@ -18,7 +18,7 @@
     "description": "*Esse objeto oferece opçao multicor.*",
     "options": [
       { "name": "Material", "values": ["PLA", "PETG"] },
-      { "name": "Cor1", "values": ["Amarelo", "Laranja", "Marrom", "Azul", "Verde"] }
+      { "name": "Cor1", "values": ["Amarelo", "Laranja", "Marrom", "Azul", "Verde"] },
       { "name": "Cor2 (Opcional)", "values": ["Amarelo", "Laranja", "Marrom", "Azul", "Verde"] }
     ]
   },
