@@ -1,12 +1,12 @@
 [
   {
     "id": "p1",
-    "name": "EXLY a conexão infinita",
-    "category": "EXLY",
-    "price": 19.9,
+    "name": "Mini Polvo Fofo",
+    "category": "Articulado",
+    "price": 9.49,
     "currency": "BRL",
-    "dimensions":"null",
-    "image": "assets/products/images/7349019e-6047-4267-a519-f532d52c2b8e.png",
+    "dimensions":"Encantador 🐙✨",
+    "image": "assets/products/images/P1/p1.png",
     "gallery": [
       "assets/products/images/suporte.jpg"
     ],
