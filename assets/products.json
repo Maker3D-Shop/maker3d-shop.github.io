@@ -14,7 +14,7 @@
       "assets/products/images/P1/p4.png",
       "assets/products/images/P1/p5.png"
     ],
-    "modelUrl": "assets/products/models/p1.stl",
+    "modelUrl": "assets/products/models/p1.glb",
     "description": "*Esse objeto oferece opçao multicor.*",
     "options": [
       {
