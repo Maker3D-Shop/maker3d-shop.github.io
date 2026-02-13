@@ -39,7 +39,17 @@ header{
 .brand .btxt{display:flex;flex-direction:column;line-height:1.05}
 .brand .btxt strong{font-weight:800;font-size:16px;color:#3c3f44}
 .brand .btxt span{font-size:12px;opacity:.9}
-.menu{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+
+/* ✅ menu no mobile não quebra linha */
+.menu{
+  display:flex;
+  gap:10px;
+  flex-wrap:nowrap;
+  justify-content:flex-end;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:2px
+}
 .menu a{
   padding:10px 14px;border-radius:var(--pill);
   border:1px solid var(--border);
@@ -244,8 +254,15 @@ header{
 }
 .filterChip.active{border-color:rgba(255,159,28,.55);background:rgba(255,159,28,.10)}
 
-/* Modal */
-.modalBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:flex-end;justify-content:center;padding:14px;z-index:200}
+/* ✅ Modal (X sempre visível + scroll no celular) */
+.modalBackdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.35);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  z-index:200
+}
 .modalBackdrop.open{display:flex}
 .modal{
   width:min(980px, 100%);
@@ -254,11 +271,22 @@ header{
   border:1px solid var(--border);
   box-shadow:0 30px 90px rgba(0,0,0,.25);
   overflow:hidden;
+  max-height:calc(100vh - 28px);
 }
-.modalHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-bottom:1px solid var(--border)}
+.modalHeader{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--white);z-index:2
+}
 .modalHeader h3{margin:0;font-size:14px;color:#3c3f44;font-weight:800}
 .iconBtn{width:44px;height:44px;border-radius:var(--pill);border:1px solid var(--border);background:var(--white);cursor:pointer;font-weight:900}
-.modalBody{padding:14px;display:grid;gap:12px}
+.modalBody{
+  padding:14px;
+  display:grid;
+  gap:12px;
+  overflow:auto;
+  max-height:calc(100vh - 28px - 73px);
+}
 .modalGrid{display:grid;grid-template-columns:1fr;gap:12px}
 .panel{border:1px solid var(--border);border-radius:18px;background:rgba(255,159,28,.06);padding:12px}
 .small{margin:0;font-size:12px;line-height:1.5}
@@ -352,7 +380,11 @@ model-viewer{
 }
 @media(max-width:520px){
   .heroTitle{font-size:22px}
-  .menu a{padding:9px 12px;font-size:12px}
+  .menu{gap:8px}
+  .menu a{padding:9px 12px;font-size:12px;white-space:nowrap}
   .product{grid-template-columns:76px 1fr}
   .thumb{width:76px;height:76px}
 }
+
+/* Menu: evita quebrar linha no celular */
+.menu::-webkit-scrollbar{height:0}
