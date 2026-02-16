@@ -1,25 +1,26 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MAKER3D — Loja 3D</title>
+  <link rel="icon" href="assets/brand/logo.png" />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 
-<body data-page="home">
+<body>
   <header>
     <div class="container">
       <div class="nav">
-        <a class="brand" href="index.html" aria-label="MAKER3D - Início">
-          <img src="assets/brand/logo.png" alt="Logo MAKER3D" />
+        <a class="brand" href="index.html" aria-label="MAKER3D">
+          <img src="assets/brand/logo.png" alt="MAKER3D" />
           <div class="btxt">
             <strong>MAKER3D</strong>
             <span>coisas legais feitas em 3D</span>
           </div>
         </a>
 
-        <nav class="menu" aria-label="Menu">
+        <nav class="menu">
           <a class="active" href="index.html">Início</a>
           <a href="catalogo.html">Catálogo</a>
           <a href="contato.html">Contato</a>
@@ -28,80 +29,81 @@
     </div>
   </header>
 
-  <main>
+  <main class="container">
     <section class="hero">
-      <div class="container">
-        <div class="heroCard">
-          <div class="heroInner">
-            <h1 class="heroTitle">Sua ideia vira peça. Simples assim.</h1>
-            <p class="heroSub">Peças prontas, utilidades e sob encomenda — com visual limpo e compra pelo WhatsApp.</p>
+      <div class="heroCard">
+        <div class="heroInner">
+          <h1 class="heroTitle">Sua ideia vira peça. Simples assim.</h1>
+          <p class="heroSub">
+            Peças prontas, utilidades e sob encomenda — com visual limpo e compra pelo WhatsApp.
+          </p>
 
-            <div class="heroActions">
-              <a class="btn primary" href="catalogo.html">Ver catálogo</a>
-              <button class="btn ghost" id="btnCustom" type="button">Peça sob encomenda</button>
-              <a class="btn" href="contato.html">Falar com a gente</a>
-            </div>
+          <div class="heroActions">
+            <a class="btn primary" href="catalogo.html">Ver catálogo</a>
+            <a class="btn ghost" href="#" onclick="window.openProductById && window.openProductById('p5'); return false;">
+              Peça sob encomenda
+            </a>
+            <a class="btn ghost" href="contato.html">Falar com a gente</a>
           </div>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="container">
-        <div class="carousel" id="carousel">
-          <div class="carouselTop">
-            <div class="carouselLeft">
-              <h2>Destaques</h2>
-              <a class="miniLink" href="catalogo.html">Ver destaques</a>
-            </div>
-
-            <div class="carouselNav">
-              <button class="carouselBtn" id="prevBtn" aria-label="Anterior">‹</button>
-              <button class="carouselBtn" id="nextBtn" aria-label="Próximo">›</button>
-            </div>
+      <div class="carousel" id="carousel">
+        <div class="carouselTop">
+          <div class="carouselLeft">
+            <h2>Destaques</h2>
+            <a class="miniLink" href="catalogo.html">Ver destaques</a>
           </div>
 
-          <div class="carouselTrack" id="track"></div>
-          <div class="carouselDots" id="dots"></div>
+          <div class="carouselNav">
+            <button class="carouselBtn" id="prevBtn" type="button" aria-label="Anterior">‹</button>
+            <button class="carouselBtn" id="nextBtn" type="button" aria-label="Próximo">›</button>
+          </div>
         </div>
+
+        <div class="carouselTrack" id="track"></div>
+        <div class="carouselDots" id="dots"></div>
       </div>
     </section>
   </main>
 
-  <!-- Modal -->
+  <!-- MODAL -->
   <div class="modalBackdrop" id="modal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Detalhes">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
       <div class="modalHeader">
-        <div>
-          <h3 id="mTitle">Produto</h3>
-          <p class="small" id="mCategory"></p>
-        </div>
-        <button class="iconBtn" data-close aria-label="Fechar">✕</button>
+        <h3 id="mTitle">Produto</h3>
+        <button class="iconBtn" type="button" data-close aria-label="Fechar">✕</button>
       </div>
 
       <div class="modalBody">
         <div class="modalGrid">
-          <div class="panel" id="leftPanel">
-            <model-viewer id="mViewer" camera-controls autoplay exposure="1" shadow-intensity="0.8" alt="Modelo 3D"></model-viewer>
-            <div id="mTextBlock" style="display:none;"></div>
+          <!-- ESQUERDA: fotos/3d (o app.js injeta as abas aqui) -->
+          <div>
+            <!-- app.js vai mover o model-viewer pra dentro do painel 3D -->
+            <model-viewer id="mViewer" style="display:none" autoplay camera-controls></model-viewer>
+
+            <!-- fallback (quando não tem modelUrl): app.js usa esse bloco -->
+            <div id="mTextBlock" class="panel" style="display:none"></div>
           </div>
 
-          <div class="panel">
+          <!-- DIREITA: infos + opções -->
+          <div>
+            <p class="small" id="mCategory"></p>
             <p class="small" id="mDesc"></p>
-            <p class="small" id="mDim"></p>
-            <div style="height:10px"></div>
+            <p class="small" id="mDim" style="display:none"></p>
 
-            <div class="priceLine">
-              <span class="price" id="mPrice">Preço</span>
-              <span class="small">Checkout pelo WhatsApp</span>
-            </div>
+            <p class="small">Preço</p>
+            <p id="mPrice" class="price"></p>
 
-            <div style="height:12px"></div>
+            <p class="small">Checkout pelo WhatsApp</p>
+
+            <!-- ✅ ESSA PARTE FALTAVA NA HOME -->
+            <h4>Opções</h4>
             <div id="mOptions"></div>
 
-            <button class="btn primary" id="mBuyInside" type="button" style="width:100%; margin-top:8px;">
-              Comprar no WhatsApp
-            </button>
+            <a id="mBuyInside" class="btn primary" href="#" role="button">Comprar no WhatsApp</a>
           </div>
         </div>
       </div>
