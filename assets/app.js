@@ -33,7 +33,6 @@ function buildWhatsMsg(product, selections) {
     product.price != null ? `Preço: ${moneyBRL(product.price)}` : "Preço: sob consulta",
     selections?.length ? `Opções: ${selections.join(" • ")}` : null,
   ].filter(Boolean);
-
   return lines.join("\n");
 }
 
@@ -55,33 +54,33 @@ function shuffle(arr) {
 /* ---------------- Card ---------------- */
 function productCard(p) {
   const img = p.image
-    ? `<div class="thumb"><img src="${p.image}" alt="${(p.name || "").replaceAll('"', "")}"></div>`
+    ? `<div class="thumb"><img src="${p.image}" alt="${p.name || ""}"></div>`
     : `<div class="thumb"></div>`;
 
   const dims = p.dimensions ? p.dimensions : "—";
 
   return `
-  <article class="card">
+  <div class="card">
     <div class="product">
       ${img}
       <div class="pmeta">
         <div class="pmetaTop">
-          <h3 class="pname">${p.name || ""}</h3>
+          <p class="pname">${p.name || ""}</p>
           ${p.category ? `<span class="tag">${p.category}</span>` : ``}
         </div>
         ${p.description ? `<p class="pdesc">${p.description}</p>` : ``}
         <div class="priceLine">
           <span class="price">${moneyBRL(p.price)}</span>
-          <span class="pill">${dims}</span>
+          <span class="small">${dims}</span>
         </div>
       </div>
 
       <div class="pactions">
-        <button class="btn primary" data-open="${p.id}">Ver opções</button>
-        <button class="btn" data-buy="${p.id}">Comprar</button>
+        <button class="btn ghost" data-open="${p.id}">Ver opções</button>
+        <button class="btn primary" data-buy="${p.id}">Comprar</button>
       </div>
     </div>
-  </article>
+  </div>
   `;
 }
 
@@ -97,19 +96,16 @@ function ensureMediaUI() {
   wrap = document.createElement("div");
   wrap.id = "mMediaWrap";
   wrap.className = "mediaWrap";
-
   wrap.innerHTML = `
     <div class="mediaTabs">
-      <button type="button" class="mediaTab active" data-tab="photos">Fotos</button>
-      <button type="button" class="mediaTab" data-tab="model">3D</button>
+      <button class="mediaTab active" data-tab="photos" type="button">Fotos</button>
+      <button class="mediaTab" data-tab="model" type="button">3D</button>
     </div>
-
-    <div id="mPhotos" class="mediaPane">
-      <img id="mPhotoMain" class="photoMain" alt="Foto do produto">
+    <div class="mediaPane" id="mPhotos">
+      <img id="mPhotoMain" class="photoMain" alt="Foto do produto" />
       <div id="mPhotoThumbs" class="photoThumbs"></div>
     </div>
-
-    <div id="mModelPane" class="mediaPane" style="display:none;"></div>
+    <div class="mediaPane" id="mModelPane" style="display:none"></div>
   `;
 
   if (textBlock && textBlock.parentElement) {
@@ -122,7 +118,6 @@ function ensureMediaUI() {
 
   const modelPane = $("#mModelPane");
   if (viewer && modelPane) modelPane.appendChild(viewer);
-
   return wrap;
 }
 
@@ -144,7 +139,6 @@ function renderPhotos(gallery) {
   if (!main || !thumbs) return;
 
   const imgs = (gallery || []).filter(Boolean);
-
   if (!imgs.length) {
     main.style.display = "none";
     thumbs.innerHTML = "";
@@ -157,10 +151,9 @@ function renderPhotos(gallery) {
   thumbs.innerHTML = imgs
     .map(
       (src, i) => `
-        <button type="button" class="thumbBtn ${i === 0 ? "active" : ""}" data-src="${src}">
-          <img src="${src}" alt="miniatura">
-        </button>
-      `
+      <button class="thumbBtn ${i === 0 ? "active" : ""}" type="button" data-src="${src}">
+        <img src="${src}" alt="thumb ${i + 1}">
+      </button>`
     )
     .join("");
 
@@ -175,26 +168,17 @@ function renderPhotos(gallery) {
 
 /* ---------------- ✅ LOOK INVERTIDO: modelo branco + fundo laranja ---------------- */
 const presets = {
-  // fundo laranja + modelo "puxado pro branco"
   bg_orange_model_white: {
-    background: "rgba(255, 159, 28, 0.18)", // #ff9f1c com alpha
-    filter: "grayscale(1) brightness(1.35) contrast(1.10)" // controla aqui!
-  }
+    background: "rgba(255, 159, 28, 0.18)",
+    filter: "grayscale(1) brightness(1.35) contrast(1.10)",
+  },
 };
 
-// aplica no <model-viewer>
 function applyViewerPreset(viewer, presetName = "bg_orange_model_white") {
   if (!viewer) return;
-
   const p = presets[presetName] || presets.bg_orange_model_white;
-
-  // fundo laranja
   viewer.style.background = p.background;
-
-  // deixa o modelo branco (sem “incandescência”)
   viewer.style.filter = p.filter;
-
-  // ajustes de "foto de vitrine" (ajuda muito sem estourar)
   viewer.setAttribute("exposure", "0.9");
   viewer.setAttribute("shadow-intensity", "1");
   viewer.setAttribute("camera-controls", "");
@@ -222,17 +206,12 @@ function wireDrawer(allProducts, onFilterChange) {
     a.localeCompare(b)
   );
   const chips = ["Tudo", ...categories];
-
   let active = "Tudo";
 
   function renderChips() {
     list.innerHTML = chips
       .map(
-        (c) => `
-      <button class="filterChip ${c === active ? "active" : ""}" type="button" data-cat="${c}">
-        ${c}
-      </button>
-    `
+        (c) => `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`
       )
       .join("");
   }
@@ -275,7 +254,6 @@ function wireModal(productsById) {
 
     if (mode === "model") {
       ensureModelViewer();
-
       const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
       if (btn3d) btn3d.style.display = "";
 
@@ -283,8 +261,6 @@ function wireModal(productsById) {
         viewer.style.display = "";
         if (modelUrl) viewer.setAttribute("src", modelUrl);
         else viewer.removeAttribute("src");
-
-        // ✅ aplica look invertido aqui
         applyViewerPreset(viewer, "bg_orange_model_white");
       }
 
@@ -313,38 +289,123 @@ function wireModal(productsById) {
     }
   }
 
-  function renderOptions(opts, selections) {
+  function addSelect(wrap, labelText, values, onChange, initialValue) {
+    const label = document.createElement("p");
+    label.className = "small";
+    label.style.fontWeight = "800";
+    label.style.margin = "0 0 6px";
+    label.textContent = labelText;
+
+    const sel = document.createElement("select");
+    sel.className = "select";
+
+    (values || []).forEach((v) => {
+      const o = document.createElement("option");
+      o.value = v;
+      o.textContent = v;
+      sel.appendChild(o);
+    });
+
+    if (initialValue != null) sel.value = initialValue;
+
+    sel.addEventListener("change", () => onChange(sel.value));
+
+    wrap.appendChild(label);
+    wrap.appendChild(sel);
+
+    const spacer = document.createElement("div");
+    spacer.style.height = "10px";
+    wrap.appendChild(spacer);
+
+    return sel;
+  }
+
+  function renderOptions(product, selections) {
     const wrap = $("#mOptions");
     if (!wrap) return;
 
     wrap.innerHTML = "";
-    (opts || []).forEach((opt, idx) => {
-      const label = document.createElement("p");
-      label.className = "small";
-      label.style.fontWeight = "800";
-      label.style.margin = "0 0 6px";
-      label.textContent = opt.name;
 
-      const sel = document.createElement("select");
-      sel.className = "select";
+    // 1) opções normais (Material, Tamanho, etc)
+    (product.options || []).forEach((opt) => {
+      addSelect(
+        wrap,
+        opt.name,
+        opt.values || [],
+        (v) => {
+          const idx = selections.findIndex((s) => s.startsWith(opt.name + ":"));
+          const txt = `${opt.name}: ${v}`;
+          if (idx >= 0) selections[idx] = txt;
+          else selections.push(txt);
+        },
+        (opt.values || [])[0]
+      );
 
-      (opt.values || []).forEach((v) => {
-        const o = document.createElement("option");
-        o.value = v;
-        o.textContent = v;
-        sel.appendChild(o);
-      });
-
-      selections[idx] = `${opt.name}: ${sel.value}`;
-      sel.addEventListener("change", () => (selections[idx] = `${opt.name}: ${sel.value}`));
-
-      wrap.appendChild(label);
-      wrap.appendChild(sel);
-
-      const spacer = document.createElement("div");
-      spacer.style.height = "10px";
-      wrap.appendChild(spacer);
+      // set inicial
+      const first = (opt.values || [])[0];
+      if (first) selections.push(`${opt.name}: ${first}`);
     });
+
+    // 2) cores (colorConfig)
+    const cc = product.colorConfig;
+    const palette = cc?.palette || [];
+    if (!palette.length) return;
+
+    const def = cc?.default || palette[0];
+    const max = Math.max(1, Number(cc?.maxColors || 1));
+    const isMulti = !!cc?.multicolor;
+
+    let qty = isMulti ? Math.min(2, max) : 1;
+
+    const colorRowsWrap = document.createElement("div");
+    wrap.appendChild(colorRowsWrap);
+
+    const setColorsUI = () => {
+      colorRowsWrap.innerHTML = "";
+
+      // remove seleções antigas de cor
+      for (let i = selections.length - 1; i >= 0; i--) {
+        if (selections[i].startsWith("Cor")) selections.splice(i, 1);
+        if (selections[i].startsWith("Qtd. cores")) selections.splice(i, 1);
+      }
+
+      if (isMulti) selections.push(`Qtd. cores: ${qty}`);
+
+      for (let i = 1; i <= qty; i++) {
+        const label = qty === 1 ? "Cor" : `Cor ${i}`;
+        addSelect(
+          colorRowsWrap,
+          label,
+          palette,
+          (v) => {
+            const key = label + ":";
+            const idx = selections.findIndex((s) => s.startsWith(key));
+            const txt = `${label}: ${v}`;
+            if (idx >= 0) selections[idx] = txt;
+            else selections.push(txt);
+          },
+          def
+        );
+
+        // set inicial
+        selections.push(`${label}: ${def}`);
+      }
+    };
+
+    if (isMulti && max > 1) {
+      addSelect(
+        wrap,
+        "Quantidade de cores",
+        Array.from({ length: max }, (_, i) => String(i + 1)),
+        (v) => {
+          qty = Math.max(1, Math.min(max, Number(v)));
+          setColorsUI();
+        },
+        String(qty)
+      );
+    }
+
+    setColorsUI();
   }
 
   window.openProductById = (id) => {
@@ -360,7 +421,7 @@ function wireModal(productsById) {
 
     $("#mPrice").textContent = moneyBRL(p.price);
 
-    const gallery = p.gallery && p.gallery.length ? p.gallery : (p.image ? [p.image] : []);
+    const gallery = p.gallery && p.gallery.length ? p.gallery : p.image ? [p.image] : [];
 
     if (p.modelUrl) {
       setLeftPanelMode({ mode: "model", modelUrl: p.modelUrl, gallery });
@@ -368,12 +429,12 @@ function wireModal(productsById) {
       setLeftPanelMode({
         mode: "text",
         gallery,
-        textHtml: `<div class="panel"><p class="small">Sem visualização 3D aqui — pede no WhatsApp que a gente manda mais detalhes.</p></div>`
+        textHtml: `Sem visualização 3D aqui — pede no WhatsApp que a gente manda mais detalhes.`,
       });
     }
 
     const selections = [];
-    renderOptions(p.options || [], selections);
+    renderOptions(p, selections);
 
     $("#mBuyInside").onclick = () => openWhats(p, selections.filter(Boolean));
     modal.classList.add("open");
@@ -401,7 +462,6 @@ function renderHomeCarouselRandom4(products) {
   const prevBtn = $("#prevBtn");
   const nextBtn = $("#nextBtn");
   const carousel = $("#carousel");
-
   if (!track || !dotsWrap) return;
 
   const candidates = products.filter((p) => p.id !== "custom");
@@ -413,10 +473,7 @@ function renderHomeCarouselRandom4(products) {
 
   track.innerHTML = chosen.map((p) => `<div class="carouselSlide">${productCard(p)}</div>`).join("");
 
-  dotsWrap.innerHTML = chosen
-    .map((_, i) => `<button class="dot ${i === 0 ? "active" : ""}" aria-label="slide ${i + 1}"></button>`)
-    .join("");
-
+  dotsWrap.innerHTML = chosen.map((_, i) => `<button class="dot ${i === 0 ? "active" : ""}" type="button"></button>`).join("");
   const dots = $$(".dot", dotsWrap);
 
   const set = (i) => {
@@ -428,8 +485,14 @@ function renderHomeCarouselRandom4(products) {
   const tick = () => {
     if (chosen.length <= 1) return;
     let next = idx + dir;
-    if (next >= chosen.length) { dir = -1; next = idx + dir; }
-    if (next < 0) { dir = 1; next = idx + dir; }
+    if (next >= chosen.length) {
+      dir = -1;
+      next = idx + dir;
+    }
+    if (next < 0) {
+      dir = 1;
+      next = idx + dir;
+    }
     set(next);
   };
 
@@ -446,11 +509,19 @@ function renderHomeCarouselRandom4(products) {
     })
   );
 
-  prevBtn?.addEventListener("click", () => { dir = -1; set(idx - 1); restart(); });
-  nextBtn?.addEventListener("click", () => { dir = 1; set(idx + 1); restart(); });
+  prevBtn?.addEventListener("click", () => {
+    dir = -1;
+    set(idx - 1);
+    restart();
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    dir = 1;
+    set(idx + 1);
+    restart();
+  });
 
   restart();
-
   carousel?.addEventListener("mouseenter", () => timer && clearInterval(timer));
   carousel?.addEventListener("mouseleave", restart);
 }
@@ -505,6 +576,7 @@ function wireSearch(allProducts, getActiveCategory, onResult) {
 
     wireDrawer(productsAll, (cat) => {
       activeCategory = cat;
+
       const q = ($("#searchInput")?.value || "").trim().toLowerCase();
       const filtered = productsAll.filter((p) => {
         const matchesCat = activeCategory === "Tudo" || (p.category || "") === activeCategory;
@@ -513,6 +585,7 @@ function wireSearch(allProducts, getActiveCategory, onResult) {
         const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
         return hay.includes(q);
       });
+
       renderCatalogIntoGrid(filtered);
     });
 
@@ -524,6 +597,6 @@ function wireSearch(allProducts, getActiveCategory, onResult) {
   } catch (err) {
     console.error(err);
     const grid = $("#catalogGrid");
-    if (grid) grid.innerHTML = `<div class="card" style="padding:14px;">Erro carregando produtos.</div>`;
+    if (grid) grid.innerHTML = `<p>Erro carregando produtos.</p>`;
   }
 })();
