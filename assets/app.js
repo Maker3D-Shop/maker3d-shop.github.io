@@ -21,11 +21,10 @@ function ensureModelViewer() {
 }
 
 async function loadProducts() {
-  // caminho relativo ao HTML (index.html / catalogo.html)
   const r = await fetch("assets/products.json", { cache: "no-store" });
   if (!r.ok) throw new Error(`products.json não carregou (HTTP ${r.status})`);
   const data = await r.json();
-  if (!Array.isArray(data)) throw new Error("products.json precisa ser um ARRAY [] de produtos");
+  if (!Array.isArray(data)) throw new Error("products.json precisa ser um ARRAY []");
   return data;
 }
 
@@ -45,25 +44,9 @@ function openWhats(product, selections) {
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank", "noopener,noreferrer");
 }
 
-/* ---------------- Utils ---------------- */
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-/* ---------------- UI: erro visível ---------------- */
 function showFatal(msg, err) {
   console.error("[MAKER3D]", msg, err || "");
-  const target =
-    $("#catalogGrid") ||
-    $("#track") ||
-    $(".container") ||
-    document.body;
-
+  const target = $("#catalogGrid") || $(".container") || document.body;
   const box = document.createElement("div");
   box.className = "card";
   box.style.padding = "14px";
@@ -78,7 +61,7 @@ function showFatal(msg, err) {
   target.prepend(box);
 }
 
-/* ---------------- Card ---------------- */
+/* ---------- Card ---------- */
 function productCard(p) {
   const img = p.image
     ? `<div class="thumb"><img src="${p.image}" alt="${p.name || ""}"></div>`
@@ -87,31 +70,30 @@ function productCard(p) {
   const dims = p.dimensions ? p.dimensions : "—";
 
   return `
-  <div class="card">
-    <div class="product">
-      ${img}
-      <div class="pmeta">
-        <div class="pmetaTop">
-          <p class="pname">${p.name || ""}</p>
-          ${p.category ? `<span class="tag">${p.category}</span>` : ``}
-        </div>
-        ${p.description ? `<p class="pdesc">${p.description}</p>` : ``}
-        <div class="priceLine">
-          <span class="price">${moneyBRL(p.price)}</span>
-          <span class="small">${dims}</span>
-        </div>
+  <article class="card product">
+    ${img}
+    <div class="pmeta">
+      <div class="pmetaTop">
+        <h3 class="pname">${p.name || ""}</h3>
+        ${p.category ? `<span class="tag">${p.category}</span>` : ``}
+      </div>
+
+      ${p.description ? `<p class="pdesc">${String(p.description).replace(/\n/g, "<br>")}</p>` : ``}
+
+      <div class="priceLine">
+        <span class="price">${moneyBRL(p.price)}</span>
+        <span class="small">${dims}</span>
       </div>
 
       <div class="pactions">
-        <button class="btn ghost" data-open="${p.id}">Ver opções</button>
-        <button class="btn primary" data-buy="${p.id}">Comprar</button>
+        <button class="btn ghost" data-open="${p.id}" type="button">Ver opções</button>
+        <button class="btn primary" data-buy="${p.id}" type="button">Comprar</button>
       </div>
     </div>
-  </div>
-  `;
+  </article>`;
 }
 
-/* ---------------- Modal: Fotos + 3D (abas) ---------------- */
+/* ---------- Modal mídia (Fotos/3D) ---------- */
 function ensureMediaUI() {
   const textBlock = $("#mTextBlock");
   const viewer = $("#mViewer");
@@ -128,23 +110,20 @@ function ensureMediaUI() {
       <button class="mediaTab active" data-tab="photos" type="button">Fotos</button>
       <button class="mediaTab" data-tab="model" type="button">3D</button>
     </div>
-    <div class="mediaPane" id="mPhotos">
-      <img id="mPhotoMain" class="photoMain" alt="Foto do produto" />
+    <div id="mPhotos" class="mediaPane">
+      <img id="mPhotoMain" class="photoMain" alt="Foto do produto">
       <div id="mPhotoThumbs" class="photoThumbs"></div>
     </div>
-    <div class="mediaPane" id="mModelPane" style="display:none"></div>
+    <div id="mModelPane" class="mediaPane" style="display:none;"></div>
   `;
 
-  if (textBlock && textBlock.parentElement) {
-    textBlock.parentElement.insertBefore(wrap, textBlock);
-  } else if (viewer && viewer.parentElement) {
-    viewer.parentElement.insertBefore(wrap, viewer);
-  } else {
-    $(".modalBody")?.prepend(wrap);
-  }
+  const left = textBlock?.parentElement || viewer?.parentElement || $(".modalLeft");
+  left?.prepend(wrap);
 
   const modelPane = $("#mModelPane");
   if (viewer && modelPane) modelPane.appendChild(viewer);
+
+  $$(".mediaTab", wrap).forEach((b) => (b.onclick = () => setActiveTab(b.dataset.tab)));
 
   return wrap;
 }
@@ -154,7 +133,6 @@ function setActiveTab(tab) {
   if (!wrap) return;
 
   $$(".mediaTab", wrap).forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
-
   const photos = $("#mPhotos");
   const modelPane = $("#mModelPane");
   if (photos) photos.style.display = tab === "photos" ? "" : "none";
@@ -195,7 +173,7 @@ function renderPhotos(gallery) {
   };
 }
 
-/* ---------------- Look: modelo branco + fundo laranja ---------------- */
+/* ---------- Viewer look ---------- */
 const presets = {
   bg_orange_model_white: {
     background: "rgba(255, 159, 28, 0.18)",
@@ -216,7 +194,7 @@ function applyViewerPreset(viewer, presetName = "bg_orange_model_white") {
   viewer.setAttribute("touch-action", "pan-y");
 }
 
-/* ---------------- Drawer (Filtros) ---------------- */
+/* ---------- Drawer filtros ---------- */
 function wireDrawer(allProducts, onFilterChange) {
   const backdrop = $("#drawerBackdrop");
   const openBtn = $("#openDrawer");
@@ -230,10 +208,7 @@ function wireDrawer(allProducts, onFilterChange) {
 
   openBtn.addEventListener("click", open);
   closeBtn.addEventListener("click", close);
-
-  backdrop.addEventListener("click", (e) => {
-    if (e.target === backdrop) close();
-  });
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) close(); });
 
   const categories = [...new Set(allProducts.map((p) => p.category).filter(Boolean))].sort((a, b) =>
     a.localeCompare(b)
@@ -260,7 +235,7 @@ function wireDrawer(allProducts, onFilterChange) {
   renderChips();
 }
 
-/* ---------------- Modal ---------------- */
+/* ---------- Modal ---------- */
 function wireModal(productsById) {
   const modal = $("#modal");
   if (!modal) return;
@@ -273,35 +248,24 @@ function wireModal(productsById) {
   });
 
   function setLeftPanelMode({ mode, modelUrl, gallery, textHtml }) {
-    const ui = ensureMediaUI();
+    ensureMediaUI();
     const viewer = $("#mViewer");
     const textBlock = $("#mTextBlock");
-
-    if (ui) {
-      const btns = $$(".mediaTab", ui);
-      btns.forEach((b) => (b.onclick = () => setActiveTab(b.dataset.tab)));
-    }
 
     renderPhotos(gallery || []);
 
     if (mode === "model") {
       ensureModelViewer();
-
-      const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
-      if (btn3d) btn3d.style.display = "";
-
       if (viewer) {
         viewer.style.display = "";
         if (modelUrl) viewer.setAttribute("src", modelUrl);
         else viewer.removeAttribute("src");
         applyViewerPreset(viewer, "bg_orange_model_white");
       }
-
       if (textBlock) {
         textBlock.style.display = "none";
         textBlock.innerHTML = "";
       }
-
       setActiveTab("model");
       return;
     }
@@ -310,16 +274,11 @@ function wireModal(productsById) {
       viewer.style.display = "none";
       viewer.removeAttribute("src");
     }
-
-    const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
-    if (btn3d) btn3d.style.display = "none";
-
-    setActiveTab("photos");
-
     if (textBlock) {
       textBlock.style.display = "";
       textBlock.innerHTML = textHtml || "";
     }
+    setActiveTab("photos");
   }
 
   function addSelect(wrap, labelText, values, onChange, initialValue) {
@@ -340,7 +299,6 @@ function wireModal(productsById) {
     });
 
     if (initialValue != null) sel.value = initialValue;
-
     sel.addEventListener("change", () => onChange(sel.value));
 
     wrap.appendChild(label);
@@ -359,83 +317,94 @@ function wireModal(productsById) {
 
     wrap.innerHTML = "";
 
-    // opções normais
-    (product.options || []).forEach((opt) => {
-      addSelect(
-        wrap,
-        opt.name,
-        opt.values || [],
-        (v) => {
-          const idx = selections.findIndex((s) => s.startsWith(opt.name + ":"));
-          const txt = `${opt.name}: ${v}`;
-          if (idx >= 0) selections[idx] = txt;
-          else selections.push(txt);
-        },
-        (opt.values || [])[0]
-      );
+    const setSelection = (key, value) => {
+      const prefix = key + ":";
+      const idx = selections.findIndex((s) => s.startsWith(prefix));
+      const txt = `${key}: ${value}`;
+      if (idx >= 0) selections[idx] = txt;
+      else selections.push(txt);
+    };
 
+    (product.options || []).forEach((opt) => {
       const first = (opt.values || [])[0];
-      if (first) selections.push(`${opt.name}: ${first}`);
+      addSelect(wrap, opt.name, opt.values || [], (v) => setSelection(opt.name, v), first);
+      if (first) setSelection(opt.name, first);
     });
 
-    // cores (se existir)
+    // ✅ aceita seu schema novo (modes/multiMaxColors)
     const cc = product.colorConfig;
     const palette = cc?.palette || [];
     if (!palette.length) return;
 
     const def = cc?.default || palette[0];
-    const max = Math.max(1, Number(cc?.maxColors || 1));
-    const isMulti = !!cc?.multicolor;
+    const modes = Array.isArray(cc?.modes) && cc.modes.length ? cc.modes : ["solid"];
+    const multiMaxColors = Math.max(2, Number(cc?.multiMaxColors || 2));
 
-    let qty = isMulti ? Math.min(2, max) : 1;
+    let mode = cc?.defaultMode && modes.includes(cc.defaultMode) ? cc.defaultMode : (modes.includes("multi") ? "multi" : "solid");
+    let qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
 
-    const colorRowsWrap = document.createElement("div");
-    wrap.appendChild(colorRowsWrap);
+    const colorWrap = document.createElement("div");
+    wrap.appendChild(colorWrap);
 
-    const setColorsUI = () => {
-      colorRowsWrap.innerHTML = "";
-
-      // limpa seleções antigas de cor
+    const clearColorSelections = () => {
       for (let i = selections.length - 1; i >= 0; i--) {
-        if (selections[i].startsWith("Cor")) selections.splice(i, 1);
-        if (selections[i].startsWith("Qtd. cores")) selections.splice(i, 1);
-      }
-
-      if (isMulti) selections.push(`Qtd. cores: ${qty}`);
-
-      for (let i = 1; i <= qty; i++) {
-        const label = qty === 1 ? "Cor" : `Cor ${i}`;
-        addSelect(
-          colorRowsWrap,
-          label,
-          palette,
-          (v) => {
-            const key = label + ":";
-            const idx = selections.findIndex((s) => s.startsWith(key));
-            const txt = `${label}: ${v}`;
-            if (idx >= 0) selections[idx] = txt;
-            else selections.push(txt);
-          },
-          def
-        );
-        selections.push(`${label}: ${def}`);
+        if (
+          selections[i].startsWith("Tipo de cor:") ||
+          selections[i].startsWith("Qtd. cores:") ||
+          selections[i].startsWith("Cor")
+        ) selections.splice(i, 1);
       }
     };
 
-    if (isMulti && max > 1) {
+    const renderColorPickers = () => {
+      clearColorSelections();
+      colorWrap.innerHTML = "";
+
+      setSelection("Tipo de cor", mode === "multi" ? "Multicor" : "Sólida");
+      if (mode === "multi") setSelection("Qtd. cores", String(qty));
+
+      const count = mode === "multi" ? qty : 1;
+      for (let i = 1; i <= count; i++) {
+        const label = count === 1 ? "Cor" : `Cor ${i}`;
+        addSelect(colorWrap, label, palette, (v) => setSelection(label, v), def);
+        setSelection(label, def);
+      }
+    };
+
+    if (modes.includes("solid") && modes.includes("multi")) {
       addSelect(
         wrap,
-        "Quantidade de cores",
-        Array.from({ length: max }, (_, i) => String(i + 1)),
+        "Tipo de cor",
+        ["Sólida (1 cor)", `Multicor (até ${multiMaxColors})`],
         (v) => {
-          qty = Math.max(1, Math.min(max, Number(v)));
-          setColorsUI();
+          mode = v.startsWith("Multi") ? "multi" : "solid";
+          qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
+          renderCatalogExtra();
         },
-        String(qty)
+        mode === "multi" ? `Multicor (até ${multiMaxColors})` : "Sólida (1 cor)"
       );
     }
 
-    setColorsUI();
+    function renderCatalogExtra() {
+      // remove seletor antigo de quantidade (recria simples)
+      // (como o modal é reconstruído por clique, isso é suficiente)
+      if (mode === "multi") {
+        // cria um seletor de quantidade antes das cores
+        const qtyWrap = document.createElement("div");
+        colorWrap.parentElement.insertBefore(qtyWrap, colorWrap);
+
+        addSelect(
+          qtyWrap,
+          "Quantidade de cores",
+          Array.from({ length: multiMaxColors }, (_, i) => String(i + 1)),
+          (v) => { qty = Math.max(1, Math.min(multiMaxColors, Number(v))); renderColorPickers(); },
+          String(qty)
+        );
+      }
+      renderColorPickers();
+    }
+
+    renderCatalogExtra();
   }
 
   window.openProductById = (id) => {
@@ -445,10 +414,6 @@ function wireModal(productsById) {
     $("#mTitle").textContent = p.name || "Produto";
     $("#mCategory").textContent = p.category || "";
     $("#mDesc").textContent = p.description || "";
-
-    const mDim = $("#mDim");
-    if (mDim) mDim.style.display = "none";
-
     $("#mPrice").textContent = moneyBRL(p.price);
 
     const gallery = p.gallery && p.gallery.length ? p.gallery : p.image ? [p.image] : [];
@@ -456,18 +421,13 @@ function wireModal(productsById) {
     if (p.modelUrl) {
       setLeftPanelMode({ mode: "model", modelUrl: p.modelUrl, gallery });
     } else {
-      setLeftPanelMode({
-        mode: "text",
-        gallery,
-        textHtml: `Sem visualização 3D aqui — pede no WhatsApp que a gente manda mais detalhes.`,
-      });
+      setLeftPanelMode({ mode: "text", gallery, textHtml: `Sem visualização 3D — chama no WhatsApp.` });
     }
 
     const selections = [];
     renderOptions(p, selections);
 
     $("#mBuyInside").onclick = () => openWhats(p, selections.filter(Boolean));
-
     modal.classList.add("open");
   };
 
@@ -486,7 +446,16 @@ function wireModal(productsById) {
   });
 }
 
-/* ---------------- Home carousel ---------------- */
+/* ---------- Home Carousel ---------- */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 function renderHomeCarouselRandom4(products) {
   const track = $("#track");
   const dotsWrap = $("#dots");
@@ -495,9 +464,7 @@ function renderHomeCarouselRandom4(products) {
   const carousel = $("#carousel");
   if (!track || !dotsWrap) return;
 
-  const candidates = products.filter((p) => p.id !== "custom");
-  const chosen = shuffle(candidates).slice(0, 4);
-
+  const chosen = shuffle(products).slice(0, 4);
   let idx = 0;
   let dir = 1;
   let timer = null;
@@ -516,14 +483,8 @@ function renderHomeCarouselRandom4(products) {
   const tick = () => {
     if (chosen.length <= 1) return;
     let next = idx + dir;
-    if (next >= chosen.length) {
-      dir = -1;
-      next = idx + dir;
-    }
-    if (next < 0) {
-      dir = 1;
-      next = idx + dir;
-    }
+    if (next >= chosen.length) { dir = -1; next = idx + dir; }
+    if (next < 0) { dir = 1; next = idx + dir; }
     set(next);
   };
 
@@ -540,44 +501,23 @@ function renderHomeCarouselRandom4(products) {
     })
   );
 
-  prevBtn?.addEventListener("click", () => {
-    dir = -1;
-    set(idx - 1);
-    restart();
-  });
-
-  nextBtn?.addEventListener("click", () => {
-    dir = 1;
-    set(idx + 1);
-    restart();
-  });
+  prevBtn?.addEventListener("click", () => { dir = -1; set(idx - 1); restart(); });
+  nextBtn?.addEventListener("click", () => { dir = 1; set(idx + 1); restart(); });
 
   restart();
   carousel?.addEventListener("mouseenter", () => timer && clearInterval(timer));
   carousel?.addEventListener("mouseleave", restart);
 }
 
-/* ---------------- Catálogo: render robusto ---------------- */
-function getCatalogGridEl() {
-  // ✅ fallback forte (se mudar IDs no futuro)
-  return (
-    $("#catalogGrid") ||
-    document.querySelector('[data-catalog-grid]') ||
-    document.querySelector(".grid#catalog") ||
-    document.querySelector(".grid.catalog") ||
-    document.querySelector(".grid")
-  );
-}
-
+/* ---------- Catálogo render ---------- */
 function renderCatalogIntoGrid(products) {
-  const grid = getCatalogGridEl();
+  const grid = $("#catalogGrid");
   if (!grid) return;
 
   if (!products || !products.length) {
     grid.innerHTML = `<div class="card" style="padding:14px;">Nenhum item para mostrar.</div>`;
     return;
   }
-
   grid.innerHTML = products.map(productCard).join("");
 }
 
@@ -602,20 +542,17 @@ function wireSearch(allProducts, getActiveCategory, onResult) {
   }
 
   input.addEventListener("input", apply);
-  clear.addEventListener("click", () => {
-    input.value = "";
-    apply();
-  });
+  clear.addEventListener("click", () => { input.value = ""; apply(); });
 
   apply();
 }
 
-/* ---------------- Boot ---------------- */
+/* ---------- Boot ---------- */
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const productsAll = await loadProducts();
-    const productsById = new Map(productsAll.map((p) => [p.id, p]));
 
+    const productsById = new Map(productsAll.map((p) => [p.id, p]));
     wireModal(productsById);
 
     // Home
@@ -627,8 +564,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     wireDrawer(productsAll, (cat) => {
       activeCategory = cat;
-
       const q = ($("#searchInput")?.value || "").trim().toLowerCase();
+
       const filtered = productsAll.filter((p) => {
         const matchesCat = activeCategory === "Tudo" || (p.category || "") === activeCategory;
         if (!matchesCat) return false;
@@ -642,11 +579,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     wireSearch(productsAll, getActiveCategory, renderCatalogIntoGrid);
 
-    // ✅ render inicial (não some mais)
-    // (se você quiser esconder "custom", deixe p.id === "custom" no JSON e ele não aparece aqui)
-    if (getCatalogGridEl()) {
-      renderCatalogIntoGrid(productsAll);
-    }
+    if ($("#catalogGrid")) renderCatalogIntoGrid(productsAll);
   } catch (err) {
     showFatal(err?.message || "Falha ao carregar catálogo.", err);
   }
