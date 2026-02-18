@@ -1,6 +1,23 @@
 [
-  {
+    {
     "id": "p1",
+    "name": "Peça Custom (sob medida)",
+    "category": "Serviços",
+    "price": null,
+    "currency": "BRL",
+    "dimensions": "Sob medida",
+    "image": "assets/products/images/custom.jpg",
+    "gallery": ["assets/products/images/custom.jpg"],
+    "modelUrl": "",
+    "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
+    "options": [
+      { "name": "Material", "values": ["PLA", "PETG", "ABS"] },
+      { "name": "Tolerância", "values": ["Padrão", "Ajuste fino"] },
+      { "name": "Acabamento", "values": ["Bruto", "Lixado", "Pintado"] }
+    ]
+  },
+  {
+    "id": "p2",
     "name": "Mini Polvo Fofo",
     "category": "Articulado",
     "price": 9.49,
@@ -29,73 +46,21 @@
   },
   {
     "id": "p2",
-    "name": "Engrenagem Decorativa",
-    "category": "Decoração",
-    "price": 34.9,
+    "name": "Slider Fidget",
+    "category": "Fidget",
+    "price": 2,29,
     "currency": "BRL",
-    "dimensions": "15 × 15 × 2 cm",
-    "image": "assets/products/images/engrenagem.jpg",
-    "gallery": ["assets/products/images/engrenagem.jpg"],
-    "modelUrl": "assets/products/models/engrenagem.glb",
-    "description": "Peça decorativa com acabamento suave e bordas arredondadas.",
-    "options": [
-      { "name": "Acabamento", "values": ["Fosco", "Semi-brilho"] },
-      { "name": "Tamanho", "values": ["Pequeno", "Médio", "Grande"] }
-    ]
-  },
-  {
-    "id": "p3",
-    "name": "Case Eletrônica (RP2040)",
-    "category": "Eletrônica",
-    "price": 49.9,
-    "currency": "BRL",
-    "dimensions": "9 × 6 × 2.5 cm",
-    "image": "assets/products/images/7349019e-6047-4267-a519-f532d52c2b8e.png",
-    "gallery": ["assets/products/images/7349019e-6047-4267-a519-f532d52c2b8e.png"],
-    "modelUrl": "assets/products/models/box-opener.glb",
-    "description": "Case com encaixe preciso para placa e passagem de cabo.",
-    "options": [
-      { "name": "Tampa", "values": ["Com ventilação", "Fechada"] },
-      { "name": "Fixação", "values": ["Parafuso", "Snap-fit"] }
-    ]
-  },
-  {
-    "id": "p4",
-    "name": "Organizador de Ferramentas",
-    "category": "Oficina",
-    "price": 59.9,
-    "currency": "BRL",
-    "dimensions": "20 × 12 × 6 cm",
+    "dimensions": "",
     "image": "assets/products/images/organizador.jpg",
     "gallery": ["assets/products/images/organizador.jpg"],
     "modelUrl": "assets/products/models/organizador.glb",
     "description": "Organizador modular para bancada, com encaixes e estética clean.",
-    "options": [
-      { "name": "Módulos", "values": ["1x", "2x", "3x"] }
-    ],
     "colorConfig": {
-      "palette": ["Âmbar", "Magenta", "Laranja (Paleta)"],
-      "default": "Laranja (Paleta)",
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
       "modes": ["solid"],
       "defaultMode": "solid",
       "multiMaxColors": 1
     }
-  },
-  {
-    "id": "p5",
-    "name": "Peça Custom (sob medida)",
-    "category": "Serviços",
-    "price": null,
-    "currency": "BRL",
-    "dimensions": "Sob medida",
-    "image": "assets/products/images/custom.jpg",
-    "gallery": ["assets/products/images/custom.jpg"],
-    "modelUrl": "",
-    "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
-    "options": [
-      { "name": "Material", "values": ["PLA", "PETG", "ABS"] },
-      { "name": "Tolerância", "values": ["Padrão", "Ajuste fino"] },
-      { "name": "Acabamento", "values": ["Bruto", "Lixado", "Pintado"] }
-    ]
   }
 ]
