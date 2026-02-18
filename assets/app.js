@@ -131,7 +131,6 @@ function ensureMediaUI() {
   if (viewer && modelPane) modelPane.appendChild(viewer);
 
   $$(".mediaTab", wrap).forEach((b) => (b.onclick = () => setActiveTab(b.dataset.tab)));
-
   return wrap;
 }
 
@@ -181,7 +180,7 @@ function renderPhotos(gallery) {
   };
 }
 
-/* ---------------- Viewer look (seu CSS já faz, mas isso reforça) ---------------- */
+/* ---------------- Viewer look ---------------- */
 function applyViewerPreset(viewer) {
   if (!viewer) return;
   viewer.style.background = "rgba(255, 159, 28, 0.16)";
@@ -206,7 +205,6 @@ function wireDrawer(allProducts, onFilterChange) {
 
   openBtn.addEventListener("click", open);
   closeBtn.addEventListener("click", close);
-
   backdrop.addEventListener("click", (e) => {
     if (e.target === backdrop) close();
   });
@@ -220,7 +218,10 @@ function wireDrawer(allProducts, onFilterChange) {
 
   function renderChips() {
     list.innerHTML = chips
-      .map((c) => `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`)
+      .map(
+        (c) =>
+          `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`
+      )
       .join("");
   }
 
@@ -236,7 +237,7 @@ function wireDrawer(allProducts, onFilterChange) {
   renderChips();
 }
 
-/* ---------------- Modal (abre/fecha do jeito do CSS) ---------------- */
+/* ---------------- Modal (corrigido: sem duplicar seções) ---------------- */
 function wireModal(productsById) {
   const modalBackdrop = $("#modalBackdrop");
   if (!modalBackdrop) return;
@@ -281,6 +282,7 @@ function wireModal(productsById) {
   function renderOptions(product, selections) {
     const wrap = $("#mOptions");
     if (!wrap) return;
+
     wrap.innerHTML = "";
 
     const setSelection = (key, value) => {
@@ -291,91 +293,95 @@ function wireModal(productsById) {
       else selections.push(txt);
     };
 
-    // opções normais
+    const clearSelectionsByPrefix = (prefixes) => {
+      for (let i = selections.length - 1; i >= 0; i--) {
+        if (prefixes.some((p) => selections[i].startsWith(p))) selections.splice(i, 1);
+      }
+    };
+
+    // 1) opções normais
     (product.options || []).forEach((opt) => {
       const first = (opt.values || [])[0];
       addSelect(wrap, opt.name, opt.values || [], (v) => setSelection(opt.name, v), first);
       if (first) setSelection(opt.name, first);
     });
 
-    // cores (novo schema)
+    // 2) cores (se existir)
     const cc = product.colorConfig;
     const palette = cc?.palette || [];
     if (!palette.length) return;
 
-    const def = cc?.default || palette[0];
-    const modes = Array.isArray(cc?.modes) && cc.modes.length ? cc.modes : ["solid"];
-    const multiMaxColors = Math.max(2, Number(cc?.multiMaxColors || 2));
+    // Wrapper único para cores (zera sempre e não duplica)
+    const colorSection = document.createElement("div");
+    wrap.appendChild(colorSection);
 
-    let mode = cc?.defaultMode && modes.includes(cc.defaultMode)
-      ? cc.defaultMode
-      : (modes.includes("multi") ? "multi" : "solid");
+    const def = cc?.default || palette[0];
+
+    // suporta schema novo + fallback
+    const legacyIsMulti = !!cc?.multicolor;
+    const legacyMax = Math.max(1, Number(cc?.maxColors || 1));
+
+    const modes =
+      Array.isArray(cc?.modes) && cc.modes.length ? cc.modes : legacyIsMulti ? ["solid", "multi"] : ["solid"];
+
+    const multiMaxColors = Math.max(2, Number(cc?.multiMaxColors || legacyMax || 2));
+
+    let mode =
+      cc?.defaultMode && modes.includes(cc.defaultMode)
+        ? cc.defaultMode
+        : modes.includes("multi")
+        ? "multi"
+        : "solid";
 
     let qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
 
-    const colorWrap = document.createElement("div");
-    wrap.appendChild(colorWrap);
+    const rerenderColors = () => {
+      // limpa DOM e seleções antigas de cor
+      colorSection.innerHTML = "";
+      clearSelectionsByPrefix(["Tipo de cor:", "Qtd. cores:", "Cor:", "Cor 1:", "Cor 2:", "Cor 3:", "Cor 4:"]);
 
-    const clearColorSelections = () => {
-      for (let i = selections.length - 1; i >= 0; i--) {
-        if (
-          selections[i].startsWith("Tipo de cor:") ||
-          selections[i].startsWith("Qtd. cores:") ||
-          selections[i].startsWith("Cor")
-        ) selections.splice(i, 1);
+      // Tipo de cor (se tiver os dois modos)
+      if (modes.includes("solid") && modes.includes("multi")) {
+        addSelect(
+          colorSection,
+          "Tipo de cor",
+          ["Sólida (1 cor)", `Multicor (até ${multiMaxColors})`],
+          (v) => {
+            mode = v.startsWith("Multi") ? "multi" : "solid";
+            qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
+            rerenderColors();
+          },
+          mode === "multi" ? `Multicor (até ${multiMaxColors})` : "Sólida (1 cor)"
+        );
       }
-    };
-
-    const renderColorPickers = () => {
-      clearColorSelections();
-      colorWrap.innerHTML = "";
 
       setSelection("Tipo de cor", mode === "multi" ? "Multicor" : "Sólida");
-      if (mode === "multi") setSelection("Qtd. cores", String(qty));
 
-      const count = mode === "multi" ? qty : 1;
-      for (let i = 1; i <= count; i++) {
-        const label = count === 1 ? "Cor" : `Cor ${i}`;
-        addSelect(colorWrap, label, palette, (v) => setSelection(label, v), def);
-        setSelection(label, def);
-      }
-    };
-
-    if (modes.includes("solid") && modes.includes("multi")) {
-      addSelect(
-        wrap,
-        "Tipo de cor",
-        ["Sólida (1 cor)", `Multicor (até ${multiMaxColors})`],
-        (v) => {
-          mode = v.startsWith("Multi") ? "multi" : "solid";
-          qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
-          renderExtra();
-        },
-        mode === "multi" ? `Multicor (até ${multiMaxColors})` : "Sólida (1 cor)"
-      );
-    }
-
-    function renderExtra() {
-      // se multi: seletor de quantidade
+      // Quantidade de cores (só no modo multi)
       if (mode === "multi") {
-        const qtyBox = document.createElement("div");
-        wrap.insertBefore(qtyBox, colorWrap);
-
         addSelect(
-          qtyBox,
+          colorSection,
           "Quantidade de cores",
           Array.from({ length: multiMaxColors }, (_, i) => String(i + 1)),
           (v) => {
             qty = Math.max(1, Math.min(multiMaxColors, Number(v)));
-            renderColorPickers();
+            rerenderColors();
           },
           String(qty)
         );
+        setSelection("Qtd. cores", String(qty));
       }
-      renderColorPickers();
-    }
 
-    renderExtra();
+      // Pickers de cor
+      const count = mode === "multi" ? qty : 1;
+      for (let i = 1; i <= count; i++) {
+        const label = count === 1 ? "Cor" : `Cor ${i}`;
+        addSelect(colorSection, label, palette, (v) => setSelection(label, v), def);
+        setSelection(label, def);
+      }
+    };
+
+    rerenderColors();
   }
 
   window.openProductById = (id) => {
@@ -387,7 +393,7 @@ function wireModal(productsById) {
     $("#mDesc").textContent = p.description || "";
     $("#mPrice").textContent = moneyBRL(p.price);
 
-    const gallery = p.gallery && p.gallery.length ? p.gallery : (p.image ? [p.image] : []);
+    const gallery = p.gallery && p.gallery.length ? p.gallery : p.image ? [p.image] : [];
 
     ensureMediaUI();
     renderPhotos(gallery);
@@ -420,7 +426,6 @@ function wireModal(productsById) {
     renderOptions(p, selections);
 
     $("#mBuyInside").onclick = () => openWhats(p, selections.filter(Boolean));
-
     modalBackdrop.classList.add("open");
   };
 
@@ -480,7 +485,6 @@ function renderHomeCarouselRandom4(products) {
   };
 
   dots.forEach((d, i) => d.addEventListener("click", () => { dir = i > idx ? 1 : -1; set(i); restart(); }));
-
   prevBtn?.addEventListener("click", () => { dir = -1; set(idx - 1); restart(); });
   nextBtn?.addEventListener("click", () => { dir = 1; set(idx + 1); restart(); });
 
