@@ -47,7 +47,6 @@ function openWhats(product, selections) {
 function showFatal(msg, err) {
   console.error("[MAKER3D]", msg, err || "");
   const target = $("#catalogGrid") || $("#track") || $(".container") || document.body;
-
   const box = document.createElement("div");
   box.className = "card";
   box.style.padding = "14px";
@@ -237,7 +236,7 @@ function wireDrawer(allProducts, onFilterChange) {
   renderChips();
 }
 
-/* ---------------- Modal (sem Quantidade de cores) ---------------- */
+/* ---------------- Modal (Multicor usa multiMaxColors do JSON, sem seletor de quantidade) ---------------- */
 function wireModal(productsById) {
   const modalBackdrop = $("#modalBackdrop");
   if (!modalBackdrop) return;
@@ -306,7 +305,7 @@ function wireModal(productsById) {
       if (first) setSelection(opt.name, first);
     });
 
-    // 2) cores (se existir)
+    // 2) cores
     const cc = product.colorConfig;
     const palette = cc?.palette || [];
     if (!palette.length) return;
@@ -316,7 +315,7 @@ function wireModal(productsById) {
 
     const def = cc?.default || palette[0];
 
-    // aceita schema novo + fallback
+    // modos suportados (novo + fallback)
     const legacyIsMulti = !!cc?.multicolor;
     const modes =
       Array.isArray(cc?.modes) && cc.modes.length ? cc.modes : legacyIsMulti ? ["solid", "multi"] : ["solid"];
@@ -328,33 +327,51 @@ function wireModal(productsById) {
         ? "multi"
         : "solid";
 
-    // ✅ FIXO: multicor sempre 2 cores (sem select de quantidade)
-    const MULTI_FIXED_COUNT = 2;
+    // ✅ pega do JSON: multiMaxColors (também aceita "multimaxcolors" se você escrever diferente)
+    const rawMultiMax =
+      cc?.multiMaxColors ?? cc?.multimaxcolors ?? cc?.maxColors ?? (legacyIsMulti ? 2 : 1);
+
+    let multiCount = Number(rawMultiMax);
+    if (!Number.isFinite(multiCount)) multiCount = 2;
+    multiCount = Math.max(2, Math.min(8, Math.floor(multiCount))); // cap 8 pra não quebrar layout
 
     const rerenderColors = () => {
       colorSection.innerHTML = "";
-      clearSelectionsByPrefix(["Tipo de cor:", "Qtd. cores:", "Cor:", "Cor 1:", "Cor 2:", "Cor 3:", "Cor 4:"]);
+      clearSelectionsByPrefix([
+        "Tipo de cor:",
+        "Qtd. cores:",
+        "Cor:",
+        "Cor 1:",
+        "Cor 2:",
+        "Cor 3:",
+        "Cor 4:",
+        "Cor 5:",
+        "Cor 6:",
+        "Cor 7:",
+        "Cor 8:",
+      ]);
 
-      // Tipo de cor (se houver os dois modos)
+      // Tipo de cor
       if (modes.includes("solid") && modes.includes("multi")) {
         addSelect(
           colorSection,
           "Tipo de cor",
-          ["Sólida (1 cor)", "Multicor (2 cores)"],
+          ["Sólida (1 cor)", `Multicor (até ${multiCount})`],
           (v) => {
             mode = v.startsWith("Multi") ? "multi" : "solid";
             rerenderColors();
           },
-          mode === "multi" ? "Multicor (2 cores)" : "Sólida (1 cor)"
+          mode === "multi" ? `Multicor (até ${multiCount})` : "Sólida (1 cor)"
         );
       }
 
       setSelection("Tipo de cor", mode === "multi" ? "Multicor" : "Sólida");
 
-      // ✅ sem "Quantidade de cores" aqui
+      // ✅ NÃO mostra seletor “Quantidade de cores”, mas envia no WhatsApp
+      if (mode === "multi") setSelection("Qtd. cores", String(multiCount));
 
       // Pickers
-      const count = mode === "multi" ? MULTI_FIXED_COUNT : 1;
+      const count = mode === "multi" ? multiCount : 1;
       for (let i = 1; i <= count; i++) {
         const label = count === 1 ? "Cor" : `Cor ${i}`;
         addSelect(colorSection, label, palette, (v) => setSelection(label, v), def);
