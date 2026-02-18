@@ -643,3 +643,18 @@ model-viewer{
 
 /* Menu: evita quebrar linha no celular */
 .menu::-webkit-scrollbar{height:0}
+/* ===== Modal: bloco da descrição (igual “categoria”) ===== */
+.descBlock {
+  display: inline-block;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin: 10px 0 8px;
+  line-height: 1.35;
+}
+
+.descBlock .small {
+  margin: 0;
+}
