@@ -34,7 +34,7 @@
     "modelUrl": "assets/products/models/p1.glb",
     "description": "*Esse objeto oferece opção multicor.*",
     "options": [
-      { "name": "Material", "values": ["PLA"]] }
+      { "name": "Material", "values": ["PLA"] }
     ],
     "colorConfig": {
       "palette": ["Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde"],
@@ -52,7 +52,7 @@
     "currency": "BRL",
     "dimensions": "",
     "options": [
-      { "name": "Material", "values": ["PLA"]] }
+      { "name": "Material", "values": ["PLA"] }
     ],
     "image": "assets/products/images/P3/p1.png",
     "gallery": [
