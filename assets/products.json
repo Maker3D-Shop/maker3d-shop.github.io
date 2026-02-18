@@ -20,14 +20,14 @@
       { "name": "Material", "values": ["PLA", "PETG"] }
     ],
     "colorConfig": {
-  "palette": ["Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde"],
-  "default": "Laranja (Paleta)",
-  "modes": ["solid", "multi"],
-  "defaultMode": "multi",
-  "multiMaxColors": 3
-}
-    
-{
+      "palette": ["Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde"],
+      "default": "Laranja (Paleta)",
+      "modes": ["solid", "multi"],
+      "defaultMode": "multi",
+      "multiMaxColors": 3
+    }
+  },
+  {
     "id": "p2",
     "name": "Engrenagem Decorativa",
     "category": "Decoração",
@@ -76,13 +76,10 @@
     "colorConfig": {
       "palette": ["Âmbar", "Magenta", "Laranja (Paleta)"],
       "default": "Laranja (Paleta)",
-
       "modes": ["solid"],
       "defaultMode": "solid",
-
       "multiMaxColors": 1
-    },
-    "viewerTint": "orange_soft"
+    }
   },
   {
     "id": "p5",
