@@ -237,7 +237,7 @@ function wireDrawer(allProducts, onFilterChange) {
   renderChips();
 }
 
-/* ---------------- Modal (corrigido: sem duplicar seções) ---------------- */
+/* ---------------- Modal (sem Quantidade de cores) ---------------- */
 function wireModal(productsById) {
   const modalBackdrop = $("#modalBackdrop");
   if (!modalBackdrop) return;
@@ -311,20 +311,15 @@ function wireModal(productsById) {
     const palette = cc?.palette || [];
     if (!palette.length) return;
 
-    // Wrapper único para cores (zera sempre e não duplica)
     const colorSection = document.createElement("div");
     wrap.appendChild(colorSection);
 
     const def = cc?.default || palette[0];
 
-    // suporta schema novo + fallback
+    // aceita schema novo + fallback
     const legacyIsMulti = !!cc?.multicolor;
-    const legacyMax = Math.max(1, Number(cc?.maxColors || 1));
-
     const modes =
       Array.isArray(cc?.modes) && cc.modes.length ? cc.modes : legacyIsMulti ? ["solid", "multi"] : ["solid"];
-
-    const multiMaxColors = Math.max(2, Number(cc?.multiMaxColors || legacyMax || 2));
 
     let mode =
       cc?.defaultMode && modes.includes(cc.defaultMode)
@@ -333,47 +328,33 @@ function wireModal(productsById) {
         ? "multi"
         : "solid";
 
-    let qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
+    // ✅ FIXO: multicor sempre 2 cores (sem select de quantidade)
+    const MULTI_FIXED_COUNT = 2;
 
     const rerenderColors = () => {
-      // limpa DOM e seleções antigas de cor
       colorSection.innerHTML = "";
       clearSelectionsByPrefix(["Tipo de cor:", "Qtd. cores:", "Cor:", "Cor 1:", "Cor 2:", "Cor 3:", "Cor 4:"]);
 
-      // Tipo de cor (se tiver os dois modos)
+      // Tipo de cor (se houver os dois modos)
       if (modes.includes("solid") && modes.includes("multi")) {
         addSelect(
           colorSection,
           "Tipo de cor",
-          ["Sólida (1 cor)", `Multicor (até ${multiMaxColors})`],
+          ["Sólida (1 cor)", "Multicor (2 cores)"],
           (v) => {
             mode = v.startsWith("Multi") ? "multi" : "solid";
-            qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
             rerenderColors();
           },
-          mode === "multi" ? `Multicor (até ${multiMaxColors})` : "Sólida (1 cor)"
+          mode === "multi" ? "Multicor (2 cores)" : "Sólida (1 cor)"
         );
       }
 
       setSelection("Tipo de cor", mode === "multi" ? "Multicor" : "Sólida");
 
-      // Quantidade de cores (só no modo multi)
-      if (mode === "multi") {
-        addSelect(
-          colorSection,
-          "Quantidade de cores",
-          Array.from({ length: multiMaxColors }, (_, i) => String(i + 1)),
-          (v) => {
-            qty = Math.max(1, Math.min(multiMaxColors, Number(v)));
-            rerenderColors();
-          },
-          String(qty)
-        );
-        setSelection("Qtd. cores", String(qty));
-      }
+      // ✅ sem "Quantidade de cores" aqui
 
-      // Pickers de cor
-      const count = mode === "multi" ? qty : 1;
+      // Pickers
+      const count = mode === "multi" ? MULTI_FIXED_COUNT : 1;
       for (let i = 1; i <= count; i++) {
         const label = count === 1 ? "Cor" : `Cor ${i}`;
         addSelect(colorSection, label, palette, (v) => setSelection(label, v), def);
