@@ -34,14 +34,14 @@
     "modelUrl": "assets/products/models/p1.glb",
     "description": "*Esse objeto oferece opção multicor.*",
     "options": [
-      { "name": "Material", "values": ["PLA", "PETG"] }
+      { "name": "Material", "values": ["PLA"]] }
     ],
     "colorConfig": {
       "palette": ["Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde"],
       "default": "Laranja (Paleta)",
       "modes": ["solid", "multi"],
       "defaultMode": "multi",
-      "multiMaxColors": 3
+      "multiMaxColors": 1
     }
   },
   {
@@ -51,9 +51,17 @@
     "price": 2.29,
     "currency": "BRL",
     "dimensions": "",
-    "image": "assets/products/images/organizador.jpg",
-    "gallery": ["assets/products/images/organizador.jpg"],
-    "modelUrl": "assets/products/models/organizador.glb",
+    "options": [
+      { "name": "Material", "values": ["PLA"]] }
+    ],
+    "image": "assets/products/images/P3/p1.png",
+    "gallery": [
+      "assets/products/images/P3/p1.png",
+      "assets/products/images/P3/p2.png",
+      "assets/products/images/P3/p3.png",
+      "assets/products/images/P3/p4.png",
+      ],
+    "modelUrl": "assets/products/models/p3.glb",
     "description": "Organizador modular para bancada, com encaixes e estética clean.",
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
