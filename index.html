@@ -4,106 +4,84 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MAKER3D — Loja 3D</title>
-  <link rel="icon" href="assets/brand/logo.png" />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 
 <body>
-  <header>
-    <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html" aria-label="MAKER3D">
-          <img src="assets/brand/logo.png" alt="MAKER3D" />
-          <div class="btxt">
-            <strong>MAKER3D</strong>
-            <span>coisas legais feitas em 3D</span>
-          </div>
-        </a>
+  <header class="topbar">
+    <div class="container topbarRow">
+      <a class="brand" href="index.html">
+        <img src="assets/brand/logo.png" alt="MAKER3D" class="brandLogo" />
+        <span class="brandText">MAKER3D</span>
+      </a>
 
-        <nav class="menu">
-          <a class="active" href="index.html">Início</a>
-          <a href="catalogo.html">Catálogo</a>
-          <a href="contato.html">Contato</a>
-        </nav>
-      </div>
+      <nav class="nav">
+        <a href="index.html" class="navLink active">Início</a>
+        <a href="catalogo.html" class="navLink">Catálogo</a>
+        <a href="contato.html" class="navLink">Contato</a>
+      </nav>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
-      <div class="heroCard">
-        <div class="heroInner">
-          <h1 class="heroTitle">Sua ideia vira peça. Simples assim.</h1>
-          <p class="heroSub">
-            Peças prontas, utilidades e sob encomenda — com visual limpo e compra pelo WhatsApp.
-          </p>
-
-          <div class="heroActions">
-            <a class="btn primary" href="catalogo.html">Ver catálogo</a>
-            <a class="btn ghost" href="#" onclick="window.openProductById && window.openProductById('p5'); return false;">
-              Peça sob encomenda
-            </a>
-            <a class="btn ghost" href="contato.html">Falar com a gente</a>
-          </div>
-        </div>
+      <h1>Impressão 3D sob medida</h1>
+      <p>Escolha um produto, personalize e compre direto no WhatsApp.</p>
+      <div class="heroActions">
+        <a class="btn primary" href="catalogo.html">Ver catálogo</a>
+        <a class="btn ghost" href="contato.html">Falar comigo</a>
       </div>
     </section>
 
+    <!-- Carrossel -->
     <section class="section">
-      <div class="carousel" id="carousel">
-        <div class="carouselTop">
-          <div class="carouselLeft">
-            <h2>Destaques</h2>
-            <a class="miniLink" href="catalogo.html">Ver destaques</a>
-          </div>
-
-          <div class="carouselNav">
-            <button class="carouselBtn" id="prevBtn" type="button" aria-label="Anterior">‹</button>
-            <button class="carouselBtn" id="nextBtn" type="button" aria-label="Próximo">›</button>
-          </div>
-        </div>
-
-        <div class="carouselTrack" id="track"></div>
-        <div class="carouselDots" id="dots"></div>
+      <div class="sectionHeader">
+        <h2>Destaques</h2>
+        <p class="small">Alguns produtos aleatórios do catálogo.</p>
       </div>
+
+      <div id="carousel" class="carousel">
+        <button id="prevBtn" class="carouselBtn" type="button" aria-label="Anterior">‹</button>
+        <div class="carouselViewport">
+          <div id="track" class="carouselTrack"></div>
+        </div>
+        <button id="nextBtn" class="carouselBtn" type="button" aria-label="Próximo">›</button>
+      </div>
+
+      <div id="dots" class="dots"></div>
     </section>
   </main>
 
-  <!-- MODAL -->
-  <div class="modalBackdrop" id="modal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
-      <div class="modalHeader">
-        <h3 id="mTitle">Produto</h3>
-        <button class="iconBtn" type="button" data-close aria-label="Fechar">✕</button>
-      </div>
+  <!-- Modal (obrigatório para o app.js) -->
+  <div id="modal" class="modal">
+    <div class="modalCard">
+      <button class="modalClose" type="button" data-close aria-label="Fechar">×</button>
 
       <div class="modalBody">
-        <div class="modalGrid">
-          <!-- ESQUERDA: fotos/3d (o app.js injeta as abas aqui) -->
-          <div>
-            <!-- app.js vai mover o model-viewer pra dentro do painel 3D -->
-            <model-viewer id="mViewer" style="display:none" autoplay camera-controls></model-viewer>
+        <div class="modalLeft">
+          <!-- o app.js injeta UI de fotos/3D aqui -->
+          <div id="mTextBlock" class="mTextBlock"></div>
 
-            <!-- fallback (quando não tem modelUrl): app.js usa esse bloco -->
-            <div id="mTextBlock" class="panel" style="display:none"></div>
+          <!-- model-viewer é movido pra aba 3D pelo JS -->
+          <model-viewer id="mViewer" style="display:none;"></model-viewer>
+        </div>
+
+        <div class="modalRight">
+          <div class="modalHead">
+            <h3 id="mTitle">Produto</h3>
+            <p id="mCategory" class="small"></p>
+            <p id="mDesc"></p>
+            <p id="mDim" class="small"></p>
+            <p id="mPrice" class="price"></p>
           </div>
 
-          <!-- DIREITA: infos + opções -->
-          <div>
-            <p class="small" id="mCategory"></p>
-            <p class="small" id="mDesc"></p>
-            <p class="small" id="mDim" style="display:none"></p>
-
-            <p class="small">Preço</p>
-            <p id="mPrice" class="price"></p>
-
-            <p class="small">Checkout pelo WhatsApp</p>
-
-            <!-- ✅ ESSA PARTE FALTAVA NA HOME -->
+          <div class="modalOptions">
             <h4>Opções</h4>
             <div id="mOptions"></div>
+          </div>
 
-            <a id="mBuyInside" class="btn primary" href="#" role="button">Comprar no WhatsApp</a>
+          <div class="modalFooter">
+            <button id="mBuyInside" class="btn primary" type="button">Comprar no WhatsApp</button>
           </div>
         </div>
       </div>
