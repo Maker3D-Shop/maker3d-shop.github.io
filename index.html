@@ -3,86 +3,111 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MAKER3D — Loja 3D</title>
+  <title>MAKER3D coisas legais feitas em 3D</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
-
 <body>
-  <header class="topbar">
-    <div class="container topbarRow">
-      <a class="brand" href="index.html">
-        <img src="assets/brand/logo.png" alt="MAKER3D" class="brandLogo" />
-        <span class="brandText">MAKER3D</span>
-      </a>
 
-      <nav class="nav">
-        <a href="index.html" class="navLink active">Início</a>
-        <a href="catalogo.html" class="navLink">Catálogo</a>
-        <a href="contato.html" class="navLink">Contato</a>
-      </nav>
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html">
+          <img src="assets/brand/logo.png" alt="MAKER3D" />
+          <div class="btxt">
+            <strong>MAKER3D</strong>
+            <span>coisas legais feitas em 3D</span>
+          </div>
+        </a>
+
+        <div class="menu">
+          <a class="active" href="index.html">Início</a>
+          <a href="catalogo.html">Catálogo</a>
+          <a href="contato.html">Contato</a>
+        </div>
+      </div>
     </div>
   </header>
 
   <main class="container">
+
     <section class="hero">
-      <h1>Impressão 3D sob medida</h1>
-      <p>Escolha um produto, personalize e compre direto no WhatsApp.</p>
-      <div class="heroActions">
-        <a class="btn primary" href="catalogo.html">Ver catálogo</a>
-        <a class="btn ghost" href="contato.html">Falar comigo</a>
+      <div class="heroCard">
+        <div class="heroInner">
+          <h1 class="heroTitle">Sua ideia vira peça. Simples assim.</h1>
+          <p class="heroSub">
+            Peças prontas, utilidades e sob encomenda — com visual limpo e compra pelo WhatsApp.
+          </p>
+
+          <div class="heroActions">
+            <a class="btn primary" href="catalogo.html">Ver catálogo</a>
+            <span class="pill">Peça sob encomenda</span>
+            <a class="btn ghost" href="contato.html">Falar com a gente</a>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Carrossel -->
     <section class="section">
-      <div class="sectionHeader">
-        <h2>Destaques</h2>
-        <p class="small">Alguns produtos aleatórios do catálogo.</p>
-      </div>
+      <div class="carousel">
+        <div class="carouselTop">
+          <div class="carouselLeft">
+            <h2>Destaques</h2>
+            <a class="miniLink" href="catalogo.html">Ver destaques</a>
+          </div>
 
-      <div id="carousel" class="carousel">
-        <button id="prevBtn" class="carouselBtn" type="button" aria-label="Anterior">‹</button>
+          <div class="carouselNav">
+            <button id="prevBtn" class="carouselBtn" type="button" aria-label="Anterior">‹</button>
+            <button id="nextBtn" class="carouselBtn" type="button" aria-label="Próximo">›</button>
+          </div>
+        </div>
+
         <div class="carouselViewport">
           <div id="track" class="carouselTrack"></div>
         </div>
-        <button id="nextBtn" class="carouselBtn" type="button" aria-label="Próximo">›</button>
-      </div>
 
-      <div id="dots" class="dots"></div>
+        <div id="dots" class="carouselDots"></div>
+      </div>
     </section>
+
   </main>
 
-  <!-- Modal (obrigatório para o app.js) -->
-  <div id="modal" class="modal">
-    <div class="modalCard">
-      <button class="modalClose" type="button" data-close aria-label="Fechar">×</button>
+  <!-- ✅ MODAL (o CSS espera modalBackdrop) -->
+  <div id="modalBackdrop" class="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Produto">
+      <div class="modalHeader">
+        <h3 id="mTitle">Produto</h3>
+        <button class="iconBtn" type="button" data-close aria-label="Fechar">✕</button>
+      </div>
 
       <div class="modalBody">
-        <div class="modalLeft">
-          <!-- o app.js injeta UI de fotos/3D aqui -->
-          <div id="mTextBlock" class="mTextBlock"></div>
+        <div class="modalGrid">
 
-          <!-- model-viewer é movido pra aba 3D pelo JS -->
-          <model-viewer id="mViewer" style="display:none;"></model-viewer>
-        </div>
-
-        <div class="modalRight">
-          <div class="modalHead">
-            <h3 id="mTitle">Produto</h3>
-            <p id="mCategory" class="small"></p>
-            <p id="mDesc"></p>
-            <p id="mDim" class="small"></p>
-            <p id="mPrice" class="price"></p>
+          <!-- Left -->
+          <div>
+            <div id="mTextBlock" class="small"></div>
+            <model-viewer id="mViewer" style="display:none;"></model-viewer>
           </div>
 
-          <div class="modalOptions">
-            <h4>Opções</h4>
+          <!-- Right -->
+          <div class="panel">
+            <p class="small"><strong id="mCategory"></strong></p>
+            <p class="small" id="mDesc"></p>
+            <p class="small" id="mDim" style="display:none;"></p>
+
+            <div style="height:10px;"></div>
+
+            <p class="price" id="mPrice">Preço</p>
+
+            <div style="height:10px;"></div>
+
+            <p class="small" style="font-weight:900;margin:0 0 8px;">Opções</p>
             <div id="mOptions"></div>
-          </div>
 
-          <div class="modalFooter">
+            <div style="height:12px;"></div>
+
             <button id="mBuyInside" class="btn primary" type="button">Comprar no WhatsApp</button>
           </div>
+
         </div>
       </div>
     </div>
