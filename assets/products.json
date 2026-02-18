@@ -20,14 +20,11 @@
       { "name": "Material", "values": ["PLA", "PETG"] }
     ],
     "colorConfig": {
-      "palette": ["Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde"],
-      "default": "Laranja (Paleta)",
-
-      "modes": ["solid", "multi"],
-      "defaultMode": "multi",
-
-      "multiMaxColors": 3
-    },
+  "palette": ["Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde"],
+  "default": "Laranja (Paleta)",
+  "modes": ["solid", "multi"],
+  "defaultMode": "multi",
+  "multiMaxColors": 3
 },
 {
     "id": "p2",
