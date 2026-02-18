@@ -4,100 +4,85 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MAKER3D — Catálogo</title>
-  <link rel="icon" href="assets/brand/logo.png" />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 
 <body>
-  <header>
-    <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html">
-          <img src="assets/brand/logo.png" alt="MAKER3D">
-          <div class="btxt">
-            <strong>MAKER3D</strong>
-            <span>catálogo</span>
-          </div>
-        </a>
+  <header class="topbar">
+    <div class="container topbarRow">
+      <a class="brand" href="index.html">
+        <img src="assets/brand/logo.png" alt="MAKER3D" class="brandLogo" />
+        <span class="brandText">MAKER3D</span>
+      </a>
 
-        <nav class="menu">
-          <a href="index.html">Início</a>
-          <a class="active" href="catalogo.html">Catálogo</a>
-          <a href="contato.html">Contato</a>
-        </nav>
-      </div>
+      <nav class="nav">
+        <a href="index.html" class="navLink">Início</a>
+        <a href="catalogo.html" class="navLink active">Catálogo</a>
+        <a href="contato.html" class="navLink">Contato</a>
+      </nav>
     </div>
   </header>
 
   <main class="container">
     <section class="section">
-      <div class="catalogTools">
-        <!-- ✅ BOTÃO DE FILTRO (VOLTA A SER A BOLINHA COM 3 TRACINHOS) -->
-        <button class="filterFab" id="openDrawer" type="button" aria-label="Abrir filtros">
-          <span class="bars" aria-hidden="true">
-            <i></i><i></i><i></i>
-          </span>
-        </button>
+      <div class="sectionHeader">
+        <h1>Catálogo</h1>
+        <p class="small">Pesquise, filtre e personalize.</p>
+      </div>
 
-        <div class="searchPill">
-          <input id="searchInput" type="text" placeholder="Buscar... (ex: suporte, decoração)" />
-          <button class="searchClear" id="clearSearch" type="button" aria-label="Limpar busca">×</button>
+      <!-- Barra de ações -->
+      <div class="catalogBar">
+        <button id="openDrawer" class="btn ghost" type="button">Filtrar</button>
+
+        <div class="searchWrap">
+          <input id="searchInput" class="searchInput" type="text" placeholder="Buscar produto..." />
+          <button id="clearSearch" class="btn ghost" type="button">Limpar</button>
         </div>
       </div>
 
-      <div class="grid" id="catalogGrid"></div>
-
-      <!-- slot opcional (se você ainda usa) -->
-      <div class="grid" id="customSlot" style="margin-top:12px;"></div>
+      <!-- ✅ ESTE É O GRID QUE ESTAVA SUMINDO -->
+      <div id="catalogGrid" class="grid"></div>
     </section>
   </main>
 
-  <!-- ✅ DRAWER (ABA LATERAL) -->
-  <div class="drawerBackdrop" id="drawerBackdrop" aria-hidden="true">
-    <aside class="drawer" role="dialog" aria-label="Filtros">
-      <div class="drawerHeader">
-        <strong>Filtrar</strong>
-        <!-- ✅ X FICA AQUI (FECHAR DRAWER) -->
-        <button class="iconBtn" id="closeDrawer" type="button" aria-label="Fechar filtros">×</button>
+  <!-- Drawer filtros -->
+  <div id="drawerBackdrop" class="drawerBackdrop">
+    <aside class="drawer">
+      <div class="drawerHead">
+        <h3>Filtrar</h3>
+        <button id="closeDrawer" class="btn ghost" type="button">×</button>
       </div>
-
-      <div class="drawerBody" id="filterList">
-        <!-- JS preenche os chips -->
-      </div>
+      <div id="filterList" class="filterList"></div>
     </aside>
   </div>
 
-  <!-- Modal do produto (seu app.js já usa esses IDs) -->
-  <div class="modalBackdrop" id="modal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-label="Detalhes do produto">
-      <div class="modalHeader">
-        <h3 id="mTitle">Produto</h3>
-        <button class="iconBtn" data-close type="button" aria-label="Fechar">×</button>
-      </div>
+  <!-- Modal (obrigatório para o app.js) -->
+  <div id="modal" class="modal">
+    <div class="modalCard">
+      <button class="modalClose" type="button" data-close aria-label="Fechar">×</button>
 
       <div class="modalBody">
-        <div class="modalGrid">
-          <div>
-            <model-viewer id="mViewer" style="display:none;" camera-controls auto-rotate></model-viewer>
-            <div id="mTextBlock"></div>
+        <div class="modalLeft">
+          <div id="mTextBlock" class="mTextBlock"></div>
+          <model-viewer id="mViewer" style="display:none;"></model-viewer>
+        </div>
+
+        <div class="modalRight">
+          <div class="modalHead">
+            <h3 id="mTitle">Produto</h3>
+            <p id="mCategory" class="small"></p>
+            <p id="mDesc"></p>
+            <p id="mDim" class="small"></p>
+            <p id="mPrice" class="price"></p>
           </div>
 
-          <div>
-            <div class="panel">
-              <p class="small"><strong id="mCategory"></strong></p>
-              <p class="small" id="mDesc"></p>
-              <p class="small" id="mDim"></p>
-              <p class="small"><strong id="mPrice"></strong></p>
-            </div>
+          <div class="modalOptions">
+            <h4>Opções</h4>
+            <div id="mOptions"></div>
+          </div>
 
-            <div class="panel" style="margin-top:10px;">
-              <p class="small"><strong>Opções</strong></p>
-              <div id="mOptions"></div>
-            </div>
-
-            <button class="btn primary" id="mBuyInside" type="button" style="width:100%; margin-top:10px;">
-              Comprar no WhatsApp
-            </button>
+          <div class="modalFooter">
+            <button id="mBuyInside" class="btn primary" type="button">Comprar no WhatsApp</button>
           </div>
         </div>
       </div>
