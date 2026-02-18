@@ -1,0 +1,22 @@
+  {
+    "id": "p4",
+    "name": "Organizador de Ferramentas",
+    "category": "Oficina",
+    "price": 59.9,
+    "currency": "BRL",
+    "dimensions": "20 × 12 × 6 cm",
+    "image": "assets/products/images/organizador.jpg",
+    "gallery": ["assets/products/images/organizador.jpg"],
+    "modelUrl": "assets/products/models/organizador.glb",
+    "description": "Organizador modular para bancada, com encaixes e estética clean.",
+    "options": [
+      { "name": "Módulos", "values": ["1x", "2x", "3x"] }
+    ],
+    "colorConfig": {
+      "palette": ["Âmbar", "Magenta", "Laranja (Paleta)"],
+      "default": "Laranja (Paleta)",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  },
