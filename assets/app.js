@@ -31,8 +31,9 @@ function buildWhatsMsg(product, selections) {
     `Olá! Quero: ${product.name}`,
     product.category ? `Categoria: ${product.category}` : null,
     product.price != null ? `Preço: ${moneyBRL(product.price)}` : "Preço: sob consulta",
-    selections?.length ? `Opções: ${selections.join(" • ")}` : null,
+    selections?.length ? `Opções: ${selections.join(" • ")}` : null
   ].filter(Boolean);
+
   return lines.join("\n");
 }
 
@@ -54,34 +55,30 @@ function shuffle(arr) {
 /* ---------------- Card ---------------- */
 function productCard(p) {
   const img = p.image
-    ? `<div class="thumb"><img src="${p.image}" alt="${p.name || ""}"></div>`
+    ? `<div class="thumb"><img src="${p.image}" alt="${p.name || "Produto"}"></div>`
     : `<div class="thumb"></div>`;
 
   const dims = p.dimensions ? p.dimensions : "—";
 
   return `
-  <div class="card">
-    <div class="product">
-      ${img}
-      <div class="pmeta">
-        <div class="pmetaTop">
-          <p class="pname">${p.name || ""}</p>
-          ${p.category ? `<span class="tag">${p.category}</span>` : ``}
-        </div>
-        ${p.description ? `<p class="pdesc">${p.description}</p>` : ``}
-        <div class="priceLine">
-          <span class="price">${moneyBRL(p.price)}</span>
-          <span class="small">${dims}</span>
-        </div>
+  <article class="card product">
+    ${img}
+    <div class="pmeta">
+      <div class="pmetaTop">
+        <h3 class="pname">${p.name || ""}</h3>
+        ${p.category ? `<span class="tag">${p.category}</span>` : ``}
       </div>
-
+      ${p.description ? `<p class="pdesc">${p.description}</p>` : ``}
+      <div class="priceLine">
+        <span class="price">${moneyBRL(p.price)}</span>
+        <span class="small">${dims}</span>
+      </div>
       <div class="pactions">
         <button class="btn ghost" data-open="${p.id}">Ver opções</button>
         <button class="btn primary" data-buy="${p.id}">Comprar</button>
       </div>
     </div>
-  </div>
-  `;
+  </article>`;
 }
 
 /* ---------------- Modal: Fotos + 3D (abas) ---------------- */
@@ -98,14 +95,14 @@ function ensureMediaUI() {
   wrap.className = "mediaWrap";
   wrap.innerHTML = `
     <div class="mediaTabs">
-      <button class="mediaTab active" data-tab="photos" type="button">Fotos</button>
-      <button class="mediaTab" data-tab="model" type="button">3D</button>
+      <button class="mediaTab active" data-tab="photos">Fotos</button>
+      <button class="mediaTab" data-tab="model">3D</button>
     </div>
-    <div class="mediaPane" id="mPhotos">
-      <img id="mPhotoMain" class="photoMain" alt="Foto do produto" />
+    <div id="mPhotos" class="mediaPane">
+      <img id="mPhotoMain" class="photoMain" alt="Foto do produto">
       <div id="mPhotoThumbs" class="photoThumbs"></div>
     </div>
-    <div class="mediaPane" id="mModelPane" style="display:none"></div>
+    <div id="mModelPane" class="mediaPane" style="display:none;"></div>
   `;
 
   if (textBlock && textBlock.parentElement) {
@@ -118,6 +115,7 @@ function ensureMediaUI() {
 
   const modelPane = $("#mModelPane");
   if (viewer && modelPane) modelPane.appendChild(viewer);
+
   return wrap;
 }
 
@@ -151,9 +149,10 @@ function renderPhotos(gallery) {
   thumbs.innerHTML = imgs
     .map(
       (src, i) => `
-      <button class="thumbBtn ${i === 0 ? "active" : ""}" type="button" data-src="${src}">
+      <button class="thumbBtn ${i === 0 ? "active" : ""}" data-src="${src}">
         <img src="${src}" alt="thumb ${i + 1}">
-      </button>`
+      </button>
+    `
     )
     .join("");
 
@@ -170,15 +169,17 @@ function renderPhotos(gallery) {
 const presets = {
   bg_orange_model_white: {
     background: "rgba(255, 159, 28, 0.18)",
-    filter: "grayscale(1) brightness(1.35) contrast(1.10)",
-  },
+    filter: "grayscale(1) brightness(1.35) contrast(1.10)"
+  }
 };
 
 function applyViewerPreset(viewer, presetName = "bg_orange_model_white") {
   if (!viewer) return;
   const p = presets[presetName] || presets.bg_orange_model_white;
+
   viewer.style.background = p.background;
   viewer.style.filter = p.filter;
+
   viewer.setAttribute("exposure", "0.9");
   viewer.setAttribute("shadow-intensity", "1");
   viewer.setAttribute("camera-controls", "");
@@ -191,6 +192,7 @@ function wireDrawer(allProducts, onFilterChange) {
   const openBtn = $("#openDrawer");
   const closeBtn = $("#closeDrawer");
   const list = $("#filterList");
+
   if (!backdrop || !openBtn || !closeBtn || !list) return;
 
   const open = () => backdrop.classList.add("open");
@@ -198,6 +200,7 @@ function wireDrawer(allProducts, onFilterChange) {
 
   openBtn.addEventListener("click", open);
   closeBtn.addEventListener("click", close);
+
   backdrop.addEventListener("click", (e) => {
     if (e.target === backdrop) close();
   });
@@ -205,14 +208,13 @@ function wireDrawer(allProducts, onFilterChange) {
   const categories = [...new Set(allProducts.map((p) => p.category).filter(Boolean))].sort((a, b) =>
     a.localeCompare(b)
   );
+
   const chips = ["Tudo", ...categories];
   let active = "Tudo";
 
   function renderChips() {
     list.innerHTML = chips
-      .map(
-        (c) => `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`
-      )
+      .map((c) => `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}">${c}</button>`)
       .join("");
   }
 
@@ -254,6 +256,7 @@ function wireModal(productsById) {
 
     if (mode === "model") {
       ensureModelViewer();
+
       const btn3d = $('.mediaTab[data-tab="model"]', ui || document);
       if (btn3d) btn3d.style.display = "";
 
@@ -326,277 +329,134 @@ function wireModal(productsById) {
 
     wrap.innerHTML = "";
 
+    // util: set/replace seleção por chave
+    const setSelection = (key, value) => {
+      const prefix = key + ":";
+      const idx = selections.findIndex((s) => s.startsWith(prefix));
+      const txt = `${key}: ${value}`;
+      if (idx >= 0) selections[idx] = txt;
+      else selections.push(txt);
+    };
+
     // 1) opções normais (Material, Tamanho, etc)
     (product.options || []).forEach((opt) => {
+      const first = (opt.values || [])[0];
       addSelect(
         wrap,
         opt.name,
         opt.values || [],
-        (v) => {
-          const idx = selections.findIndex((s) => s.startsWith(opt.name + ":"));
-          const txt = `${opt.name}: ${v}`;
-          if (idx >= 0) selections[idx] = txt;
-          else selections.push(txt);
-        },
-        (opt.values || [])[0]
+        (v) => setSelection(opt.name, v),
+        first
       );
-
-      // set inicial
-      const first = (opt.values || [])[0];
-      if (first) selections.push(`${opt.name}: ${first}`);
+      if (first) setSelection(opt.name, first);
     });
 
-    // 2) cores (colorConfig)
+    // 2) cores (novo schema)
     const cc = product.colorConfig;
     const palette = cc?.palette || [];
     if (!palette.length) return;
 
     const def = cc?.default || palette[0];
-    const max = Math.max(1, Number(cc?.maxColors || 1));
-    const isMulti = !!cc?.multicolor;
 
-    let qty = isMulti ? Math.min(2, max) : 1;
+    // fallback compatibilidade (caso você tenha JSON antigo)
+    const legacyIsMulti = !!cc?.multicolor;
+    const legacyMax = Math.max(1, Number(cc?.maxColors || 1));
+
+    // novo: modes e multiMaxColors
+    const modes = Array.isArray(cc?.modes) && cc.modes.length ? cc.modes : (legacyIsMulti ? ["solid", "multi"] : ["solid"]);
+    const defaultMode = cc?.defaultMode && modes.includes(cc.defaultMode) ? cc.defaultMode : (modes.includes("multi") ? "multi" : "solid");
+    const multiMaxColors = Math.max(2, Number(cc?.multiMaxColors || legacyMax || 2));
+
+    let mode = defaultMode; // "solid" | "multi"
+    let qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
 
     const colorRowsWrap = document.createElement("div");
     wrap.appendChild(colorRowsWrap);
 
-    const setColorsUI = () => {
+    // remove seleções antigas de cor (quando re-renderiza)
+    const clearColorSelections = () => {
+      for (let i = selections.length - 1; i >= 0; i--) {
+        if (
+          selections[i].startsWith("Tipo de cor:") ||
+          selections[i].startsWith("Qtd. cores:") ||
+          selections[i].startsWith("Cor:") ||
+          selections[i].startsWith("Cor 1:") ||
+          selections[i].startsWith("Cor 2:") ||
+          selections[i].startsWith("Cor 3:") ||
+          selections[i].startsWith("Cor 4:")
+        ) selections.splice(i, 1);
+      }
+    };
+
+    const renderColorPickers = () => {
+      clearColorSelections();
       colorRowsWrap.innerHTML = "";
 
-      // remove seleções antigas de cor
-      for (let i = selections.length - 1; i >= 0; i--) {
-        if (selections[i].startsWith("Cor")) selections.splice(i, 1);
-        if (selections[i].startsWith("Qtd. cores")) selections.splice(i, 1);
-      }
+      const tipoLabel = mode === "multi" ? "Multicor" : "Sólida";
+      setSelection("Tipo de cor", tipoLabel);
 
-      if (isMulti) selections.push(`Qtd. cores: ${qty}`);
+      if (mode === "multi") setSelection("Qtd. cores", String(qty));
 
-      for (let i = 1; i <= qty; i++) {
-        const label = qty === 1 ? "Cor" : `Cor ${i}`;
+      const count = mode === "multi" ? qty : 1;
+
+      for (let i = 1; i <= count; i++) {
+        const label = count === 1 ? "Cor" : `Cor ${i}`;
         addSelect(
           colorRowsWrap,
           label,
           palette,
-          (v) => {
-            const key = label + ":";
-            const idx = selections.findIndex((s) => s.startsWith(key));
-            const txt = `${label}: ${v}`;
-            if (idx >= 0) selections[idx] = txt;
-            else selections.push(txt);
-          },
+          (v) => setSelection(label, v),
           def
         );
-
-        // set inicial
-        selections.push(`${label}: ${def}`);
+        setSelection(label, def);
       }
     };
 
-    if (isMulti && max > 1) {
+    // 2.1) seletor de modo (se o produto permitir os dois)
+    if (modes.includes("solid") && modes.includes("multi")) {
+      addSelect(
+        wrap,
+        "Tipo de cor",
+        ["Sólida (1 cor)", `Multicor (até ${multiMaxColors})`],
+        (v) => {
+          mode = v.startsWith("Multi") ? "multi" : "solid";
+          qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
+          // re-render completo (inclui qtd)
+          renderColorSection();
+        },
+        mode === "multi" ? `Multicor (até ${multiMaxColors})` : "Sólida (1 cor)"
+      );
+    } else {
+      // se só tiver um modo, ainda assim escreve no WhatsApp
+      setSelection("Tipo de cor", modes.includes("multi") ? "Multicor" : "Sólida");
+      mode = modes.includes("multi") ? "multi" : "solid";
+      qty = mode === "multi" ? Math.min(2, multiMaxColors) : 1;
+    }
+
+    // 2.2) UI de quantidade + cores (aparece só no modo multi)
+    const renderColorSection = () => {
+      // se for multi, mostra qtd. se não, remove (re-render)
+      // a parte dos selects de cor fica no colorRowsWrap
+      // a parte de "quantidade de cores" fica aqui, antes das cores.
+      // Para simplificar, a gente recria tudo chamando renderColorPickers e controlando qty selector aqui.
+      // Primeiro: apaga qualquer seletor anterior de "Quantidade de cores" recriando do zero:
+      // (Como wrap já tem outras coisas, a maneira mais segura é: não tentar achar e remover, só criar condicionado 1x via re-render completo)
+      // => solução: não guardar referência; em vez disso, quando mudar modo, a função acima chama renderColorSection(), mas o seletor de qty fica logo abaixo do seletor "Tipo de cor" e acima das cores. A forma segura aqui é: se for solid, não cria qty; se for multi, cria.
+      // Como o modal é recriado por produto, isso é suficiente.
+
+      // Remove seleções antigas e desenha as cores:
+      renderColorPickers();
+    };
+
+    // Se modo multi, adiciona seletor de quantidade (logo após "Tipo de cor")
+    if (mode === "multi") {
       addSelect(
         wrap,
         "Quantidade de cores",
-        Array.from({ length: max }, (_, i) => String(i + 1)),
+        Array.from({ length: multiMaxColors }, (_, i) => String(i + 1)),
         (v) => {
-          qty = Math.max(1, Math.min(max, Number(v)));
-          setColorsUI();
+          qty = Math.max(1, Math.min(multiMaxColors, Number(v)));
+          renderColorPickers();
         },
         String(qty)
       );
-    }
-
-    setColorsUI();
-  }
-
-  window.openProductById = (id) => {
-    const p = productsById.get(id);
-    if (!p) return;
-
-    $("#mTitle").textContent = p.name || "Produto";
-    $("#mCategory").textContent = p.category || "";
-    $("#mDesc").textContent = p.description || "";
-
-    const mDim = $("#mDim");
-    if (mDim) mDim.style.display = "none";
-
-    $("#mPrice").textContent = moneyBRL(p.price);
-
-    const gallery = p.gallery && p.gallery.length ? p.gallery : p.image ? [p.image] : [];
-
-    if (p.modelUrl) {
-      setLeftPanelMode({ mode: "model", modelUrl: p.modelUrl, gallery });
-    } else {
-      setLeftPanelMode({
-        mode: "text",
-        gallery,
-        textHtml: `Sem visualização 3D aqui — pede no WhatsApp que a gente manda mais detalhes.`,
-      });
-    }
-
-    const selections = [];
-    renderOptions(p, selections);
-
-    $("#mBuyInside").onclick = () => openWhats(p, selections.filter(Boolean));
-    modal.classList.add("open");
-  };
-
-  document.addEventListener("click", (e) => {
-    const open = e.target.closest("[data-open]");
-    if (open) window.openProductById(open.getAttribute("data-open"));
-  });
-
-  document.addEventListener("click", (e) => {
-    const buy = e.target.closest("[data-buy]");
-    if (!buy) return;
-    const id = buy.getAttribute("data-buy");
-    const p = productsById.get(id);
-    if (!p) return;
-    openWhats(p, []);
-  });
-}
-
-/* ---------------- Início: Carrossel 4 aleatórios (ping-pong) ---------------- */
-function renderHomeCarouselRandom4(products) {
-  const track = $("#track");
-  const dotsWrap = $("#dots");
-  const prevBtn = $("#prevBtn");
-  const nextBtn = $("#nextBtn");
-  const carousel = $("#carousel");
-  if (!track || !dotsWrap) return;
-
-  const candidates = products.filter((p) => p.id !== "custom");
-  const chosen = shuffle(candidates).slice(0, 4);
-
-  let idx = 0;
-  let dir = 1;
-  let timer = null;
-
-  track.innerHTML = chosen.map((p) => `<div class="carouselSlide">${productCard(p)}</div>`).join("");
-
-  dotsWrap.innerHTML = chosen.map((_, i) => `<button class="dot ${i === 0 ? "active" : ""}" type="button"></button>`).join("");
-  const dots = $$(".dot", dotsWrap);
-
-  const set = (i) => {
-    idx = Math.max(0, Math.min(chosen.length - 1, i));
-    track.style.transform = `translateX(-${idx * 100}%)`;
-    dots.forEach((d, di) => d.classList.toggle("active", di === idx));
-  };
-
-  const tick = () => {
-    if (chosen.length <= 1) return;
-    let next = idx + dir;
-    if (next >= chosen.length) {
-      dir = -1;
-      next = idx + dir;
-    }
-    if (next < 0) {
-      dir = 1;
-      next = idx + dir;
-    }
-    set(next);
-  };
-
-  const restart = () => {
-    if (timer) clearInterval(timer);
-    timer = setInterval(tick, 4200);
-  };
-
-  dots.forEach((d, i) =>
-    d.addEventListener("click", () => {
-      dir = i > idx ? 1 : -1;
-      set(i);
-      restart();
-    })
-  );
-
-  prevBtn?.addEventListener("click", () => {
-    dir = -1;
-    set(idx - 1);
-    restart();
-  });
-
-  nextBtn?.addEventListener("click", () => {
-    dir = 1;
-    set(idx + 1);
-    restart();
-  });
-
-  restart();
-  carousel?.addEventListener("mouseenter", () => timer && clearInterval(timer));
-  carousel?.addEventListener("mouseleave", restart);
-}
-
-/* ---------------- Catálogo: grid + busca + filtro ---------------- */
-function renderCatalogIntoGrid(products) {
-  const grid = $("#catalogGrid");
-  if (!grid) return;
-  grid.innerHTML = products.map(productCard).join("");
-}
-
-function wireSearch(allProducts, getActiveCategory, onResult) {
-  const input = $("#searchInput");
-  const clear = $("#clearSearch");
-  if (!input || !clear) return;
-
-  function apply() {
-    const q = (input.value || "").trim().toLowerCase();
-    const cat = getActiveCategory();
-
-    const filtered = allProducts.filter((p) => {
-      const matchesCat = cat === "Tudo" || (p.category || "") === cat;
-      if (!matchesCat) return false;
-      if (!q) return true;
-      const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
-      return hay.includes(q);
-    });
-
-    onResult(filtered);
-  }
-
-  input.addEventListener("input", apply);
-  clear.addEventListener("click", () => {
-    input.value = "";
-    apply();
-  });
-
-  apply();
-}
-
-/* ---------------- Boot ---------------- */
-(async function main() {
-  try {
-    const productsAll = await loadProducts();
-    const productsById = new Map(productsAll.map((p) => [p.id, p]));
-
-    wireModal(productsById);
-    renderHomeCarouselRandom4(productsAll);
-
-    let activeCategory = "Tudo";
-    const getActiveCategory = () => activeCategory;
-
-    wireDrawer(productsAll, (cat) => {
-      activeCategory = cat;
-
-      const q = ($("#searchInput")?.value || "").trim().toLowerCase();
-      const filtered = productsAll.filter((p) => {
-        const matchesCat = activeCategory === "Tudo" || (p.category || "") === activeCategory;
-        if (!matchesCat) return false;
-        if (!q) return true;
-        const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
-        return hay.includes(q);
-      });
-
-      renderCatalogIntoGrid(filtered);
-    });
-
-    wireSearch(productsAll, getActiveCategory, renderCatalogIntoGrid);
-
-    if ($("#catalogGrid")) {
-      renderCatalogIntoGrid(productsAll.filter((p) => p.id !== "custom"));
-    }
-  } catch (err) {
-    console.error(err);
-    const grid = $("#catalogGrid");
-    if (grid) grid.innerHTML = `<p>Erro carregando produtos.</p>`;
-  }
-})();
