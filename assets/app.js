@@ -5,11 +5,7 @@ const $$ = (q, el = document) => [...el.querySelectorAll(q)];
 
 function moneyBRL(v) {
   if (v === null || v === undefined) return "Sob consulta";
-  try {
-    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
-  } catch {
-    return `R$ ${v}`;
-  }
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 }
 
 function ensureModelViewer() {
@@ -35,7 +31,6 @@ function buildWhatsMsg(product, selections) {
     product.price != null ? `Preço: ${moneyBRL(product.price)}` : "Preço: sob consulta",
     selections?.length ? `Opções: ${selections.join(" • ")}` : null,
   ].filter(Boolean);
-
   return lines.join("\n");
 }
 
@@ -51,14 +46,10 @@ function showFatal(msg, err) {
   box.className = "card";
   box.style.padding = "14px";
   box.style.margin = "12px 0";
-  box.innerHTML = `
-    <p style="margin:0 0 6px;font-weight:900;">Erro</p>
-    <p style="margin:0;opacity:.85;">${msg}</p>
-  `;
+  box.innerHTML = `<p style="margin:0 0 6px;font-weight:900;">Erro</p><p style="margin:0;opacity:.85;">${msg}</p>`;
   target.prepend(box);
 }
 
-/* ---------------- Utils ---------------- */
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -68,7 +59,6 @@ function shuffle(arr) {
   return a;
 }
 
-/* ---------------- Card ---------------- */
 function productCard(p) {
   const img = p.image
     ? `<div class="thumb"><img src="${p.image}" alt="${p.name || ""}"></div>`
@@ -100,7 +90,7 @@ function productCard(p) {
   </article>`;
 }
 
-/* ---------------- Modal: Fotos + 3D (abas) ---------------- */
+/* ---------- Modal: Fotos/3D ---------- */
 function ensureMediaUI() {
   const leftCol = $("#mTextBlock")?.parentElement || $(".modalGrid > div");
   if (!leftCol) return null;
@@ -179,7 +169,6 @@ function renderPhotos(gallery) {
   };
 }
 
-/* ---------------- Viewer look ---------------- */
 function applyViewerPreset(viewer) {
   if (!viewer) return;
   viewer.style.background = "rgba(255, 159, 28, 0.16)";
@@ -190,7 +179,7 @@ function applyViewerPreset(viewer) {
   viewer.setAttribute("touch-action", "pan-y");
 }
 
-/* ---------------- Drawer (Filtros) ---------------- */
+/* ---------- Drawer + Search ---------- */
 function wireDrawer(allProducts, onFilterChange) {
   const backdrop = $("#drawerBackdrop");
   const openBtn = $("#openDrawer");
@@ -217,10 +206,7 @@ function wireDrawer(allProducts, onFilterChange) {
 
   function renderChips() {
     list.innerHTML = chips
-      .map(
-        (c) =>
-          `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`
-      )
+      .map((c) => `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`)
       .join("");
   }
 
@@ -236,7 +222,42 @@ function wireDrawer(allProducts, onFilterChange) {
   renderChips();
 }
 
-/* ---------------- Modal (Multicor usa multiMaxColors do JSON, sem seletor de quantidade) ---------------- */
+function renderCatalogIntoGrid(products) {
+  const grid = $("#catalogGrid");
+  if (!grid) return;
+  grid.innerHTML = (products || []).map(productCard).join("");
+}
+
+function wireSearch(allProducts, getActiveCategory, onResult) {
+  const input = $("#searchInput");
+  const clear = $("#clearSearch");
+  if (!input || !clear) return;
+
+  function apply() {
+    const q = (input.value || "").trim().toLowerCase();
+    const cat = getActiveCategory();
+
+    const filtered = allProducts.filter((p) => {
+      const matchesCat = cat === "Tudo" || (p.category || "") === cat;
+      if (!matchesCat) return false;
+      if (!q) return true;
+      const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
+      return hay.includes(q);
+    });
+
+    onResult(filtered);
+  }
+
+  input.addEventListener("input", apply);
+  clear.addEventListener("click", () => {
+    input.value = "";
+    apply();
+  });
+
+  apply();
+}
+
+/* ---------- Modal: Opções + cores (sem seletor quantidade) ---------- */
 function wireModal(productsById) {
   const modalBackdrop = $("#modalBackdrop");
   if (!modalBackdrop) return;
@@ -298,14 +319,14 @@ function wireModal(productsById) {
       }
     };
 
-    // 1) opções normais
+    // opções normais
     (product.options || []).forEach((opt) => {
       const first = (opt.values || [])[0];
       addSelect(wrap, opt.name, opt.values || [], (v) => setSelection(opt.name, v), first);
       if (first) setSelection(opt.name, first);
     });
 
-    // 2) cores
+    // cores
     const cc = product.colorConfig;
     const palette = cc?.palette || [];
     if (!palette.length) return;
@@ -315,7 +336,6 @@ function wireModal(productsById) {
 
     const def = cc?.default || palette[0];
 
-    // modos suportados (novo + fallback)
     const legacyIsMulti = !!cc?.multicolor;
     const modes =
       Array.isArray(cc?.modes) && cc.modes.length ? cc.modes : legacyIsMulti ? ["solid", "multi"] : ["solid"];
@@ -327,13 +347,10 @@ function wireModal(productsById) {
         ? "multi"
         : "solid";
 
-    // ✅ pega do JSON: multiMaxColors (também aceita "multimaxcolors" se você escrever diferente)
-    const rawMultiMax =
-      cc?.multiMaxColors ?? cc?.multimaxcolors ?? cc?.maxColors ?? (legacyIsMulti ? 2 : 1);
-
+    const rawMultiMax = cc?.multiMaxColors ?? cc?.multimaxcolors ?? cc?.maxColors ?? (legacyIsMulti ? 2 : 1);
     let multiCount = Number(rawMultiMax);
     if (!Number.isFinite(multiCount)) multiCount = 2;
-    multiCount = Math.max(2, Math.min(8, Math.floor(multiCount))); // cap 8 pra não quebrar layout
+    multiCount = Math.max(2, Math.min(8, Math.floor(multiCount))); // limite de layout
 
     const rerenderColors = () => {
       colorSection.innerHTML = "";
@@ -351,7 +368,6 @@ function wireModal(productsById) {
         "Cor 8:",
       ]);
 
-      // Tipo de cor
       if (modes.includes("solid") && modes.includes("multi")) {
         addSelect(
           colorSection,
@@ -366,11 +382,8 @@ function wireModal(productsById) {
       }
 
       setSelection("Tipo de cor", mode === "multi" ? "Multicor" : "Sólida");
+      if (mode === "multi") setSelection("Qtd. cores", String(multiCount)); // vai pro WhatsApp
 
-      // ✅ NÃO mostra seletor “Quantidade de cores”, mas envia no WhatsApp
-      if (mode === "multi") setSelection("Qtd. cores", String(multiCount));
-
-      // Pickers
       const count = mode === "multi" ? multiCount : 1;
       for (let i = 1; i <= count; i++) {
         const label = count === 1 ? "Cor" : `Cor ${i}`;
@@ -388,7 +401,21 @@ function wireModal(productsById) {
 
     $("#mTitle").textContent = p.name || "Produto";
     $("#mCategory").textContent = p.category || "";
-    $("#mDesc").textContent = p.description || "";
+
+    // descrição dentro do bloco (.descBlock já existe no seu CSS)
+    const descEl = $("#mDesc");
+    if (descEl) {
+      descEl.innerHTML = "";
+      const txt = (p.description || "").trim();
+      if (txt) {
+        const box = document.createElement("div");
+        box.className = "descBlock";
+        const safe = txt.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        box.innerHTML = `<p class="small">${safe.replace(/\n/g, "<br>")}</p>`;
+        descEl.appendChild(box);
+      }
+    }
+
     $("#mPrice").textContent = moneyBRL(p.price);
 
     const gallery = p.gallery && p.gallery.length ? p.gallery : p.image ? [p.image] : [];
@@ -442,7 +469,7 @@ function wireModal(productsById) {
   });
 }
 
-/* ---------------- Home carousel ---------------- */
+/* ---------- Destaques (Home) ---------- */
 function renderHomeCarouselRandom4(products) {
   const track = $("#track");
   const dotsWrap = $("#dots");
@@ -489,40 +516,7 @@ function renderHomeCarouselRandom4(products) {
   restart();
 }
 
-/* ---------------- Catálogo: grid + busca + filtro ---------------- */
-function renderCatalogIntoGrid(products) {
-  const grid = $("#catalogGrid");
-  if (!grid) return;
-  grid.innerHTML = (products || []).map(productCard).join("");
-}
-
-function wireSearch(allProducts, getActiveCategory, onResult) {
-  const input = $("#searchInput");
-  const clear = $("#clearSearch");
-  if (!input || !clear) return;
-
-  function apply() {
-    const q = (input.value || "").trim().toLowerCase();
-    const cat = getActiveCategory();
-
-    const filtered = allProducts.filter((p) => {
-      const matchesCat = cat === "Tudo" || (p.category || "") === cat;
-      if (!matchesCat) return false;
-      if (!q) return true;
-      const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
-      return hay.includes(q);
-    });
-
-    onResult(filtered);
-  }
-
-  input.addEventListener("input", apply);
-  clear.addEventListener("click", () => { input.value = ""; apply(); });
-
-  apply();
-}
-
-/* ---------------- Boot ---------------- */
+/* ---------- Boot ---------- */
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const productsAll = await loadProducts();
