@@ -133,7 +133,7 @@
       "assets/products/images/P6/p2.png",
       "assets/products/images/P6/p3.png"
     ],
-    "modelUrl": "assets/products/models/p6.stl",
+    "modelUrl": "assets/products/models/p6.glb",
     "description": "Um brinquedo cinético cheio de movimento que dança entre os dedos!\nRelaxante, divertido e visualmente incrível.",
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
