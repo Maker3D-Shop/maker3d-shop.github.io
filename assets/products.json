@@ -190,5 +190,31 @@
       "defaultMode": "solid",
       "multiMaxColors": 1
     }
-  }  
+  },
+  {
+    "id": "p9",
+    "name": "Caixa de Coração com Decoração de Rosa",
+    "category": "Dia dos Namorados",
+    "price": null,
+    "currency": "BRL",
+    "dimensions": "❤️",
+    "image": "assets/products/images/P9/p1.png",
+    "gallery": [
+      "assets/products/images/P9/p1.png",
+      "assets/products/images/P9/p2.png"
+    ],
+    "modelUrl": "assets/products/models/p9.glb",
+    "description": "Variante em caixa do coração com decoração de rosas./n*Esse objeto oferece opção multicor.*",
+    "options": [
+      { "name": "Material", "values": ["PLA"] },
+      { "name": "Altura da caixa", "values": ["4cm, 2,5cm"] }
+    ],
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Verde",
+      "modes": ["solid", "multi"],
+      "defaultMode": "multi",
+      "multiMaxColors": 3
+    }
+  }, 
 ]
