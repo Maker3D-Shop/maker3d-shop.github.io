@@ -208,7 +208,7 @@
     "options": [
       { "name": "Material", "values": ["PLA"] },
       { "name": "Altura da caixa", "values": ["4cm, 2,5cm"] }
-    ],
+   ],
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
       "default": "Verde",
@@ -216,5 +216,5 @@
       "defaultMode": "multi",
       "multiMaxColors": 3
     }
-  }, 
+  } 
 ]
