@@ -166,5 +166,29 @@
       "defaultMode": "solid",
       "multiMaxColors": 1
     }
-  }
+  },
+  {
+    "id": "p8",
+    "name": "Travessa de Doces de Morcego",
+    "category": "Halloween",
+    "price": 25.99,
+    "currency": "BRL",
+    "dimensions": "🦇",
+    "options": [ { "name": "Material", "values": ["PLA"] } ],
+    "image": "assets/products/images/P8/p1.png",
+    "gallery": [
+      "assets/products/images/P8/p1.png",
+      "assets/products/images/P8/p2.png",
+      "assets/products/images/P8/p3.png"
+    ],
+    "modelUrl": "assets/products/models/p8.glb",
+    "description": "Um pequeno pote de doces em forma de morcego para o Halloween ou fãs de morcegos!",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  }  
 ]
