@@ -9,7 +9,253 @@
     "image": "assets/products/images/custom.jpg",
     "gallery": [
       "assets/products/images/custom.jpg"
+    ],[
+  {
+    "id": "p1",
+    "name": "Peça Custom (sob medida)",
+    "category": "Serviços",
+    "price": null,
+    "currency": "BRL",
+    "dimensions": "Sob medida",
+    "image": "assets/brand/logo.png",
+    "gallery": ["assets/brand/logo.png"],
+    "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
+    "options": [
+      { "name": "Material", "values": ["PLA", "PETG", "ABS"] },
+      { "name": "Tolerância", "values": ["Padrão", "Ajuste fino"] },
+      { "name": "Acabamento", "values": ["Bruto", "Lixado", "Pintado"] }
+    ]
+  },
+  {
+    "id": "p2",
+    "name": "Mini Polvo Fofo",
+    "category": "Articulado",
+    "price": 8.20,
+    "currency": "BRL",
+    "dimensions": "Encantador🐙",
+    "image": "assets/products/images/P1/p1.png",
+    "gallery": [
+      "assets/products/images/P1/p1.png",
+      "assets/products/images/P1/p2.png",
+      "assets/products/images/P1/p3.png",
+      "assets/products/images/P1/p4.png",
+      "assets/products/images/P1/p5.png"
     ],
+    "modelUrl": "assets/products/models/p1.glb",
+    "description": "*Esse objeto oferece opção multicor.*",
+    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "colorConfig": {
+      "palette": ["Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde"],
+      "default": "Laranja (Paleta)",
+      "modes": ["solid", "multi"],
+      "defaultMode": "multi",
+      "multiMaxColors": 2
+    }
+  },
+  {
+    "id": "p3",
+    "name": "Slider",
+    "category": "Fidget",
+    "price": 2.29,
+    "currency": "BRL",
+    "dimensions": "Viciante✨",
+    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "image": "assets/products/images/P3/p1.png",
+    "gallery": [
+      "assets/products/images/P3/p1.png",
+      "assets/products/images/P3/p2.png",
+      "assets/products/images/P3/p3.png",
+      "assets/products/images/P3/p4.png"
+    ],
+    "modelUrl": "assets/products/models/p3.glb",
+    "description": "Um fidget deslizante super satisfatório pra mexer sem parar!\nPequeno, bonito e perfeito pra distrair a mente e relaxar as mãos.",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  },
+  {
+    "id": "p4",
+    "name": "Fidget Giratório Triplo",
+    "category": "Fidget",
+    "price": 3.80,
+    "currency": "BRL",
+    "dimensions": "Hipnotizante🌀",
+    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "image": "assets/products/images/P4/p1.png",
+    "gallery": [
+      "assets/products/images/P4/p1.png",
+      "assets/products/images/P4/p2.png",
+      "assets/products/images/P4/p3.png",
+      "assets/products/images/P4/p4.png",
+      "assets/products/images/P4/p5.png"
+    ],
+    "modelUrl": "assets/products/models/p4.glb",
+    "description": "Gira, gira e não dá vontade de largar!\nEsse fidget triplo é ótimo pra passar o tempo, aliviar ansiedade e brincar enquanto pensa.",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  },
+  {
+    "id": "p5",
+    "name": "Giroscópio de 4 Anéis",
+    "category": "Fidget",
+    "price": 2.75,
+    "currency": "BRL",
+    "dimensions": "Magnético🤯",
+    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "image": "assets/products/images/P5/p1.png",
+    "gallery": [
+      "assets/products/images/P5/p1.png",
+      "assets/products/images/P5/p2.png",
+      "assets/products/images/P5/p3.png"
+    ],
+    "modelUrl": "assets/products/models/p5.glb",
+    "description": "Um brinquedo cinético cheio de movimento que dança entre os dedos!\nRelaxante, divertido e visualmente incrível.",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  },
+  {
+    "id": "p6",
+    "name": "Dragão Articuado",
+    "category": "Articulado",
+    "price": null,
+    "currency": "BRL",
+    "dimensions": "🐉",
+    "options": [
+      { "name": "Material", "values": ["PLA"] },
+      { "name": "Tamanho", "values": ["Pequeno (10)", "Médio (20)", "Grande (50)"] }
+    ],
+    "image": "assets/products/images/P6/p1.png",
+    "gallery": [
+      "assets/products/images/P6/p1.png",
+      "assets/products/images/P6/p2.png",
+      "assets/products/images/P6/p3.png"
+    ],
+    "modelUrl": "assets/products/models/p6.glb",
+    "description": "Um brinquedo cinético cheio de movimento que dança entre os dedos!\nRelaxante, divertido e visualmente incrível.",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  },
+  {
+    "id": "p7",
+    "name": "Porta-página do livro",
+    "category": "Utilitário",
+    "price": 5.40,
+    "currency": "BRL",
+    "dimensions": "📖",
+    "options": [ { "name": "Material", "values": ["PLA"] } ],
+    "image": "assets/products/images/P7/p1.png",
+    "gallery": [
+      "assets/products/images/P7/p1.png",
+      "assets/products/images/P7/p2.png",
+      "assets/products/images/P7/p3.png"
+    ],
+    "modelUrl": "assets/products/models/book2.glb",
+    "description": "Porta-páginas de livro de dois lados para leitura com uma mão.\nServe em vários tamanhos de livros.",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  },
+  {
+    "id": "p8",
+    "name": "Travessa de Doces de Morcego",
+    "category": "Halloween",
+    "price": 25.99,
+    "currency": "BRL",
+    "dimensions": "🦇",
+    "options": [ { "name": "Material", "values": ["PLA"] } ],
+    "image": "assets/products/images/P8/p1.png",
+    "gallery": [
+      "assets/products/images/P8/p1.png",
+      "assets/products/images/P8/p2.png",
+      "assets/products/images/P8/p3.png"
+    ],
+    "modelUrl": "assets/products/models/p8.glb",
+    "description": "Um pequeno pote de doces em forma de morcego para o Halloween ou fãs de morcegos!",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  },
+  {
+    "id": "p9",
+    "name": "Caixa de Coração",
+    "category": "Dia dos Namorados",
+    "price": null,
+    "currency": "BRL",
+    "dimensions": "❤️",
+    "image": "assets/products/images/P9/p1.png",
+    "gallery": [
+      "assets/products/images/P9/p1.png",
+      "assets/products/images/P9/p2.png"
+    ],
+    "modelUrl": "assets/products/models/p9.glb",
+    "description": "Variante em caixa do coração com decoração de rosas. \n*Esse objeto oferece opção multicor.*",
+    "options": [
+      { "name": "Material", "values": ["PLA"] },
+      { "name": "Altura da caixa", "values": ["4cm", "2,5cm"] }
+   ],
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Verde",
+      "modes": ["solid", "multi"],
+      "defaultMode": "multi",
+      "multiMaxColors": 3
+      "multiParts": ["Folhas", "Rosa", "Base"] 
+    }
+  },
+  {
+    "id": "p10",
+    "name": "Buldogue Francês",
+    "category": "Halloween",
+    "price": null,
+    "currency": "BRL",
+    "dimensions": "🦇",
+    "options": [ 
+      { "name": "Material", "values": ["PLA"] }
+   ],
+    "image": "assets/products/images/P8/p1.png",
+    "gallery": [
+      "assets/products/images/P8/p1.png",
+      "assets/products/images/P8/p2.png",
+      "assets/products/images/P8/p3.png"
+    ],
+    "modelUrl": "assets/products/models/p8.glb",
+    "description": "Um pequeno pote de doces em forma de morcego para o Halloween ou fãs de morcegos!",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  }
+]
     "modelUrl": "",
     "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
     "options": [
