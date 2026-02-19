@@ -127,7 +127,7 @@
       { "name": "Material", "values": ["PLA"] }
       { "name": "Tamanho", "values": ["Pequeno", "Médio", "Grande"] },
     ],
-    "image": "assets/products/images/P5/p1.png",
+    "image": "assets/products/images/P6/p1.png",
     "gallery": [
       "assets/products/images/P6/p1.png",
       "assets/products/images/P6/p2.png",
