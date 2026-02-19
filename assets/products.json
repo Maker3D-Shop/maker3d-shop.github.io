@@ -66,5 +66,31 @@
       "defaultMode": "solid",
       "multiMaxColors": 1
     }
+  },
+  {
+    "id": "p4",
+    "name": "Fidget Giratório Triplo",
+    "category": "Fidget",
+    "price": 3.80,
+    "currency": "BRL",
+    "dimensions": "",
+    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "image": "assets/products/images/P4/p1.png",
+    "gallery": [
+      "assets/products/images/P4/p1.png",
+      "assets/products/images/P4/p2.png",
+      "assets/products/images/P4/p3.png",
+      "assets/products/images/P4/p4.png",
+      "assets/products/images/P4/p5.png"
+    ],
+    "modelUrl": "assets/products/models/p4.glb",
+    "description": "Organizador modular para bancada, com encaixes e estética clean.",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
   }
 ]
