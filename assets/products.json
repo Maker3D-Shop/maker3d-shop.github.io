@@ -6,9 +6,8 @@
     "price": null,
     "currency": "BRL",
     "dimensions": "Sob medida",
-    "image": "assets/products/images/custom.jpg",
-    "gallery": ["assets/products/images/custom.jpg"],
-    "modelUrl": "",
+    "image": "assets/brand/logo.png",
+    "gallery": ["assets/brand/logo.png"],
     "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
     "options": [
       { "name": "Material", "values": ["PLA", "PETG", "ABS"] },
@@ -22,7 +21,7 @@
     "category": "Articulado",
     "price": 8.20,
     "currency": "BRL",
-    "dimensions": "Encantador ✨",
+    "dimensions": "Encantador✨",
     "image": "assets/products/images/P1/p1.png",
     "gallery": [
       "assets/products/images/P1/p1.png",
@@ -48,7 +47,7 @@
     "category": "Fidget",
     "price": 2.29,
     "currency": "BRL",
-    "dimensions": "",
+    "dimensions": "Viciante✨",
     "options": [{ "name": "Material", "values": ["PLA"] }],
     "image": "assets/products/images/P3/p1.png",
     "gallery": [
@@ -58,7 +57,7 @@
       "assets/products/images/P3/p4.png"
     ],
     "modelUrl": "assets/products/models/p3.glb",
-    "description": "Organizador modular para bancada, com encaixes e estética clean.",
+    "description": "Um fidget deslizante super satisfatório pra mexer sem parar!\nPequeno, bonito e perfeito pra distrair a mente e relaxar as mãos.",
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
       "default": "Preto",
@@ -73,7 +72,7 @@
     "category": "Fidget",
     "price": 3.80,
     "currency": "BRL",
-    "dimensions": "",
+    "dimensions": "Hipnotizante🔷",
     "options": [{ "name": "Material", "values": ["PLA"] }],
     "image": "assets/products/images/P4/p1.png",
     "gallery": [
@@ -84,7 +83,7 @@
       "assets/products/images/P4/p5.png"
     ],
     "modelUrl": "assets/products/models/p4.glb",
-    "description": "Organizador modular para bancada, com encaixes e estética clean.",
+    "description": "Gira, gira e não dá vontade de largar!\nEsse fidget triplo é ótimo pra passar o tempo, aliviar ansiedade e brincar enquanto pensa.",
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
       "default": "Preto",
@@ -99,7 +98,7 @@
     "category": "Fidget",
     "price": 2.75,
     "currency": "BRL",
-    "dimensions": "",
+    "dimensions": "Magnético🤯",
     "options": [{ "name": "Material", "values": ["PLA"] }],
     "image": "assets/products/images/P5/p1.png",
     "gallery": [
@@ -108,7 +107,7 @@
       "assets/products/images/P5/p3.png"
     ],
     "modelUrl": "assets/products/models/p5.glb",
-    "description": "Organizador modular para bancada, com encaixes e estética clean.",
+    "description": "Um brinquedo cinético cheio de movimento que dança entre os dedos!\nRelaxante, divertido e visualmente incrível.",
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
       "default": "Preto",
