@@ -46,6 +46,110 @@ function openWhats(product, selections) {
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank", "noopener,noreferrer");
 }
 
+/* ---------------- Modal Media (Fotos + 3D) ---------------- */
+function ensureMediaUI() {
+  const textBlock = document.getElementById("mTextBlock");
+  const viewer = document.getElementById("mViewer");
+  if (!textBlock) return null;
+
+  const leftCol = textBlock.parentElement;
+  if (!leftCol) return null;
+
+  let wrap = document.getElementById("mMediaWrap");
+  if (!wrap) {
+    wrap = document.createElement("div");
+    wrap.id = "mMediaWrap";
+    wrap.className = "mediaWrap";
+    wrap.innerHTML = `
+      <div class="mediaTabs">
+        <button class="mediaTab active" type="button" data-tab="photos">Fotos</button>
+        <button class="mediaTab" type="button" data-tab="model">3D</button>
+      </div>
+
+      <div id="mPhotos" class="mediaPane">
+        <img id="mPhotoMain" class="photoMain" alt="Foto do produto" />
+        <div id="mPhotoThumbs" class="photoThumbs"></div>
+      </div>
+
+      <div id="mModelPane" class="mediaPane" style="display:none;"></div>
+    `;
+    leftCol.prepend(wrap);
+
+    wrap.addEventListener("click", (e) => {
+      const tabBtn = e.target.closest(".mediaTab");
+      if (!tabBtn) return;
+      setActiveTab(tabBtn.getAttribute("data-tab"));
+    });
+  }
+
+  // Move o viewer para dentro do painel 3D, se ainda não estiver lá
+  const modelPane = document.getElementById("mModelPane");
+  if (viewer && modelPane && viewer.parentElement !== modelPane) {
+    modelPane.appendChild(viewer);
+  }
+
+  return wrap;
+}
+
+function setActiveTab(tab) {
+  const wrap = document.getElementById("mMediaWrap");
+  if (!wrap) return;
+
+  const photos = document.getElementById("mPhotos");
+  const modelPane = document.getElementById("mModelPane");
+
+  [...wrap.querySelectorAll(".mediaTab")].forEach((b) =>
+    b.classList.toggle("active", b.getAttribute("data-tab") === tab)
+  );
+
+  if (photos) photos.style.display = tab === "photos" ? "" : "none";
+  if (modelPane) modelPane.style.display = tab === "model" ? "" : "none";
+}
+
+function renderPhotos(gallery) {
+  const main = document.getElementById("mPhotoMain");
+  const thumbs = document.getElementById("mPhotoThumbs");
+  if (!main || !thumbs) return;
+
+  const imgs = (gallery || []).filter(Boolean);
+
+  if (!imgs.length) {
+    main.style.display = "none";
+    thumbs.innerHTML = "";
+    return;
+  }
+
+  main.style.display = "";
+  main.src = imgs[0];
+
+  thumbs.innerHTML = imgs
+    .map(
+      (src, i) => `
+      <button class="thumbBtn ${i === 0 ? "active" : ""}" type="button" data-src="${src}" aria-label="Foto ${i + 1}">
+        <img src="${src}" alt="" loading="lazy" />
+      </button>`
+    )
+    .join("");
+
+  thumbs.onclick = (e) => {
+    const btn = e.target.closest(".thumbBtn");
+    if (!btn) return;
+
+    const src = btn.getAttribute("data-src");
+    if (src) main.src = src;
+
+    [...thumbs.querySelectorAll(".thumbBtn")].forEach((b) => b.classList.toggle("active", b === btn));
+  };
+}
+
+function applyViewerPreset(viewer) {
+  if (!viewer) return;
+  // fundo já é laranja no CSS; aqui a gente dá uma "clareada" no modelo
+  viewer.style.filter = "grayscale(1) brightness(1.35) contrast(1.10)";
+  viewer.setAttribute("exposure", "0.9");
+  viewer.setAttribute("shadow-intensity", "1");
+}
+
 /* ---------------- Card (compatível com style.css) ---------------- */
 function productCard(p) {
   const img = p.image
@@ -69,12 +173,12 @@ function productCard(p) {
 
       <div class="priceLine">
         <span class="price">${moneyBRL(p.price)}</span>
-        ${dims ? `<span class="small">${dims}</span>` : ``}
+        ${dims ? `<span class="pillOrange">${dims}</span>` : ``}
       </div>
 
       <div class="pactions">
         <button class="btn ghost" type="button" data-open="${p.id}">Ver opções</button>
-        <button class="btn" type="button" data-buy="${p.id}">Comprar</button>
+        <button class="btn primary" type="button" data-buy="${p.id}">Comprar</button>
       </div>
     </div>
   </article>`;
@@ -307,11 +411,19 @@ function wireModal(productsById) {
     const dims = (p.dimensions || "").trim();
     if (dimEl) {
       dimEl.textContent = dims;
-      dimEl.style.display = dims ? "" : "none";
+      dimEl.className = "pillOrange";
+      dimEl.style.display = dims ? "inline-flex" : "none";
     }
 
     const viewer = $("#mViewer");
     const textBlock = $("#mTextBlock");
+
+    // Fotos (se tiver gallery, senão usa image)
+    ensureMediaUI();
+    const gallery = (p.gallery && p.gallery.length ? p.gallery : (p.image ? [p.image] : []));
+    renderPhotos(gallery);
+    // default: abre em Fotos
+    setActiveTab("photos");
 
     if (p.modelUrl && viewer) {
       ensureModelViewer();
@@ -319,13 +431,20 @@ function wireModal(productsById) {
       viewer.setAttribute("src", p.modelUrl);
       viewer.setAttribute("camera-controls", "");
       viewer.setAttribute("touch-action", "pan-y");
+      applyViewerPreset(viewer);
       if (textBlock) textBlock.textContent = "Arraste para girar / dê zoom com o mouse.";
+      const wrap = document.getElementById("mMediaWrap");
+      const btn3d = wrap ? wrap.querySelector('.mediaTab[data-tab="model"]') : null;
+      if (btn3d) btn3d.style.display = "";
     } else {
       if (viewer) {
         viewer.style.display = "none";
         viewer.removeAttribute("src");
       }
       if (textBlock) textBlock.textContent = "";
+      const wrap = document.getElementById("mMediaWrap");
+      const btn3d = wrap ? wrap.querySelector('.mediaTab[data-tab="model"]') : null;
+      if (btn3d) btn3d.style.display = "none";
     }
 
     const selections = [];
