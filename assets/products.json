@@ -226,8 +226,6 @@
     "currency": "BRL",
     "dimensions": "🦇",
     "options": [ 
-      { "name": "Material", "values": ["PLA"] },
-      { "name": "Material", "values": ["PLA"] },
       { "name": "Material", "values": ["PLA"] }
     ],
     "image": "assets/products/images/P8/p1.png",
