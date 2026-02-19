@@ -679,3 +679,19 @@ model-viewer{
 #mDesc{
   white-space: pre-line; /* respeita quebras de linha do JSON */
 }
+
+
+/* ===== Pílula de dimensions mais fina ===== */
+.pillOrange{
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;             /* menos espaço dentro */
+  border-radius: 999px;
+  border: 1px solid #ff9f1c;    /* linha mais fina */
+  background: #ffffff;
+  color: #111111;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+}
