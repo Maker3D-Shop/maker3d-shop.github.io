@@ -39,12 +39,12 @@
       "default": "Laranja (Paleta)",
       "modes": ["solid", "multi"],
       "defaultMode": "multi",
-      "multiMaxColors": 3
+      "multiMaxColors": 2
     }
   },
   {
     "id": "p3",
-    "name": "Slider Fidget",
+    "name": "Slider",
     "category": "Fidget",
     "price": 2.29,
     "currency": "BRL",
@@ -84,6 +84,30 @@
       "assets/products/images/P4/p5.png"
     ],
     "modelUrl": "assets/products/models/p4.glb",
+    "description": "Organizador modular para bancada, com encaixes e estética clean.",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  }
+  {
+    "id": "p5",
+    "name": "Giroscópio de 4 Anéis",
+    "category": "Fidget",
+    "price": 2.75,
+    "currency": "BRL",
+    "dimensions": "",
+    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "image": "assets/products/images/P4/p1.png",
+    "gallery": [
+      "assets/products/images/P5/p1.png",
+      "assets/products/images/P5/p2.png",
+      "assets/products/images/P5/p3.png"
+    ],
+    "modelUrl": "assets/products/models/p5.glb",
     "description": "Organizador modular para bancada, com encaixes e estética clean.",
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
