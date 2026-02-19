@@ -51,8 +51,8 @@ function showFatal(msg, err) {
   box.style.padding = "14px";
   box.style.margin = "12px 0";
   box.innerHTML = `
-    <p style="margin:0 0 6px;font-weight:900;">Erro</p>
-    <p style="margin:0;opacity:.85;">${msg}</p>
+    <div style="font-weight:900;margin-bottom:6px">Erro</div>
+    <div class="small" style="opacity:.85">${msg}</div>
   `;
   target.prepend(box);
 }
@@ -70,30 +70,36 @@ function shuffle(arr) {
 /* ---------------- Card ---------------- */
 function productCard(p) {
   const img = p.image
-    ? `<div class="thumb"><img src="${p.image}" alt="${p.name || ""}"></div>`
-    : `<div class="thumb"></div>`;
+    ? `
+    <div class="thumb">
+      <img src="${p.image}" alt="${p.name || ""}" loading="lazy"/>
+    </div>`
+    : `
+    <div class="thumb">
+      <div class="thumbPh">Sem foto</div>
+    </div>`;
 
   const dims = (p.dimensions || "").trim();
 
   return `
   <article class="card product">
     ${img}
-    <div class="pmeta">
-      <div class="pmetaTop">
-        <p class="pname">${p.name || ""}</p>
-        ${p.category ? `<span class="tag">${p.category}</span>` : ``}
+    <div class="pBody">
+      <div class="pTop">
+        <h3 class="pName">${p.name || ""}</h3>
+        ${p.category ? `<div class="chip">${p.category}</div>` : ``}
       </div>
 
-      ${p.description ? `<p class="pdesc">${String(p.description).replace(/\n/g, "<br>")}</p>` : ``}
+      ${p.description ? `<div class="pDesc">${String(p.description).replace(/\n/g, "<br>")}</div>` : ``}
 
-      <div class="priceLine">
-        <span class="price">${moneyBRL(p.price)}</span>
-        ${dims ? `<span class="pillOrange">${dims}</span>` : ``}
+      <div class="pMeta">
+        <div class="pPrice">${moneyBRL(p.price)}</div>
+        ${dims ? `<div class="pDim small">${dims}</div>` : ``}
       </div>
 
-      <div class="pactions">
-        <button class="btn ghost" data-open="${p.id}" type="button">Ver opções</button>
-        <button class="btn primary" data-buy="${p.id}" type="button">Comprar</button>
+      <div class="pActions">
+        <button class="btn ghost" data-open="${p.id}">Ver opções</button>
+        <button class="btn" data-buy="${p.id}">Comprar</button>
       </div>
     </div>
   </article>`;
@@ -112,16 +118,10 @@ function ensureMediaUI() {
   wrap.className = "mediaWrap";
   wrap.innerHTML = `
     <div class="mediaTabs">
-      <button class="mediaTab active" data-tab="photos" type="button">Fotos</button>
-      <button class="mediaTab" data-tab="model" type="button">3D</button>
+      <button class="mediaTab active" data-tab="photos">Fotos</button>
+      <button class="mediaTab" data-tab="model">3D</button>
     </div>
-    <div id="mPhotos" class="mediaPane">
-      <img id="mPhotoMain" class="photoMain" alt="Foto do produto">
-      <div id="mPhotoThumbs" class="photoThumbs"></div>
-    </div>
-    <div id="mModelPane" class="mediaPane" style="display:none;"></div>
   `;
-
   leftCol.prepend(wrap);
 
   const viewer = $("#mViewer");
@@ -137,9 +137,9 @@ function setActiveTab(tab) {
   if (!wrap) return;
 
   $$(".mediaTab", wrap).forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
-
   const photos = $("#mPhotos");
   const modelPane = $("#mModelPane");
+
   if (photos) photos.style.display = tab === "photos" ? "" : "none";
   if (modelPane) modelPane.style.display = tab === "model" ? "" : "none";
 }
@@ -162,10 +162,9 @@ function renderPhotos(gallery) {
   thumbs.innerHTML = imgs
     .map(
       (src, i) => `
-      <button class="thumbBtn ${i === 0 ? "active" : ""}" data-src="${src}" type="button">
-        <img src="${src}" alt="thumb ${i + 1}">
-      </button>
-    `
+      <button class="thumbBtn ${i === 0 ? "active" : ""}" data-src="${src}" aria-label="Foto ${i + 1}">
+        <img src="${src}" alt="" loading="lazy"/>
+      </button>`
     )
     .join("");
 
@@ -202,6 +201,7 @@ function wireDrawer(allProducts, onFilterChange) {
 
   openBtn.addEventListener("click", open);
   closeBtn.addEventListener("click", close);
+
   backdrop.addEventListener("click", (e) => {
     if (e.target === backdrop) close();
   });
@@ -209,14 +209,11 @@ function wireDrawer(allProducts, onFilterChange) {
   const categories = [...new Set(allProducts.map((p) => p.category).filter(Boolean))].sort((a, b) =>
     a.localeCompare(b)
   );
-
   const chips = ["Tudo", ...categories];
   let active = "Tudo";
 
   function renderChips() {
-    list.innerHTML = chips
-      .map((c) => `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`)
-      .join("");
+    list.innerHTML = chips.map((c) => `<button class="chip ${c === active ? "on" : ""}" data-cat="${c}">${c}</button>`).join("");
   }
 
   list.addEventListener("click", (e) => {
@@ -231,7 +228,7 @@ function wireDrawer(allProducts, onFilterChange) {
   renderChips();
 }
 
-/* ---------------- Modal (cores usam multiMaxColors do JSON; sem seletor de quantidade) ---------------- */
+/* ---------------- Modal (multicor) ---------------- */
 function wireModal(productsById) {
   const modalBackdrop = $("#modalBackdrop");
   if (!modalBackdrop) return;
@@ -261,6 +258,7 @@ function wireModal(productsById) {
     });
 
     if (initialValue != null) sel.value = initialValue;
+
     sel.addEventListener("change", () => onChange(sel.value));
 
     wrap.appendChild(label);
@@ -276,7 +274,6 @@ function wireModal(productsById) {
   function renderOptions(product, selections) {
     const wrap = $("#mOptions");
     if (!wrap) return;
-
     wrap.innerHTML = "";
 
     const setSelection = (key, value) => {
@@ -309,10 +306,14 @@ function wireModal(productsById) {
     wrap.appendChild(colorSection);
 
     const def = cc?.default || palette[0];
-
     const legacyIsMulti = !!cc?.multicolor;
+
     const modes =
-      Array.isArray(cc?.modes) && cc.modes.length ? cc.modes : legacyIsMulti ? ["solid", "multi"] : ["solid"];
+      Array.isArray(cc?.modes) && cc.modes.length
+        ? cc.modes
+        : legacyIsMulti
+        ? ["solid", "multi"]
+        : ["solid"];
 
     let mode =
       cc?.defaultMode && modes.includes(cc.defaultMode)
@@ -322,6 +323,7 @@ function wireModal(productsById) {
         : "solid";
 
     const rawMultiMax = cc?.multiMaxColors ?? cc?.multimaxcolors ?? cc?.maxColors ?? (legacyIsMulti ? 2 : 1);
+
     let multiCount = Number(rawMultiMax);
     if (!Number.isFinite(multiCount)) multiCount = 2;
     multiCount = Math.max(2, Math.min(8, Math.floor(multiCount)));
@@ -330,7 +332,6 @@ function wireModal(productsById) {
       colorSection.innerHTML = "";
       clearSelectionsByPrefix([
         "Tipo de cor:",
-        "Qtd. cores:",
         "Cor:",
         "Cor 1:",
         "Cor 2:",
@@ -342,6 +343,7 @@ function wireModal(productsById) {
         "Cor 8:",
       ]);
 
+      // Se tiver 2 modos (sólida + multi), mostra seletor. Se só tiver 1, a UI já nasce naquele modo.
       if (modes.includes("solid") && modes.includes("multi")) {
         addSelect(
           colorSection,
@@ -356,13 +358,22 @@ function wireModal(productsById) {
       }
 
       setSelection("Tipo de cor", mode === "multi" ? "Multicor" : "Sólida");
-      if (mode === "multi") setSelection("Qtd. cores", String(multiCount)); // vai pro WhatsApp
 
-      const count = mode === "multi" ? multiCount : 1;
+      // Partes nomeadas (opcional no JSON): colorConfig.multiParts = ["Folhas","Rosa","Base"]
+      const parts = Array.isArray(cc?.multiParts) ? cc.multiParts.filter(Boolean) : [];
+      const count =
+        mode === "multi"
+          ? Math.min(multiCount, parts.length ? parts.length : multiCount)
+          : 1;
+
+      // 🔥 No WhatsApp/JSON: sempre salva como Cor 1, Cor 2, Cor 3...
       for (let i = 1; i <= count; i++) {
-        const label = count === 1 ? "Cor" : `Cor ${i}`;
-        addSelect(colorSection, label, palette, (v) => setSelection(label, v), def);
-        setSelection(label, def);
+        const key = `Cor ${i}`;
+        const partName = parts[i - 1];
+        const label = partName ? `${key} — ${partName}` : key;
+
+        addSelect(colorSection, label, palette, (v) => setSelection(key, v), def);
+        setSelection(key, def);
       }
     };
 
@@ -396,153 +407,82 @@ function wireModal(productsById) {
         viewer.setAttribute("src", p.modelUrl);
         applyViewerPreset(viewer);
       }
-      if (textBlock) textBlock.style.display = "none";
-      setActiveTab("model");
+      if (textBlock) textBlock.style.display = "";
     } else {
-      if (viewer) {
-        viewer.style.display = "none";
-        viewer.removeAttribute("src");
-      }
-      if (textBlock) {
-        textBlock.style.display = "";
-        textBlock.textContent = "";
-      }
+      if (viewer) viewer.style.display = "none";
       setActiveTab("photos");
     }
 
+    // opções
     const selections = [];
     renderOptions(p, selections);
 
-    $("#mBuyInside").onclick = () => openWhats(p, selections.filter(Boolean));
+    // botões
+    const buyBtn = $("#mBuy");
+    const shareBtn = $("#mShare");
+
+    if (buyBtn) {
+      buyBtn.onclick = () => openWhats(p, selections);
+    }
+
+    if (shareBtn) {
+      shareBtn.onclick = async () => {
+        const url = new URL(window.location.href);
+        url.searchParams.set("p", id);
+        try {
+          await navigator.clipboard.writeText(url.toString());
+          shareBtn.textContent = "Link copiado ✅";
+          setTimeout(() => (shareBtn.textContent = "Copiar link"), 1500);
+        } catch {
+          prompt("Copie o link:", url.toString());
+        }
+      };
+    }
+
     modalBackdrop.classList.add("open");
   };
-
-  document.addEventListener("click", (e) => {
-    const open = e.target.closest("[data-open]");
-    if (open) window.openProductById(open.getAttribute("data-open"));
-  });
-
-  document.addEventListener("click", (e) => {
-    const buy = e.target.closest("[data-buy]");
-    if (!buy) return;
-    const id = buy.getAttribute("data-buy");
-    const p = productsById.get(id);
-    if (!p) return;
-    openWhats(p, []);
-  });
 }
 
-/* ---------------- Home carousel ---------------- */
-function renderHomeCarouselRandom4(products) {
-  const track = $("#track");
-  const dotsWrap = $("#dots");
-  const prevBtn = $("#prevBtn");
-  const nextBtn = $("#nextBtn");
-  if (!track || !dotsWrap) return;
+/* ---------------- Main ---------------- */
+(async function main() {
+  try {
+    const all = await loadProducts();
+    const productsById = new Map(all.map((p) => [p.id, p]));
 
-  const chosen = shuffle(products).slice(0, 4);
+    const grid = $("#catalogGrid") || $("#track");
+    if (grid) grid.innerHTML = all.map(productCard).join("");
 
-  let idx = 0;
-  let dir = 1;
-  let timer = null;
+    // Abrir modal
+    document.addEventListener("click", (e) => {
+      const btnOpen = e.target.closest("[data-open]");
+      const btnBuy = e.target.closest("[data-buy]");
 
-  track.innerHTML = chosen.map((p) => `<div class="carouselSlide">${productCard(p)}</div>`).join("");
-  dotsWrap.innerHTML = chosen
-    .map((_, i) => `<button class="dot ${i === 0 ? "active" : ""}" type="button" aria-label="slide ${i + 1}"></button>`)
-    .join("");
+      if (btnOpen) {
+        const id = btnOpen.getAttribute("data-open");
+        if (id) window.openProductById?.(id);
+      }
 
-  const dots = $$(".dot", dotsWrap);
-
-  const set = (i) => {
-    idx = Math.max(0, Math.min(chosen.length - 1, i));
-    track.style.transform = `translateX(-${idx * 100}%)`;
-    dots.forEach((d, di) => d.classList.toggle("active", di === idx));
-  };
-
-  const tick = () => {
-    if (chosen.length <= 1) return;
-    let next = idx + dir;
-    if (next >= chosen.length) { dir = -1; next = idx + dir; }
-    if (next < 0) { dir = 1; next = idx + dir; }
-    set(next);
-  };
-
-  const restart = () => {
-    if (timer) clearInterval(timer);
-    timer = setInterval(tick, 4200);
-  };
-
-  dots.forEach((d, i) => d.addEventListener("click", () => { dir = i > idx ? 1 : -1; set(i); restart(); }));
-  prevBtn?.addEventListener("click", () => { dir = -1; set(idx - 1); restart(); });
-  nextBtn?.addEventListener("click", () => { dir = 1; set(idx + 1); restart(); });
-
-  restart();
-}
-
-/* ---------------- Catálogo: grid + busca + filtro ---------------- */
-function renderCatalogIntoGrid(products) {
-  const grid = $("#catalogGrid");
-  if (!grid) return;
-  grid.innerHTML = (products || []).map(productCard).join("");
-}
-
-function wireSearch(allProducts, getActiveCategory, onResult) {
-  const input = $("#searchInput");
-  const clear = $("#clearSearch");
-  if (!input || !clear) return;
-
-  function apply() {
-    const q = (input.value || "").trim().toLowerCase();
-    const cat = getActiveCategory();
-
-    const filtered = allProducts.filter((p) => {
-      const matchesCat = cat === "Tudo" || (p.category || "") === cat;
-      if (!matchesCat) return false;
-      if (!q) return true;
-      const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
-      return hay.includes(q);
+      if (btnBuy) {
+        const id = btnBuy.getAttribute("data-buy");
+        const p = productsById.get(id);
+        if (p) openWhats(p, []);
+      }
     });
 
-    onResult(filtered);
-  }
-
-  input.addEventListener("input", apply);
-  clear.addEventListener("click", () => { input.value = ""; apply(); });
-
-  apply();
-}
-
-/* ---------------- Boot ---------------- */
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    const productsAll = await loadProducts();
-    const productsById = new Map(productsAll.map((p) => [p.id, p]));
+    wireDrawer(all, (activeCategory) => {
+      const items = activeCategory === "Tudo" ? all : all.filter((p) => p.category === activeCategory);
+      if (grid) grid.innerHTML = items.map(productCard).join("");
+    });
 
     wireModal(productsById);
-    renderHomeCarouselRandom4(productsAll);
 
-    let activeCategory = "Tudo";
-    const getActiveCategory = () => activeCategory;
-
-    wireDrawer(productsAll, (cat) => {
-      activeCategory = cat;
-      const q = ($("#searchInput")?.value || "").trim().toLowerCase();
-
-      const filtered = productsAll.filter((p) => {
-        const matchesCat = activeCategory === "Tudo" || (p.category || "") === activeCategory;
-        if (!matchesCat) return false;
-        if (!q) return true;
-        const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
-        return hay.includes(q);
-      });
-
-      renderCatalogIntoGrid(filtered);
-    });
-
-    wireSearch(productsAll, getActiveCategory, renderCatalogIntoGrid);
-
-    if ($("#catalogGrid")) renderCatalogIntoGrid(productsAll);
+    // Abrir via URL ?p=ID
+    const url = new URL(window.location.href);
+    const pid = url.searchParams.get("p");
+    if (pid && productsById.has(pid)) {
+      setTimeout(() => window.openProductById(pid), 50);
+    }
   } catch (err) {
-    showFatal(err?.message || "Falha ao carregar catálogo.", err);
+    showFatal("Falha ao iniciar catálogo.", err);
   }
-});
+})();
