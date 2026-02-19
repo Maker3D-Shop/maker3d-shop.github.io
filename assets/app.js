@@ -5,7 +5,11 @@ const $$ = (q, el = document) => [...el.querySelectorAll(q)];
 
 function moneyBRL(v) {
   if (v === null || v === undefined) return "Sob consulta";
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+  try {
+    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+  } catch {
+    return `R$ ${v}`;
+  }
 }
 
 function ensureModelViewer() {
@@ -31,6 +35,7 @@ function buildWhatsMsg(product, selections) {
     product.price != null ? `Preço: ${moneyBRL(product.price)}` : "Preço: sob consulta",
     selections?.length ? `Opções: ${selections.join(" • ")}` : null,
   ].filter(Boolean);
+
   return lines.join("\n");
 }
 
@@ -42,14 +47,19 @@ function openWhats(product, selections) {
 function showFatal(msg, err) {
   console.error("[MAKER3D]", msg, err || "");
   const target = $("#catalogGrid") || $("#track") || $(".container") || document.body;
+
   const box = document.createElement("div");
   box.className = "card";
   box.style.padding = "14px";
   box.style.margin = "12px 0";
-  box.innerHTML = `<p style="margin:0 0 6px;font-weight:900;">Erro</p><p style="margin:0;opacity:.85;">${msg}</p>`;
+  box.innerHTML = `
+    <p style="margin:0 0 6px;font-weight:900;">Erro</p>
+    <p style="margin:0;opacity:.85;">${msg}</p>
+  `;
   target.prepend(box);
 }
 
+/* ---------------- Utils ---------------- */
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -59,12 +69,13 @@ function shuffle(arr) {
   return a;
 }
 
+/* ---------------- Card ---------------- */
 function productCard(p) {
   const img = p.image
     ? `<div class="thumb"><img src="${p.image}" alt="${p.name || ""}"></div>`
     : `<div class="thumb"></div>`;
 
-  const dims = p.dimensions ? p.dimensions : "—";
+  const dims = (p.dimensions || "").trim();
 
   return `
   <article class="card product">
@@ -79,7 +90,7 @@ function productCard(p) {
 
       <div class="priceLine">
         <span class="price">${moneyBRL(p.price)}</span>
-        <span class="small">${dims}</span>
+        ${dims ? `<span class="pillOrange">${dims}</span>` : ``}
       </div>
 
       <div class="pactions">
@@ -90,7 +101,7 @@ function productCard(p) {
   </article>`;
 }
 
-/* ---------- Modal: Fotos/3D ---------- */
+/* ---------------- Modal: Fotos + 3D (abas) ---------------- */
 function ensureMediaUI() {
   const leftCol = $("#mTextBlock")?.parentElement || $(".modalGrid > div");
   if (!leftCol) return null;
@@ -169,6 +180,7 @@ function renderPhotos(gallery) {
   };
 }
 
+/* ---------------- Viewer look ---------------- */
 function applyViewerPreset(viewer) {
   if (!viewer) return;
   viewer.style.background = "rgba(255, 159, 28, 0.16)";
@@ -179,7 +191,7 @@ function applyViewerPreset(viewer) {
   viewer.setAttribute("touch-action", "pan-y");
 }
 
-/* ---------- Drawer + Search ---------- */
+/* ---------------- Drawer (Filtros) ---------------- */
 function wireDrawer(allProducts, onFilterChange) {
   const backdrop = $("#drawerBackdrop");
   const openBtn = $("#openDrawer");
@@ -206,7 +218,10 @@ function wireDrawer(allProducts, onFilterChange) {
 
   function renderChips() {
     list.innerHTML = chips
-      .map((c) => `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`)
+      .map(
+        (c) =>
+          `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`
+      )
       .join("");
   }
 
@@ -222,42 +237,7 @@ function wireDrawer(allProducts, onFilterChange) {
   renderChips();
 }
 
-function renderCatalogIntoGrid(products) {
-  const grid = $("#catalogGrid");
-  if (!grid) return;
-  grid.innerHTML = (products || []).map(productCard).join("");
-}
-
-function wireSearch(allProducts, getActiveCategory, onResult) {
-  const input = $("#searchInput");
-  const clear = $("#clearSearch");
-  if (!input || !clear) return;
-
-  function apply() {
-    const q = (input.value || "").trim().toLowerCase();
-    const cat = getActiveCategory();
-
-    const filtered = allProducts.filter((p) => {
-      const matchesCat = cat === "Tudo" || (p.category || "") === cat;
-      if (!matchesCat) return false;
-      if (!q) return true;
-      const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
-      return hay.includes(q);
-    });
-
-    onResult(filtered);
-  }
-
-  input.addEventListener("input", apply);
-  clear.addEventListener("click", () => {
-    input.value = "";
-    apply();
-  });
-
-  apply();
-}
-
-/* ---------- Modal: Opções + cores (sem seletor quantidade) ---------- */
+/* ---------------- Modal (multicor usa multiMaxColors do JSON, sem seletor de quantidade) ---------------- */
 function wireModal(productsById) {
   const modalBackdrop = $("#modalBackdrop");
   if (!modalBackdrop) return;
@@ -319,14 +299,14 @@ function wireModal(productsById) {
       }
     };
 
-    // opções normais
+    // 1) opções normais
     (product.options || []).forEach((opt) => {
       const first = (opt.values || [])[0];
       addSelect(wrap, opt.name, opt.values || [], (v) => setSelection(opt.name, v), first);
       if (first) setSelection(opt.name, first);
     });
 
-    // cores
+    // 2) cores
     const cc = product.colorConfig;
     const palette = cc?.palette || [];
     if (!palette.length) return;
@@ -350,7 +330,7 @@ function wireModal(productsById) {
     const rawMultiMax = cc?.multiMaxColors ?? cc?.multimaxcolors ?? cc?.maxColors ?? (legacyIsMulti ? 2 : 1);
     let multiCount = Number(rawMultiMax);
     if (!Number.isFinite(multiCount)) multiCount = 2;
-    multiCount = Math.max(2, Math.min(8, Math.floor(multiCount))); // limite de layout
+    multiCount = Math.max(2, Math.min(8, Math.floor(multiCount)));
 
     const rerenderColors = () => {
       colorSection.innerHTML = "";
@@ -400,21 +380,29 @@ function wireModal(productsById) {
     if (!p) return;
 
     $("#mTitle").textContent = p.name || "Produto";
-    $("#mCategory").textContent = p.category || "";
 
-    // descrição dentro do bloco (.descBlock já existe no seu CSS)
-    const descEl = $("#mDesc");
-    if (descEl) {
-      descEl.innerHTML = "";
-      const txt = (p.description || "").trim();
-      if (txt) {
-        const box = document.createElement("div");
-        box.className = "descBlock";
-        const safe = txt.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        box.innerHTML = `<p class="small">${safe.replace(/\n/g, "<br>")}</p>`;
-        descEl.appendChild(box);
+    // Categoria normal (não mexo no seu pill atual)
+    const catEl = $("#mCategory");
+    if (catEl) catEl.textContent = p.category || "";
+
+    // ✅ Dimensions como pílula (borda laranja, branco)
+    const dims = (p.dimensions || "").trim();
+    if (catEl && catEl.parentElement) {
+      // remove pílula antiga se existir
+      catEl.parentElement.querySelectorAll(".pillOrange[data-role='dims']").forEach((n) => n.remove());
+
+      if (dims) {
+        const pill = document.createElement("span");
+        pill.className = "pillOrange";
+        pill.setAttribute("data-role", "dims");
+        pill.textContent = dims;
+        catEl.parentElement.appendChild(pill);
       }
     }
+
+    // ✅ Descrição VOLTA ao normal (texto comum)
+    const descEl = $("#mDesc");
+    if (descEl) descEl.textContent = p.description || "";
 
     $("#mPrice").textContent = moneyBRL(p.price);
 
@@ -469,7 +457,7 @@ function wireModal(productsById) {
   });
 }
 
-/* ---------- Destaques (Home) ---------- */
+/* ---------------- Home carousel ---------------- */
 function renderHomeCarouselRandom4(products) {
   const track = $("#track");
   const dotsWrap = $("#dots");
@@ -516,7 +504,40 @@ function renderHomeCarouselRandom4(products) {
   restart();
 }
 
-/* ---------- Boot ---------- */
+/* ---------------- Catálogo: grid + busca + filtro ---------------- */
+function renderCatalogIntoGrid(products) {
+  const grid = $("#catalogGrid");
+  if (!grid) return;
+  grid.innerHTML = (products || []).map(productCard).join("");
+}
+
+function wireSearch(allProducts, getActiveCategory, onResult) {
+  const input = $("#searchInput");
+  const clear = $("#clearSearch");
+  if (!input || !clear) return;
+
+  function apply() {
+    const q = (input.value || "").trim().toLowerCase();
+    const cat = getActiveCategory();
+
+    const filtered = allProducts.filter((p) => {
+      const matchesCat = cat === "Tudo" || (p.category || "") === cat;
+      if (!matchesCat) return false;
+      if (!q) return true;
+      const hay = `${p.name || ""} ${p.category || ""} ${p.description || ""}`.toLowerCase();
+      return hay.includes(q);
+    });
+
+    onResult(filtered);
+  }
+
+  input.addEventListener("input", apply);
+  clear.addEventListener("click", () => { input.value = ""; apply(); });
+
+  apply();
+}
+
+/* ---------------- Boot ---------------- */
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const productsAll = await loadProducts();
