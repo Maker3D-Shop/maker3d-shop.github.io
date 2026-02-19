@@ -142,5 +142,29 @@
       "defaultMode": "solid",
       "multiMaxColors": 1
     }
+  },
+  {
+    "id": "p7",
+    "name": "Porta-página do livro",
+    "category": "Utilitário",
+    "price": 4.30,
+    "currency": "BRL",
+    "dimensions": "📖",
+    "options": [ { "name": "Material", "values": ["PLA"] } ],
+    "image": "assets/products/images/P7/p1.png",
+    "gallery": [
+      "assets/products/images/P7/p1.png",
+      "assets/products/images/P7/p2.png",
+      "assets/products/images/P7/p3.png"
+    ],
+    "modelUrl": "assets/products/models/p7.glb",
+    "description": "Porta-páginas de livro de dois lados para leitura com uma mão./nServe em vários tamanhos de livros.",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
   }
 ]
