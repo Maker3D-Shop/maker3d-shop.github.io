@@ -674,13 +674,10 @@ model-viewer{
   line-height: 1;
   white-space: nowrap;
 }
-
 /* ===== Descrição “normal” (texto comum) ===== */
 #mDesc{
   white-space: pre-line; /* respeita quebras de linha do JSON */
 }
-
-
 /* ===== Pílula de dimensions mais fina ===== */
 .pillOrange{
   display: inline-flex;
