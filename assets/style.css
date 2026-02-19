@@ -658,3 +658,24 @@ model-viewer{
 .descBlock .small {
   margin: 0;
 }
+
+/* ===== Pílula (borda laranja, fundo branco, texto preto) ===== */
+.pillOrange{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 2px solid #ff9f1c;   /* laranja */
+  background: #ffffff;          /* branco */
+  color: #111111;               /* preto */
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ===== Descrição “normal” (texto comum) ===== */
+#mDesc{
+  white-space: pre-line; /* respeita quebras de linha do JSON */
+}
