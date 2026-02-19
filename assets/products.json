@@ -214,7 +214,7 @@
       "default": "Verde",
       "modes": ["solid", "multi"],
       "defaultMode": "multi",
-      "multiMaxColors": 3
+      "multiMaxColors": 3,
       "multiParts": ["Folhas", "Rosa", "Base"] 
     }
   },
