@@ -21,7 +21,7 @@
     "category": "Articulado",
     "price": 8.20,
     "currency": "BRL",
-    "dimensions": "Encantador✨",
+    "dimensions": "Encantador🐙",
     "image": "assets/products/images/P1/p1.png",
     "gallery": [
       "assets/products/images/P1/p1.png",
@@ -72,7 +72,7 @@
     "category": "Fidget",
     "price": 3.80,
     "currency": "BRL",
-    "dimensions": "Hipnotizante🔷",
+    "dimensions": "Hipnotizante🌀",
     "options": [{ "name": "Material", "values": ["PLA"] }],
     "image": "assets/products/images/P4/p1.png",
     "gallery": [
@@ -107,6 +107,30 @@
       "assets/products/images/P5/p3.png"
     ],
     "modelUrl": "assets/products/models/p5.glb",
+    "description": "Um brinquedo cinético cheio de movimento que dança entre os dedos!\nRelaxante, divertido e visualmente incrível.",
+    "colorConfig": {
+      "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
+      "default": "Preto",
+      "modes": ["solid"],
+      "defaultMode": "solid",
+      "multiMaxColors": 1
+    }
+  },
+  {
+    "id": "p6",
+    "name": "Dragão Articuado",
+    "category": "Articulado",
+    "price": null,
+    "currency": "BRL",
+    "dimensions": "🐉",
+    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "image": "assets/products/images/P5/p1.png",
+    "gallery": [
+      "assets/products/images/P6/p1.png",
+      "assets/products/images/P6/p2.png",
+      "assets/products/images/P6/p3.png"
+    ],
+    "modelUrl": "assets/products/models/p6.stl",
     "description": "Um brinquedo cinético cheio de movimento que dança entre os dedos!\nRelaxante, divertido e visualmente incrível.",
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
