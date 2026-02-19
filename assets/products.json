@@ -243,5 +243,6 @@
       "modes": ["solid"],
       "defaultMode": "solid",
       "multiMaxColors": 1
-    } 
+    }
+  }
 ]
