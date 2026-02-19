@@ -157,7 +157,7 @@
       "assets/products/images/P7/p2.png",
       "assets/products/images/P7/p3.png"
     ],
-    "modelUrl": "assets/products/models/book.glb",
+    "modelUrl": "assets/products/models/book2.glb",
     "description": "Porta-páginas de livro de dois lados para leitura com uma mão./nServe em vários tamanhos de livros.",
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
