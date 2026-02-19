@@ -125,7 +125,7 @@
     "dimensions": "🐉",
     "options": [
       { "name": "Material", "values": ["PLA"] },
-      { "name": "Tamanho", "values": ["Pequeno", "Médio", "Grande"] }
+      { "name": "Tamanho", "values": ["Pequeno (10)", "Médio (20)", "Grande (50)"] }
     ],
     "image": "assets/products/images/P6/p1.png",
     "gallery": [
@@ -147,7 +147,7 @@
     "id": "p7",
     "name": "Porta-página do livro",
     "category": "Utilitário",
-    "price": 4.30,
+    "price": 5.40,
     "currency": "BRL",
     "dimensions": "📖",
     "options": [ { "name": "Material", "values": ["PLA"] } ],
