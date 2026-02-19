@@ -158,7 +158,7 @@
       "assets/products/images/P7/p3.png"
     ],
     "modelUrl": "assets/products/models/book2.glb",
-    "description": "Porta-páginas de livro de dois lados para leitura com uma mão./nServe em vários tamanhos de livros.",
+    "description": "Porta-páginas de livro de dois lados para leitura com uma mão.\nServe em vários tamanhos de livros.",
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
       "default": "Preto",
@@ -193,7 +193,7 @@
   },
   {
     "id": "p9",
-    "name": "Caixa de Coração com Decoração de Rosa",
+    "name": "Caixa de Coração",
     "category": "Dia dos Namorados",
     "price": null,
     "currency": "BRL",
@@ -204,7 +204,7 @@
       "assets/products/images/P9/p2.png"
     ],
     "modelUrl": "assets/products/models/p9.glb",
-    "description": "Variante em caixa do coração com decoração de rosas. /n*Esse objeto oferece opção multicor.*",
+    "description": "Variante em caixa do coração com decoração de rosas. \n*Esse objeto oferece opção multicor.*",
     "options": [
       { "name": "Material", "values": ["PLA"] },
       { "name": "Altura da caixa", "values": ["4cm", "2,5cm"] }
