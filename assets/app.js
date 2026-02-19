@@ -35,7 +35,6 @@ function buildWhatsMsg(product, selections) {
     product.price != null ? `Preço: ${moneyBRL(product.price)}` : "Preço: sob consulta",
     selections?.length ? `Opções: ${selections.join(" • ")}` : null,
   ].filter(Boolean);
-
   return lines.join("\n");
 }
 
@@ -47,7 +46,6 @@ function openWhats(product, selections) {
 function showFatal(msg, err) {
   console.error("[MAKER3D]", msg, err || "");
   const target = $("#catalogGrid") || $("#track") || $(".container") || document.body;
-
   const box = document.createElement("div");
   box.className = "card";
   box.style.padding = "14px";
@@ -197,7 +195,6 @@ function wireDrawer(allProducts, onFilterChange) {
   const openBtn = $("#openDrawer");
   const closeBtn = $("#closeDrawer");
   const list = $("#filterList");
-
   if (!backdrop || !openBtn || !closeBtn || !list) return;
 
   const open = () => backdrop.classList.add("open");
@@ -218,10 +215,7 @@ function wireDrawer(allProducts, onFilterChange) {
 
   function renderChips() {
     list.innerHTML = chips
-      .map(
-        (c) =>
-          `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`
-      )
+      .map((c) => `<button class="filterChip ${c === active ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`)
       .join("");
   }
 
@@ -237,7 +231,7 @@ function wireDrawer(allProducts, onFilterChange) {
   renderChips();
 }
 
-/* ---------------- Modal (multicor usa multiMaxColors do JSON, sem seletor de quantidade) ---------------- */
+/* ---------------- Modal (cores usam multiMaxColors do JSON; sem seletor de quantidade) ---------------- */
 function wireModal(productsById) {
   const modalBackdrop = $("#modalBackdrop");
   if (!modalBackdrop) return;
@@ -380,29 +374,10 @@ function wireModal(productsById) {
     if (!p) return;
 
     $("#mTitle").textContent = p.name || "Produto";
+    $("#mCategory").textContent = p.category || "";
 
-    // Categoria normal (não mexo no seu pill atual)
-    const catEl = $("#mCategory");
-    if (catEl) catEl.textContent = p.category || "";
-
-    // ✅ Dimensions como pílula (borda laranja, branco)
-    const dims = (p.dimensions || "").trim();
-    if (catEl && catEl.parentElement) {
-      // remove pílula antiga se existir
-      catEl.parentElement.querySelectorAll(".pillOrange[data-role='dims']").forEach((n) => n.remove());
-
-      if (dims) {
-        const pill = document.createElement("span");
-        pill.className = "pillOrange";
-        pill.setAttribute("data-role", "dims");
-        pill.textContent = dims;
-        catEl.parentElement.appendChild(pill);
-      }
-    }
-
-    // ✅ Descrição VOLTA ao normal (texto comum)
-    const descEl = $("#mDesc");
-    if (descEl) descEl.textContent = p.description || "";
+    // ✅ descrição normal
+    $("#mDesc").textContent = p.description || "";
 
     $("#mPrice").textContent = moneyBRL(p.price);
 
