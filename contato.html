@@ -2,17 +2,18 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maker3D Shop | Contato</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Maker3D Shop | Fale Conosco</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
     <header class="header-principal">
-        <div class="logo-container">
-            <img src="assets/brand/logo.png" alt="Maker3D Shop" class="logo-img" style="max-width: 150px; max-height: 80px;">
-        </div>
+        <a href="index.html">
+            <img src="assets/brand/logo.png" alt="Maker3D Shop" class="logo-img" onerror="this.src='https://via.placeholder.com/150x60?text=Maker3D'">
+        </a>
         <nav class="menu-navegacao">
             <a href="index.html">Início</a>
             <a href="catalogo.html">Catálogo</a>
@@ -22,13 +23,21 @@
 
     <main class="container-principal" style="max-width: 600px; text-align: center;">
         <h1 class="titulo-secao">Fale Conosco</h1>
-        <p class="subtitulo-secao">Tem um projeto especial ou dúvida? Mande uma mensagem.</p>
+        <p class="subtitulo-secao">Tem um projeto especial, dúvida ou orçamento sob medida? Mande uma mensagem para a gente!</p>
         
-        <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 20px;">
-            <p><strong>WhatsApp:</strong> (11) 99999-9999</p>
-            <p><strong>Email:</strong> contato@maker3dshop.com</p>
-            <br>
-            <a href="https://wa.me/5511999999999" target="_blank" class="btn-comprar-whatsapp" style="display: block; text-decoration: none; padding: 15px;">
+        <div style="background: var(--branco); padding: 40px 30px; border-radius: 12px; box-shadow: var(--sombra-suave); margin-top: 20px;">
+            
+            <p style="font-size: 16px; margin-bottom: 15px;">
+                <strong>WhatsApp:</strong> 
+                <a href="https://wa.me/5511999999999" target="_blank" class="link-laranja">(11) 99999-9999</a>
+            </p>
+            
+            <p style="font-size: 16px; margin-bottom: 30px;">
+                <strong>Email:</strong> 
+                <a href="mailto:contato@maker3dshop.com" class="link-laranja">contato@maker3dshop.com</a>
+            </p>
+            
+            <a href="https://wa.me/5511999999999" target="_blank" class="btn-comprar" style="display: block; text-decoration: none; padding: 18px;">
                 CHAMAR NO WHATSAPP
             </a>
         </div>
