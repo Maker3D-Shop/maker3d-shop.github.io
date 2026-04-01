@@ -2,10 +2,12 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Maker3D Shop | Inovação em Impressão</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Maker3D Shop | Inovação e Design</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
     
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -14,7 +16,7 @@
 
     <header class="header-principal">
         <a href="index.html">
-            <img src="assets/brand/logo.png" alt="Maker3D Shop" class="logo-img" onerror="this.src='https://via.placeholder.com/150x60?text=Maker3D'">
+            <img src="assets/brand/logo.png" alt="Logo Maker3D Shop" class="logo-img" onerror="this.src='https://via.placeholder.com/150x50?text=Maker3D'">
         </a>
         <nav class="menu-navegacao">
             <a href="index.html" class="ativo">Início</a>
@@ -24,32 +26,32 @@
     </header>
 
     <main class="container-principal">
-        <h1 class="titulo-secao">Nossas Criações</h1>
-        <p class="subtitulo-secao">Toque no produto para descobrir cores, valores e visualização 3D.</p>
+        <h1 class="titulo-secao">O Futuro em Suas Mãos</h1>
+        <p class="subtitulo-secao">Toque para explorar modelagem 3D, valores e personalizar seu pedido.</p>
         
-        <div id="grid-produtos" class="grid-produtos">
-            <p style="text-align: center; grid-column: 1/-1;">Carregando vitrine...</p>
-        </div>
+        <section id="grid-produtos" class="grid-produtos">
+            </section>
     </main>
 
     <div id="modal-produto" class="modal-overlay">
         <div class="modal-conteudo">
-            <button id="btn-fechar-modal" class="btn-fechar">&times;</button>
-            
+            <button id="btn-fechar-modal" class="btn-fechar" aria-label="Fechar">&times;</button>
             <div class="carrossel-midia" id="modal-carrossel"></div>
-
             <div class="info-produto">
                 <h2 id="modal-titulo">Nome</h2>
                 <p id="modal-descricao">Descrição</p>
-                
-                <div id="modal-opcoes"></div> <div class="preco-destaque" id="modal-preco">R$ 0,00</div>
+                <div id="modal-opcoes"></div> 
+                <div class="preco-destaque" id="modal-preco">R$ 0,00</div>
             </div>
-
             <div class="area-compra">
                 <button id="btn-comprar" class="btn-comprar">COMPRAR AGORA</button>
             </div>
         </div>
     </div>
+
+    <a href="https://wa.me/5511999999999" target="_blank" class="whatsapp-flutuante" aria-label="Falar no WhatsApp">
+        💬
+    </a>
 
     <script src="assets/app.js"></script>
 </body>
