@@ -20,3 +20,19 @@
     "cores": ["Branco Neve", "Preto Fosco"]
   }
 ]
+[
+  {
+    "id": "polvo-01",
+    "name": "Mini Polvo Fofo",
+    "description": "Articulado, divertido e ótimo para decoração ou anti-stress.",
+    "price": "8.20",
+    "image": "assets/products/images/polvo-principal.jpg",
+    "gallery": [
+      "assets/products/images/polvo-principal.jpg",
+      "assets/products/images/polvo-detalhe.jpg",
+      "assets/products/images/polvo-cores.jpg"
+    ],
+    "model": "assets/products/models/polvo.glb",
+    "cores": ["Multicor", "Azul", "Rosa", "Preto"]
+  }
+]
