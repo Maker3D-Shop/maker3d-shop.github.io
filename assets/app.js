@@ -14,10 +14,17 @@ async function carregarProdutos() {
         const resposta = await fetch("assets/products.json");
         if (!resposta.ok) throw new Error("Erro JSON");
         
-        listaProdutos = await resposta.json();
+        let produtos = await resposta.json();
+        listaProdutos = produtos; // guarda todos no array global para o modal funcionar
         grid.innerHTML = ""; 
         
-        listaProdutos.forEach((produto) => {
+        // Verifica se há limite de produtos (ex: apenas 4 na Home)
+        const limite = grid.getAttribute("data-limit");
+        if (limite && !isNaN(limite)) {
+            produtos = produtos.slice(0, parseInt(limite));
+        }
+        
+        produtos.forEach((produto) => {
             const card = document.createElement("div");
             card.className = "card-produto";
             card.onclick = () => abrirModal(produto.id);
