@@ -4,43 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Maker3D Shop | Fale Conosco</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
     <header class="header-principal">
         <a href="index.html">
-            <img src="assets/brand/logo.png" alt="Logo Maker3D Shop" class="logo-img" onerror="this.src='https://via.placeholder.com/150x50?text=Maker3D'">
+            <img src="assets/brand/logo.png" alt="Logo Maker3D" class="logo-img">
         </a>
         <nav class="menu-navegacao">
             <a href="index.html">Início</a>
             <a href="catalogo.html">Catálogo</a>
             <a href="contato.html" class="ativo">Contato</a>
+            <a onclick="abrirCarrinho()" style="color: var(--laranja);">🛒 Carrinho (<span class="cart-count-badge">0</span>)</a>
         </nav>
     </header>
 
-    <main class="container-principal" style="max-width: 600px; margin: 0 auto;">
+    <main class="container-principal" style="max-width: 600px; margin: 0 auto; text-align: center;">
         <h1 class="titulo-secao">Fale Conosco</h1>
-        <p class="subtitulo-secao">Projetos especiais, suporte ou dúvidas? Estamos à disposição.</p>
+        <p class="subtitulo-secao" style="margin-bottom: 30px;">Projetos especiais, suporte ou dúvidas? Estamos à disposição.</p>
         
-        <div style="background: var(--branco); border-radius: var(--raio-card); padding: 40px; box-shadow: var(--sombra-card); text-align: center;">
+        <div style="background: var(--bg-card); border-radius: 20px; padding: 50px 30px; box-shadow: var(--sombra-card);">
+            
             <div style="margin-bottom: 30px;">
-                <h3 style="font-size: 14px; color: var(--texto-apoio); text-transform: uppercase; margin-bottom: 5px;">Atendimento via WhatsApp</h3>
-                <a href="https://wa.me/5531984566047" target="_blank" class="link-laranja" style="font-size: 24px;">(31) 98456-6047</a>
+                <h3 style="font-size: 13px; color: var(--texto-dark); text-transform: uppercase; font-weight: 800; margin-bottom: 5px;">ATENDIMENTO VIA WHATSAPP</h3>
+                <a href="https://wa.me/5531984566047" target="_blank" class="link-laranja" style="font-size: 26px; font-weight: 400; text-decoration: underline;">(31) 98456-6047</a>
             </div>
             
-            <div style="margin-bottom: 40px;">
-                <h3 style="font-size: 14px; color: var(--texto-apoio); text-transform: uppercase; margin-bottom: 5px;">Suporte por E-mail</h3>
-                <a href="mailto:maker3d.suporte@gmail.com" class="link-laranja" style="font-size: 18px;">maker3d.suporte@gmail.com</a>
+            <div style="margin-bottom: 50px;">
+                <h3 style="font-size: 13px; color: var(--texto-dark); text-transform: uppercase; font-weight: 800; margin-bottom: 5px;">SUPORTE POR E-MAIL</h3>
+                <a href="mailto:maker3d.suporte@gmail.com" class="link-laranja" style="font-size: 18px; font-weight: 400; text-decoration: underline;">maker3d.suporte@gmail.com</a>
             </div>
             
-            <a href="https://wa.me/5531984566047" target="_blank" class="btn-comprar" style="display: inline-block; text-decoration: none;">
+            <a href="https://wa.me/5531984566047" target="_blank" style="background: var(--laranja); color: white; padding: 18px 40px; border-radius: 50px; font-weight: 800; text-decoration: none; text-transform: uppercase; display: inline-block;">
                 INICIAR CONVERSA
             </a>
         </div>
     </main>
 
+    <footer class="site-footer"> ... </footer>
+    
+    <div id="carrinho-overlay" class="carrinho-overlay" onclick="fecharCarrinho()"></div>
+    <div id="carrinho-sidebar" class="carrinho-sidebar"> ... </div>
+
+    <script src="assets/app.js"></script>
 </body>
 </html>
