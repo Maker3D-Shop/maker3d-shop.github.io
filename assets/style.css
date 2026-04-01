@@ -132,160 +132,213 @@ model-viewer { width: 100%; height: 100%; }
 }
 
 /* =========================================
-   LAYOUT CARTIER (PÁGINA DE PRODUTO LUXO)
+   LAYOUT PREMIUM TECH (TELA DO PRODUTO)
 ========================================= */
 .modal-overlay {
-    background: #ffffff; /* Fundo totalmente branco, sem transparência */
-    backdrop-filter: none;
-    align-items: flex-start; /* Alinha no topo */
-    padding: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 20px;
+    align-items: center;
 }
 
 .modal-conteudo {
     background: #ffffff;
     width: 100%;
-    max-width: 1400px; /* Largura gigante para telas grandes */
-    margin: 0 auto;
-    border-radius: 0; /* Sem bordas arredondadas (Luxo é quadrado) */
-    box-shadow: none;
-    padding: 60px 40px;
-    animation: fadeInCartier 0.5s ease forwards;
+    max-width: 1100px;
+    margin: auto;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    padding: 40px;
+    animation: fadeInTech 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    position: relative;
+    max-height: 95vh;
+    overflow-y: auto;
 }
 
-@keyframes fadeInCartier {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInTech {
+    from { opacity: 0; transform: scale(0.98) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* O Segredo: Grid de 2 Colunas */
+.luxo-btn-voltar {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: #f4f5f7;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 20px;
+    color: #333;
+    cursor: pointer;
+    transition: var(--transicao);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+.luxo-btn-voltar:hover { background: #e5e7eb; color: var(--laranja); transform: rotate(90deg); }
+
 .luxo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    margin-bottom: 80px;
+    gap: 50px;
 }
 
-/* Coluna da Esquerda (Mídia e 3D) */
+/* --- ÁREA DE MÍDIA (GALERIA E 3D) --- */
 .luxo-midia-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 .luxo-midia-principal {
     width: 100%;
-    height: 600px;
-    background: #fcfcfc;
-    border: 1px solid #f0f0f0;
+    aspect-ratio: 1/1;
+    background: #f9fafb;
+    border-radius: 20px;
     position: relative;
+    overflow: hidden;
+    border: 1px solid #f3f4f6;
 }
 
-.luxo-midia-principal model-viewer,
-.luxo-midia-principal img {
+.luxo-midia-principal img,
+.luxo-midia-principal model-viewer {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    transition: opacity 0.3s ease;
 }
 
-/* Coluna da Direita (Informações) */
+.btn-ativar-3d {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+    border: 1px solid #eee;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--texto-dark);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: var(--transicao);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 5;
+}
+.btn-ativar-3d:hover { background: var(--laranja); color: white; transform: translateY(-3px); }
+
+/* Miniaturas (Thumbnails) */
+.galeria-thumbs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.galeria-thumbs::-webkit-scrollbar { display: none; }
+
+.thumb-item {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    background: #f9fafb;
+    border: 2px solid transparent;
+    cursor: pointer;
+    object-fit: cover;
+    transition: var(--transicao);
+    opacity: 0.6;
+}
+.thumb-item:hover { opacity: 1; }
+.thumb-item.ativo { border-color: var(--laranja); opacity: 1; }
+
+
+/* --- ÁREA DE INFORMAÇÕES --- */
 .luxo-info {
-    padding-top: 20px;
-    text-align: left; /* Alinhamento Cartier é à esquerda */
+    display: flex;
+    flex-direction: column;
 }
 
 .luxo-info h2 {
     font-size: 32px;
+    font-weight: 900;
+    color: var(--texto-dark);
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.luxo-preco {
+    font-size: 28px;
     font-weight: 800;
-    color: #000;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 15px;
+    color: var(--laranja);
+    margin-bottom: 20px;
 }
 
 .luxo-desc {
     font-size: 15px;
-    color: #555;
-    line-height: 1.8;
+    color: var(--texto-light);
+    line-height: 1.7;
     margin-bottom: 30px;
 }
 
-.luxo-preco {
-    font-size: 24px;
-    font-weight: 700;
-    color: #000;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
-}
-
-/* Botão Estilo Cartier (Laranja ou Preto) */
 .luxo-btn-comprar {
     width: 100%;
-    background: #000000; /* Preto luxo */
-    color: #ffffff;
+    background: var(--laranja);
+    color: white;
     border: none;
-    padding: 20px;
-    font-size: 14px;
-    font-weight: 700;
+    padding: 18px;
+    font-size: 15px;
+    font-weight: 800;
+    border-radius: 12px;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(255,158,27,0.2);
+    transition: var(--transicao);
+    margin-bottom: 30px;
 }
+.luxo-btn-comprar:hover { background: var(--laranja-dark); transform: translateY(-2px); box-shadow: 0 12px 25px rgba(255,158,27,0.3); }
 
-.luxo-btn-comprar:hover {
-    background: var(--laranja); /* Fica laranja ao passar o mouse */
-}
-
-/* Seção de Especificações e Benefícios (Embaixo) */
+/* Selos de Confiança Tech */
 .luxo-beneficios {
-    font-size: 13px;
-    color: #666;
-    border-top: 1px solid #eee;
-    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
-
-.luxo-beneficios p { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.beneficio-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--texto-dark);
+    background: #fff8f0; /* Fundo laranjinha bem fraco */
+    padding: 12px 15px;
+    border-radius: 10px;
+}
+.beneficio-icone {
+    font-size: 18px;
+}
 
 .luxo-especificacoes {
-    text-align: center;
-    border-top: 1px solid #eee;
-    padding-top: 60px;
-    max-width: 800px;
-    margin: 0 auto;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #f3f4f6;
+    font-size: 13px;
+    color: var(--texto-light);
+    line-height: 1.6;
 }
 
-.luxo-especificacoes h3 {
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 30px;
-    color: #000;
-}
-
-.luxo-btn-voltar {
-    position: fixed;
-    top: 20px;
-    right: 30px;
-    background: none;
-    border: none;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 1px;
-    z-index: 2000;
-}
-
-.luxo-btn-voltar:hover { color: var(--laranja); }
-
-/* Remove o botão fixo antigo que tínhamos feito */
-.area-compra { display: none !important; }
-
-/* Responsivo Mobile */
+/* Responsivo */
 @media (max-width: 900px) {
-    .luxo-grid { grid-template-columns: 1fr; gap: 40px; }
-    .luxo-midia-principal { height: 400px; }
-    .modal-conteudo { padding: 40px 20px; }
-    .luxo-info h2 { font-size: 24px; }
+    .modal-overlay { padding: 0; align-items: flex-end; }
+    .modal-conteudo { border-radius: 24px 24px 0 0; padding: 30px 20px; max-height: 90vh; }
+    .luxo-grid { grid-template-columns: 1fr; gap: 30px; }
+    .luxo-midia-principal { max-height: 400px; }
+    .luxo-info h2 { font-size: 26px; }
+    .thumb-item { width: 65px; height: 65px; }
 }
