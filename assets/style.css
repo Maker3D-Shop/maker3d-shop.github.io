@@ -130,3 +130,162 @@ model-viewer { width: 100%; height: 100%; }
     .hero-banner { padding: 80px 20px 100px; }
     .diferenciais-container { margin-top: -50px; }
 }
+
+/* =========================================
+   LAYOUT CARTIER (PÁGINA DE PRODUTO LUXO)
+========================================= */
+.modal-overlay {
+    background: #ffffff; /* Fundo totalmente branco, sem transparência */
+    backdrop-filter: none;
+    align-items: flex-start; /* Alinha no topo */
+    padding: 0;
+}
+
+.modal-conteudo {
+    background: #ffffff;
+    width: 100%;
+    max-width: 1400px; /* Largura gigante para telas grandes */
+    margin: 0 auto;
+    border-radius: 0; /* Sem bordas arredondadas (Luxo é quadrado) */
+    box-shadow: none;
+    padding: 60px 40px;
+    animation: fadeInCartier 0.5s ease forwards;
+}
+
+@keyframes fadeInCartier {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* O Segredo: Grid de 2 Colunas */
+.luxo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-bottom: 80px;
+}
+
+/* Coluna da Esquerda (Mídia e 3D) */
+.luxo-midia-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.luxo-midia-principal {
+    width: 100%;
+    height: 600px;
+    background: #fcfcfc;
+    border: 1px solid #f0f0f0;
+    position: relative;
+}
+
+.luxo-midia-principal model-viewer,
+.luxo-midia-principal img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Coluna da Direita (Informações) */
+.luxo-info {
+    padding-top: 20px;
+    text-align: left; /* Alinhamento Cartier é à esquerda */
+}
+
+.luxo-info h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.luxo-desc {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.luxo-preco {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+/* Botão Estilo Cartier (Laranja ou Preto) */
+.luxo-btn-comprar {
+    width: 100%;
+    background: #000000; /* Preto luxo */
+    color: #ffffff;
+    border: none;
+    padding: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.luxo-btn-comprar:hover {
+    background: var(--laranja); /* Fica laranja ao passar o mouse */
+}
+
+/* Seção de Especificações e Benefícios (Embaixo) */
+.luxo-beneficios {
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.luxo-beneficios p { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+
+.luxo-especificacoes {
+    text-align: center;
+    border-top: 1px solid #eee;
+    padding-top: 60px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.luxo-especificacoes h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 30px;
+    color: #000;
+}
+
+.luxo-btn-voltar {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    z-index: 2000;
+}
+
+.luxo-btn-voltar:hover { color: var(--laranja); }
+
+/* Remove o botão fixo antigo que tínhamos feito */
+.area-compra { display: none !important; }
+
+/* Responsivo Mobile */
+@media (max-width: 900px) {
+    .luxo-grid { grid-template-columns: 1fr; gap: 40px; }
+    .luxo-midia-principal { height: 400px; }
+    .modal-conteudo { padding: 40px 20px; }
+    .luxo-info h2 { font-size: 24px; }
+}
