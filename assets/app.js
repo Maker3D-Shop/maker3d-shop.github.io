@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     carregarProdutos();
-    const btnFechar = document.getElementById("btn-fechar-modal");
-    if(btnFechar) btnFechar.addEventListener("click", fecharModal);
 });
 
 let listaProdutos = [];
@@ -15,10 +13,9 @@ async function carregarProdutos() {
         if (!resposta.ok) throw new Error("Erro JSON");
         
         let produtos = await resposta.json();
-        listaProdutos = produtos; // guarda todos no array global para o modal funcionar
+        listaProdutos = produtos; 
         grid.innerHTML = ""; 
         
-        // Verifica se há limite de produtos (ex: apenas 4 na Home)
         const limite = grid.getAttribute("data-limit");
         if (limite && !isNaN(limite)) {
             produtos = produtos.slice(0, parseInt(limite));
@@ -38,7 +35,7 @@ async function carregarProdutos() {
                 </div>
                 <div class="card-info">
                     <h3 class="card-titulo">${produto.name}</h3>
-                    <p class="ver-detalhes">Conhecer Produto</p>
+                    <p class="ver-detalhes">Descobrir Produto</p>
                 </div>
             `;
             grid.appendChild(card);
@@ -55,34 +52,72 @@ function abrirModal(idProduto) {
     if (!produto) return;
 
     const modal = document.getElementById("modal-produto");
-    
-    document.getElementById("modal-titulo").innerText = produto.name;
-    document.getElementById("modal-descricao").innerText = produto.description || "Design exclusivo impresso em 3D de alta qualidade com polímeros resistentes.";
-    
     const precoFormatado = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(produto.price) || 0);
-    document.getElementById("modal-preco").innerText = precoFormatado;
 
-    const carrossel = document.getElementById("modal-carrossel");
-    carrossel.innerHTML = "";
-    if (produto.image) {
-        carrossel.innerHTML += `<img src="${produto.image}" loading="lazy" class="item-midia" onerror="this.src='https://via.placeholder.com/600?text=Maker+3D'">`;
-    }
+    // Constrói a mídia (Se tiver 3D, mostra o 3D interativo, se não, a foto)
+    let midiaPrincipal = '';
     if (produto.model) {
-        carrossel.innerHTML += `<model-viewer class="item-midia" src="${produto.model}" auto-rotate camera-controls shadow-intensity="1"></model-viewer>`;
-    }
-
-    const areaOpcoes = document.getElementById("modal-opcoes");
-    if (produto.cores && produto.cores.length > 0) {
-        let opcoesHtml = produto.cores.map(cor => `<option value="${cor}">${cor}</option>`).join('');
-        areaOpcoes.innerHTML = `
-            <label style="font-size: 12px; font-weight: 800; color: #6b7280; text-transform: uppercase; display:block; margin-bottom:8px;">Cores Disponíveis</label>
-            <select id="selecao-cor" class="seletor-cor">${opcoesHtml}</select>
-        `;
+        midiaPrincipal = `<model-viewer src="${produto.model}" auto-rotate camera-controls shadow-intensity="1.5" environment-image="neutral" exposure="1.2"></model-viewer>`;
     } else {
-        areaOpcoes.innerHTML = ""; 
+        midiaPrincipal = `<img src="${produto.image}" onerror="this.src='https://via.placeholder.com/600?text=Maker+3D'">`;
     }
 
-    document.getElementById("btn-comprar").onclick = () => {
+    // Constrói as opções de Cores
+    let opcoesHtml = '';
+    if (produto.cores && produto.cores.length > 0) {
+        let options = produto.cores.map(cor => `<option value="${cor}">${cor}</option>`).join('');
+        opcoesHtml = `
+            <div style="margin-bottom: 25px;">
+                <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #888; display:block; margin-bottom: 5px;">Selecione a Cor</label>
+                <select id="selecao-cor" class="seletor-cor" style="width: 100%; border-radius: 0; border: 1px solid #ccc;">${options}</select>
+            </div>
+        `;
+    }
+
+    // Injeta o Layout Cartier inteiro dentro do Modal
+    modal.innerHTML = `
+        <button class="luxo-btn-voltar" onclick="fecharModal()">✕ FECHAR</button>
+        <div class="modal-conteudo">
+            
+            <div class="luxo-grid">
+                <div class="luxo-midia-container">
+                    <div class="luxo-midia-principal">
+                        ${midiaPrincipal}
+                    </div>
+                </div>
+
+                <div class="luxo-info">
+                    <h2>${produto.name}</h2>
+                    <div class="luxo-preco">${precoFormatado}</div>
+                    <div class="luxo-desc">${produto.description || 'Uma obra de precisão e design. Impressa em alta resolução para entregar detalhes perfeitos e resistência estrutural.'}</div>
+                    
+                    ${opcoesHtml}
+                    
+                    <button id="btn-comprar-luxo" class="luxo-btn-comprar">ADICIONAR AO PEDIDO</button>
+                    
+                    <div class="luxo-beneficios">
+                        <p>📦 <b>Entrega Segura:</b> Produção e envio cuidadoso para todo o Brasil.</p>
+                        <p>🛡️ <b>Qualidade Garantida:</b> Peça inspecionada contra falhas.</p>
+                        <p>♻️ <b>Material:</b> Polímeros de alta performance.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="luxo-especificacoes">
+                <h3>ESPECIFICAÇÕES DO PRODUTO</h3>
+                <p style="font-size: 14px; color: #555; line-height: 1.8;">
+                    Nossos produtos são fabricados através de manufatura aditiva (Impressão 3D) de última geração. 
+                    Recomendamos não expor peças em PLA a temperaturas superiores a 50°C. 
+                    A limpeza deve ser feita apenas com um pano levemente umedecido. 
+                    <br><br><b>Design e fabricação por Maker3D Shop.</b>
+                </p>
+            </div>
+
+        </div>
+    `;
+
+    // Ação de Compra
+    document.getElementById("btn-comprar-luxo").onclick = () => {
         let corEscolhida = "";
         const selectCor = document.getElementById("selecao-cor");
         if (selectCor) corEscolhida = ` na cor *${selectCor.value}*`;
@@ -92,11 +127,15 @@ function abrirModal(idProduto) {
         window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, "_blank");
     };
 
-    modal.style.display = "flex";
+    modal.style.display = "block";
     document.body.style.overflow = "hidden";
 }
 
 function fecharModal() {
-    document.getElementById("modal-produto").style.display = "none";
+    const modal = document.getElementById("modal-produto");
+    if(modal) {
+        modal.style.display = "none";
+        modal.innerHTML = ""; // Limpa o modal para a próxima vez
+    }
     document.body.style.overflow = "auto";
 }
