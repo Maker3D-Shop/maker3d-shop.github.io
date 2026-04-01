@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Maker3D Shop | A Revolução da Impressão</title>
+    <title>Maker3D Shop | Inovação em Impressão</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
@@ -13,13 +13,13 @@
 
     <header class="header-principal">
         <a href="index.html">
-            <img src="assets/brand/logo.png" alt="Logo Maker3D Shop" class="logo-img" onerror="this.src='https://via.placeholder.com/150x50?text=Maker3D'">
+            <img src="assets/brand/logo.png" alt="Logo Maker3D" class="logo-img" onerror="this.src='https://via.placeholder.com/150x50?text=Maker3D'">
         </a>
         <nav class="menu-navegacao">
             <a href="index.html" class="ativo">Início</a>
             <a href="catalogo.html">Catálogo</a>
             <a href="contato.html">Contato</a>
-            <a onclick="abrirCarrinho()" style="color: var(--laranja);">🛒 Carrinho (<span class="cart-count-badge">0</span>)</a>
+            <a class="btn-carrinho" onclick="abrirCarrinho()">🛒 (<span class="cart-count-badge">0</span>)</a>
         </nav>
     </header>
 
@@ -36,7 +36,7 @@
             <div class="card-diferencial">
                 <svg class="icone-svg" viewBox="0 0 24 24" fill="none" stroke="var(--laranja)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
                 <h3>Sob Demanda</h3>
-                <p>Peças personalizadas para a sua exata necessidade.</p>
+                <p>Peças personalizadas para a sua necessidade.</p>
             </div>
             <div class="card-diferencial">
                 <svg class="icone-svg" viewBox="0 0 24 24" fill="none" stroke="var(--laranja)" stroke-width="2"><polygon points="12 2 2 7 12 22 22 7 12 2"></polygon></svg>
@@ -46,18 +46,18 @@
             <div class="card-diferencial">
                 <svg class="icone-svg" viewBox="0 0 24 24" fill="none" stroke="var(--laranja)" stroke-width="2"><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path></svg>
                 <h3>Inovação Aditiva</h3>
-                <p>A tecnologia mais avançada diretamente ao seu alcance.</p>
+                <p>A tecnologia mais avançada ao seu alcance.</p>
             </div>
         </section>
 
         <section class="container-principal" style="padding-top: 0;">
             <h2 class="titulo-secao">Destaques da Loja</h2>
-            <p class="subtitulo-secao">Conheça nossas criações exclusivas.</p>
+            <p class="subtitulo-secao">Conheça nossas criações mais pedidas.</p>
             
             <div id="grid-produtos" class="grid-produtos" data-limit="4"></div>
             
             <div style="text-align: center; margin-top: 50px;">
-                <a href="catalogo.html" style="color: var(--laranja); font-weight: 800; text-transform: uppercase; text-decoration: none;">VER CATÁLOGO COMPLETO &rarr;</a>
+                <a href="catalogo.html" class="link-laranja">VER CATÁLOGO COMPLETO &rarr;</a>
             </div>
         </section>
     </main>
@@ -66,36 +66,25 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <img src="assets/brand/logo.png" alt="Maker3D" onerror="this.src='https://via.placeholder.com/150x50?text=Maker3D'">
-                <p>Todo o conteúdo deste site é de propriedade intelectual da Maker3D Shop, incluindo modelos, imagens e direitos autorais.</p>
-                <p style="margin-top: 10px; color: var(--laranja);">Aviso de Privacidade</p>
+                <p>Todo conteúdo deste site é de propriedade intelectual da Maker3D Shop, incluindo modelos 3D, imagens e direitos autorais.</p>
             </div>
             <div class="footer-coluna">
                 <h4>Contatos</h4>
                 <ul>
                     <li><a href="contato.html">Fale Conosco</a></li>
-                    <li><a href="https://wa.me/5531984566047" target="_blank">Suporte WhatsApp</a></li>
-                    <li><a href="mailto:maker3d.suporte@gmail.com">Imprensa / E-mail</a></li>
+                    <li><a href="https://wa.me/5531984566047" target="_blank">WhatsApp Suporte</a></li>
+                    <li><a href="mailto:maker3d.suporte@gmail.com">E-mail Comercial</a></li>
                 </ul>
             </div>
             <div class="footer-coluna">
-                <h4>Acesso</h4>
+                <h4>Acesso Rápido</h4>
                 <ul>
                     <li><a href="catalogo.html">Catálogo Completo</a></li>
-                    <li><a href="calculadora.html">Área do Colaborador</a></li>
+                    <li><a href="#" onclick="abrirCarrinho()">Meu Carrinho</a></li>
                 </ul>
             </div>
-            <div class="footer-coluna">
-                <h4>Redes Sociais</h4>
-                <div style="display: flex; gap: 15px; margin-top: 10px;">
-                    <a href="#" style="font-size: 20px; color: var(--laranja);">📸</a>
-                    <a href="#" style="font-size: 20px; color: var(--laranja);">📘</a>
-                    <a href="#" style="font-size: 20px; color: var(--laranja);">🎵</a>
-                </div>
-            </div>
         </div>
-        <div class="footer-bottom">
-            © 2026 Maker3D Shop - Conselheiro Lafaiete, MG.
-        </div>
+        <div class="footer-bottom">© 2026 Maker3D Shop. Todos os direitos reservados.</div>
     </footer>
 
     <div id="modal-produto" class="modal-overlay"></div>
@@ -103,18 +92,21 @@
     <div id="carrinho-overlay" class="carrinho-overlay" onclick="fecharCarrinho()"></div>
     <div id="carrinho-sidebar" class="carrinho-sidebar">
         <div class="carrinho-header">
-            <h2>MEU CARRINHO (<span id="cart-count">0</span>)</h2>
+            <h2>MEU CARRINHO (<span class="cart-count-badge">0</span>)</h2>
             <button onclick="fecharCarrinho()">✕</button>
         </div>
-        <div id="carrinho-items" class="carrinho-items">
-            </div>
+        <div id="carrinho-items" class="carrinho-items"></div>
         <div class="carrinho-footer">
             <div class="carrinho-total">TOTAL: <span id="cart-total">R$ 0,00</span></div>
             <button class="btn-finalizar" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
         </div>
     </div>
 
-    <a href="https://wa.me/5531984566047" target="_blank" class="whatsapp-flutuante" style="position:fixed; bottom:30px; left:30px; background:#25d366; color:white; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(37,211,102,0.4); z-index:1500; text-decoration:none; font-size:30px;">💬</a>
+    <a href="https://wa.me/5531984566047" target="_blank" class="whatsapp-flutuante" aria-label="Falar no WhatsApp">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/>
+        </svg>
+    </a>
 
     <script src="assets/app.js"></script>
 </body>
