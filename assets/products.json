@@ -9,11 +9,6 @@
     "image": "assets/brand/logo.png",
     "gallery": ["assets/brand/logo.png"],
     "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
-    "options": [
-      { "name": "Material", "values": ["PLA", "PETG", "ABS"] },
-      { "name": "Tolerância", "values": ["Padrão", "Ajuste fino"] },
-      { "name": "Acabamento", "values": ["Bruto", "Lixado", "Pintado"] }
-    ]
   },
   {
     "id": "p2",
