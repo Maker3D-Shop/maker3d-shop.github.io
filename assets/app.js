@@ -82,14 +82,16 @@ function abrirModal(idProduto) {
         areaOpcoes.innerHTML = ""; 
     }
 
-    // Ação WhatsApp
+    // Ação WhatsApp (Dentro da função abrirModal)
     document.getElementById("btn-comprar").onclick = () => {
         let corEscolhida = "";
         const selectCor = document.getElementById("selecao-cor");
         if (selectCor) corEscolhida = ` na cor *${selectCor.value}*`;
         
-        const numeroWhatsApp = "5511999999999"; // SEU NUMERO AQUI
-        const mensagem = encodeURIComponent(`Olá, Maker3D! Gostaria de encomendar: *${produto.name}*${corEscolhida}. Vi no catálogo por ${precoFormatado}.`);
+        // SEU NÚMERO E DDD AQUI (55 Brasil + 31 DDD + Número)
+        const numeroWhatsApp = "5531984566047"; 
+        
+        const mensagem = encodeURIComponent(`Olá, Maker3D! Gostaria de encomendar: *${produto.name}*${corEscolhida}. Vi no site por ${precoFormatado}.`);
         window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, "_blank");
     };
 
