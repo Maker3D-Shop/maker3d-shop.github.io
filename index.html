@@ -1,118 +1,26 @@
-<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MAKER3D coisas legais feitas em 3D</title>
-  <link rel="stylesheet" href="assets/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maker3D Shop | Exclusividade em Impressão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
 
-  <header>
-    <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html">
-          <img src="assets/brand/logo.png" alt="MAKER3D" />
-          <div class="btxt">
-            <strong>MAKER3D</strong>
-            <span>coisas legais feitas em 3D</span>
-          </div>
-        </a>
+    <header>
+        <img src="assets/brand/logo.png" alt="Maker3D" width="120">
+    </header>
 
-        <div class="menu">
-          <a class="active" href="index.html">Início</a>
-          <a href="catalogo.html">Catálogo</a>
-          <a href="contato.html">Contato</a>
-        </div>
-      </div>
-    </div>
-  </header>
+    <main>
+        <section class="product-grid">
+            </section>
+    </main>
 
-  <main class="container">
+    <div class="product-modal"></div>
 
-    <section class="hero">
-      <div class="heroCard">
-        <div class="heroInner">
-          <h1 class="heroTitle">Sua ideia vira peça. Simples assim.</h1>
-          <p class="heroSub">
-            Peças prontas, utilidades e sob encomenda — com visual limpo e compra pelo WhatsApp.
-          </p>
-
-          <div class="heroActions">
-            <a class="btn primary" href="catalogo.html">Ver catálogo</a>
-            <span class="pill">Peça sob encomenda</span>
-            <a class="btn ghost" href="contato.html">Falar com a gente</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="carousel">
-        <div class="carouselTop">
-          <div class="carouselLeft">
-            <h2>Destaques</h2>
-            <a class="miniLink" href="catalogo.html">Ver destaques</a>
-          </div>
-
-          <div class="carouselNav">
-            <button id="prevBtn" class="carouselBtn" type="button" aria-label="Anterior">‹</button>
-            <button id="nextBtn" class="carouselBtn" type="button" aria-label="Próximo">›</button>
-          </div>
-        </div>
-
-        <div class="carouselViewport">
-          <div id="track" class="carouselTrack"></div>
-        </div>
-
-        <div id="dots" class="carouselDots"></div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ✅ MODAL (o CSS espera modalBackdrop) -->
-  <div id="modalBackdrop" class="modalBackdrop">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Produto">
-      <div class="modalHeader">
-        <h3 id="mTitle">Produto</h3>
-        <button class="iconBtn" type="button" data-close aria-label="Fechar">✕</button>
-      </div>
-
-      <div class="modalBody">
-        <div class="modalGrid">
-
-          <!-- Left -->
-          <div>
-            <div id="mTextBlock" class="small"></div>
-            <model-viewer id="mViewer" style="display:none;"></model-viewer>
-          </div>
-
-          <!-- Right -->
-          <div class="panel">
-            <p class="small"><strong id="mCategory"></strong></p>
-            <p class="small" id="mDesc"></p>
-            <p class="small" id="mDim" style="display:none;"></p>
-
-            <div style="height:10px;"></div>
-
-            <p class="price" id="mPrice">Preço</p>
-
-            <div style="height:10px;"></div>
-
-            <p class="small" style="font-weight:900;margin:0 0 8px;">Opções</p>
-            <div id="mOptions"></div>
-
-            <div style="height:12px;"></div>
-
-            <button id="mBuyInside" class="btn primary" type="button">Comprar no WhatsApp</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="assets/app.js"></script>
+    <script src="assets/app.js"></script>
 </body>
 </html>
