@@ -7,7 +7,7 @@ let listaProdutos = [];
 let carrinho = JSON.parse(localStorage.getItem('maker3d_carrinho')) || [];
 
 // ==========================================
-// 1. CARREGAR VITRINE (Sem Preço)
+// 1. CARREGAR VITRINE
 // ==========================================
 async function carregarProdutos() {
     const grid = document.getElementById("grid-produtos");
@@ -53,13 +53,13 @@ async function carregarProdutos() {
 // 2. MODAL DE PRODUTO
 // ==========================================
 window.trocarFoto = function(src, elemento) {
-    document.getElementById('midia-render').innerHTML = `<img src="${src}" style="width:100%; height:100%; object-fit:contain; animation: fadeInTech 0.3s ease;">`;
+    document.getElementById('midia-render').innerHTML = `<img src="${src}" style="width:100%; height:100%; object-fit:contain; animation: popIn 0.3s ease;">`;
     document.querySelectorAll('.thumb-item').forEach(el => el.classList.remove('ativo'));
     if(elemento) elemento.classList.add('ativo');
 };
 
 window.ativar3D = function(modeloSrc) {
-    document.getElementById('midia-render').innerHTML = `<model-viewer src="${modeloSrc}" auto-rotate camera-controls shadow-intensity="1.2" environment-image="neutral" style="width:100%; height:100%; animation: fadeInTech 0.3s ease;"></model-viewer>`;
+    document.getElementById('midia-render').innerHTML = `<model-viewer src="${modeloSrc}" auto-rotate camera-controls shadow-intensity="1.2" environment-image="neutral" style="width:100%; height:100%; animation: popIn 0.3s ease;"></model-viewer>`;
     document.querySelectorAll('.thumb-item').forEach(el => el.classList.remove('ativo'));
 };
 
@@ -78,14 +78,12 @@ function abrirModal(idProduto) {
 
     const fotos = produto.gallery && produto.gallery.length > 0 ? produto.gallery : [produto.image];
     let thumbsHtml = fotos.map((foto, idx) => `<img src="${foto}" class="thumb-item ${idx === 0 ? 'ativo' : ''}" onclick="trocarFoto('${foto}', this)">`).join('');
-
     let btn3DHtml = produto.modelUrl ? `<button class="btn-ativar-3d" onclick="ativar3D('${produto.modelUrl}')">Ver em 3D</button>` : '';
 
-    // Opções Dinâmicas (Material, Tamanho, Cores)
     let opcoesHtml = '';
     if (produto.options) {
         opcoesHtml += produto.options.map((opt, i) => `
-            <div style="margin-bottom: 15px;">
+            <div style="margin-bottom: 12px;">
                 <label style="font-size: 11px; font-weight: 800; color: var(--texto-light); text-transform: uppercase;">${opt.name}</label>
                 <select class="seletor-cor class-opcao-extra" data-nome="${opt.name}" style="margin-top:5px;">
                     ${opt.values.map(v => `<option value="${v}">${v}</option>`).join('')}
@@ -106,7 +104,7 @@ function abrirModal(idProduto) {
             opcoesHtml += `<div style="display:flex; flex-wrap:wrap; gap:10px;">${partsHtml}</div>`;
         } else {
             opcoesHtml += `
-                <div style="margin-bottom: 15px;">
+                <div style="margin-bottom: 12px;">
                     <label style="font-size: 11px; font-weight: 800; color: var(--texto-light); text-transform: uppercase;">Escolha a Cor</label>
                     <select class="seletor-cor class-opcao-cor" data-nome="Cor" style="margin-top:5px;">${paleta}</select>
                 </div>
@@ -114,7 +112,7 @@ function abrirModal(idProduto) {
         }
     }
 
-    let personalizacaoContainer = opcoesHtml ? `<div class="caixa-personalizacao"><h4 style="margin-bottom:15px; font-size:14px;">Personalize:</h4>${opcoesHtml}</div>` : '';
+    let personalizacaoContainer = opcoesHtml ? `<div class="caixa-personalizacao"><h4 style="margin-bottom:15px; font-size:14px; color:var(--texto-dark);">Personalize o Pedido:</h4>${opcoesHtml}</div>` : '';
 
     modal.innerHTML = `
         <div class="modal-conteudo">
@@ -128,7 +126,7 @@ function abrirModal(idProduto) {
                     <div class="galeria-thumbs">${thumbsHtml}</div>
                 </div>
                 <div class="luxo-info">
-                    <h2>${produto.name} <span style="font-size: 18px;">${produto.dimensions || ''}</span></h2>
+                    <h2>${produto.name} <span style="font-size: 18px; color:var(--texto-light);">${produto.dimensions || ''}</span></h2>
                     <div class="luxo-preco">${precoDisplay}</div>
                     <div class="luxo-desc">${produto.description.replace(/\n/g, '<br>')}</div>
                     
@@ -165,24 +163,16 @@ window.fecharCarrinho = function() {
 
 window.adicionarAoCarrinho = function(id, nome, imagem, preco) {
     let configuracoes = [];
-    
-    // Pega todas as opções selecionadas no Modal
     document.querySelectorAll('.class-opcao-extra, .class-opcao-cor').forEach(select => {
         configuracoes.push(`${select.getAttribute('data-nome')}: ${select.value}`);
     });
 
-    const item = {
-        id: id,
-        nome: nome,
-        imagem: imagem,
-        preco: preco, // Número
-        config: configuracoes.join(' | ')
-    };
-
+    const item = { id, nome, imagem, preco: Number(preco) || 0, config: configuracoes.join(' | ') };
     carrinho.push(item);
+    
     salvarCarrinho();
     fecharModal();
-    abrirCarrinho();
+    mostrarToast("✅ Produto adicionado ao carrinho!");
 }
 
 window.removerDoCarrinho = function(index) {
@@ -199,8 +189,6 @@ function salvarCarrinho() {
 function atualizarContadorCarrinho() {
     const counts = document.querySelectorAll('.cart-count-badge');
     counts.forEach(c => c.innerText = carrinho.length);
-    const headerCount = document.getElementById("cart-count");
-    if(headerCount) headerCount.innerText = carrinho.length;
 }
 
 function renderizarCarrinho() {
@@ -256,4 +244,19 @@ window.finalizarCompra = function() {
 
     const numeroWhatsApp = "5531984566047"; 
     window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, "_blank");
+}
+
+// TOAST NOTIFICATIONS
+function mostrarToast(mensagem) {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = mensagem;
+    container.appendChild(toast);
+    setTimeout(() => { toast.remove(); }, 3000);
 }
