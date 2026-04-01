@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Maker3D Shop | O Futuro em Suas Mãos</title>
+    <title>Maker3D Shop | A Revolução da Impressão</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
     
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -25,48 +27,49 @@
 
     <section class="hero-banner">
         <div class="hero-conteudo">
-            <h1>Sua Ideia, Nossa <span style="color: var(--laranja-maker);">Impressão.</span></h1>
+            <h1>Sua Ideia, Nossa <span style="color: var(--laranja);">Impressão.</span></h1>
             <p>Design exclusivo, precisão milimétrica e polímeros de alta resistência. Transformamos projetos digitais em realidade palpável.</p>
-            <a href="catalogo.html" class="btn-comprar" style="display: inline-block; text-decoration: none; margin-top: 20px;">
-                EXPLORAR CATÁLOGO
-            </a>
+            <a href="catalogo.html" class="btn-hero">EXPLORAR CATÁLOGO</a>
         </div>
     </section>
 
     <section class="diferenciais-container">
         <div class="card-diferencial">
-            <div class="icone-diferencial">🛠️</div>
+            <svg class="icone-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
             <h3>Sob Demanda</h3>
-            <p>Peças personalizadas feitas especialmente para a sua necessidade.</p>
+            <p>Peças personalizadas feitas sob medida para a sua exata necessidade.</p>
         </div>
         <div class="card-diferencial">
-            <div class="icone-diferencial">💎</div>
+            <svg class="icone-svg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
             <h3>Qualidade Premium</h3>
-            <p>Acabamento impecável e materiais de altíssima resistência.</p>
+            <p>Acabamento impecável e materiais testados de altíssima resistência.</p>
         </div>
         <div class="card-diferencial">
-            <div class="icone-diferencial">🚀</div>
-            <h3>Inovação</h3>
-            <p>A tecnologia mais avançada de manufatura aditiva ao seu alcance.</p>
+            <svg class="icone-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3>Inovação Aditiva</h3>
+            <p>A tecnologia mais avançada de manufatura diretamente ao seu alcance.</p>
         </div>
     </section>
 
     <main class="container-principal" style="padding-top: 0;">
-        <h2 class="titulo-secao" style="font-size: 28px;">Destaques da Loja</h2>
-        <p class="subtitulo-secao">Conheça nossas criações mais pedidas.</p>
+        <h2 class="titulo-secao">Destaques da Loja</h2>
+        <p class="subtitulo-secao">Conheça nossas criações mais procuradas.</p>
         
         <section id="grid-produtos" class="grid-produtos">
-            <p style="text-align: center; grid-column: 1/-1;">Carregando vitrine...</p>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
         </section>
         
-        <div style="text-align: center; margin-top: 40px;">
-            <a href="catalogo.html" class="link-laranja" style="font-size: 16px; text-transform: uppercase; letter-spacing: 2px;">Ver todos os produtos &rarr;</a>
+        <div style="text-align: center; margin-top: 50px;">
+            <a href="catalogo.html" style="color: var(--laranja); font-weight: 800; text-transform: uppercase; text-decoration: none; font-size: 15px; letter-spacing: 1px;">VER CATÁLOGO COMPLETO &rarr;</a>
         </div>
     </main>
 
     <div id="modal-produto" class="modal-overlay">
         <div class="modal-conteudo">
-            <button id="btn-fechar-modal" class="btn-fechar">&times;</button>
+            <button id="btn-fechar-modal" class="btn-fechar" aria-label="Fechar">&times;</button>
             <div class="carrossel-midia" id="modal-carrossel"></div>
             <div class="info-produto">
                 <h2 id="modal-titulo">Nome</h2>
@@ -81,7 +84,7 @@
     </div>
 
     <a href="https://wa.me/5531984566047" target="_blank" class="whatsapp-flutuante" aria-label="Falar no WhatsApp">
-        <svg viewBox="0 0 24 24" width="30" height="30" fill="white"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
     </a>
 
     <script src="assets/app.js"></script>
