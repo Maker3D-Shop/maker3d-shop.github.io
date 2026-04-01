@@ -11,6 +11,22 @@
     "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
   },
   {
+    "id": "polvo-01",
+    "name": "Mini Polvo Fofo",
+    "description": "Articulado, divertido e ótimo para decoração ou anti-stress.",
+    "price": "8.20",
+    "image": "assets/products/models/p1.glb",
+    "gallery": [
+      "assets/products/images/P1/p1.png",
+      "assets/products/images/P1/p2.png",
+      "assets/products/images/P1/p3.png",
+      "assets/products/images/P1/p4.png",
+      "assets/products/images/P1/p5.png"
+    ],
+    "model": "assets/products/models/polvo.glb",
+    "cores": ["Multicor", "Azul", "Rosa", "Preto"]
+  }  
+  {
     "id": "p2",
     "name": "Mini Polvo Fofo",
     "category": "Articulado",
