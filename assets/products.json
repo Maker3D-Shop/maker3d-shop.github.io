@@ -25,7 +25,7 @@
     ],
     "model": "assets/products/models/polvo.glb",
     "cores": ["Multicor", "Azul", "Rosa", "Preto"]
-  }  
+  },  
   {
     "id": "p2",
     "name": "Mini Polvo Fofo",
