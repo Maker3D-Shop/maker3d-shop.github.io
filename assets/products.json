@@ -1,32 +1,5 @@
 [
   {
-    "id": "p1",
-    "name": "Peça Custom (sob medida)",
-    "category": "Serviços",
-    "price": null,
-    "currency": "BRL",
-    "dimensions": "Sob medida",
-    "image": "assets/brand/logo.png",
-    "gallery": ["assets/brand/logo.png"],
-    "description": "Projeto e impressão sob medida.\nClique para escolher material, tolerância e acabamento.",
-  },
-  {
-    "id": "polvo-01",
-    "name": "Mini Polvo Fofo",
-    "description": "Articulado, divertido e ótimo para decoração ou anti-stress.",
-    "price": "8.20",
-    "image": "assets/products/models/p1.glb",
-    "gallery": [
-      "assets/products/images/P1/p1.png",
-      "assets/products/images/P1/p2.png",
-      "assets/products/images/P1/p3.png",
-      "assets/products/images/P1/p4.png",
-      "assets/products/images/P1/p5.png"
-    ],
-    "model": "assets/products/models/polvo.glb",
-    "cores": ["Multicor", "Azul", "Rosa", "Preto"]
-  },  
-  {
     "id": "p2",
     "name": "Mini Polvo Fofo",
     "category": "Articulado",
@@ -43,7 +16,9 @@
     ],
     "modelUrl": "assets/products/models/p1.glb",
     "description": "*Esse objeto oferece opção multicor.*",
-    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "options": [
+      { "name": "Material", "values": ["PLA"] }
+    ],
     "colorConfig": {
       "palette": ["Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde"],
       "default": "Laranja (Paleta)",
@@ -59,7 +34,9 @@
     "price": 3.00,
     "currency": "BRL",
     "dimensions": "Viciante✨",
-    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "options": [
+      { "name": "Material", "values": ["PLA"] }
+    ],
     "image": "assets/products/images/P3/p1.png",
     "gallery": [
       "assets/products/images/P3/p1.png",
@@ -84,7 +61,9 @@
     "price": 4.00,
     "currency": "BRL",
     "dimensions": "Hipnotizante🌀",
-    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "options": [
+      { "name": "Material", "values": ["PLA"] }
+    ],
     "image": "assets/products/images/P4/p1.png",
     "gallery": [
       "assets/products/images/P4/p1.png",
@@ -110,7 +89,9 @@
     "price": 3.00,
     "currency": "BRL",
     "dimensions": "Magnético🤯",
-    "options": [{ "name": "Material", "values": ["PLA"] }],
+    "options": [
+      { "name": "Material", "values": ["PLA"] }
+    ],
     "image": "assets/products/images/P5/p1.png",
     "gallery": [
       "assets/products/images/P5/p1.png",
@@ -161,7 +142,9 @@
     "price": 6.00,
     "currency": "BRL",
     "dimensions": "📖",
-    "options": [ { "name": "Material", "values": ["PLA"] } ],
+    "options": [
+      { "name": "Material", "values": ["PLA"] }
+    ],
     "image": "assets/products/images/P7/p1.png",
     "gallery": [
       "assets/products/images/P7/p1.png",
@@ -185,7 +168,9 @@
     "price": 25.99,
     "currency": "BRL",
     "dimensions": "🦇",
-    "options": [ { "name": "Material", "values": ["PLA"] } ],
+    "options": [
+      { "name": "Material", "values": ["PLA"] }
+    ],
     "image": "assets/products/images/P8/p1.png",
     "gallery": [
       "assets/products/images/P8/p1.png",
@@ -219,7 +204,7 @@
     "options": [
       { "name": "Material", "values": ["PLA"] },
       { "name": "Altura da caixa", "values": ["4cm", "2,5cm"] }
-   ],
+    ],
     "colorConfig": {
       "palette": ["Amarelo", "Marrom", "Verde", "Preto", "Azul"],
       "default": "Verde",
@@ -236,7 +221,7 @@
     "price": null,
     "currency": "BRL",
     "dimensions": "🦇",
-    "options": [ 
+    "options": [
       { "name": "Material", "values": ["PLA"] }
     ],
     "image": "assets/products/images/P8/p1.png",
