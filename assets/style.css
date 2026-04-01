@@ -36,22 +36,24 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg-site); color:
 .menu-navegacao a.ativo { color: var(--texto-dark); }
 
 /* =========================================
-   HERO BANNER (Aquele que quebrou no print)
+   HERO BANNER (AGORA É LARANJA!)
 ========================================= */
 .hero-banner {
-    background: linear-gradient(to right bottom, #111827, #1f2937, #111827);
+    background: linear-gradient(135deg, var(--laranja), #ff7500);
     color: white; text-align: center;
-    padding: 100px 20px 140px; /* Espaço extra embaixo para o Overlap */
+    padding: 100px 20px 140px; 
     position: relative;
 }
 .hero-conteudo { max-width: 800px; margin: 0 auto; }
-.hero-conteudo h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
-.hero-conteudo p { font-size: clamp(16px, 2vw, 20px); color: #9ca3af; margin-bottom: 30px; }
-.btn-hero { background: var(--laranja); color: white; padding: 16px 36px; border-radius: 50px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; display: inline-block; transition: var(--transicao); box-shadow: 0 10px 20px rgba(255,158,27,0.3); }
-.btn-hero:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(255,158,27,0.4); background: var(--laranja-dark); }
+.hero-conteudo h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 900; line-height: 1.1; margin-bottom: 20px; color: white; }
+.hero-conteudo p { font-size: clamp(16px, 2vw, 20px); color: rgba(255, 255, 255, 0.9); margin-bottom: 30px; }
+
+/* Botão Branco para dar contraste no fundo Laranja */
+.btn-hero { background: white; color: var(--laranja); padding: 16px 36px; border-radius: 50px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; display: inline-block; transition: var(--transicao); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+.btn-hero:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(0,0,0,0.2); background: #f9fafb; color: var(--laranja-dark); }
 
 /* =========================================
-   GRID DE DIFERENCIAIS (OVERLAP)
+   GRID DE DIFERENCIAIS (ÍCONES CORRIGIDOS)
 ========================================= */
 .diferenciais-container {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
@@ -59,7 +61,10 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg-site); color:
 }
 .card-diferencial { background: var(--bg-card); padding: 35px 25px; border-radius: var(--raio); text-align: center; box-shadow: var(--sombra-card); transition: var(--transicao); }
 .card-diferencial:hover { transform: translateY(-5px); box-shadow: var(--sombra-hover); }
-.icone-svg { width: 48px; height: 48px; fill: var(--laranja); margin-bottom: 20px; }
+
+/* Trava no tamanho dos Ícones SVG */
+.icone-svg { width: 48px; height: 48px; margin-bottom: 20px; display: inline-block; }
+
 .card-diferencial h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
 .card-diferencial p { font-size: 14px; color: var(--texto-light); }
 
@@ -81,14 +86,12 @@ body { font-family: 'Montserrat', sans-serif; background: var(--bg-site); color:
 .card-titulo { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
 .ver-detalhes { font-size: 13px; font-weight: 700; color: var(--laranja); text-transform: uppercase; }
 
-/* =========================================
-   SKELETON LOADING (Carregamento Premium)
-========================================= */
+/* SKELETON LOADING */
 .skeleton { background: #e5e7eb; border-radius: var(--raio); height: 350px; animation: pulse 1.5s infinite ease-in-out; }
 @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
 /* =========================================
-   MODAL DE COMPRAS
+   MODAL DE COMPRAS E RESTO DO SITE
 ========================================= */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(8px); z-index: 2000; overflow-y: auto; justify-content: center; align-items: center; padding: 20px; }
 .modal-conteudo { background: var(--bg-card); width: 100%; max-width: 850px; border-radius: 24px; position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); padding-bottom: 90px; animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
