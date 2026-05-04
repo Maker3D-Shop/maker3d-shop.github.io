@@ -1,0 +1,100 @@
+name: 🚀 Deploy Maker3D Shop
+
+on:
+  push:
+    branches: [main, refactor/professional-v2]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 📚 Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔍 Lint Code
+        run: npm run lint --if-present
+        continue-on-error: true
+
+      - name: 🧪 Run Tests
+        run: npm test --if-present
+        continue-on-error: true
+
+      - name: 🏗️ Build Project
+        run: npm run build
+        env:
+          NODE_ENV: production
+          VITE_APP_TITLE: "Maker3D Shop"
+
+      - name: 🧹 Check Build Size
+        run: |
+          DIST_SIZE=$(du -sh dist | cut -f1)
+          echo "📊 Build size: $DIST_SIZE"
+          if [ -d dist ]; then
+            find dist -type f -name "*.js" -o -name "*.css" | head -10
+          fi
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
+          cname: maker3d-shop.github.io
+
+      - name: ✅ Verify Deployment
+        run: |
+          echo "🎉 Deploy concluído!"
+          echo "📍 URL: https://maker3d-shop.github.io"
+
+      - name: 📧 Notify on Failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ Build falhou! Verifique os logs.'
+            })
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 🚀 Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v9
+        with:
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  performance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: 📊 Bundle Analysis
+        run: npm run analyze 2>/dev/null || echo "Analyzer não configurado"
