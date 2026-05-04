@@ -1,7 +1,3 @@
-<!-- Vou te entregar uma base refatorada mantendo aparência, mas corrigindo bugs e estruturando melhor -->
-
-<!-- ======================= assets/app.js (NOVO COMPLETO) ======================= -->
-<script>
 // ===== STATE =====
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -16,7 +12,10 @@ function formatPrice(v) {
 }
 
 // ===== CART =====
-function addToCart(product) {
+function addToCart(id) {
+  const product = window.allProducts.find(p => p.id === id);
+  if (!product) return;
+
   const existing = cart.find(p => p.id === product.id);
   if (existing) {
     existing.qty++;
@@ -75,6 +74,7 @@ function renderCart() {
 async function loadProducts() {
   const res = await fetch("assets/products.json");
   const products = await res.json();
+  window.allProducts = products; // Make products globally accessible
 
   const container = document.getElementById("products");
   if (!container) return;
@@ -89,7 +89,7 @@ async function loadProducts() {
       <img src="${p.images[0]}" class="product-img" />
       <h3>${p.name}</h3>
       <p>${formatPrice(p.price)}</p>
-      <button onclick='addToCart(${JSON.stringify(p)})'>Adicionar</button>
+      <button onclick="addToCart(${p.id})">Adicionar</button>
     `;
 
     // ===== swipe support =====
@@ -121,75 +121,3 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   renderCart();
 });
-</script>
-
-
-<!-- ======================= FIX CARRINHO VISÍVEL (catalogo.html) ======================= -->
-<!-- Adicione isso dentro do body -->
-<div id="cart">
-  <h2>Carrinho</h2>
-  <div id="cart-items"></div>
-  <strong>Total: <span id="cart-total"></span></strong>
-</div>
-
-
-<!-- ======================= FIX CONTATO (contato.html) ======================= -->
-<!-- Substitua a parte bugada por isso -->
-<footer>
-  <div class="footer-info">
-    <img src="assets/brand/logo.png" style="height:60px" />
-    <p>Email: contato@maker3d.com</p>
-    <p>WhatsApp: (31) 99999-9999</p>
-  </div>
-</footer>
-
-
-<!-- ======================= CSS FIXES ======================= -->
-<style>
-#cart {
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 300px;
-  height: 100%;
-  background: #111;
-  color: #fff;
-  overflow-y: auto;
-  padding: 10px;
-  z-index: 999;
-}
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.product-img {
-  width: 100%;
-  cursor: pointer;
-}
-</style>
-
-
-<!-- ======================= MELHORIAS IMPLEMENTADAS ======================= -->
-<!--
-✔ Carrinho funcional (add/remove/quantidade)
-✔ Persistência com localStorage
-✔ Swipe nas imagens
-✔ Correção footer contato
-✔ Carrinho visível no catálogo
-✔ Código modularizado
--->
-
-
-<!-- ======================= PRÓXIMOS PASSOS (RECOMENDADO) ======================= -->
-<!--
-1. Migrar para React (Vite)
-2. Backend (Firebase ou Node)
-3. Sistema de login
-4. Checkout com Stripe/MercadoPago
-5. Lazy loading imagens
-6. SEO meta tags
-7. Acessibilidade (aria-label)
--->
