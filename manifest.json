@@ -1,0 +1,21 @@
+{
+  "name": "Maker3D Shop",
+  "short_name": "Maker3D",
+  "description": "Loja especializada em produtos de impressão 3D",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff9e1b",
+  "icons": [
+    {
+      "src": "/assets/brand/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/brand/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
