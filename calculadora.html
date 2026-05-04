@@ -13,25 +13,17 @@
 </head>
 
 <body>
-  <header>
-    <div class="container">
-      <div class="nav">
-        <a class="brand" href="index.html">
-          <img src="assets/brand/logo.png" alt="MAKER3D">
-          <div class="btxt">
-            <strong>MAKER3D</strong>
-            <span>calculadora (privado)</span>
-          </div>
-        </a>
-
-        <!-- ✅ mantém igual ao site (sem link pra calculadora) -->
-        <nav class="menu">
-          <a href="index.html">Início</a>
-          <a href="catalogo.html">Catálogo</a>
-          <a href="contato.html">Contato</a>
-        </nav>
-      </div>
-    </div>
+  <header class="header-principal">
+    <a href="index.html">
+      <img src="assets/brand/logo.png" alt="Logo Maker3D" class="logo-img">
+    </a>
+    <nav class="menu-navegacao">
+      <a href="index.html">Início</a>
+      <a href="catalogo.html">Catálogo</a>
+      <a href="contato.html">Contato</a>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema" title="Alternar entre tema claro e escuro">🌙</button>
+      <a class="btn-carrinho" onclick="abrirCarrinho()">🛒 (<span class="cart-count-badge">0</span>)</a>
+    </nav>
   </header>
 
   <main class="container">
@@ -157,6 +149,20 @@
     </section>
   </main>
 
+  <div id="carrinho-overlay" class="carrinho-overlay" onclick="fecharCarrinho()"></div>
+  <div id="carrinho-sidebar" class="carrinho-sidebar">
+      <div class="carrinho-header">
+          <h2>MEU CARRINHO (<span class="cart-count-badge">0</span>)</h2>
+          <button onclick="fecharCarrinho()">✕</button>
+      </div>
+      <div id="carrinho-items" class="carrinho-items"></div>
+      <div class="carrinho-footer">
+          <div class="carrinho-total">TOTAL: <span id="cart-total">R$ 0,00</span></div>
+          <button class="btn-finalizar" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
+      </div>
+  </div>
+
+  <script src="assets/app.js"></script>
   <script>
     const KEY = "maker3d_calc_config_v1";
 

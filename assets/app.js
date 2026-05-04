@@ -25,8 +25,17 @@ function showToast(message, type = 'success') {
 // ===== UTILS =====
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartBadges();
   renderCart();
   showToast('Carrinho atualizado!', 'success');
+}
+
+function updateCartBadges() {
+  const badges = document.querySelectorAll('.cart-count-badge');
+  const count = cart.reduce((total, item) => total + (item.qty || 1), 0);
+  badges.forEach(badge => {
+    badge.textContent = count;
+  });
 }
 
 function formatPrice(v) {
@@ -210,10 +219,42 @@ async function loadProducts() {
 }
 
 // ===== THEME TOGGLE =====
+function getAutoTheme() {
+  const hour = new Date().getHours();
+  // Dark mode from 20h (8pm) to 6h (6am)
+  if (hour >= 20 || hour < 6) {
+    return 'dark';
+  }
+  return 'light';
+}
+
 function initTheme() {
-  const theme = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', theme);
-  updateThemeButton(theme);
+  const storedTheme = localStorage.getItem('theme');
+  
+  // If user manually set a theme, respect it
+  if (storedTheme) {
+    const theme = storedTheme;
+    document.documentElement.setAttribute('data-theme', theme);
+    updateThemeButton(theme);
+  } else {
+    // Otherwise, use automatic theme based on time
+    const autoTheme = getAutoTheme();
+    document.documentElement.setAttribute('data-theme', autoTheme);
+    updateThemeButton(autoTheme);
+  }
+  
+  // Check theme every minute to update based on time
+  setInterval(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (!storedTheme) {
+      const autoTheme = getAutoTheme();
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (autoTheme !== currentTheme) {
+        document.documentElement.setAttribute('data-theme', autoTheme);
+        updateThemeButton(autoTheme);
+      }
+    }
+  }, 60000);
 }
 
 function toggleTheme() {
@@ -221,6 +262,7 @@ function toggleTheme() {
   const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
   
   document.documentElement.setAttribute('data-theme', newTheme);
+  // Store the manual theme preference
   localStorage.setItem('theme', newTheme);
   updateThemeButton(newTheme);
   
@@ -271,9 +313,55 @@ function initBackToTop() {
   });
 }
 
+// ===== CART FUNCTIONS =====
+function abrirCarrinho() {
+  const overlay = document.getElementById('carrinho-overlay');
+  const sidebar = document.getElementById('carrinho-sidebar');
+  if (overlay && sidebar) {
+    overlay.classList.add('ativo');
+    sidebar.classList.add('ativo');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function fecharCarrinho() {
+  const overlay = document.getElementById('carrinho-overlay');
+  const sidebar = document.getElementById('carrinho-sidebar');
+  if (overlay && sidebar) {
+    overlay.classList.remove('ativo');
+    sidebar.classList.remove('ativo');
+    document.body.style.overflow = '';
+  }
+}
+
+function finalizarCompra() {
+  if (cart.length === 0) {
+    showToast('Seu carrinho está vazio!', 'error');
+    return;
+  }
+
+  const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  const items = cart.map(item => `${item.name} (x${item.qty})`).join('\n');
+  
+  const message = encodeURIComponent(
+    `Olá! Gostaria de fazer uma compra:\n\n${items}\n\nTotal: ${formatPrice(total)}`
+  );
+  
+  window.open(`https://wa.me/5531984566047?text=${message}`, '_blank');
+  
+  // Clear cart after successful order
+  cart = [];
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartBadges();
+  renderCart();
+  fecharCarrinho();
+  showToast('Pedido enviado pelo WhatsApp!', 'success');
+}
+
 // ===== INIT =====
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
+  updateCartBadges();
   renderCart();
   initTheme();
   initSearch();
@@ -284,5 +372,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeButton = document.getElementById('theme-toggle');
   if (themeButton) {
     themeButton.addEventListener('click', toggleTheme);
+  }
+
+  // Close cart when clicking on overlay
+  const cartOverlay = document.getElementById('carrinho-overlay');
+  if (cartOverlay) {
+    cartOverlay.addEventListener('click', fecharCarrinho);
+  }
+
+  // Prevent body scroll when cart is open
+  const cartSidebar = document.getElementById('carrinho-sidebar');
+  if (cartSidebar) {
+    cartSidebar.addEventListener('click', (e) => e.stopPropagation());
   }
 });

@@ -239,5 +239,30 @@
       "defaultMode": "solid",
       "multiMaxColors": 1
     }
+  },
+  {
+    "id": "p11",
+    "name": "Peça Customizada",
+    "category": "Personalizado",
+    "price": null,
+    "currency": "BRL",
+    "dimensions": "📐",
+    "image": "assets/products/images/placeholder.png",
+    "gallery": [
+      "assets/products/images/placeholder.png"
+    ],
+    "modelUrl": null,
+    "description": "Peça 100% personalizada conforme suas especificações!\nDescreva sua ideia e transformaremos em realidade.\nTamanho, formato, cor e material: você escolhe tudo!\nPerfect para projetos únicos, protótipos e soluções criativas personalizadas.",
+    "options": [
+      { "name": "Tipo de Projeto", "values": ["Prototipagem", "Decoração", "Funcional", "Gift Especial", "Outro"] },
+      { "name": "Complexidade", "values": ["Simples", "Moderada", "Complexa"] }
+    ],
+    "colorConfig": {
+      "palette": ["Amarelo", "Laranja (Paleta)", "Marrom", "Azul", "Verde", "Preto", "Branco", "Rosa", "Roxo"],
+      "default": "Laranja (Paleta)",
+      "modes": ["solid", "multi"],
+      "defaultMode": "multi",
+      "multiMaxColors": 5
+    }
   }
 ]
