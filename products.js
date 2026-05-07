@@ -51,7 +51,7 @@ const MAKER3D_PRODUCTS = [
     category: "decorativo",
     featured: true,
     badge: "Popular",
-    price: 45,
+    price: 450,
     desc: "Vaso com design geométrico inspirado em origami. Perfeito para decoração minimalista.",
     descFull: "Vaso decorativo com estrutura geométrica inspirada no origami japonês. Impresso em PLA de alta qualidade, possui paredes resistentes e acabamento liso. Disponível em diversas cores e pode ser usado com plantas artificiais ou como peça decorativa pura.",
     colors: [
