@@ -1,341 +1,914 @@
-/**
- * ╔══════════════════════════════════════════════════════════════╗
- * ║              MAKER3D — ARQUIVO DE PRODUTOS                  ║
- * ║  Edite este arquivo para gerenciar todo o catálogo.         ║
- * ║  Coloque imagens em: ./assets/images/                       ║
- * ║  Coloque modelos 3D em: ./assets/models/  (formato .glb)    ║
- * ╚══════════════════════════════════════════════════════════════╝
- *
- * COMO ADICIONAR UM PRODUTO:
- *  1. Copie o bloco de um produto existente
- *  2. Altere o id (deve ser único)
- *  3. Preencha os campos
- *  4. Salve o arquivo — o site atualiza automaticamente
- *
- * CAMPOS DISPONÍVEIS:
- *  id          → número único do produto
- *  name        → nome exibido no site
- *  emoji       → emoji fallback caso não haja imagem
- *  category    → "decorativo" | "funcional" | "miniatura" | "customizado"
- *  desc        → descrição curta (aparece no card)
- *  descFull    → descrição completa (aparece no modal)
- *  price       → preço em reais (null = "Sob Consulta")
- *  badge       → etiqueta sobre o card (ex: "Novo", "Popular") ou ""
- *  custom      → true = produto customizado (visual especial)
- *  featured    → true = aparece no carrossel da página inicial
- *
- *  colors      → array de objetos { hex: "#cor", name: "Nome da Cor" }
- *
- *  images      → array de caminhos para imagens do produto
- *                Ex: ["./assets/images/vaso-geo-1.jpg", "./assets/images/vaso-geo-2.jpg"]
- *                Primeira imagem = capa do card
- *                Deixe [] para usar o emoji como fallback
- *
- *  model3d     → caminho para o modelo 3D (.glb) ou null para não mostrar
- *                Ex: "./assets/models/vaso-geometrico.glb"
- *                Requer three.js (já incluído no index.html via CDN)
- *
- *  specs       → objeto com especificações técnicas (aparece no modal)
- *  tags        → array de palavras-chave para busca
- */
-
-const MAKER3D_PRODUCTS = [
-
-  // ─────────────────────────────────────────────
-  //  DECORATIVOS
-  // ─────────────────────────────────────────────
-  {
-    id: 1,
-    name: "Vaso Geométrico",
-    emoji: "🏺",
-    category: "decorativo",
-    featured: true,
-    badge: "Popular",
-    price: 450,
-    desc: "Vaso com design geométrico inspirado em origami. Perfeito para decoração minimalista.",
-    descFull: "Vaso decorativo com estrutura geométrica inspirada no origami japonês. Impresso em PLA de alta qualidade, possui paredes resistentes e acabamento liso. Disponível em diversas cores e pode ser usado com plantas artificiais ou como peça decorativa pura.",
-    colors: [
-      { hex: "#f07800", name: "Laranja Maker" },
-      { hex: "#2c2c2c", name: "Preto Fosco" },
-      { hex: "#ffffff", name: "Branco Neve" },
-      { hex: "#4a9e6f", name: "Verde Sage" }
-    ],
-    images: [
-      // "./assets/images/vaso-geo-1.jpg",
-      // "./assets/images/vaso-geo-2.jpg",
-      // "./assets/images/vaso-geo-3.jpg"
-    ],
-    model3d: null,
-    // model3d: "./assets/models/vaso-geometrico.glb",
-    specs: {
-      "Material": "PLA Premium",
-      "Altura": "18 cm",
-      "Diâmetro": "10 cm",
-      "Peso": "120g",
-      "Acabamento": "Liso"
-    },
-    tags: ["vaso", "decoração", "origami", "geométrico", "minimalista"]
-  },
-
-  {
-    id: 7,
-    name: "Porta-Retratos 3D",
-    emoji: "🖼️",
-    category: "decorativo",
-    featured: false,
-    badge: "",
-    price: 42,
-    desc: "Porta-retratos com efeito de profundidade. Design único que valoriza suas fotos.",
-    descFull: "Porta-retratos modular com estrutura tridimensional que cria um efeito de profundidade ao redor da foto. Fica lindo em prateleiras e mesas. Compatível com fotos 10x15cm.",
-    colors: [
-      { hex: "#f07800", name: "Laranja Maker" },
-      { hex: "#ffffff", name: "Branco Neve" },
-      { hex: "#8e6b3e", name: "Madeira" }
-    ],
-    images: [],
-    model3d: null,
-    specs: {
-      "Material": "PLA Premium",
-      "Tamanho da foto": "10x15 cm",
-      "Profundidade": "2 cm",
-      "Acabamento": "Liso"
-    },
-    tags: ["foto", "porta-retratos", "decoração", "presente"]
-  },
-
-  // ─────────────────────────────────────────────
-  //  FUNCIONAIS
-  // ─────────────────────────────────────────────
-  {
-    id: 2,
-    name: "Suporte de Fone",
-    emoji: "🎧",
-    category: "funcional",
-    featured: true,
-    badge: "",
-    price: 38,
-    desc: "Suporte de mesa ergonômico para headphones. Elegante e resistente.",
-    descFull: "Suporte lateral de mesa para headphones. Design minimalista com base antiderrapante. Impresso em PETG para maior resistência mecânica. Suporta headphones de até 500g.",
-    colors: [
-      { hex: "#f07800", name: "Laranja Maker" },
-      { hex: "#1a1a2e", name: "Azul Noite" },
-      { hex: "#e8e8e8", name: "Cinza Claro" }
-    ],
-    images: [],
-    model3d: null,
-    specs: {
-      "Material": "PETG",
-      "Altura": "22 cm",
-      "Base": "12x8 cm",
-      "Carga máx.": "500g",
-      "Acabamento": "Fosco"
-    },
-    tags: ["fone", "headphone", "suporte", "mesa", "gamer", "escritório"]
-  },
-
-  {
-    id: 4,
-    name: "Organizador de Mesa",
-    emoji: "🗂️",
-    category: "funcional",
-    featured: true,
-    badge: "",
-    price: 52,
-    desc: "Organize canetas, cartões e cabos com estilo. Modular e expansível.",
-    descFull: "Organizador de mesa modular com compartimentos para canetas, cartões, post-its e pequenos objetos. Os módulos se encaixam entre si permitindo configurações personalizadas. Impresso em PETG resistente.",
-    colors: [
-      { hex: "#f07800", name: "Laranja Maker" },
-      { hex: "#ffffff", name: "Branco Neve" },
-      { hex: "#3d3d3d", name: "Grafite" }
-    ],
-    images: [],
-    model3d: null,
-    specs: {
-      "Material": "PETG",
-      "Módulos inclusos": "3",
-      "Compatível": "Expansível",
-      "Acabamento": "Liso"
-    },
-    tags: ["organizador", "mesa", "escritório", "papelaria", "modular"]
-  },
-
-  {
-    id: 8,
-    name: "Suporte Celular",
-    emoji: "📱",
-    category: "funcional",
-    featured: false,
-    badge: "",
-    price: 29,
-    desc: "Suporte ajustável de mesa para qualquer smartphone. Ângulo perfeito sempre.",
-    descFull: "Suporte de mesa com ângulo ajustável para smartphones de qualquer tamanho. Base robusta com slot para cabo de carregamento. Ideal para videoconferências e leitura.",
-    colors: [
-      { hex: "#2c2c2c", name: "Preto Fosco" },
-      { hex: "#f07800", name: "Laranja Maker" },
-      { hex: "#ffffff", name: "Branco Neve" }
-    ],
-    images: [],
-    model3d: null,
-    specs: {
-      "Material": "PETG",
-      "Compatível": "Todos smartphones",
-      "Ângulo": "Ajustável 30–70°",
-      "Slot carregador": "Sim"
-    },
-    tags: ["celular", "suporte", "smartphone", "mesa", "trabalho"]
-  },
-
-  // ─────────────────────────────────────────────
-  //  MINIATURAS
-  // ─────────────────────────────────────────────
-  {
-    id: 3,
-    name: "Miniatura Dragão",
-    emoji: "🐉",
-    category: "miniatura",
-    featured: true,
-    badge: "Destaque",
-    price: 89,
-    desc: "Dragão articulado impresso em múltiplas partes. Escama por escama, um trabalho de arte.",
-    descFull: "Dragão articulado com mais de 40 peças impressas separadamente e montadas à mão. Cada escama é detalhada individualmente. Articulações funcionais nas asas e cauda. Um item colecionável de alto nível.",
-    colors: [
-      { hex: "#c0392b", name: "Vermelho Fogo" },
-      { hex: "#2c2c2c", name: "Preto Abissal" },
-      { hex: "#f0a500", name: "Dourado" }
-    ],
-    images: [],
-    model3d: null,
-    specs: {
-      "Material": "PLA Premium",
-      "Peças": "40+",
-      "Comprimento": "30 cm",
-      "Articulado": "Sim",
-      "Acabamento": "Detalhado"
-    },
-    tags: ["dragão", "miniatura", "colecionável", "fantasia", "articulado"]
-  },
-
-  {
-    id: 6,
-    name: "Miniatura RPG",
-    emoji: "⚔️",
-    category: "miniatura",
-    featured: true,
-    badge: "Novo",
-    price: 65,
-    desc: "Miniaturas para RPG de mesa — guerreiros, magos e criaturas. Acabamento detalhado.",
-    descFull: "Coleção de miniaturas para RPG de mesa em escala 28mm. Inclui guerreiros, magos, arqueiros e criaturas. Impressas em resina para máximo detalhe. Perfeitas para pintar ou usar direto na mesa.",
-    colors: [
-      { hex: "#7f8c8d", name: "Prata" },
-      { hex: "#c0392b", name: "Vermelho" },
-      { hex: "#2c2c2c", name: "Preto" }
-    ],
-    images: [],
-    model3d: null,
-    specs: {
-      "Material": "Resina",
-      "Escala": "28mm",
-      "Itens por kit": "5",
-      "Pintável": "Sim"
-    },
-    tags: ["rpg", "miniatura", "mesa", "fantasia", "guerreiro", "mago"]
-  },
-
-  // ─────────────────────────────────────────────
-  //  CUSTOMIZADOS
-  // ─────────────────────────────────────────────
-  {
-    id: 5,
-    name: "Chaveiro Personalizado",
-    emoji: "🔑",
-    category: "customizado",
-    featured: false,
-    badge: "",
-    price: 18,
-    desc: "Chaveiro com nome, inicial ou símbolo de sua escolha. Presente perfeito.",
-    descFull: "Chaveiro personalizado impresso em PLA com nome, inicial, símbolo ou pequeno desenho vetorial à sua escolha. Acabamento liso e resistente. Ótima opção de presente.",
-    colors: [
-      { hex: "#f07800", name: "Laranja Maker" },
-      { hex: "#e8c840", name: "Amarelo Ouro" },
-      { hex: "#c0392b", name: "Vermelho" },
-      { hex: "#3498db", name: "Azul" }
-    ],
-    images: [],
-    model3d: null,
-    specs: {
-      "Material": "PLA",
-      "Tamanho": "~5 cm",
-      "Personalização": "Nome/símbolo",
-      "Prazo": "3–5 dias úteis"
-    },
-    tags: ["chaveiro", "personalizado", "presente", "nome", "brinde"]
-  },
-
-  {
-    id: 9,
-    name: "✨ Peça Customizada",
-    emoji: "⚙️",
-    category: "customizado",
-    featured: false,
-    badge: "Sob Medida",
-    price: null,
-    custom: true,
-    desc: "Traga seu arquivo STL ou descreva sua ideia. Criamos qualquer coisa do zero!",
-    descFull: "Nosso serviço de peça totalmente customizada. Você pode enviar um arquivo STL pronto, uma referência de imagem, ou apenas descrever a ideia. Nossa equipe avalia, faz o orçamento e imprime com a mesma qualidade de todos os nossos produtos. Não há limites para o que podemos criar.",
-    colors: [
-      { hex: "#f07800", name: "Laranja Maker" },
-      { hex: "#c85a00", name: "Laranja Escuro" },
-      { hex: "#ffb347", name: "Âmbar" },
-      { hex: "#3498db", name: "Azul" },
-      { hex: "#2ecc71", name: "Verde" },
-      { hex: "#9b59b6", name: "Roxo" },
-      { hex: "#e74c3c", name: "Vermelho" },
-      { hex: "#2c2c2c", name: "Preto" },
-      { hex: "#ffffff", name: "Branco" }
-    ],
-    images: [],
-    model3d: null,
-    specs: {
-      "Material": "PLA / PETG / Resina",
-      "Arquivo aceito": "STL, OBJ, 3MF",
-      "Prazo": "A combinar",
-      "Orçamento": "Gratuito"
-    },
-    tags: ["customizado", "personalizado", "sob medida", "stl", "projeto"]
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maker3D — Impressão 3D Especializada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange-deep: #c85a00;
+    --orange-main: #f07800;
+    --orange-mid: #f59320;
+    --orange-light: #ffb347;
+    --orange-pale: #fff3e0;
+    --orange-glow: rgba(240,120,0,0.18);
+    --white: #ffffff;
+    --off-white: #fdf8f2;
+    --gray-light: #f5ede0;
+    --gray-mid: #c9a882;
+    --gray-dark: #4a3520;
+    --text-dark: #2a1a08;
+    --text-mid: #6b4c2a;
+    --shadow-soft: 0 4px 24px rgba(200,90,0,0.13);
+    --shadow-btn: 0 6px 20px rgba(240,120,0,0.35), 0 2px 6px rgba(200,90,0,0.2);
+    --shadow-card: 0 8px 32px rgba(200,90,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+    --radius-pill: 999px;
+    --radius-card: 20px;
+    --radius-lg: 32px;
+    --transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
   }
 
-  // ─────────────────────────────────────────────
-  //  ADICIONE NOVOS PRODUTOS ABAIXO:
-  // ─────────────────────────────────────────────
-  /*
-  ,{
-    id: 10,
-    name: "Meu Novo Produto",
-    emoji: "🎁",
-    category: "decorativo",   // decorativo | funcional | miniatura | customizado
-    featured: false,
-    badge: "Novo",
-    price: 00,
-    desc: "Descrição curta aqui.",
-    descFull: "Descrição completa aqui.",
-    colors: [
-      { hex: "#f07800", name: "Laranja Maker" }
-    ],
-    images: [
-      "./assets/images/meu-produto-1.jpg",
-      "./assets/images/meu-produto-2.jpg"
-    ],
-    model3d: "./assets/models/meu-produto.glb",
-    specs: {
-      "Material": "PLA",
-      "Tamanho": "10 cm"
-    },
-    tags: ["palavra1", "palavra2"]
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Outfit', sans-serif; background: var(--off-white); color: var(--text-dark); overflow-x: hidden; }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 72px;
+    background: rgba(253,248,242,0.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(240,120,0,0.12);
+    box-shadow: 0 2px 24px rgba(200,90,0,0.07);
   }
-  */
+
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo img { width: 42px; height: 42px; border-radius: 50%; box-shadow: 0 2px 10px rgba(240,120,0,0.3); }
+  .nav-logo span { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--orange-main); letter-spacing: -0.02em; }
+
+  .nav-links { display: flex; gap: 4px; list-style: none; }
+  .nav-links a { display: block; padding: 8px 18px; text-decoration: none; color: var(--text-mid); font-weight: 500; font-size: 0.95rem; border-radius: var(--radius-pill); transition: var(--transition); position: relative; }
+  .nav-links a:hover, .nav-links a.active { color: var(--orange-main); background: var(--orange-pale); }
+
+  .nav-cta { background: var(--orange-main) !important; color: var(--white) !important; box-shadow: var(--shadow-btn); font-weight: 600 !important; }
+  .nav-cta:hover { background: var(--orange-deep) !important; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(240,120,0,0.45) !important; }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+  .hamburger span { width: 26px; height: 2px; background: var(--orange-main); border-radius: 2px; transition: var(--transition); }
+
+  /* ─── SECTIONS ─── */
+  .page { display: none; }
+  .page.active { display: block; }
+  main { padding-top: 72px; min-height: 100vh; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: calc(100vh - 72px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 60px 5% 40px;
+    background: linear-gradient(145deg, var(--off-white) 0%, var(--orange-pale) 60%, #fde8c4 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero::before { content: ''; position: absolute; top: -120px; right: -120px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,179,71,0.35) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .hero::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 380px; height: 380px; background: radial-gradient(circle, rgba(240,120,0,0.18) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .hero-content { text-align: center; position: relative; z-index: 1; max-width: 760px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--orange-pale); border: 1px solid var(--orange-light); color: var(--orange-deep); padding: 6px 18px; border-radius: var(--radius-pill); font-size: 0.85rem; font-weight: 600; margin-bottom: 28px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2.6rem, 7vw, 5rem); line-height: 1.1; color: var(--text-dark); margin-bottom: 22px; }
+  .hero h1 em { font-style: italic; color: var(--orange-main); }
+  .hero p { font-size: 1.15rem; color: var(--text-mid); max-width: 520px; margin: 0 auto 36px; line-height: 1.7; }
+  .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  .btn-primary { background: var(--orange-main); color: var(--white); border: none; cursor: pointer; padding: 14px 34px; border-radius: var(--radius-pill); font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; box-shadow: var(--shadow-btn); transition: var(--transition); text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--orange-deep); transform: translateY(-3px) scale(1.03); box-shadow: 0 10px 32px rgba(240,120,0,0.5); }
+
+  .btn-secondary { background: transparent; color: var(--orange-main); border: 2px solid var(--orange-main); cursor: pointer; padding: 12px 32px; border-radius: var(--radius-pill); font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 600; transition: var(--transition); text-decoration: none; display: inline-block; }
+  .btn-secondary:hover { background: var(--orange-pale); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(240,120,0,0.2); }
+
+  /* ─── CAROUSEL ─── */
+  .carousel-section { padding: 60px 0 40px; background: var(--white); }
+  .carousel-title { text-align: center; margin-bottom: 36px; font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--text-dark); }
+  .carousel-title span { color: var(--orange-main); }
+  .carousel-wrapper { position: relative; overflow: hidden; touch-action: pan-y; }
+  .carousel-track { display: flex; gap: 24px; padding: 12px 5%; transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  .carousel-card { min-width: 280px; flex-shrink: 0; background: var(--off-white); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid rgba(240,120,0,0.1); transition: var(--transition); cursor: pointer; }
+  .carousel-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(200,90,0,0.18); }
+  .carousel-card-img { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; overflow: hidden; }
+  .carousel-card-body { padding: 18px 20px 20px; }
+  .carousel-card-body h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); }
+  .carousel-card-body p { font-size: 0.88rem; color: var(--text-mid); line-height: 1.5; }
+  .carousel-card-price { font-size: 1.15rem; font-weight: 800; color: var(--orange-main); margin-top: 10px; }
+  .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 24px; padding-bottom: 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-mid); cursor: pointer; transition: var(--transition); border: none; }
+  .dot.active { background: var(--orange-main); width: 24px; border-radius: var(--radius-pill); }
+
+  /* ─── FEATURES ─── */
+  .features { padding: 80px 5%; background: linear-gradient(180deg, var(--off-white) 0%, var(--orange-pale) 100%); }
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-header h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--text-dark); margin-bottom: 14px; }
+  .section-header h2 span { color: var(--orange-main); }
+  .section-header p { font-size: 1rem; color: var(--text-mid); max-width: 500px; margin: 0 auto; line-height: 1.7; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .feature-card { background: var(--white); border-radius: var(--radius-card); padding: 32px 26px; box-shadow: var(--shadow-card); border: 1px solid rgba(240,120,0,0.08); text-align: center; transition: var(--transition); }
+  .feature-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(200,90,0,0.15); border-color: var(--orange-light); }
+  .feature-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--orange-pale); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 18px; box-shadow: inset 0 2px 8px rgba(240,120,0,0.15); }
+  .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: var(--text-dark); }
+  .feature-card p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.6; }
+
+  /* ─── PRODUCTS ─── */
+  .products-hero { background: linear-gradient(135deg, var(--orange-pale) 0%, var(--off-white) 100%); padding: 56px 5% 40px; text-align: center; }
+  .products-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); color: var(--text-dark); margin-bottom: 12px; }
+  .products-hero p { color: var(--text-mid); font-size: 1rem; max-width: 480px; margin: 0 auto; }
+  .products-controls { padding: 28px 5% 0; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .search-bar { flex: 1; min-width: 220px; display: flex; align-items: center; gap: 10px; background: var(--white); border: 2px solid rgba(240,120,0,0.2); border-radius: var(--radius-pill); padding: 10px 20px; box-shadow: var(--shadow-soft); transition: var(--transition); }
+  .search-bar:focus-within { border-color: var(--orange-main); box-shadow: 0 0 0 4px rgba(240,120,0,0.1); }
+  .search-bar input { flex: 1; border: none; outline: none; font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: var(--text-dark); background: transparent; }
+  .search-bar input::placeholder { color: var(--gray-mid); }
+  .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-pill { padding: 8px 18px; border-radius: var(--radius-pill); border: 2px solid var(--orange-light); background: transparent; color: var(--text-mid); font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: var(--transition); }
+  .filter-pill:hover, .filter-pill.active { background: var(--orange-main); color: var(--white); border-color: var(--orange-main); box-shadow: 0 4px 14px rgba(240,120,0,0.3); transform: translateY(-1px); }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; padding: 32px 5% 60px; max-width: 1200px; margin: 0 auto; }
+  .product-card { background: var(--white); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid rgba(240,120,0,0.08); transition: var(--transition); position: relative; }
+  .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 48px rgba(200,90,0,0.18); border-color: var(--orange-light); }
+  .product-img { width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; font-size: 4.5rem; position: relative; }
+  .product-badge { position: absolute; top: 14px; left: 14px; background: var(--orange-main); color: var(--white); font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: var(--radius-pill); letter-spacing: 0.05em; text-transform: uppercase; box-shadow: 0 2px 8px rgba(240,120,0,0.35); }
+  .product-body { padding: 18px 20px 22px; }
+  .product-body h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); }
+  .product-body p { font-size: 0.85rem; color: var(--text-mid); line-height: 1.5; margin-bottom: 12px; }
+  .color-dots { display: flex; gap: 7px; margin-bottom: 14px; align-items: center; }
+  .color-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--white); box-shadow: 0 0 0 1.5px rgba(0,0,0,0.15), 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; transition: var(--transition); }
+  .color-dot:hover, .color-dot.selected { transform: scale(1.25); box-shadow: 0 0 0 2px var(--orange-main), 0 2px 5px rgba(0,0,0,0.15); }
+  .color-label { font-size: 0.78rem; color: var(--text-mid); margin-left: 4px; }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .product-price { font-size: 1.2rem; font-weight: 800; color: var(--orange-main); }
+  .add-cart-btn { background: var(--orange-main); color: var(--white); border: none; cursor: pointer; padding: 9px 20px; border-radius: var(--radius-pill); font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 700; box-shadow: 0 4px 14px rgba(240,120,0,0.35); transition: var(--transition); }
+  .add-cart-btn:hover { background: var(--orange-deep); transform: translateY(-2px) scale(1.04); box-shadow: 0 8px 22px rgba(240,120,0,0.45); }
+  .custom-card { background: linear-gradient(135deg, var(--orange-main) 0%, var(--orange-deep) 100%); color: var(--white); }
+  .custom-card h3, .custom-card p, .custom-card .product-price { color: var(--white); }
+  .custom-card .add-cart-btn { background: var(--white); color: var(--orange-main); }
+  .custom-card .add-cart-btn:hover { background: var(--orange-pale); box-shadow: 0 8px 22px rgba(0,0,0,0.2); }
+  .custom-card .color-label { color: rgba(255,255,255,0.8); }
+
+  /* ─── CART FAB ─── */
+  .cart-fab { position: fixed; bottom: 28px; right: 28px; z-index: 900; width: 62px; height: 62px; border-radius: 50%; background: var(--orange-main); color: var(--white); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 6px 24px rgba(240,120,0,0.5), 0 2px 8px rgba(0,0,0,0.15); transition: var(--transition); }
+  .cart-fab:hover { transform: scale(1.1) translateY(-3px); background: var(--orange-deep); box-shadow: 0 12px 36px rgba(240,120,0,0.55); }
+  .cart-count { position: absolute; top: -4px; right: -4px; background: var(--orange-deep); color: var(--white); width: 22px; height: 22px; border-radius: 50%; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid var(--white); }
+
+  /* ─── WHATSAPP FAB (lado esquerdo) ─── */
+  .whatsapp-fab {
+    position: fixed; bottom: 28px; left: 28px; z-index: 900;
+    width: 62px; height: 62px; border-radius: 50%;
+    background: #25d366;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.5), 0 2px 8px rgba(0,0,0,0.15);
+    transition: var(--transition);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .whatsapp-fab:hover { transform: scale(1.1) translateY(-3px); background: #128c7e; box-shadow: 0 12px 36px rgba(37,211,102,0.55); }
+  .whatsapp-fab svg { width: 32px; height: 32px; }
+
+  /* ─── CART PANEL ─── */
+  .cart-overlay { position: fixed; inset: 0; background: rgba(42,26,8,0.5); z-index: 1100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-panel { position: fixed; right: 0; top: 0; bottom: 0; width: min(420px, 100vw); background: var(--white); z-index: 1200; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -8px 0 40px rgba(0,0,0,0.15); }
+  .cart-panel.open { transform: translateX(0); }
+  .cart-header { padding: 24px; border-bottom: 1px solid var(--gray-light); display: flex; align-items: center; justify-content: space-between; }
+  .cart-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--text-dark); }
+  .cart-close { width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--orange-pale); color: var(--orange-main); font-size: 1.1rem; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; }
+  .cart-close:hover { background: var(--orange-main); color: var(--white); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+  .cart-item { display: flex; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--gray-light); }
+  .cart-item-img { width: 60px; height: 60px; border-radius: 12px; background: var(--orange-pale); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
+  .cart-item-info { flex: 1; }
+  .cart-item-info h4 { font-size: 0.9rem; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; }
+  .cart-item-info span { font-size: 0.85rem; color: var(--orange-main); font-weight: 600; }
+  .cart-item-qty { display: flex; align-items: center; gap: 8px; }
+  .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--orange-light); background: transparent; color: var(--orange-main); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); font-weight: 700; }
+  .qty-btn:hover { background: var(--orange-main); color: var(--white); border-color: var(--orange-main); }
+  .qty-value { font-weight: 700; color: var(--text-dark); min-width: 20px; text-align: center; }
+  .cart-remove { width: 28px; height: 28px; border-radius: 50%; border: none; background: #fee; color: #c00; font-size: 0.8rem; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; }
+  .cart-remove:hover { background: #c00; color: #fff; }
+  .cart-empty { text-align: center; padding: 60px 20px; color: var(--text-mid); }
+  .cart-empty .empty-icon { font-size: 3.5rem; margin-bottom: 16px; display: block; }
+  .cart-empty p { font-size: 1rem; line-height: 1.6; }
+  .cart-footer { padding: 20px 24px; border-top: 2px solid var(--gray-light); background: var(--off-white); }
+  .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .cart-total span { font-size: 1rem; color: var(--text-mid); font-weight: 600; }
+  .cart-total strong { font-size: 1.4rem; color: var(--orange-main); font-weight: 800; }
+  .checkout-btn { width: 100%; background: var(--orange-main); color: var(--white); border: none; cursor: pointer; padding: 15px; border-radius: var(--radius-pill); font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; box-shadow: var(--shadow-btn); transition: var(--transition); }
+  .checkout-btn:hover { background: var(--orange-deep); transform: translateY(-2px); box-shadow: 0 10px 32px rgba(240,120,0,0.5); }
+
+  /* ─── ABOUT ─── */
+  .about-hero { background: linear-gradient(135deg, var(--orange-pale) 0%, var(--off-white) 60%, #fff9f0 100%); padding: 70px 5% 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .about-text h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4.5vw, 3rem); color: var(--text-dark); margin-bottom: 20px; line-height: 1.2; }
+  .about-text h1 span { color: var(--orange-main); }
+  .about-text p { font-size: 1rem; color: var(--text-mid); line-height: 1.8; margin-bottom: 16px; }
+  .about-visual { display: flex; align-items: center; justify-content: center; position: relative; }
+  .about-logo-big { width: 240px; height: 240px; background: linear-gradient(135deg, var(--orange-main), var(--orange-deep)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 60px rgba(240,120,0,0.35), 0 6px 20px rgba(0,0,0,0.1); position: relative; }
+  .about-logo-big::before { content: ''; position: absolute; inset: -12px; border-radius: 50%; background: transparent; border: 2px dashed var(--orange-light); opacity: 0.5; animation: spin 20s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .about-logo-big img { width: 65%; filter: brightness(10); }
+  .about-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; padding: 0 5% 60px; max-width: 1200px; margin: 0 auto; }
+  .stat-box { background: var(--white); border-radius: var(--radius-card); padding: 28px 20px; text-align: center; box-shadow: var(--shadow-card); border: 1px solid rgba(240,120,0,0.1); transition: var(--transition); }
+  .stat-box:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(200,90,0,0.15); }
+  .stat-number { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: var(--orange-main); margin-bottom: 6px; }
+  .stat-label { font-size: 0.88rem; color: var(--text-mid); font-weight: 500; }
+  .about-story { background: var(--white); padding: 60px 5%; }
+  .about-story-inner { max-width: 800px; margin: 0 auto; }
+  .about-story h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--text-dark); margin-bottom: 24px; }
+  .about-story h2 span { color: var(--orange-main); }
+  .about-story p { font-size: 1rem; color: var(--text-mid); line-height: 1.85; margin-bottom: 18px; }
+  .timeline { border-left: 3px solid var(--orange-light); padding-left: 28px; margin: 36px 0; display: flex; flex-direction: column; gap: 28px; }
+  .timeline-item { position: relative; }
+  .timeline-item::before { content: ''; position: absolute; left: -37px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--orange-main); box-shadow: 0 0 0 4px var(--orange-pale); }
+  .timeline-year { font-size: 0.8rem; font-weight: 700; color: var(--orange-main); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .timeline-text { font-size: 0.95rem; color: var(--text-mid); line-height: 1.65; }
+
+  /* ─── CONTACT ─── */
+  .contact-section { padding: 70px 5% 60px; background: linear-gradient(145deg, var(--off-white) 0%, var(--orange-pale) 100%); min-height: calc(100vh - 72px); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1100px; margin: 0 auto 56px; align-items: start; }
+  .contact-info h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--text-dark); margin-bottom: 18px; line-height: 1.25; }
+  .contact-info h1 span { color: var(--orange-main); }
+  .contact-info p { font-size: 1rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 32px; }
+  .contact-links { display: flex; flex-direction: column; gap: 14px; }
+  .contact-link { display: flex; align-items: center; gap: 14px; background: var(--white); border-radius: var(--radius-card); padding: 16px 20px; box-shadow: var(--shadow-card); text-decoration: none; color: var(--text-dark); border: 1px solid rgba(240,120,0,0.1); transition: var(--transition); font-weight: 600; }
+  .contact-link:hover { transform: translateX(6px); border-color: var(--orange-main); box-shadow: 0 8px 28px rgba(240,120,0,0.18); }
+  .contact-link-icon { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+  .insta-icon { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+  .whats-icon { background: #25d366; }
+  .email-icon { background: var(--orange-pale); font-size: 1.1rem; }
+  .contact-link-text { flex: 1; }
+  .contact-link-text strong { display: block; font-size: 0.95rem; color: var(--text-dark); }
+  .contact-link-text span { font-size: 0.82rem; color: var(--text-mid); font-weight: 400; }
+  .contact-form-box { background: var(--white); border-radius: var(--radius-lg); padding: 36px 32px; box-shadow: var(--shadow-card); border: 1px solid rgba(240,120,0,0.1); }
+  .contact-form-box h2 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--text-dark); margin-bottom: 24px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-mid); margin-bottom: 6px; }
+  .form-group input, .form-group textarea { width: 100%; border: 2px solid rgba(240,120,0,0.2); border-radius: 14px; padding: 12px 16px; font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: var(--text-dark); background: var(--off-white); outline: none; transition: var(--transition); resize: vertical; }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--orange-main); box-shadow: 0 0 0 4px rgba(240,120,0,0.1); background: var(--white); }
+  .form-group textarea { min-height: 110px; }
+  .form-submit { width: 100%; background: var(--orange-main); color: var(--white); border: none; cursor: pointer; padding: 14px; border-radius: var(--radius-pill); font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; box-shadow: var(--shadow-btn); transition: var(--transition); margin-top: 4px; }
+  .form-submit:hover { background: var(--orange-deep); transform: translateY(-2px); box-shadow: 0 10px 32px rgba(240,120,0,0.5); }
+
+  /* ─── FOOTER ─── */
+  footer { background: var(--text-dark); color: rgba(255,255,255,0.75); padding: 56px 5% 24px; }
+  /* 3 colunas: brand (2fr) + navegação (1fr) + contato (1fr) */
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; max-width: 1200px; margin: 0 auto 40px; }
+  .footer-brand img { width: 48px; height: 48px; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(240,120,0,0.4); }
+  .footer-brand-name { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--white); margin-bottom: 8px; }
+  .footer-brand p { font-size: 0.88rem; line-height: 1.7; max-width: 260px; }
+  .footer-col h4 { color: var(--white); font-size: 0.9rem; font-weight: 700; margin-bottom: 16px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .footer-col ul li a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; cursor: pointer; }
+  .footer-col ul li a:hover { color: var(--orange-light); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 22px; max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.82rem; }
+  .footer-bottom-links { display: flex; gap: 20px; }
+  .footer-bottom-links a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: pointer; }
+  .footer-bottom-links a:hover { color: var(--orange-light); }
+  .footer-social { display: flex; gap: 10px; margin-top: 14px; }
+  .social-circle { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; cursor: pointer; transition: var(--transition); text-decoration: none; color: var(--white); }
+  .social-circle:hover { background: var(--orange-main); transform: translateY(-3px); }
+
+  /* ─── COOKIE BANNER ─── */
+  .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000; background: var(--text-dark); color: rgba(255,255,255,0.85); padding: 18px 5%; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 -4px 24px rgba(0,0,0,0.2); transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+  .cookie-banner.show { transform: translateY(0); }
+  .cookie-banner p { flex: 1; font-size: 0.88rem; line-height: 1.6; min-width: 200px; }
+  .cookie-banner a { color: var(--orange-light); }
+  .cookie-accept { background: var(--orange-main); color: var(--white); border: none; cursor: pointer; padding: 10px 26px; border-radius: var(--radius-pill); font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 700; box-shadow: 0 4px 14px rgba(240,120,0,0.4); transition: var(--transition); flex-shrink: 0; }
+  .cookie-accept:hover { background: var(--orange-deep); transform: translateY(-2px); }
+  .cookie-decline { background: transparent; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.3); cursor: pointer; padding: 9px 20px; border-radius: var(--radius-pill); font-family: 'Outfit', sans-serif; font-size: 0.88rem; transition: var(--transition); flex-shrink: 0; }
+  .cookie-decline:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+
+  /* ─── TOAST ─── */
+  .toast { position: fixed; bottom: 100px; right: 28px; z-index: 3000; background: var(--text-dark); color: var(--white); padding: 14px 22px; border-radius: var(--radius-card); font-size: 0.9rem; font-weight: 600; box-shadow: 0 8px 28px rgba(0,0,0,0.2); transform: translateY(20px); opacity: 0; transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; border-left: 4px solid var(--orange-main); max-width: 280px; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ─── MODAL ─── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(42,26,8,0.55); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal-box { background: var(--white); border-radius: var(--radius-lg); max-width: 500px; width: 100%; padding: 36px 32px; box-shadow: 0 24px 64px rgba(0,0,0,0.2); transform: scale(0.9); transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); max-height: 90vh; overflow-y: auto; position: relative; }
+  .modal-overlay.open .modal-box { transform: scale(1); }
+  .modal-img { font-size: 5rem; text-align: center; margin-bottom: 16px; }
+  .modal-box h2 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 8px; }
+  .modal-box p { font-size: 0.95rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 16px; }
+  .modal-price { font-size: 1.4rem; font-weight: 800; color: var(--orange-main); margin-bottom: 20px; }
+  .modal-close { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--orange-pale); color: var(--orange-main); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+  .modal-close:hover { background: var(--orange-main); color: white; }
+
+  /* ─── NO RESULTS ─── */
+  .no-results { text-align: center; padding: 60px 20px; color: var(--text-mid); grid-column: 1 / -1; }
+  .no-results span { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .about-hero { grid-template-columns: 1fr; text-align: center; gap: 32px; }
+    .about-visual { order: -1; }
+    .about-stats { grid-template-columns: repeat(3, 1fr); }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; flex-direction: column; gap: 4px; }
+    .nav-links.open { display: flex; position: absolute; top: 72px; left: 0; right: 0; background: var(--white); padding: 12px 5% 20px; border-bottom: 1px solid var(--gray-light); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .hamburger { display: flex; }
+    .about-stats { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .cart-panel { width: 100vw; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeInUp 0.6s ease forwards; }
+  .fade-in-1 { animation-delay: 0.1s; opacity: 0; }
+  .fade-in-2 { animation-delay: 0.25s; opacity: 0; }
+  .fade-in-3 { animation-delay: 0.4s; opacity: 0; }
+  .fade-in-4 { animation-delay: 0.55s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('inicio'); return false;">
+    <!--
+      ════════════════════════════════════════════════════════
+      LOGO: Substitua o bloco abaixo pela sua logo SVG.
+      Exemplo: <img src="logo.svg" alt="Maker3D" style="width:42px;height:42px;">
+      ════════════════════════════════════════════════════════
+    -->
+    <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#f07800,#c85a00);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(240,120,0,0.3);">
+      <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+        <polygon points="50,10 70,30 90,40 50,50 10,40 30,30" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/>
+        <polygon points="50,50 90,40 75,75 50,85 25,75 10,40" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/>
+        <line x1="50" y1="10" x2="50" y2="85" stroke="white" stroke-width="3"/>
+        <line x1="10" y1="40" x2="90" y2="40" stroke="white" stroke-width="2.5"/>
+      </svg>
+    </div>
+    <span>Maker3D</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" onclick="showPage('inicio'); return false;" class="active" id="nav-inicio">Início</a></li>
+    <li><a href="#" onclick="showPage('produtos'); return false;" id="nav-produtos">Produtos</a></li>
+    <li><a href="#" onclick="showPage('sobre'); return false;" id="nav-sobre">Sobre Nós</a></li>
+    <li><a href="#" onclick="showPage('contato'); return false;" id="nav-contato" class="nav-cta">Contato</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- CART FAB (direita) -->
+<button class="cart-fab" onclick="toggleCart()">
+  🛒
+  <div class="cart-count" id="cartCount">0</div>
+</button>
+
+<!-- WHATSAPP FAB (esquerda) -->
+<a class="whatsapp-fab" href="https://wa.me/5531984566047" target="_blank" title="Fale conosco no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- CART PANEL -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>🛒 Meu Carrinho</h2>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <span class="empty-icon">🪣</span>
+      <p>Seu carrinho está vazio.<br>Explore nossos produtos incríveis!</p>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span>Total</span>
+      <strong id="cartTotal">R$ 0,00</strong>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Finalizar Pedido 🚀</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-img" id="modalEmoji"></div>
+    <h2 id="modalTitle"></h2>
+    <p id="modalDesc"></p>
+    <div class="modal-price" id="modalPrice"></div>
+    <div id="modalColors" style="margin-bottom:18px;"></div>
+    <button class="btn-primary" style="width:100%" onclick="addToCartFromModal()">Adicionar ao Carrinho</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Produto adicionado!</div>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <p>🍪 Usamos cookies para melhorar sua experiência em nosso site. Ao continuar navegando, você concorda com nossa <a href="#">Política de Privacidade</a>.</p>
+  <button class="cookie-accept" onclick="acceptCookies()">Aceitar Tudo</button>
+  <button class="cookie-decline" onclick="acceptCookies()">Só Essenciais</button>
+</div>
+
+<main>
+
+<!-- ════ INÍCIO ════ -->
+<section class="page active" id="page-inicio">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge fade-in fade-in-1">🔶 Especialistas em Impressão 3D</div>
+      <h1 class="fade-in fade-in-2">Transformamos <em>Ideias</em> em Realidade 3D</h1>
+      <p class="fade-in fade-in-3">Peças únicas, personalizadas e de alta precisão. Da prototipagem à produção, a Maker3D entrega qualidade que você pode tocar.</p>
+      <div class="hero-buttons fade-in fade-in-4">
+        <a href="#" class="btn-primary" onclick="showPage('produtos'); return false;">Ver Produtos</a>
+        <a href="#" class="btn-secondary" onclick="showPage('contato'); return false;">Solicitar Orçamento</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel-section">
+    <div class="carousel-title">Produtos em <span>Destaque</span></div>
+    <div class="carousel-wrapper" id="carouselWrapper">
+      <div class="carousel-track" id="carouselTrack"></div>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </div>
+
+  <div class="features">
+    <div class="section-header">
+      <h2>Por que <span>Maker3D</span>?</h2>
+      <p>Qualidade industrial, atenção artesanal em cada peça que sai das nossas impressoras.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">🎯</div><h3>Alta Precisão</h3><p>Impressão com camadas de até 0,1mm para detalhes que impressionam.</p></div>
+      <div class="feature-card"><div class="feature-icon">🎨</div><h3>Múltiplas Cores</h3><p>Mais de 30 filamentos coloridos para personalizar sua peça do jeito que imagina.</p></div>
+      <div class="feature-card"><div class="feature-icon">⚡</div><h3>Entrega Rápida</h3><p>Pedidos processados em até 48h com envio para todo o Brasil.</p></div>
+      <div class="feature-card"><div class="feature-icon">🔧</div><h3>Customização Total</h3><p>Traga seu projeto ou nos mande a ideia — tornamos realidade.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PRODUTOS ════ -->
+<section class="page" id="page-produtos">
+  <div class="products-hero">
+    <h1>Nossos Produtos</h1>
+    <p>Peças funcionais, decorativas e customizadas feitas com precisão industrial.</p>
+  </div>
+  <div class="products-controls">
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar produto..." oninput="filterProducts()">
+    </div>
+    <div class="filter-pills" id="filterPills">
+      <button class="filter-pill active" onclick="setFilter('todos', this)">Todos</button>
+      <button class="filter-pill" onclick="setFilter('decorativo', this)">Decorativo</button>
+      <button class="filter-pill" onclick="setFilter('funcional', this)">Funcional</button>
+      <button class="filter-pill" onclick="setFilter('miniatura', this)">Miniaturas</button>
+      <button class="filter-pill" onclick="setFilter('customizado', this)">Customizado</button>
+    </div>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- ════ SOBRE NÓS ════ -->
+<section class="page" id="page-sobre">
+  <div style="background:linear-gradient(135deg,var(--orange-pale) 0%,var(--off-white) 100%);padding-top:20px">
+    <div class="about-hero">
+      <div class="about-text">
+        <h1>A História da <span>Maker3D</span></h1>
+        <p>Nascemos da paixão por criar. Do garagem para o Brasil, a Maker3D começou como um sonho de dois amigos que acreditavam que a impressão 3D poderia ser acessível, criativa e de alta qualidade.</p>
+        <p>Cada peça que saiu de nossas impressoras foi feita com cuidado, atenção aos detalhes e muito amor pelo que fazemos.</p>
+        <a href="#" class="btn-primary" onclick="showPage('contato'); return false;" style="display:inline-block;margin-top:8px;">Fale Conosco</a>
+      </div>
+      <div class="about-visual">
+        <div class="about-logo-big">
+          <!--
+            ════════════════════════════════════════════════════════
+            LOGO: Substitua o SVG abaixo pela sua logo.
+            Exemplo: <img src="logo.svg" alt="Maker3D" style="width:65%;filter:brightness(10);">
+            ════════════════════════════════════════════════════════
+          -->
+          <svg width="130" height="130" viewBox="0 0 100 100" fill="none">
+            <polygon points="50,8 72,28 92,38 50,50 8,38 28,28" fill="none" stroke="white" stroke-width="3.5" stroke-linejoin="round"/>
+            <polygon points="50,50 92,38 76,76 50,88 24,76 8,38" fill="none" stroke="white" stroke-width="3.5" stroke-linejoin="round"/>
+            <line x1="50" y1="8" x2="50" y2="88" stroke="white" stroke-width="2.5"/>
+            <line x1="8" y1="38" x2="92" y2="38" stroke="white" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-stats">
+    <div class="stat-box"><div class="stat-number">500+</div><div class="stat-label">Peças Entregues</div></div>
+    <div class="stat-box"><div class="stat-number">30+</div><div class="stat-label">Cores Disponíveis</div></div>
+    <div class="stat-box"><div class="stat-number">98%</div><div class="stat-label">Clientes Satisfeitos</div></div>
+  </div>
+
+  <div class="about-story">
+    <div class="about-story-inner">
+      <h2>Nossa <span>Jornada</span></h2>
+      <p>Tudo começou em 2021, quando dois makers apaixonados por tecnologia resolveram transformar um hobby em algo maior. Com uma única impressora 3D e muita criatividade, a Maker3D ganhou vida.</p>
+      <p>O que nos diferencia não é apenas a tecnologia — é o cuidado humano em cada projeto. Ouvimos nossos clientes, entendemos sua necessidade e entregamos mais do que esperavam.</p>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">2021</div><div class="timeline-text">Fundação da Maker3D em um pequeno espaço caseiro. Primeira impressora, primeiros sonhos.</div></div>
+        <div class="timeline-item"><div class="timeline-year">2022</div><div class="timeline-text">Expansão do portfólio: miniaturas, peças funcionais e os primeiros projetos customizados para clientes externos.</div></div>
+        <div class="timeline-item"><div class="timeline-year">2023</div><div class="timeline-text">Crescimento acelerado. Chegamos a 5 impressoras simultâneas e entrada em mais materiais premium.</div></div>
+        <div class="timeline-item"><div class="timeline-year">2024+</div><div class="timeline-text">Loja online oficial, presença nas redes sociais e compromisso de levar impressão 3D de qualidade para todo o Brasil.</div></div>
+      </div>
+      <p>Hoje, a Maker3D é sinônimo de qualidade, inovação e atendimento personalizado. Cada peça é tratada como se fosse única — porque ela é.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ CONTATO ════ -->
+<section class="page" id="page-contato">
+  <div class="contact-section">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h1>Vamos <span>Conversar</span>?</h1>
+        <p>Tem um projeto em mente, uma dúvida ou quer um orçamento? A gente responde rápido. Escolha o canal que preferir:</p>
+        <div class="contact-links">
+          <a href="https://www.instagram.com/maker3d.oficial" target="_blank" class="contact-link">
+            <div class="contact-link-icon insta-icon" style="color:white;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <div class="contact-link-text"><strong>@maker3d.oficial</strong><span>Instagram — DM sempre aberta</span></div>
+            <span>→</span>
+          </a>
+          <a href="https://wa.me/5531984566047" target="_blank" class="contact-link">
+            <div class="contact-link-icon whats-icon" style="color:white;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </div>
+            <div class="contact-link-text"><strong>+55 (31) 98456-6047</strong><span>WhatsApp — Resposta em até 1h</span></div>
+            <span>→</span>
+          </a>
+          <a href="mailto:maker3d.suporte@gmail.com" class="contact-link">
+            <div class="contact-link-icon email-icon" style="display:flex;align-items:center;justify-content:center;font-size:1.2rem;">✉️</div>
+            <div class="contact-link-text"><strong>maker3d.suporte@gmail.com</strong><span>E-mail — para orçamentos detalhados</span></div>
+            <span>→</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact-form-box">
+        <h2>Envie uma Mensagem</h2>
+        <div class="form-group"><label>Seu Nome</label><input type="text" placeholder="Como posso te chamar?"></div>
+        <div class="form-group"><label>E-mail ou WhatsApp</label><input type="text" placeholder="Para te respondermos"></div>
+        <div class="form-group"><label>Assunto</label><input type="text" placeholder="Ex: Orçamento para peça customizada"></div>
+        <div class="form-group"><label>Mensagem</label><textarea placeholder="Descreva seu projeto ou dúvida..."></textarea></div>
+        <button class="form-submit" onclick="submitForm()">Enviar Mensagem 🚀</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer id="siteFooter">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <!--
+        ════════════════════════════════════════════════════════
+        LOGO NO FOOTER: Substitua pelo seu SVG também.
+        Exemplo: <img src="logo.svg" alt="Maker3D" style="width:48px;height:48px;margin-bottom:12px;">
+        ════════════════════════════════════════════════════════
+      -->
+      <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f07800,#c85a00);display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 2px 10px rgba(240,120,0,0.4);">
+        <svg width="28" height="28" viewBox="0 0 100 100" fill="none"><polygon points="50,8 72,28 92,38 50,50 8,38 28,28" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/><polygon points="50,50 92,38 76,76 50,88 24,76 8,38" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/><line x1="50" y1="8" x2="50" y2="88" stroke="white" stroke-width="3"/><line x1="8" y1="38" x2="92" y2="38" stroke="white" stroke-width="2.5"/></svg>
+      </div>
+      <div class="footer-brand-name">Maker3D</div>
+      <p>Especialistas em impressão 3D. Transformando ideias em objetos reais com precisão e criatividade.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/maker3d.oficial" target="_blank" class="social-circle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://wa.me/5531984566047" target="_blank" class="social-circle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="mailto:maker3d.suporte@gmail.com" class="social-circle">✉</a>
+      </div>
+    </div>
+
+    <!-- Coluna: Navegação -->
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <ul>
+        <li><a onclick="showPage('inicio')">Início</a></li>
+        <li><a onclick="showPage('produtos')">Produtos</a></li>
+        <li><a onclick="showPage('sobre')">Sobre Nós</a></li>
+        <li><a onclick="showPage('contato')">Contato</a></li>
+      </ul>
+    </div>
+
+    <!-- Coluna: Contato -->
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="https://www.instagram.com/maker3d.oficial" target="_blank">Instagram</a></li>
+        <li><a href="https://wa.me/5531984566047" target="_blank">WhatsApp</a></li>
+        <li><a href="mailto:maker3d.suporte@gmail.com">E-mail</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 Maker3D — Todos os direitos reservados.</p>
+    <div class="footer-bottom-links">
+      <a href="#" onclick="showCookiePolicy()">Política de Cookies</a>
+      <a href="#">Privacidade</a>
+      <a href="#">Termos de Uso</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── PRODUCTS DATA ───
+// Os produtos são carregados do localStorage (gerenciados pelo admin.html).
+// Se não houver dados do admin, usa os produtos padrão abaixo.
+const defaultProducts = [
+  { id:1, name:'Vaso Geométrico', emoji:'🏺', category:'decorativo', desc:'Vaso com design geométrico inspirado em origami. Perfeito para decoração minimalista.', price:45, colors:[{name:'Laranja',hex:'#f07800'},{name:'Preto',hex:'#2c2c2c'},{name:'Branco',hex:'#ffffff'},{name:'Verde',hex:'#4a9e6f'}], badge:'Popular' },
+  { id:2, name:'Suporte de Fone', emoji:'🎧', category:'funcional', desc:'Suporte de mesa ergonômico para headphones. Elegante e resistente.', price:38, colors:[{name:'Laranja',hex:'#f07800'},{name:'Azul',hex:'#1a1a2e'},{name:'Cinza',hex:'#e8e8e8'}], badge:'' },
+  { id:3, name:'Miniatura Dragão', emoji:'🐉', category:'miniatura', desc:'Dragão articulado impresso em múltiplas partes. Escama por escama, um trabalho de arte.', price:89, colors:[{name:'Vermelho',hex:'#c0392b'},{name:'Preto',hex:'#2c2c2c'},{name:'Dourado',hex:'#f0a500'}], badge:'Destaque' },
+  { id:4, name:'Organizador de Mesa', emoji:'🗂️', category:'funcional', desc:'Organize canetas, cartões e cabos com estilo. Modular e expansível.', price:52, colors:[{name:'Laranja',hex:'#f07800'},{name:'Branco',hex:'#ffffff'},{name:'Cinza',hex:'#3d3d3d'}], badge:'' },
+  { id:5, name:'Chaveiro Personalizado', emoji:'🔑', category:'customizado', desc:'Chaveiro com nome, inicial ou símbolo de sua escolha. Presente perfeito.', price:18, colors:[{name:'Laranja',hex:'#f07800'},{name:'Amarelo',hex:'#e8c840'},{name:'Vermelho',hex:'#c0392b'},{name:'Azul',hex:'#3498db'}], badge:'' },
+  { id:6, name:'Miniatura RPG', emoji:'⚔️', category:'miniatura', desc:'Miniaturas para RPG de mesa — guerreiros, magos e criaturas. Acabamento detalhado.', price:65, colors:[{name:'Cinza',hex:'#7f8c8d'},{name:'Vermelho',hex:'#c0392b'},{name:'Preto',hex:'#2c2c2c'}], badge:'Novo' },
+  { id:7, name:'Porta-Retratos 3D', emoji:'🖼️', category:'decorativo', desc:'Porta-retratos com efeito de profundidade. Design único que valoriza suas fotos.', price:42, colors:[{name:'Laranja',hex:'#f07800'},{name:'Branco',hex:'#ffffff'},{name:'Marrom',hex:'#8e6b3e'}], badge:'' },
+  { id:8, name:'Suporte Celular', emoji:'📱', category:'funcional', desc:'Suporte ajustável de mesa para qualquer smartphone. Ângulo perfeito sempre.', price:29, colors:[{name:'Preto',hex:'#2c2c2c'},{name:'Laranja',hex:'#f07800'},{name:'Branco',hex:'#ffffff'}], badge:'' },
+  { id:9, name:'✨ Peça Customizada', emoji:'⚙️', category:'customizado', desc:'Envie seu arquivo STL ou descreva sua ideia. Criamos qualquer coisa do zero! Preço sob consulta conforme o projeto.', price:null, colors:[{name:'Laranja',hex:'#f07800'},{name:'Escuro',hex:'#c85a00'},{name:'Claro',hex:'#ffb347'},{name:'Azul',hex:'#3498db'},{name:'Verde',hex:'#2ecc71'}], badge:'Sob Medida', custom:true },
 ];
 
-// Exporta para uso no index.html
-if (typeof window !== 'undefined') {
-  window.MAKER3D_PRODUCTS = MAKER3D_PRODUCTS;
+function loadProducts() {
+  try {
+    const saved = localStorage.getItem('maker3d_products');
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return defaultProducts;
 }
+
+let products = loadProducts();
+const carouselProducts = products.slice(0, 6);
+
+let cart = [];
+let currentFilter = 'todos';
+let currentModal = null;
+
+// ─── NAVIGATION ───
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('nav-'+id)?.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('navLinks').classList.remove('open');
+  if (id === 'produtos') renderProducts();
+}
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+// ─── CAROUSEL ───
+let carouselIdx = 0, isDragging = false, startX = 0, currentX = 0;
+
+function renderCarousel() {
+  const track = document.getElementById('carouselTrack');
+  const dots = document.getElementById('carouselDots');
+  const gradients = ['linear-gradient(135deg,#ffe0b2,#ffcc80)','linear-gradient(135deg,#fff3e0,#ffe0b2)','linear-gradient(135deg,#fbe9e7,#ffccbc)','linear-gradient(135deg,#fff8e1,#ffe082)','linear-gradient(135deg,#f3e5f5,#e1bee7)','linear-gradient(135deg,#e8f5e9,#c8e6c9)'];
+
+  track.innerHTML = carouselProducts.map((p,i) => `
+    <div class="carousel-card" onclick="openModal(${p.id})">
+      <div class="carousel-card-img" style="background:${gradients[i % gradients.length]}">${p.emoji}</div>
+      <div class="carousel-card-body">
+        <h3>${p.name}</h3>
+        <p>${p.desc.substring(0,70)}...</p>
+        <div class="carousel-card-price">${p.price ? 'R$ '+p.price+',00' : 'Sob Consulta'}</div>
+      </div>
+    </div>
+  `).join('');
+
+  dots.innerHTML = carouselProducts.map((_,i) => `<button class="dot ${i===0?'active':''}" onclick="goToSlide(${i})"></button>`).join('');
+
+  const wrapper = document.getElementById('carouselWrapper');
+  wrapper.addEventListener('touchstart', e => { isDragging=true; startX=e.touches[0].clientX; }, {passive:true});
+  wrapper.addEventListener('touchmove', e => { if(isDragging) currentX=e.touches[0].clientX; }, {passive:true});
+  wrapper.addEventListener('touchend', () => {
+    if(!isDragging) return;
+    const diff = startX - currentX;
+    if(Math.abs(diff) > 40) { if(diff > 0) nextSlide(); else prevSlide(); }
+    isDragging = false;
+  });
+}
+
+function getCardWidth() {
+  const card = document.querySelector('.carousel-card');
+  return card ? card.offsetWidth + 24 : 304;
+}
+function goToSlide(idx) {
+  carouselIdx = Math.max(0, Math.min(idx, carouselProducts.length - 1));
+  document.getElementById('carouselTrack').style.transform = `translateX(-${carouselIdx * getCardWidth()}px)`;
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === carouselIdx));
+}
+function nextSlide() { goToSlide(carouselIdx < carouselProducts.length - 1 ? carouselIdx + 1 : 0); }
+function prevSlide() { goToSlide(carouselIdx > 0 ? carouselIdx - 1 : carouselProducts.length - 1); }
+setInterval(nextSlide, 3500);
+
+// ─── PRODUCTS ───
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  const query = document.getElementById('searchInput')?.value.toLowerCase() || '';
+  const filtered = products.filter(p => {
+    const matchCat = currentFilter === 'todos' || p.category === currentFilter;
+    const matchQ = !query || p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
+    return matchCat && matchQ;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="no-results"><span>🔍</span><p>Nenhum produto encontrado.</p></div>`;
+    return;
+  }
+
+  const gradients = ['linear-gradient(135deg,#ffe0b2,#ffcc80)','linear-gradient(135deg,#fff3e0,#ffe0b2)','linear-gradient(135deg,#fbe9e7,#ffccbc)','linear-gradient(135deg,#fff8e1,#ffe082)','linear-gradient(135deg,#f0e6ff,#e1bee7)','linear-gradient(135deg,#e8f5e9,#c8e6c9)','linear-gradient(135deg,#e3f2fd,#bbdefb)','linear-gradient(135deg,#fce4ec,#f8bbd9)'];
+
+  grid.innerHTML = filtered.map((p,i) => {
+    const colorsHtml = (p.colors || []).map((c,ci) => {
+      const hex = typeof c === 'object' ? c.hex : c;
+      const name = typeof c === 'object' ? c.name : hex;
+      return `<div class="color-dot ${ci===0?'selected':''}" style="background:${hex}" onclick="selectColor(this)" title="${name}"></div>`;
+    }).join('');
+
+    return `
+      <div class="product-card ${p.custom ? 'custom-card' : ''}">
+        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+        <div class="product-img" style="background:${p.custom ? 'linear-gradient(135deg,#f07800,#c85a00)' : gradients[i % gradients.length]}">${p.emoji}</div>
+        <div class="product-body">
+          <h3>${p.name}</h3>
+          <p>${p.desc.substring(0,85)}...</p>
+          <div class="color-dots">
+            ${colorsHtml}
+            <span class="color-label">Cores</span>
+          </div>
+          <div class="product-footer">
+            <div class="product-price">${p.price ? 'R$ '+p.price+',00' : 'Consulte'}</div>
+            <button class="add-cart-btn" onclick="addToCart(${p.id}); event.stopPropagation()">${p.custom ? 'Solicitar' : '+ Carrinho'}</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.product-card').forEach((el, i) => {
+    el.addEventListener('click', (e) => {
+      if (e.target.classList.contains('add-cart-btn') || e.target.classList.contains('color-dot')) return;
+      openModal(filtered[i].id);
+    });
+  });
+}
+
+function setFilter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function filterProducts() { renderProducts(); }
+
+function selectColor(el) {
+  el.closest('.color-dots').querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ─── MODAL ───
+function openModal(id) {
+  const p = products.find(p => p.id === id);
+  if (!p) return;
+  currentModal = p;
+  document.getElementById('modalEmoji').textContent = p.emoji;
+  document.getElementById('modalTitle').textContent = p.name;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalPrice').textContent = p.price ? `R$ ${p.price},00` : 'Preço sob consulta';
+  const colors = (p.colors || []).map((c,i) => {
+    const hex = typeof c === 'object' ? c.hex : c;
+    const name = typeof c === 'object' ? c.name : hex;
+    return `<div class="color-dot ${i===0?'selected':''}" style="background:${hex};width:24px;height:24px" onclick="selectColor(this)" title="${name}"></div>`;
+  }).join('');
+  document.getElementById('modalColors').innerHTML = `
+    <div style="margin-bottom:8px;font-size:0.85rem;font-weight:600;color:var(--text-mid)">Escolha a cor:</div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap">${colors}</div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay') || (e.target && e.target.classList.contains('modal-close'))) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+function addToCartFromModal() {
+  if (currentModal) addToCart(currentModal.id);
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ─── CART ───
+function addToCart(id) {
+  const p = products.find(p => p.id === id);
+  if (!p) return;
+  const existing = cart.find(c => c.id === id);
+  if (existing) existing.qty++;
+  else cart.push({ ...p, qty: 1 });
+  updateCartUI();
+  showToast(`${p.emoji} ${p.name} adicionado!`);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(c => c.id !== id);
+  updateCartUI();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id);
+  else updateCartUI();
+}
+
+function updateCartUI() {
+  const total = cart.reduce((s,c) => s + (c.price||0)*c.qty, 0);
+  const count = cart.reduce((s,c) => s + c.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+  const itemsEl = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+  if (!cart.length) {
+    itemsEl.innerHTML = `<div class="cart-empty"><span class="empty-icon">🪣</span><p>Seu carrinho está vazio.<br>Explore nossos produtos!</p></div>`;
+    footer.style.display = 'none';
+    return;
+  }
+  footer.style.display = 'block';
+  document.getElementById('cartTotal').textContent = `R$ ${total},00`;
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-img">${item.emoji}</div>
+      <div class="cart-item-info"><h4>${item.name}</h4><span>${item.price ? 'R$ '+item.price+',00' : 'Sob consulta'}</span></div>
+      <div class="cart-item-qty">
+        <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+        <span class="qty-value">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+      </div>
+      <button class="cart-remove" onclick="removeFromCart(${item.id})">🗑</button>
+    </div>
+  `).join('');
+}
+
+function toggleCart() {
+  document.getElementById('cartPanel').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+}
+
+function checkout() {
+  toggleCart();
+  showToast('🚀 Redirecionando para o WhatsApp...');
+  const msg = 'Olá! Gostaria de finalizar meu pedido:\n' + cart.map(c => `• ${c.name} x${c.qty}`).join('\n');
+  setTimeout(() => { window.open('https://wa.me/5531984566047?text=' + encodeURIComponent(msg), '_blank'); }, 1000);
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ─── FORM ───
+function submitForm() { showToast('✅ Mensagem enviada com sucesso!'); }
+
+// ─── COOKIES ───
+function acceptCookies() {
+  document.getElementById('cookieBanner').classList.remove('show');
+  localStorage.setItem('maker3d_cookies', '1');
+}
+function showCookiePolicy() { showToast('🍪 Usamos cookies para melhorar sua experiência.'); }
+
+// ─── INIT ───
+window.addEventListener('DOMContentLoaded', () => {
+  renderCarousel();
+  renderProducts();
+  if (!localStorage.getItem('maker3d_cookies')) {
+    setTimeout(() => document.getElementById('cookieBanner').classList.add('show'), 2000);
+  }
+});
+</script>
+</body>
+</html>
