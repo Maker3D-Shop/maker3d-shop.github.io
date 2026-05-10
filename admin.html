@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maker3D — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange-deep: #c85a00; --orange-main: #f07800; --orange-light: #ffb347;
+    --orange-pale: #fff3e0; --white: #ffffff; --off-white: #fdf8f2;
+    --gray-light: #f0e8de; --gray-mid: #c9a882; --text-dark: #2a1a08;
+    --text-mid: #6b4c2a; --danger: #e53e3e; --success: #38a169;
+    --shadow: 0 4px 20px rgba(200,90,0,0.12); --radius: 16px; --radius-sm: 10px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Outfit', sans-serif; background: #f7f0e8; color: var(--text-dark); min-height: 100vh; }
+
+  /* ── LOGIN ── */
+  #loginScreen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(145deg, #fdf8f2 0%, #fff3e0 60%, #fde8c4 100%);
+  }
+  .login-box {
+    background: var(--white); border-radius: 24px; padding: 48px 40px;
+    box-shadow: 0 16px 56px rgba(200,90,0,0.18); width: 100%; max-width: 400px; text-align: center;
+  }
+  .login-logo {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, #f07800, #c85a00);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 6px 24px rgba(240,120,0,0.4);
+  }
+  .login-box h1 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--text-dark); margin-bottom: 6px; }
+  .login-box p { font-size: 0.9rem; color: var(--text-mid); margin-bottom: 28px; }
+  .login-input {
+    width: 100%; border: 2px solid rgba(240,120,0,0.2); border-radius: var(--radius-sm);
+    padding: 13px 16px; font-family: 'Outfit', sans-serif; font-size: 1rem;
+    color: var(--text-dark); background: var(--off-white); outline: none;
+    transition: border-color 0.2s; margin-bottom: 14px;
+  }
+  .login-input:focus { border-color: var(--orange-main); background: white; }
+  .login-btn {
+    width: 100%; background: var(--orange-main); color: white; border: none;
+    padding: 14px; border-radius: 999px; font-family: 'Outfit', sans-serif;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(240,120,0,0.4); transition: all 0.2s;
+  }
+  .login-btn:hover { background: var(--orange-deep); transform: translateY(-2px); }
+  .login-error { color: var(--danger); font-size: 0.85rem; margin-top: 10px; display: none; }
+
+  /* ── LAYOUT ── */
+  #adminApp { display: none; min-height: 100vh; }
+  .admin-sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0; width: 240px;
+    background: var(--text-dark); display: flex; flex-direction: column;
+    z-index: 100; box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  }
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 12px; padding: 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-logo-icon {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, #f07800, #c85a00);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .sidebar-logo span { font-family: 'DM Serif Display', serif; color: white; font-size: 1.2rem; }
+  .sidebar-logo small { display: block; color: rgba(255,255,255,0.4); font-size: 0.7rem; font-family: 'Outfit',sans-serif; margin-top: -2px; }
+  .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 11px 14px;
+    border-radius: var(--radius-sm); color: rgba(255,255,255,0.6);
+    font-size: 0.9rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; border: none; background: none; width: 100%; text-align: left;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
+  .nav-item.active { background: var(--orange-main); color: white; }
+  .nav-item .icon { font-size: 1.1rem; width: 20px; text-align: center; }
+  .sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .logout-btn {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    border-radius: var(--radius-sm); color: rgba(255,255,255,0.5);
+    font-size: 0.88rem; cursor: pointer; border: none; background: none;
+    width: 100%; transition: all 0.2s;
+  }
+  .logout-btn:hover { color: var(--danger); background: rgba(229,62,62,0.1); }
+
+  .admin-main { margin-left: 240px; padding: 32px; min-height: 100vh; }
+  .page-header { margin-bottom: 28px; }
+  .page-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--text-dark); }
+  .page-header p { color: var(--text-mid); font-size: 0.9rem; margin-top: 4px; }
+
+  /* ── CARDS / PANELS ── */
+  .panel {
+    background: var(--white); border-radius: var(--radius);
+    padding: 24px; box-shadow: var(--shadow);
+    border: 1px solid rgba(240,120,0,0.08); margin-bottom: 24px;
+  }
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+  }
+  .panel-header h3 { font-size: 1.1rem; font-weight: 700; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    padding: 9px 20px; border-radius: 999px; border: none;
+    font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary { background: var(--orange-main); color: white; box-shadow: 0 4px 14px rgba(240,120,0,0.35); }
+  .btn-primary:hover { background: var(--orange-deep); transform: translateY(-1px); }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-danger:hover { background: #c53030; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--text-mid); border: 2px solid var(--gray-light); }
+  .btn-ghost:hover { border-color: var(--orange-main); color: var(--orange-main); }
+  .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #276749; }
+
+  /* ── FORMS ── */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .form-group { margin-bottom: 16px; }
+  label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-mid); margin-bottom: 6px; }
+  input[type=text], input[type=number], input[type=password], textarea, select {
+    width: 100%; border: 2px solid rgba(240,120,0,0.18);
+    border-radius: var(--radius-sm); padding: 10px 14px;
+    font-family: 'Outfit', sans-serif; font-size: 0.92rem;
+    color: var(--text-dark); background: var(--off-white); outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--orange-main); background: white; }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* ── PRODUCT LIST ── */
+  .product-list { display: flex; flex-direction: column; gap: 14px; }
+  .product-row {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--off-white); border-radius: var(--radius-sm);
+    padding: 14px 18px; border: 1px solid rgba(240,120,0,0.1);
+    transition: all 0.2s; flex-wrap: wrap;
+  }
+  .product-row:hover { border-color: var(--orange-light); box-shadow: 0 4px 16px rgba(240,120,0,0.1); }
+  .product-row-emoji { font-size: 2rem; width: 48px; text-align: center; flex-shrink: 0; }
+  .product-row-info { flex: 1; min-width: 140px; }
+  .product-row-info strong { display: block; font-size: 0.95rem; }
+  .product-row-info span { font-size: 0.8rem; color: var(--text-mid); }
+  .product-row-price { font-size: 1rem; font-weight: 800; color: var(--orange-main); width: 90px; }
+  .product-row-actions { display: flex; gap: 8px; }
+
+  /* ── COLOR SECTION BUILDER ── */
+  .color-sections { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+  .color-section {
+    border: 2px solid rgba(240,120,0,0.18); border-radius: var(--radius-sm);
+    padding: 14px; background: var(--off-white);
+  }
+  .color-section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .color-section-header input { flex: 1; }
+  .color-items { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .color-item {
+    display: flex; align-items: center; gap: 6px;
+    background: white; border: 1px solid var(--gray-light);
+    border-radius: 999px; padding: 4px 10px 4px 6px;
+    font-size: 0.82rem;
+  }
+  .color-swatch { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); cursor: pointer; flex-shrink: 0; }
+  .color-item-remove { background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.9rem; padding: 0 2px; line-height: 1; }
+  .color-item-remove:hover { color: var(--danger); }
+  .add-color-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .add-color-row input[type=text] { flex: 1; min-width: 100px; }
+  .add-color-row input[type=color] { width: 40px; height: 38px; padding: 2px; border-radius: 8px; cursor: pointer; }
+
+  /* ── GLOBAL COLORS ── */
+  .global-colors-list { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .global-color-tag {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--off-white); border: 1px solid rgba(240,120,0,0.18);
+    border-radius: 999px; padding: 6px 12px 6px 8px;
+    font-size: 0.85rem;
+  }
+  .global-color-swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); }
+  .global-color-info { line-height: 1.2; }
+  .global-color-info strong { display: block; font-size: 0.82rem; }
+  .global-color-info span { font-size: 0.75rem; color: var(--text-mid); }
+
+  /* ── CALCULATOR ── */
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .calc-inputs { display: flex; flex-direction: column; gap: 12px; }
+  .calc-result-box {
+    background: linear-gradient(135deg, var(--orange-main), var(--orange-deep));
+    border-radius: var(--radius); padding: 28px; color: white; text-align: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .calc-result-label { font-size: 0.88rem; opacity: 0.85; margin-bottom: 8px; }
+  .calc-result-value { font-family: 'DM Serif Display', serif; font-size: 3rem; margin-bottom: 4px; }
+  .calc-result-sub { font-size: 0.82rem; opacity: 0.7; }
+  .calc-breakdown {
+    background: var(--off-white); border-radius: var(--radius-sm);
+    padding: 16px; margin-top: 16px;
+  }
+  .calc-breakdown-row {
+    display: flex; justify-content: space-between;
+    font-size: 0.85rem; padding: 6px 0;
+    border-bottom: 1px solid rgba(240,120,0,0.1);
+  }
+  .calc-breakdown-row:last-child { border-bottom: none; font-weight: 700; color: var(--orange-main); font-size: 0.95rem; }
+  .calc-breakdown-row span:first-child { color: var(--text-mid); }
+
+  /* ── MODAL EDIT ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(42,26,8,0.5); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal-box { background: white; border-radius: 24px; max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 32px; box-shadow: 0 24px 64px rgba(0,0,0,0.2); position: relative; transform: scale(0.95); transition: transform 0.25s; }
+  .modal-overlay.open .modal-box { transform: scale(1); }
+  .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 22px; }
+  .modal-close-btn { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--orange-pale); color: var(--orange-main); font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .modal-close-btn:hover { background: var(--orange-main); color: white; }
+
+  /* ── TOAST ── */
+  .toast { position: fixed; bottom: 28px; right: 28px; z-index: 9999; background: var(--text-dark); color: white; padding: 13px 20px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; border-left: 4px solid var(--orange-main); box-shadow: 0 8px 28px rgba(0,0,0,0.2); opacity: 0; transform: translateY(12px); transition: all 0.3s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── TABS ── */
+  .tab-bar { display: flex; gap: 4px; background: var(--off-white); border-radius: 999px; padding: 4px; margin-bottom: 24px; width: fit-content; }
+  .tab-btn { padding: 8px 20px; border-radius: 999px; border: none; background: none; font-family: 'Outfit',sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--text-mid); cursor: pointer; transition: all 0.2s; }
+  .tab-btn.active { background: var(--orange-main); color: white; box-shadow: 0 2px 10px rgba(240,120,0,0.3); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .admin-sidebar { width: 200px; }
+    .admin-main { margin-left: 200px; padding: 20px; }
+    .calc-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .form-row-3 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .admin-sidebar { display: none; }
+    .admin-main { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <svg width="36" height="36" viewBox="0 0 100 100" fill="none">
+        <polygon points="50,8 72,28 92,38 50,50 8,38 28,28" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/>
+        <polygon points="50,50 92,38 76,76 50,88 24,76 8,38" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/>
+        <line x1="50" y1="8" x2="50" y2="88" stroke="white" stroke-width="3"/>
+        <line x1="8" y1="38" x2="92" y2="38" stroke="white" stroke-width="2.5"/>
+      </svg>
+    </div>
+    <h1>Maker3D Admin</h1>
+    <p>Painel de gerenciamento da loja</p>
+    <input class="login-input" type="password" id="loginPass" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Entrar →</button>
+    <div class="login-error" id="loginError">Senha incorreta. Tente novamente.</div>
+  </div>
+</div>
+
+<!-- ── ADMIN APP ── -->
+<div id="adminApp">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><polygon points="50,8 72,28 92,38 50,50 8,38 28,28" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/><polygon points="50,50 92,38 76,76 50,88 24,76 8,38" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/><line x1="50" y1="8" x2="50" y2="88" stroke="white" stroke-width="3"/><line x1="8" y1="38" x2="92" y2="38" stroke="white" stroke-width="2.5"/></svg>
+      </div>
+      <div><span>Maker3D</span><small>Admin Panel</small></div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="showTab('produtos')" id="tab-produtos"><span class="icon">📦</span> Produtos</button>
+      <button class="nav-item" onclick="showTab('cores')" id="tab-cores"><span class="icon">🎨</span> Cores Globais</button>
+      <button class="nav-item" onclick="showTab('calc')" id="tab-calc"><span class="icon">🧮</span> Calculadora</button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()"><span>🚪</span> Sair</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <!-- ═══ PRODUTOS ═══ -->
+    <div id="section-produtos">
+      <div class="page-header">
+        <h2>Produtos</h2>
+        <p>Gerencie o catálogo da sua loja</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h3>📦 Catálogo atual</h3>
+          <button class="btn btn-primary" onclick="openNewProduct()">＋ Novo Produto</button>
+        </div>
+        <div class="product-list" id="productList"></div>
+      </div>
+    </div>
+
+    <!-- ═══ CORES GLOBAIS ═══ -->
+    <div id="section-cores" style="display:none">
+      <div class="page-header">
+        <h2>Cores Globais</h2>
+        <p>Cores e preços disponíveis — podem ser aplicadas a qualquer produto</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h3>🎨 Cores cadastradas</h3>
+        </div>
+        <div class="global-colors-list" id="globalColorsList"></div>
+
+        <hr style="border:1px solid var(--gray-light);margin:20px 0">
+        <h4 style="margin-bottom:14px;font-size:0.95rem;">Adicionar nova cor global</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nome da cor</label>
+            <input type="text" id="newGlobalColorName" placeholder="ex: Vermelho Escarlate">
+          </div>
+          <div class="form-group">
+            <label>Cor</label>
+            <input type="color" id="newGlobalColorHex" value="#f07800" style="width:100%;height:42px;padding:2px;border-radius:8px;cursor:pointer;">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Preço adicional (R$)</label>
+            <input type="number" id="newGlobalColorPrice" placeholder="0.00" step="0.01" min="0">
+          </div>
+          <div class="form-group" style="display:flex;align-items:flex-end;">
+            <button class="btn btn-primary" style="width:100%" onclick="addGlobalColor()">＋ Adicionar Cor</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CALCULADORA ═══ -->
+    <div id="section-calc" style="display:none">
+      <div class="page-header">
+        <h2>Calculadora de Custo</h2>
+        <p>Calcule o custo real de cada impressão para precificar corretamente</p>
+      </div>
+
+      <div class="panel">
+        <div class="calc-grid">
+          <div>
+            <div class="calc-inputs">
+              <div class="form-group">
+                <label>⏱️ Tempo de impressão (horas)</label>
+                <input type="number" id="c_horas" value="4" min="0" step="0.5" oninput="calcular()">
+              </div>
+              <div class="form-group">
+                <label>🧵 Filamento usado (gramas)</label>
+                <input type="number" id="c_gramas" value="80" min="0" oninput="calcular()">
+              </div>
+              <div class="form-group">
+                <label>💰 Preço do filamento (R$/kg)</label>
+                <input type="number" id="c_precoFilamento" value="120" min="0" oninput="calcular()">
+              </div>
+              <div class="form-group">
+                <label>⚡ Consumo da impressora (Watts)</label>
+                <input type="number" id="c_watts" value="200" min="0" oninput="calcular()">
+              </div>
+              <div class="form-group">
+                <label>🔌 Tarifa de energia (R$/kWh)</label>
+                <input type="number" id="c_tarifa" value="0.75" min="0" step="0.01" oninput="calcular()">
+              </div>
+              <div class="form-group">
+                <label>🔧 Custo de manutenção (R$/hora)</label>
+                <input type="number" id="c_manutencao" value="2" min="0" step="0.01" oninput="calcular()">
+              </div>
+              <div class="form-group">
+                <label>👷 Mão de obra (R$/hora)</label>
+                <input type="number" id="c_maoDeObra" value="5" min="0" step="0.01" oninput="calcular()">
+              </div>
+              <div class="form-group">
+                <label>📦 Custo de embalagem (R$)</label>
+                <input type="number" id="c_embalagem" value="2" min="0" step="0.01" oninput="calcular()">
+              </div>
+              <div class="form-group">
+                <label>📈 Margem de lucro desejada (%)</label>
+                <input type="number" id="c_margem" value="40" min="0" max="500" oninput="calcular()">
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="calc-result-box">
+              <div class="calc-result-label">Preço de venda sugerido</div>
+              <div class="calc-result-value" id="calcPrecoFinal">R$ 0,00</div>
+              <div class="calc-result-sub" id="calcCustoBase">Custo base: R$ 0,00</div>
+            </div>
+            <div class="calc-breakdown" id="calcBreakdown"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── MODAL PRODUTO (novo / editar) ── -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle">Novo Produto</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nome do produto *</label>
+        <input type="text" id="p_name" placeholder="ex: Vaso Geométrico">
+      </div>
+      <div class="form-group">
+        <label>Emoji / ícone *</label>
+        <input type="text" id="p_emoji" placeholder="🏺" maxlength="4">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Descrição *</label>
+      <textarea id="p_desc" placeholder="Descreva o produto..."></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Categoria</label>
+        <select id="p_category">
+          <option value="decorativo">Decorativo</option>
+          <option value="funcional">Funcional</option>
+          <option value="miniatura">Miniatura</option>
+          <option value="customizado">Customizado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preço (R$) — deixe vazio p/ "Sob Consulta"</label>
+        <input type="number" id="p_price" placeholder="ex: 45" min="0" step="0.01">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Badge (ex: Popular, Novo) — opcional</label>
+        <input type="text" id="p_badge" placeholder="Popular">
+      </div>
+      <div class="form-group">
+        <label>Desconto (%)</label>
+        <input type="number" id="p_discount" placeholder="0" min="0" max="100">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Link / URL do modelo 3D (opcional)</label>
+      <input type="text" id="p_model3d" placeholder="https://...">
+    </div>
+
+    <div class="form-group">
+      <label>URL da imagem principal (opcional)</label>
+      <input type="text" id="p_image" placeholder="https://...">
+    </div>
+
+    <!-- SEÇÕES DE CORES -->
+    <div style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <label style="margin:0;font-size:0.95rem;font-weight:700;color:var(--text-dark)">🎨 Seções de Cores</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-sm" onclick="addColorSectionFromGlobal()">+ Adicionar cor global</button>
+        <button class="btn btn-ghost btn-sm" onclick="addColorSection()">+ Nova seção de cor</button>
+      </div>
+    </div>
+    <div class="color-sections" id="colorSections"></div>
+
+    <div style="display:flex;gap:12px;margin-top:24px;justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveProduct()">💾 Salvar Produto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+// CONFIGURAÇÃO — altere a senha aqui
+// ═══════════════════════════════════════════════
+const ADMIN_PASSWORD = 'maker3d2026';
+
+// ═══════════════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════════════
+function doLogin() {
+  const pass = document.getElementById('loginPass').value;
+  if (pass === ADMIN_PASSWORD) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display = 'block';
+    sessionStorage.setItem('maker3d_admin', '1');
+    initAdmin();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginPass').value = '';
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('maker3d_admin');
+  location.reload();
+}
+
+// Auto-login se já autenticado na sessão
+if (sessionStorage.getItem('maker3d_admin') === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminApp').style.display = 'block';
+}
+
+// ═══════════════════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════════════════
+const DEFAULT_PRODUCTS = [
+  { id:1, name:'Vaso Geométrico', emoji:'🏺', category:'decorativo', desc:'Vaso com design geométrico inspirado em origami. Perfeito para decoração minimalista.', price:45, colorSections:[{name:'Cores disponíveis', colors:[{name:'Laranja',hex:'#f07800'},{name:'Preto',hex:'#2c2c2c'},{name:'Branco',hex:'#ffffff'},{name:'Verde',hex:'#4a9e6f'}]}], badge:'Popular', discount:0, model3d:'', image:'' },
+  { id:2, name:'Suporte de Fone', emoji:'🎧', category:'funcional', desc:'Suporte de mesa ergonômico para headphones. Elegante e resistente.', price:38, colorSections:[{name:'Cores disponíveis', colors:[{name:'Laranja',hex:'#f07800'},{name:'Azul',hex:'#1a1a2e'},{name:'Cinza',hex:'#e8e8e8'}]}], badge:'', discount:0, model3d:'', image:'' },
+  { id:3, name:'Miniatura Dragão', emoji:'🐉', category:'miniatura', desc:'Dragão articulado impresso em múltiplas partes. Escama por escama, um trabalho de arte.', price:89, colorSections:[{name:'Cores disponíveis', colors:[{name:'Vermelho',hex:'#c0392b'},{name:'Preto',hex:'#2c2c2c'},{name:'Dourado',hex:'#f0a500'}]}], badge:'Destaque', discount:0, model3d:'', image:'' },
+  { id:9, name:'✨ Peça Customizada', emoji:'⚙️', category:'customizado', desc:'Envie seu arquivo STL ou descreva sua ideia. Criamos qualquer coisa do zero!', price:null, colorSections:[{name:'Cores disponíveis', colors:[{name:'Laranja',hex:'#f07800'},{name:'Escuro',hex:'#c85a00'},{name:'Azul',hex:'#3498db'}]}], badge:'Sob Medida', discount:0, model3d:'', image:'', custom:true },
+];
+
+const DEFAULT_GLOBAL_COLORS = [
+  { name:'Laranja Maker3D', hex:'#f07800', priceAdd:0 },
+  { name:'Preto', hex:'#2c2c2c', priceAdd:0 },
+  { name:'Branco', hex:'#ffffff', priceAdd:0 },
+  { name:'Vermelho', hex:'#c0392b', priceAdd:2 },
+  { name:'Azul Royal', hex:'#2c3e7a', priceAdd:2 },
+  { name:'Verde', hex:'#27ae60', priceAdd:2 },
+  { name:'Dourado', hex:'#f0a500', priceAdd:5 },
+  { name:'Transparente', hex:'#d0e8f0', priceAdd:8 },
+];
+
+function loadState(key, def) {
+  try { const s = localStorage.getItem(key); if(s) return JSON.parse(s); } catch(e) {}
+  return def;
+}
+function saveState(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+let products = loadState('maker3d_products', DEFAULT_PRODUCTS);
+let globalColors = loadState('maker3d_global_colors', DEFAULT_GLOBAL_COLORS);
+let editingId = null;
+
+// ═══════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════
+function showTab(name) {
+  ['produtos','cores','calc'].forEach(t => {
+    document.getElementById('section-'+t).style.display = t===name ? 'block' : 'none';
+    document.getElementById('tab-'+t).classList.toggle('active', t===name);
+  });
+  if(name==='produtos') renderProductList();
+  if(name==='cores') renderGlobalColors();
+  if(name==='calc') calcular();
+}
+
+function initAdmin() {
+  renderProductList();
+  renderGlobalColors();
+  calcular();
+}
+
+if(sessionStorage.getItem('maker3d_admin')==='1') initAdmin();
+
+// ═══════════════════════════════════════════════
+// PRODUTO LIST
+// ═══════════════════════════════════════════════
+function renderProductList() {
+  const list = document.getElementById('productList');
+  if(!products.length) { list.innerHTML = '<p style="color:var(--text-mid);text-align:center;padding:20px">Nenhum produto ainda. Clique em "Novo Produto".</p>'; return; }
+  list.innerHTML = products.map(p => {
+    const priceStr = p.price ? `R$ ${parseFloat(p.price).toFixed(2).replace('.',',')}` : 'Sob Consulta';
+    const discountStr = p.discount > 0 ? ` <span style="font-size:0.75rem;background:#e6ffed;color:#276749;padding:2px 8px;border-radius:999px;">-${p.discount}%</span>` : '';
+    const totalColors = (p.colorSections||[]).reduce((s,sec) => s+(sec.colors||[]).length, 0);
+    return `
+      <div class="product-row">
+        <div class="product-row-emoji">${p.emoji||'📦'}</div>
+        <div class="product-row-info">
+          <strong>${p.name}</strong>
+          <span>${p.category} · ${totalColors} cor(es) · ${p.badge||'sem badge'}</span>
+        </div>
+        <div class="product-row-price">${priceStr}${discountStr}</div>
+        <div class="product-row-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openEditProduct(${p.id})">✏️ Editar</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// MODAL PRODUTO
+// ═══════════════════════════════════════════════
+function openNewProduct() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'Novo Produto';
+  document.getElementById('p_name').value = '';
+  document.getElementById('p_emoji').value = '';
+  document.getElementById('p_desc').value = '';
+  document.getElementById('p_category').value = 'decorativo';
+  document.getElementById('p_price').value = '';
+  document.getElementById('p_badge').value = '';
+  document.getElementById('p_discount').value = '0';
+  document.getElementById('p_model3d').value = '';
+  document.getElementById('p_image').value = '';
+  document.getElementById('colorSections').innerHTML = '';
+  addColorSection();
+  openModal();
+}
+
+function openEditProduct(id) {
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = 'Editar Produto';
+  document.getElementById('p_name').value = p.name || '';
+  document.getElementById('p_emoji').value = p.emoji || '';
+  document.getElementById('p_desc').value = p.desc || '';
+  document.getElementById('p_category').value = p.category || 'decorativo';
+  document.getElementById('p_price').value = p.price ?? '';
+  document.getElementById('p_badge').value = p.badge || '';
+  document.getElementById('p_discount').value = p.discount || 0;
+  document.getElementById('p_model3d').value = p.model3d || '';
+  document.getElementById('p_image').value = p.image || '';
+
+  // Rebuild color sections
+  const cs = document.getElementById('colorSections');
+  cs.innerHTML = '';
+  (p.colorSections || []).forEach(sec => addColorSection(sec.name, sec.colors));
+  if(!(p.colorSections||[]).length) addColorSection();
+
+  openModal();
+}
+
+function openModal() { document.getElementById('productModal').classList.add('open'); }
+function closeModal() { document.getElementById('productModal').classList.remove('open'); }
+
+function saveProduct() {
+  const name = document.getElementById('p_name').value.trim();
+  const emoji = document.getElementById('p_emoji').value.trim();
+  const desc = document.getElementById('p_desc').value.trim();
+  if(!name || !desc) { showToast('❗ Nome e descrição são obrigatórios.'); return; }
+
+  const priceRaw = document.getElementById('p_price').value;
+  const price = priceRaw !== '' ? parseFloat(priceRaw) : null;
+  const discount = parseInt(document.getElementById('p_discount').value) || 0;
+
+  // Collect color sections
+  const sectionEls = document.querySelectorAll('.color-section');
+  const colorSections = Array.from(sectionEls).map(el => {
+    const secName = el.querySelector('.cs-name').value.trim() || 'Cores disponíveis';
+    const colorItems = el.querySelectorAll('.color-item');
+    const colors = Array.from(colorItems).map(ci => ({
+      name: ci.dataset.name,
+      hex: ci.dataset.hex
+    }));
+    return { name: secName, colors };
+  }).filter(s => s.colors.length > 0);
+
+  // Flatten colors for index.html compatibility
+  const flatColors = colorSections.flatMap(s => s.colors);
+
+  if(editingId !== null) {
+    const idx = products.findIndex(p => p.id === editingId);
+    if(idx >= 0) {
+      products[idx] = { ...products[idx], name, emoji: emoji||'📦', desc, category: document.getElementById('p_category').value, price, badge: document.getElementById('p_badge').value.trim(), discount, model3d: document.getElementById('p_model3d').value.trim(), image: document.getElementById('p_image').value.trim(), colorSections, colors: flatColors };
+    }
+  } else {
+    const newId = Date.now();
+    products.push({ id: newId, name, emoji: emoji||'📦', desc, category: document.getElementById('p_category').value, price, badge: document.getElementById('p_badge').value.trim(), discount, model3d: document.getElementById('p_model3d').value.trim(), image: document.getElementById('p_image').value.trim(), colorSections, colors: flatColors });
+  }
+
+  saveState('maker3d_products', products);
+  closeModal();
+  renderProductList();
+  showToast('✅ Produto salvo com sucesso!');
+}
+
+function deleteProduct(id) {
+  if(!confirm('Tem certeza que deseja remover este produto?')) return;
+  products = products.filter(p => p.id !== id);
+  saveState('maker3d_products', products);
+  renderProductList();
+  showToast('🗑 Produto removido.');
+}
+
+// ═══════════════════════════════════════════════
+// COLOR SECTIONS
+// ═══════════════════════════════════════════════
+function addColorSection(secName='', colors=[]) {
+  const cs = document.getElementById('colorSections');
+  const div = document.createElement('div');
+  div.className = 'color-section';
+  div.innerHTML = `
+    <div class="color-section-header">
+      <input type="text" class="cs-name" placeholder="Nome da seção (ex: Parte Superior)" value="${secName}" style="flex:1">
+      <button class="btn btn-danger btn-sm" onclick="this.closest('.color-section').remove()">✕ Remover seção</button>
+    </div>
+    <div class="color-items"></div>
+    <div class="add-color-row">
+      <input type="text" placeholder="Nome da cor" class="new-color-name">
+      <input type="color" class="new-color-hex" value="#f07800">
+      <button class="btn btn-ghost btn-sm" onclick="addColorToSection(this)">＋ Cor</button>
+    </div>`;
+  cs.appendChild(div);
+  colors.forEach(c => addColorItemToSection(div, c.name, c.hex));
+}
+
+function addColorToSection(btn) {
+  const section = btn.closest('.color-section');
+  const name = section.querySelector('.new-color-name').value.trim();
+  const hex = section.querySelector('.new-color-hex').value;
+  if(!name) { showToast('❗ Digite o nome da cor.'); return; }
+  addColorItemToSection(section, name, hex);
+  section.querySelector('.new-color-name').value = '';
+}
+
+function addColorItemToSection(section, name, hex) {
+  const div = document.createElement('div');
+  div.className = 'color-item';
+  div.dataset.name = name;
+  div.dataset.hex = hex;
+  div.innerHTML = `<div class="color-swatch" style="background:${hex}"></div><span>${name}</span><button class="color-item-remove" onclick="this.closest('.color-item').remove()" title="Remover">×</button>`;
+  section.querySelector('.color-items').appendChild(div);
+}
+
+function addColorSectionFromGlobal() {
+  // Opens a mini picker from global colors
+  const gl = globalColors;
+  if(!gl.length) { showToast('Nenhuma cor global cadastrada ainda.'); return; }
+  const section = document.createElement('div');
+  section.className = 'color-section';
+  section.innerHTML = `
+    <div class="color-section-header">
+      <input type="text" class="cs-name" placeholder="Nome da seção" value="Cores disponíveis" style="flex:1">
+      <button class="btn btn-danger btn-sm" onclick="this.closest('.color-section').remove()">✕</button>
+    </div>
+    <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:10px">Selecione as cores globais que deseja adicionar:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+      ${gl.map((c,i) => `<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.82rem;background:var(--off-white);padding:4px 10px;border-radius:999px;border:1px solid var(--gray-light)"><input type="checkbox" value="${i}" style="width:auto"> <span style="width:16px;height:16px;border-radius:50%;background:${c.hex};border:1px solid rgba(0,0,0,0.1);display:inline-block"></span> ${c.name} ${c.priceAdd>0?'(+R$'+c.priceAdd+')':''}</label>`).join('')}
+    </div>
+    <div class="color-items" style="margin-bottom:0"></div>
+    <button class="btn btn-primary btn-sm" onclick="confirmGlobalColorSection(this)">Confirmar seleção</button>`;
+  document.getElementById('colorSections').appendChild(section);
+}
+
+function confirmGlobalColorSection(btn) {
+  const section = btn.closest('.color-section');
+  const checks = section.querySelectorAll('input[type=checkbox]:checked');
+  const ci = section.querySelector('.color-items');
+  ci.innerHTML = '';
+  checks.forEach(cb => {
+    const c = globalColors[parseInt(cb.value)];
+    addColorItemToSection(section, c.name, c.hex);
+  });
+  // remove the checkbox UI
+  section.querySelectorAll('p, label, input[type=checkbox], button.btn-primary').forEach(el => {
+    if(el !== btn.closest('.color-section-header')) el.remove();
+  });
+  btn.remove();
+  // add the standard add row
+  const row = document.createElement('div');
+  row.className = 'add-color-row';
+  row.innerHTML = `<input type="text" placeholder="Nome da cor" class="new-color-name"><input type="color" class="new-color-hex" value="#f07800"><button class="btn btn-ghost btn-sm" onclick="addColorToSection(this)">＋ Cor</button>`;
+  section.appendChild(row);
+}
+
+// ═══════════════════════════════════════════════
+// CORES GLOBAIS
+// ═══════════════════════════════════════════════
+function renderGlobalColors() {
+  const list = document.getElementById('globalColorsList');
+  if(!globalColors.length) { list.innerHTML = '<p style="color:var(--text-mid)">Nenhuma cor global ainda.</p>'; return; }
+  list.innerHTML = globalColors.map((c,i) => `
+    <div class="global-color-tag">
+      <div class="global-color-swatch" style="background:${c.hex}"></div>
+      <div class="global-color-info">
+        <strong>${c.name}</strong>
+        <span>${c.priceAdd > 0 ? '+R$ '+c.priceAdd.toFixed(2).replace('.',',') : 'Sem custo adicional'}</span>
+      </div>
+      <button style="background:none;border:none;color:#aaa;cursor:pointer;margin-left:4px;font-size:1rem" onclick="removeGlobalColor(${i})" title="Remover">×</button>
+    </div>`).join('');
+}
+
+function addGlobalColor() {
+  const name = document.getElementById('newGlobalColorName').value.trim();
+  const hex = document.getElementById('newGlobalColorHex').value;
+  const priceAdd = parseFloat(document.getElementById('newGlobalColorPrice').value) || 0;
+  if(!name) { showToast('❗ Digite o nome da cor.'); return; }
+  globalColors.push({ name, hex, priceAdd });
+  saveState('maker3d_global_colors', globalColors);
+  renderGlobalColors();
+  document.getElementById('newGlobalColorName').value = '';
+  document.getElementById('newGlobalColorPrice').value = '';
+  showToast('✅ Cor adicionada!');
+}
+
+function removeGlobalColor(i) {
+  if(!confirm('Remover esta cor global?')) return;
+  globalColors.splice(i, 1);
+  saveState('maker3d_global_colors', globalColors);
+  renderGlobalColors();
+  showToast('🗑 Cor removida.');
+}
+
+// ═══════════════════════════════════════════════
+// CALCULADORA
+// ═══════════════════════════════════════════════
+function calcular() {
+  const v = id => parseFloat(document.getElementById(id)?.value) || 0;
+  const horas        = v('c_horas');
+  const gramas       = v('c_gramas');
+  const precoFila    = v('c_precoFilamento');
+  const watts        = v('c_watts');
+  const tarifa       = v('c_tarifa');
+  const manutencao   = v('c_manutencao');
+  const maoDeObra    = v('c_maoDeObra');
+  const embalagem    = v('c_embalagem');
+  const margem       = v('c_margem');
+
+  const custoFilamento  = (gramas / 1000) * precoFila;
+  const kwh             = (watts / 1000) * horas;
+  const custoEnergia    = kwh * tarifa;
+  const custoManut      = manutencao * horas;
+  const custoMao        = maoDeObra * horas;
+  const custoBase       = custoFilamento + custoEnergia + custoManut + custoMao + embalagem;
+  const precoFinal      = custoBase * (1 + margem / 100);
+
+  const fmt = v => 'R$ ' + v.toFixed(2).replace('.',',');
+  document.getElementById('calcPrecoFinal').textContent = fmt(precoFinal);
+  document.getElementById('calcCustoBase').textContent = 'Custo base: ' + fmt(custoBase);
+
+  document.getElementById('calcBreakdown').innerHTML = `
+    <div class="calc-breakdown-row"><span>🧵 Filamento (${gramas}g)</span><span>${fmt(custoFilamento)}</span></div>
+    <div class="calc-breakdown-row"><span>⚡ Energia (${kwh.toFixed(2)} kWh)</span><span>${fmt(custoEnergia)}</span></div>
+    <div class="calc-breakdown-row"><span>🔧 Manutenção (${horas}h)</span><span>${fmt(custoManut)}</span></div>
+    <div class="calc-breakdown-row"><span>👷 Mão de obra (${horas}h)</span><span>${fmt(custoMao)}</span></div>
+    <div class="calc-breakdown-row"><span>📦 Embalagem</span><span>${fmt(embalagem)}</span></div>
+    <div class="calc-breakdown-row"><span>📈 Lucro (${margem}%)</span><span>${fmt(precoFinal - custoBase)}</span></div>
+    <div class="calc-breakdown-row"><span>💰 Preço final</span><span>${fmt(precoFinal)}</span></div>`;
+}
+
+// ═══════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Close modal on overlay click
+document.getElementById('productModal').addEventListener('click', e => {
+  if(e.target === document.getElementById('productModal')) closeModal();
+});
+</script>
+</body>
+</html>
