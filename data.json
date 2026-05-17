@@ -203,6 +203,23 @@
       "gallery": [],
       "colorSections": [],
       "colors": []
+    },
+    {
+      "id": 1779038443112,
+      "name": "Porta Batom",
+      "emoji": "📦",
+      "desc": ".",
+      "category": "Acessórios",
+      "price": 35,
+      "badge": "Novo✨",
+      "discount": 0,
+      "model3d": "",
+      "image": "https://makerworld.bblmw.com/makerworld/model/US23a8a1f23a9c84/design/8546f96ed132b6bf.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+      "gallery": [
+        "https://makerworld.bblmw.com/makerworld/model/US23a8a1f23a9c84/design/e9011f9744d8c675.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp"
+      ],
+      "colorSections": [],
+      "colors": []
     }
   ]
 }
