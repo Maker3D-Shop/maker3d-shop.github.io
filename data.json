@@ -47,7 +47,7 @@
       ],
       "colorSections": [
         {
-          "name": "Corpo",
+          "name": "cor do Corpo",
           "colors": [
             {
               "name": "Avelã",
@@ -64,7 +64,7 @@
           ]
         },
         {
-          "name": "Cristal",
+          "name": "cor do Cristal",
           "colors": [
             {
               "name": "Avelã",
