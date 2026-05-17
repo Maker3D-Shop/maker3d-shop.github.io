@@ -462,6 +462,23 @@
           "hex": "#000000"
         }
       ]
+    },
+    {
+      "id": 1779047822545,
+      "name": "Taça da Copa 🏆",
+      "emoji": "📦",
+      "desc": "Réplica da Taça do Mundo em escala real impressa em 3D, o item definitivo para os apaixonados por futebol! 🏆⚽\nCom tamanho original e um brilho dourado incrível, é perfeita para decorar e presentear aquele super fã. 🥇✨\nSinta a emoção de erguer a taça e traga o clima de campeão para a sua casa! 💚💛",
+      "category": "Decorativo",
+      "price": 60,
+      "badge": "Edição Campeã 🥇",
+      "discount": -10,
+      "model3d": "",
+      "image": "https://makerworld.bblmw.com/makerworld/comment/20260503/91133529/4bf68873d57c671e.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+      "gallery": [
+        "https://makerworld.bblmw.com/makerworld/comment/20260503/91133529/80cf929d1e30e1e5.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp"
+      ],
+      "colorSections": [],
+      "colors": []
     }
   ]
 }
