@@ -126,52 +126,6 @@
       "custom": true
     },
     {
-      "id": 1779032491357,
-      "name": "vaso",
-      "emoji": "📦",
-      "desc": "...",
-      "category": "fofo",
-      "price": 20,
-      "badge": "99898",
-      "discount": 0,
-      "model3d": "",
-      "image": "",
-      "gallery": [],
-      "colorSections": [
-        {
-          "name": "Cores disponíveis",
-          "colors": [
-            {
-              "name": "Laranja Maker3D",
-              "hex": "#f07800"
-            },
-            {
-              "name": "Transparente",
-              "hex": "#d0e8f0"
-            },
-            {
-              "name": "Preto",
-              "hex": "#000000"
-            }
-          ]
-        }
-      ],
-      "colors": [
-        {
-          "name": "Laranja Maker3D",
-          "hex": "#f07800"
-        },
-        {
-          "name": "Transparente",
-          "hex": "#d0e8f0"
-        },
-        {
-          "name": "Preto",
-          "hex": "#000000"
-        }
-      ]
-    },
-    {
       "id": 1779035132088,
       "name": "Mini Dragão",
       "emoji": "🐉",
