@@ -42,9 +42,16 @@
   .nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
   .nav-item.active { background: var(--orange-main); color: white; }
   .nav-item .icon { font-size: 1.1rem; width: 20px; text-align: center; }
-  .sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; gap: 4px; }
   .logout-btn { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); color: rgba(255,255,255,0.5); font-size: 0.88rem; cursor: pointer; border: none; background: none; width: 100%; transition: all 0.2s; }
   .logout-btn:hover { color: var(--danger); background: rgba(229,62,62,0.1); }
+
+  /* Token status badge */
+  .token-status { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.78rem; color: rgba(255,255,255,0.45); cursor: pointer; border: none; background: none; width: 100%; transition: all 0.2s; }
+  .token-status:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); }
+  .token-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; flex-shrink: 0; transition: background 0.3s; }
+  .token-dot.ok { background: var(--success); box-shadow: 0 0 6px rgba(56,161,105,0.6); }
+
   .admin-main { margin-left: 240px; padding: 32px; min-height: 100vh; }
   .page-header { margin-bottom: 28px; }
   .page-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--text-dark); }
@@ -82,20 +89,11 @@
 
   /* ── DRAG & DROP IMAGE UPLOAD ── */
   .drop-zone {
-    border: 2.5px dashed rgba(240,120,0,0.35);
-    border-radius: var(--radius);
-    padding: 32px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.25s;
-    background: var(--off-white);
-    position: relative;
+    border: 2.5px dashed rgba(240,120,0,0.35); border-radius: var(--radius);
+    padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.25s;
+    background: var(--off-white); position: relative;
   }
-  .drop-zone:hover, .drop-zone.drag-over {
-    border-color: var(--orange-main);
-    background: var(--orange-pale);
-    box-shadow: 0 0 0 4px rgba(240,120,0,0.08);
-  }
+  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--orange-main); background: var(--orange-pale); box-shadow: 0 0 0 4px rgba(240,120,0,0.08); }
   .drop-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
   .drop-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
   .drop-text { font-size: 0.9rem; color: var(--text-mid); line-height: 1.5; }
@@ -104,12 +102,7 @@
 
   /* ── IMAGE PREVIEW GRID ── */
   .img-preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 14px; }
-  .img-preview-item {
-    position: relative; border-radius: 10px; overflow: hidden;
-    border: 2px solid rgba(240,120,0,0.15);
-    background: var(--off-white); aspect-ratio: 1;
-    transition: all 0.2s;
-  }
+  .img-preview-item { position: relative; border-radius: 10px; overflow: hidden; border: 2px solid rgba(240,120,0,0.15); background: var(--off-white); aspect-ratio: 1; transition: all 0.2s; }
   .img-preview-item:hover { border-color: var(--orange-main); }
   .img-preview-item img { width: 100%; height: 100%; object-fit: cover; }
   .img-preview-item .img-remove { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: rgba(229,62,62,0.9); border: none; color: white; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 5; }
@@ -120,6 +113,10 @@
   .img-preview-item .img-move { position: absolute; top: 4px; left: 4px; display: flex; gap: 2px; }
   .img-move-btn { width: 18px; height: 18px; border-radius: 4px; background: rgba(0,0,0,0.5); border: none; color: white; font-size: 0.65rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
   .img-move-btn:hover { background: var(--orange-main); }
+  /* Upload progress overlay */
+  .img-preview-item .img-upload-status { position: absolute; inset: 0; background: rgba(0,0,0,0.65); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: white; font-size: 0.7rem; font-weight: 600; }
+  .img-upload-spinner { width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.25); border-top-color: var(--orange-light); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ── PRODUCT LIST ── */
   .product-list { display: flex; flex-direction: column; gap: 14px; }
@@ -181,8 +178,20 @@
   .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(240,120,0,0.15); }
 
   /* ── TOAST ── */
-  .toast { position: fixed; bottom: 28px; right: 28px; z-index: 9999; background: var(--text-dark); color: white; padding: 13px 20px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; border-left: 4px solid var(--orange-main); box-shadow: 0 8px 28px rgba(0,0,0,0.2); opacity: 0; transform: translateY(12px); transition: all 0.3s; pointer-events: none; }
+  .toast { position: fixed; bottom: 28px; right: 28px; z-index: 9999; background: var(--text-dark); color: white; padding: 13px 20px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; border-left: 4px solid var(--orange-main); box-shadow: 0 8px 28px rgba(0,0,0,0.2); opacity: 0; transform: translateY(12px); transition: all 0.3s; pointer-events: none; max-width: 320px; line-height: 1.4; }
   .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── GITHUB INFO BOX ── */
+  .gh-info-box { background: linear-gradient(135deg, rgba(240,120,0,0.06), rgba(240,120,0,0.02)); border: 1.5px solid rgba(240,120,0,0.2); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 18px; font-size: 0.83rem; color: var(--text-mid); line-height: 1.6; }
+  .gh-info-box strong { color: var(--orange-deep); }
+
+  /* ── SAVING OVERLAY ── */
+  .saving-overlay { position: fixed; inset: 0; background: rgba(42,26,8,0.65); z-index: 9000; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+  .saving-overlay.show { display: flex; }
+  .saving-box { background: white; border-radius: 20px; padding: 32px 40px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+  .saving-spinner { width: 48px; height: 48px; border: 4px solid rgba(240,120,0,0.2); border-top-color: var(--orange-main); border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 16px; }
+  .saving-text { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); }
+  .saving-sub { font-size: 0.82rem; color: var(--text-mid); margin-top: 4px; }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
@@ -202,6 +211,15 @@
 </style>
 </head>
 <body>
+
+<!-- SAVING OVERLAY -->
+<div class="saving-overlay" id="savingOverlay">
+  <div class="saving-box">
+    <div class="saving-spinner"></div>
+    <div class="saving-text" id="savingText">Sincronizando com o GitHub...</div>
+    <div class="saving-sub" id="savingSub">Aguarde um momento</div>
+  </div>
+</div>
 
 <!-- LOGIN -->
 <div id="loginScreen">
@@ -237,6 +255,10 @@
       <button class="nav-item" onclick="showTab('calc')" id="tab-calc"><span class="icon">🧮</span> Calculadora</button>
     </nav>
     <div class="sidebar-footer">
+      <button class="token-status" id="tokenStatusBtn" onclick="configureToken()">
+        <div class="token-dot" id="tokenDot"></div>
+        <span id="tokenStatusText">Configurar Token GitHub</span>
+      </button>
       <button class="logout-btn" onclick="doLogout()"><span>🚪</span> Sair</button>
     </div>
   </aside>
@@ -247,7 +269,7 @@
     <div id="section-produtos">
       <div class="page-header">
         <h2>Produtos</h2>
-        <p>Gerencie o catálogo da sua loja</p>
+        <p>Gerencie o catálogo da sua loja • As alterações são enviadas para o GitHub automaticamente</p>
       </div>
       <div class="panel">
         <div class="panel-header">
@@ -320,6 +342,12 @@
     <button class="modal-close-btn" onclick="closeModal()">✕</button>
     <div class="modal-title" id="modalTitle">Novo Produto</div>
 
+    <!-- GitHub info -->
+    <div class="gh-info-box" id="ghInfoBox">
+      🔗 As imagens serão enviadas para o repositório GitHub e o catálogo será atualizado automaticamente.
+      <strong id="ghTokenNote"> Configure o token na barra lateral antes de salvar.</strong>
+    </div>
+
     <!-- Basic info -->
     <div class="section-label">📋 Informações básicas</div>
     <div class="form-row">
@@ -347,7 +375,7 @@
 
     <!-- IMAGES SECTION -->
     <div class="section-label" style="margin-top:8px;">🖼️ Imagens do produto</div>
-    <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:12px">Arraste imagens PNG/JPG ou cole URLs. A primeira é a capa; as demais formam a galeria. Você pode reordenar.</p>
+    <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:12px">Arraste imagens PNG/JPG ou cole URLs. A primeira é a capa. Imagens locais serão enviadas para o GitHub ao salvar.</p>
 
     <!-- Drop zone -->
     <div class="drop-zone" id="dropZone">
@@ -359,7 +387,7 @@
 
     <!-- URL add -->
     <div style="display:flex;gap:8px;margin-top:10px;align-items:center;">
-      <input type="text" id="imgUrlInput" placeholder="Ou cole a URL da imagem aqui..." style="flex:1">
+      <input type="text" id="imgUrlInput" placeholder="Ou cole a URL da imagem aqui...">
       <button class="btn btn-ghost btn-sm" onclick="addImageByUrl()">+ URL</button>
     </div>
 
@@ -376,7 +404,7 @@
 
     <div style="display:flex;gap:12px;margin-top:24px;justify-content:flex-end;">
       <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveProduct()">💾 Salvar Produto</button>
+      <button class="btn btn-primary" onclick="saveProduct()" id="saveProductBtn">💾 Salvar Produto</button>
     </div>
   </div>
 </div>
@@ -385,6 +413,110 @@
 
 <script>
 const ADMIN_PASSWORD = 'maker3d2026';
+
+// ─── GITHUB CONFIG ───
+const GH_OWNER  = 'Maker3D-Shop';
+const GH_REPO   = 'maker3d-shop.github.io';
+const GH_BRANCH = 'main';
+
+// ─── TOKEN MANAGEMENT ───
+function getGHToken() {
+  return sessionStorage.getItem('gh_token') || '';
+}
+function setGHToken(token) {
+  sessionStorage.setItem('gh_token', token.trim());
+  updateTokenUI();
+}
+function updateTokenUI() {
+  const dot  = document.getElementById('tokenDot');
+  const text = document.getElementById('tokenStatusText');
+  const note = document.getElementById('ghTokenNote');
+  if (!dot) return;
+  const hasToken = !!getGHToken();
+  dot.classList.toggle('ok', hasToken);
+  text.textContent = hasToken ? 'Token GitHub ✓' : 'Configurar Token GitHub';
+  if (note) note.style.display = hasToken ? 'none' : '';
+}
+function configureToken() {
+  const current = getGHToken();
+  const msg = current
+    ? 'Token atual configurado. Digite um novo para substituir (ou cancele para manter):'
+    : '🔑 Cole seu Token de Acesso Pessoal do GitHub\n(Settings → Developer settings → Personal access tokens → Tokens classic → repo scope):';
+  const token = prompt(msg, current ? '••••••••' : '');
+  if (token && token !== '••••••••') {
+    setGHToken(token);
+    showToast('✅ Token salvo nesta sessão!');
+  }
+}
+
+// ─── GITHUB API ───
+async function uploadToGitHub(path, contentBase64, commitMessage, token) {
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`;
+
+  // Tenta pegar SHA (arquivo existente)
+  let sha = null;
+  try {
+    const getRes = await fetch(url, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (getRes.ok) {
+      const fd = await getRes.json();
+      sha = fd.sha;
+    }
+  } catch(e) {}
+
+  const body = { message: commitMessage, content: contentBase64, branch: GH_BRANCH };
+  if (sha) body.sha = sha;
+
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(()=>({message:'Erro desconhecido'}));
+    throw new Error(err.message || 'Falha no upload para o GitHub');
+  }
+  return await response.json();
+}
+
+async function saveStateToGitHub(val) {
+  // Salva localmente primeiro
+  localStorage.setItem('maker3d_products', JSON.stringify(val));
+
+  let token = getGHToken();
+  if (!token) {
+    token = prompt('🔑 Token do GitHub necessário para sincronizar:\n(cole seu Personal Access Token com permissão repo)');
+    if (token) setGHToken(token);
+    else { showToast('❗ Token não fornecido. Salvo apenas localmente.'); return; }
+  }
+
+  showSaving('Atualizando catálogo no GitHub...', 'Enviando data.json');
+  try {
+    const jsonString = JSON.stringify({ products: val }, null, 2);
+    const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
+    await uploadToGitHub('data.json', base64Content, 'Atualizando catálogo via Admin Panel', token);
+    hideSaving();
+    showToast('✅ Catálogo publicado no ar!');
+  } catch(error) {
+    hideSaving();
+    console.error(error);
+    showToast('❌ Erro no GitHub: ' + error.message);
+  }
+}
+
+function showSaving(text, sub) {
+  document.getElementById('savingText').textContent = text || 'Sincronizando...';
+  document.getElementById('savingSub').textContent  = sub || 'Aguarde';
+  document.getElementById('savingOverlay').classList.add('show');
+}
+function hideSaving() {
+  document.getElementById('savingOverlay').classList.remove('show');
+}
 
 // ─── LOGIN ───
 function doLogin() {
@@ -424,14 +556,12 @@ const DEFAULT_GLOBAL_COLORS = [
 ];
 
 function loadState(key, def) { try { const s=localStorage.getItem(key); if(s) return JSON.parse(s); } catch(e){} return def; }
-function saveState(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+function saveState(key, val)  { localStorage.setItem(key, JSON.stringify(val)); }
 
-let products = loadState('maker3d_products', DEFAULT_PRODUCTS);
+let products     = loadState('maker3d_products', DEFAULT_PRODUCTS);
 let globalColors = loadState('maker3d_global_colors', DEFAULT_GLOBAL_COLORS);
-let editingId = null;
-
-// images being edited: [{src: base64orURL, isMain: bool}]
-let editingImages = [];
+let editingId    = null;
+let editingImages = []; // [{src, isBase64, ext}]
 
 // ─── TABS ───
 function showTab(name) {
@@ -440,8 +570,8 @@ function showTab(name) {
     document.getElementById('tab-'+t).classList.toggle('active', t===name);
   });
   if(name==='produtos') renderProductList();
-  if(name==='cores') renderGlobalColors();
-  if(name==='calc') calcular();
+  if(name==='cores')    renderGlobalColors();
+  if(name==='calc')     calcular();
 }
 
 function initAdmin() {
@@ -449,6 +579,7 @@ function initAdmin() {
   renderGlobalColors();
   calcular();
   setupDropZone();
+  updateTokenUI();
 }
 if(sessionStorage.getItem('maker3d_admin')==='1') initAdmin();
 
@@ -458,10 +589,9 @@ function renderProductList() {
   if(!products.length) { list.innerHTML = '<p style="color:var(--text-mid);text-align:center;padding:20px">Nenhum produto ainda.</p>'; return; }
   list.innerHTML = products.map(p => {
     const priceStr = p.price ? `R$ ${parseFloat(p.price).toFixed(2).replace('.',',')}` : 'Sob Consulta';
-    const disc = p.discount > 0 ? `<span style="font-size:0.75rem;background:#e6ffed;color:#276749;padding:2px 8px;border-radius:999px;margin-left:6px;">-${p.discount}%</span>` : '';
+    const disc     = p.discount > 0 ? `<span style="font-size:0.75rem;background:#e6ffed;color:#276749;padding:2px 8px;border-radius:999px;margin-left:6px;">-${p.discount}%</span>` : '';
     const totalColors = (p.colorSections||[]).reduce((s,sec)=>s+(sec.colors||[]).length,0) || (p.colors||[]).length;
     const rawImg = toRawUrl(p.image);
-    const thumbHtml = rawImg ? `<img src="${rawImg}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.textContent='${p.emoji||'📦'}'">` : (p.emoji||'📦');
     return `
     <div class="product-row fade-in-anim">
       <div class="product-row-thumb">${rawImg?`<img src="${rawImg}" onerror="this.parentElement.textContent='${p.emoji||'📦'}'">`:(p.emoji||'📦')}</div>
@@ -481,24 +611,23 @@ function renderProductList() {
 // ─── DRAG & DROP SETUP ───
 function setupDropZone() {
   const dz = document.getElementById('dropZone');
-  if (!dz) return;
-  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+  if(!dz) return;
+  dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('drag-over'); });
   dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
   dz.addEventListener('drop', e => {
     e.preventDefault();
     dz.classList.remove('drag-over');
-    const files = e.dataTransfer.files;
-    if (files.length) handleFileSelect(files);
+    if(e.dataTransfer.files.length) handleFileSelect(e.dataTransfer.files);
   });
 }
 
 function handleFileSelect(files) {
   Array.from(files).forEach(file => {
-    if (!file.type.startsWith('image/')) return;
+    if(!file.type.startsWith('image/')) return;
+    const ext = file.type.split('/')[1] || 'png';
     const reader = new FileReader();
-    reader.onload = (e) => {
-      // Convert to base64 (acts as the image src)
-      editingImages.push({ src: e.target.result, isBase64: true });
+    reader.onload = e => {
+      editingImages.push({ src: e.target.result, isBase64: true, ext });
       renderImgPreviews();
     };
     reader.readAsDataURL(file);
@@ -508,7 +637,7 @@ function handleFileSelect(files) {
 function addImageByUrl() {
   const input = document.getElementById('imgUrlInput');
   const url = input.value.trim();
-  if (!url) return;
+  if(!url) return;
   editingImages.push({ src: url, isBase64: false });
   input.value = '';
   renderImgPreviews();
@@ -516,12 +645,13 @@ function addImageByUrl() {
 
 function renderImgPreviews() {
   const grid = document.getElementById('imgPreviewGrid');
-  if (!editingImages.length) { grid.innerHTML = ''; return; }
+  if(!editingImages.length) { grid.innerHTML = ''; return; }
   grid.innerHTML = editingImages.map((img, i) => `
     <div class="img-preview-item" draggable="true" ondragstart="dragImgStart(${i})" ondragover="dragImgOver(event,${i})" ondrop="dragImgDrop(event,${i})">
       <img src="${img.src}" alt="Imagem ${i+1}" onerror="this.parentElement.style.background='var(--orange-pale)'">
       <button class="img-remove" onclick="removeImg(${i})" title="Remover">✕</button>
       ${i===0 ? '<div class="img-main-badge">Capa</div>' : `<button class="img-set-main-btn" onclick="setMainImg(${i})">Tornar capa</button>`}
+      ${img.isBase64 ? '<div style="position:absolute;top:4px;left:50%;transform:translateX(-50%);background:rgba(240,120,0,0.9);color:white;font-size:0.58rem;padding:2px 6px;border-radius:999px;white-space:nowrap;">📤 Pendente upload</div>' : ''}
       <div class="img-move">
         ${i > 0 ? `<button class="img-move-btn" onclick="moveImg(${i},-1)" title="Mover esquerda">←</button>` : ''}
         ${i < editingImages.length-1 ? `<button class="img-move-btn" onclick="moveImg(${i},1)" title="Mover direita">→</button>` : ''}
@@ -534,28 +664,18 @@ function dragImgStart(i) { dragImgFromIdx = i; }
 function dragImgOver(e, i) { e.preventDefault(); }
 function dragImgDrop(e, i) {
   e.preventDefault();
-  if (dragImgFromIdx < 0 || dragImgFromIdx === i) return;
+  if(dragImgFromIdx < 0 || dragImgFromIdx === i) return;
   const item = editingImages.splice(dragImgFromIdx, 1)[0];
   editingImages.splice(i, 0, item);
   dragImgFromIdx = -1;
   renderImgPreviews();
 }
-
-function removeImg(i) {
-  editingImages.splice(i, 1);
-  renderImgPreviews();
-}
-
-function setMainImg(i) {
-  const item = editingImages.splice(i, 1)[0];
-  editingImages.unshift(item);
-  renderImgPreviews();
-}
-
+function removeImg(i)    { editingImages.splice(i, 1); renderImgPreviews(); }
+function setMainImg(i)   { const it=editingImages.splice(i,1)[0]; editingImages.unshift(it); renderImgPreviews(); }
 function moveImg(i, dir) {
-  const newIdx = i + dir;
-  if (newIdx < 0 || newIdx >= editingImages.length) return;
-  [editingImages[i], editingImages[newIdx]] = [editingImages[newIdx], editingImages[i]];
+  const ni = i+dir;
+  if(ni < 0 || ni >= editingImages.length) return;
+  [editingImages[i], editingImages[ni]] = [editingImages[ni], editingImages[i]];
   renderImgPreviews();
 }
 
@@ -564,100 +684,161 @@ function openNewProduct() {
   editingId = null;
   editingImages = [];
   document.getElementById('modalTitle').textContent = 'Novo Produto';
-  ['p_name','p_emoji','p_desc','p_badge','p_model3d','p_discount','p_price'].forEach(id => {
+  ['p_name','p_emoji','p_desc','p_badge','p_model3d','p_price'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.value = id==='p_discount' ? '0' : '';
+    if(el) el.value = '';
   });
+  document.getElementById('p_discount').value = '0';
   document.getElementById('p_category').value = 'decorativo';
   document.getElementById('colorSections').innerHTML = '';
   document.getElementById('imgPreviewGrid').innerHTML = '';
   document.getElementById('imgUrlInput').value = '';
   addColorSection();
   setupDropZone();
+  updateTokenUI();
   openModal();
 }
 
 function openEditProduct(id) {
   const p = products.find(x => x.id === id);
-  if (!p) return;
+  if(!p) return;
   editingId = id;
   document.getElementById('modalTitle').textContent = 'Editar Produto';
-  document.getElementById('p_name').value = p.name || '';
-  document.getElementById('p_emoji').value = p.emoji || '';
-  document.getElementById('p_desc').value = p.desc || '';
+  document.getElementById('p_name').value     = p.name    || '';
+  document.getElementById('p_emoji').value    = p.emoji   || '';
+  document.getElementById('p_desc').value     = p.desc    || '';
   document.getElementById('p_category').value = p.category || 'decorativo';
-  document.getElementById('p_price').value = p.price ?? '';
-  document.getElementById('p_badge').value = p.badge || '';
+  document.getElementById('p_price').value    = p.price   ?? '';
+  document.getElementById('p_badge').value    = p.badge   || '';
   document.getElementById('p_discount').value = p.discount || 0;
-  document.getElementById('p_model3d').value = p.model3d || '';
+  document.getElementById('p_model3d').value  = p.model3d || '';
 
-  // Load images
   editingImages = [];
-  if (p.image) editingImages.push({ src: p.image, isBase64: false });
-  if (p.gallery && Array.isArray(p.gallery)) {
-    p.gallery.forEach(g => { if(g) editingImages.push({ src: g, isBase64: false }); });
-  }
+  if(p.image)   editingImages.push({ src: p.image, isBase64: false });
+  if(p.gallery) p.gallery.forEach(g => { if(g) editingImages.push({ src: g, isBase64: false }); });
   renderImgPreviews();
 
-  // Colors
   const cs = document.getElementById('colorSections');
   cs.innerHTML = '';
-  const sections = p.colorSections || (p.colors ? [{ name: 'Cores disponíveis', colors: p.colors }] : []);
+  const sections = p.colorSections || (p.colors ? [{ name:'Cores disponíveis', colors:p.colors }] : []);
   sections.forEach(sec => addColorSection(sec.name, sec.colors));
-  if (!sections.length) addColorSection();
+  if(!sections.length) addColorSection();
 
   setupDropZone();
+  updateTokenUI();
   openModal();
 }
 
-function openModal() { document.getElementById('productModal').classList.add('open'); }
+function openModal()  { document.getElementById('productModal').classList.add('open'); }
 function closeModal() { document.getElementById('productModal').classList.remove('open'); }
 
-function saveProduct() {
+// ─── SAVE PRODUCT (async — faz upload das imagens no GitHub) ───
+async function saveProduct() {
   const name = document.getElementById('p_name').value.trim();
   const desc = document.getElementById('p_desc').value.trim();
-  if (!name || !desc) { showToast('❗ Nome e descrição são obrigatórios.'); return; }
+  if(!name || !desc) { showToast('❗ Nome e descrição são obrigatórios.'); return; }
 
-  const priceRaw = document.getElementById('p_price').value;
-  const price = priceRaw !== '' ? parseFloat(priceRaw) : null;
-  const discount = parseInt(document.getElementById('p_discount').value) || 0;
+  const hasLocalImages = editingImages.some(i => i.isBase64);
+  let token = getGHToken();
 
-  // Collect color sections
-  const sectionEls = document.querySelectorAll('.color-section');
-  const colorSections = Array.from(sectionEls).map(el => {
-    const secName = el.querySelector('.cs-name').value.trim() || 'Cores disponíveis';
-    const colorItems = el.querySelectorAll('.color-item');
-    const colors = Array.from(colorItems).map(ci => ({ name: ci.dataset.name, hex: ci.dataset.hex }));
-    return { name: secName, colors };
-  }).filter(s => s.colors.length > 0);
-  const flatColors = colorSections.flatMap(s => s.colors);
-
-  // Images
-  const [mainImg, ...galleryImgs] = editingImages.map(i => i.src);
-  const image = mainImg || '';
-  const gallery = galleryImgs;
-
-  if (editingId !== null) {
-    const idx = products.findIndex(p => p.id === editingId);
-    if (idx >= 0) {
-      products[idx] = { ...products[idx], name, emoji: document.getElementById('p_emoji').value.trim()||'📦', desc, category: document.getElementById('p_category').value, price, badge: document.getElementById('p_badge').value.trim(), discount, model3d: document.getElementById('p_model3d').value.trim(), image, gallery, colorSections, colors: flatColors };
+  if(hasLocalImages) {
+    if(!token) {
+      token = prompt('🔑 Token do GitHub necessário para fazer upload das imagens:\n(Personal Access Token com permissão repo)');
+      if(token) setGHToken(token);
+      else { showToast('❗ Token não fornecido. Salve como URL ou configure o token.'); return; }
     }
-  } else {
-    const newId = Date.now();
-    products.push({ id: newId, name, emoji: document.getElementById('p_emoji').value.trim()||'📦', desc, category: document.getElementById('p_category').value, price, badge: document.getElementById('p_badge').value.trim(), discount, model3d: document.getElementById('p_model3d').value.trim(), image, gallery, colorSections, colors: flatColors });
   }
 
-  saveState('maker3d_products', products);
-  closeModal();
-  renderProductList();
-  showToast('✅ Produto salvo com sucesso!');
+  // Desabilitar botão para evitar duplo clique
+  const saveBtn = document.getElementById('saveProductBtn');
+  saveBtn.disabled = true;
+  saveBtn.textContent = '⏳ Salvando...';
+
+  try {
+    // ── Upload de imagens para o GitHub ──
+    const finalUrls = [];
+    for(let i = 0; i < editingImages.length; i++) {
+      const img = editingImages[i];
+      if(img.isBase64) {
+        // Extrai dados base64 puros (remove cabeçalho data:image/xxx;base64,)
+        const base64Data = img.src.split(',')[1];
+        const ext = (img.ext || img.src.substring('data:image/'.length, img.src.indexOf(';base64'))) || 'png';
+        const fileName = `images/produto_${Date.now()}_${i}.${ext}`;
+
+        showSaving(`Enviando imagem ${i+1} de ${editingImages.filter(x=>x.isBase64).length}...`, fileName);
+        try {
+          const ghRes = await uploadToGitHub(fileName, base64Data, `Upload imagem: ${fileName}`, token);
+          // Usa a URL raw do GitHub para exibição
+          const rawUrl = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${fileName}`;
+          finalUrls.push(rawUrl);
+        } catch(err) {
+          hideSaving();
+          showToast(`❌ Falha no upload da imagem ${i+1}: ${err.message}`);
+          saveBtn.disabled = false;
+          saveBtn.textContent = '💾 Salvar Produto';
+          return;
+        }
+      } else {
+        finalUrls.push(img.src);
+      }
+    }
+
+    hideSaving();
+
+    // ── Coleta seções de cores ──
+    const sectionEls = document.querySelectorAll('.color-section');
+    const colorSections = Array.from(sectionEls).map(el => {
+      const secName  = el.querySelector('.cs-name').value.trim() || 'Cores disponíveis';
+      const colorItems = el.querySelectorAll('.color-item');
+      const colors   = Array.from(colorItems).map(ci => ({ name: ci.dataset.name, hex: ci.dataset.hex }));
+      return { name: secName, colors };
+    }).filter(s => s.colors.length > 0);
+    const flatColors = colorSections.flatMap(s => s.colors);
+
+    const [mainImg, ...galleryImgs] = finalUrls;
+    const image   = mainImg || '';
+    const gallery = galleryImgs;
+
+    const priceRaw = document.getElementById('p_price').value;
+    const price    = priceRaw !== '' ? parseFloat(priceRaw) : null;
+    const discount = parseInt(document.getElementById('p_discount').value) || 0;
+
+    const productData = {
+      name, emoji: document.getElementById('p_emoji').value.trim() || '📦',
+      desc, category: document.getElementById('p_category').value,
+      price, badge: document.getElementById('p_badge').value.trim(),
+      discount, model3d: document.getElementById('p_model3d').value.trim(),
+      image, gallery, colorSections, colors: flatColors
+    };
+
+    if(editingId !== null) {
+      const idx = products.findIndex(p => p.id === editingId);
+      if(idx >= 0) products[idx] = { ...products[idx], ...productData };
+    } else {
+      products.push({ id: Date.now(), ...productData });
+    }
+
+    // ── Salva data.json no GitHub ──
+    await saveStateToGitHub(products);
+
+    closeModal();
+    renderProductList();
+
+  } catch(e) {
+    hideSaving();
+    showToast('❌ Erro inesperado: ' + e.message);
+    console.error(e);
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = '💾 Salvar Produto';
+  }
 }
 
-function deleteProduct(id) {
-  if (!confirm('Remover este produto?')) return;
+async function deleteProduct(id) {
+  if(!confirm('Remover este produto?')) return;
   products = products.filter(p => p.id !== id);
-  saveState('maker3d_products', products);
   renderProductList();
+  await saveStateToGitHub(products);
   showToast('🗑 Produto removido.');
 }
 
@@ -684,8 +865,8 @@ function addColorSection(secName='', colors=[]) {
 function addColorToSection(btn) {
   const section = btn.closest('.color-section');
   const name = section.querySelector('.new-color-name').value.trim();
-  const hex = section.querySelector('.new-color-hex').value;
-  if (!name) { showToast('❗ Digite o nome da cor.'); return; }
+  const hex  = section.querySelector('.new-color-hex').value;
+  if(!name) { showToast('❗ Digite o nome da cor.'); return; }
   addColorItemToSection(section, name, hex);
   section.querySelector('.new-color-name').value = '';
 }
@@ -694,14 +875,14 @@ function addColorItemToSection(section, name, hex) {
   const div = document.createElement('div');
   div.className = 'color-item';
   div.dataset.name = name;
-  div.dataset.hex = hex;
+  div.dataset.hex  = hex;
   div.innerHTML = `<div class="color-swatch" style="background:${hex}"></div><span>${name}</span><button class="color-item-remove" onclick="this.closest('.color-item').remove()">×</button>`;
   section.querySelector('.color-items').appendChild(div);
 }
 
 function addColorSectionFromGlobal() {
   const gl = globalColors;
-  if (!gl.length) { showToast('Nenhuma cor global cadastrada.'); return; }
+  if(!gl.length) { showToast('Nenhuma cor global cadastrada.'); return; }
   const section = document.createElement('div');
   section.className = 'color-section fade-in-anim';
   section.innerHTML = `
@@ -724,9 +905,9 @@ function addColorSectionFromGlobal() {
 
 function confirmGlobalColorSection(btn) {
   const section = btn.closest('.color-section');
-  const checks = section.querySelectorAll('input[type=checkbox]:checked');
-  const ci = section.querySelector('.color-items');
-  ci.innerHTML = '';
+  const checks  = section.querySelectorAll('input[type=checkbox]:checked');
+  const ci      = section.querySelector('.color-items');
+  ci.innerHTML  = '';
   checks.forEach(cb => {
     const c = globalColors[parseInt(cb.value)];
     addColorItemToSection(section, c.name, c.hex);
@@ -742,7 +923,7 @@ function confirmGlobalColorSection(btn) {
 // ─── GLOBAL COLORS ───
 function renderGlobalColors() {
   const list = document.getElementById('globalColorsList');
-  if (!globalColors.length) { list.innerHTML = '<p style="color:var(--text-mid)">Nenhuma cor global ainda.</p>'; return; }
+  if(!globalColors.length) { list.innerHTML = '<p style="color:var(--text-mid)">Nenhuma cor global ainda.</p>'; return; }
   list.innerHTML = globalColors.map((c,i) => `
     <div class="global-color-tag">
       <div class="global-color-swatch" style="background:${c.hex}"></div>
@@ -755,10 +936,10 @@ function renderGlobalColors() {
 }
 
 function addGlobalColor() {
-  const name = document.getElementById('newGlobalColorName').value.trim();
-  const hex = document.getElementById('newGlobalColorHex').value;
+  const name     = document.getElementById('newGlobalColorName').value.trim();
+  const hex      = document.getElementById('newGlobalColorHex').value;
   const priceAdd = parseFloat(document.getElementById('newGlobalColorPrice').value) || 0;
-  if (!name) { showToast('❗ Digite o nome da cor.'); return; }
+  if(!name) { showToast('❗ Digite o nome da cor.'); return; }
   globalColors.push({ name, hex, priceAdd });
   saveState('maker3d_global_colors', globalColors);
   renderGlobalColors();
@@ -768,7 +949,7 @@ function addGlobalColor() {
 }
 
 function removeGlobalColor(i) {
-  if (!confirm('Remover esta cor global?')) return;
+  if(!confirm('Remover esta cor global?')) return;
   globalColors.splice(i, 1);
   saveState('maker3d_global_colors', globalColors);
   renderGlobalColors();
@@ -803,22 +984,21 @@ function calcular() {
 
 // ─── UTILS ───
 function toRawUrl(url) {
-  if (!url) return '';
-  if (url.includes('github.com') && url.includes('/blob/')) {
+  if(!url) return '';
+  if(url.includes('github.com') && url.includes('/blob/'))
     return url.replace('github.com','raw.githubusercontent.com').replace('/blob/','/');
-  }
   return url;
 }
 
 function showToast(msg) {
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
+  setTimeout(()=>t.classList.remove('show'),3200);
 }
 
 // Close modal on overlay click
 document.getElementById('productModal').addEventListener('click', e => {
-  if (e.target===document.getElementById('productModal')) closeModal();
+  if(e.target===document.getElementById('productModal')) closeModal();
 });
 </script>
 </body>
