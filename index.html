@@ -720,12 +720,7 @@
       <button class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Limpar busca">✕</button>
     </div>
     <div class="filter-pills" id="filterPills">
-      <button class="filter-pill active" onclick="setFilter('todos',this)">Todos</button>
-      <button class="filter-pill" onclick="setFilter('decorativo',this)">Decorativo</button>
-      <button class="filter-pill" onclick="setFilter('funcional',this)">Funcional</button>
-      <button class="filter-pill" onclick="setFilter('miniatura',this)">Miniaturas</button>
-      <button class="filter-pill" onclick="setFilter('customizado',this)">Customizado</button>
-    </div>
+      </div>
   </div>
   <div class="products-count" id="productsCount"></div>
   <div class="products-grid" id="productsGrid"></div>
@@ -1057,7 +1052,7 @@ function renderProducts() {
   document.getElementById('productsCount').textContent = `${filtered.length} produto${filtered.length!==1?'s':''} encontrado${filtered.length!==1?'s':''}`;
 
   if (!filtered.length) {
-    grid.innerHTML = `<div class="no-results"><span>🔍</span><p>Nenhum produto encontrado para "${q||currentFilter}".</p><button class="btn-secondary" onclick="clearSearch();setFilter('todos',document.querySelector('.filter-pill'))">Ver todos</button></div>`;
+    grid.innerHTML = `<div class="no-results"><span>🔍</span><p>Nenhum produto encontrado para "${q||currentFilter}".</p><button class="btn-secondary" onclick="clearSearch();setFilter('todos')">Ver todos</button></div>`;
     return;
   }
 
@@ -1156,11 +1151,32 @@ function getColors(p) {
   return [];
 }
 
-function setFilter(cat, btn) {
+// NOVO: renderFilters
+function renderFilters() {
+  const container = document.getElementById('filterPills');
+  if (!container) return;
+
+  // Extrai as categorias únicas dos produtos atuais
+  const categorias = [...new Set(products.map(p => p.category).filter(Boolean))];
+  
+  // Botão "Todos"
+  let html = `<button class="filter-pill ${currentFilter === 'todos' ? 'active' : ''}" onclick="setFilter('todos')">Todos</button>`;
+  
+  // Cria um botão para cada categoria encontrada
+  categorias.forEach(cat => {
+    // Coloca a primeira letra em maiúscula (ex: "geek" -> "Geek")
+    const nomeExibicao = cat.charAt(0).toUpperCase() + cat.slice(1);
+    html += `<button class="filter-pill ${currentFilter === cat ? 'active' : ''}" onclick="setFilter('${cat}')">${nomeExibicao}</button>`;
+  });
+  
+  container.innerHTML = html;
+}
+
+// NOVO: setFilter atualizado
+function setFilter(cat) {
   currentFilter = cat;
-  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  renderProducts();
+  renderFilters();   // Atualiza a cor do botão ativo
+  renderProducts();  // Mostra os produtos daquela categoria
 }
 
 function onSearch(val) {
@@ -1600,6 +1616,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   await loadData();
 
   renderCarousel();
+  renderFilters(); // <--- NOVO: Chama renderFilters antes de renderProducts
   renderProducts();
   initReveal();
 
