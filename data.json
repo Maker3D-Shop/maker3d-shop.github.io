@@ -1,51 +1,6 @@
 {
   "products": [
     {
-      "id": 3,
-      "name": "Miniatura Dragão",
-      "emoji": "🐉",
-      "category": "miniatura",
-      "desc": "Dragão articulado impresso em múltiplas partes. Escama por escama, um trabalho de arte.",
-      "price": 45,
-      "colorSections": [
-        {
-          "name": "Cores disponíveis",
-          "colors": [
-            {
-              "name": "Avelã",
-              "hex": "#bf540d"
-            },
-            {
-              "name": "Azul Cobalto",
-              "hex": "#0d54bf"
-            },
-            {
-              "name": "Preto",
-              "hex": "#000000"
-            }
-          ]
-        }
-      ],
-      "badge": "Destaque",
-      "discount": 0,
-      "model3d": "",
-      "image": "",
-      "colors": [
-        {
-          "name": "Avelã",
-          "hex": "#bf540d"
-        },
-        {
-          "name": "Azul Cobalto",
-          "hex": "#0d54bf"
-        },
-        {
-          "name": "Preto",
-          "hex": "#000000"
-        }
-      ]
-    },
-    {
       "id": 9,
       "name": "✨ Peça Customizada",
       "emoji": "⚙️",
