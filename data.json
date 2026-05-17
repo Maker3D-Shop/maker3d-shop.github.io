@@ -12,16 +12,8 @@
           "name": "Cores disponíveis",
           "colors": [
             {
-              "name": "Laranja",
+              "name": "Laranja Maker3D",
               "hex": "#f07800"
-            },
-            {
-              "name": "Escuro",
-              "hex": "#c85a00"
-            },
-            {
-              "name": "Azul",
-              "hex": "#3498db"
             }
           ]
         }
@@ -30,7 +22,14 @@
       "discount": 0,
       "model3d": "",
       "image": "",
-      "custom": true
+      "custom": true,
+      "gallery": [],
+      "colors": [
+        {
+          "name": "Laranja Maker3D",
+          "hex": "#f07800"
+        }
+      ]
     },
     {
       "id": 1779035132088,
