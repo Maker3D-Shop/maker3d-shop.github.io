@@ -892,6 +892,16 @@ function toRaw(url) {
 
 // Carrega do GitHub, fallback localStorage, fallback default
 async function loadData() {
+  // 1. Primeiro tenta ver se tem algo salvo localmente (útil se você acabou de editar no Admin)
+  try {
+    const local = localStorage.getItem('maker3d_products');
+    if (local) { 
+      products = JSON.parse(local); 
+      return; // Se achou local, usa ele e pronto!
+    }
+  } catch(e) {}
+
+  // 2. Se não tem local (cliente normal acessando), busca do GitHub
   try {
     const resp = await fetch(GITHUB_RAW + '?t=' + Date.now(), { cache: 'no-store' });
     if (resp.ok) {
@@ -902,10 +912,8 @@ async function loadData() {
       }
     }
   } catch(e) {}
-  try {
-    const local = localStorage.getItem('maker3d_products');
-    if (local) { products = JSON.parse(local); return; }
-  } catch(e) {}
+  
+  // 3. Fallback final
   products = defaultProducts;
 }
 
