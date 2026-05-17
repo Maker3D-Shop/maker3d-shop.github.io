@@ -303,6 +303,85 @@
           "hex": "#000000"
         }
       ]
+    },
+    {
+      "id": 1779042797608,
+      "name": "Mini Furão🦦",
+      "emoji": "📦",
+      "desc": "Mini furão articulado impresso em 3D, super fofo e perfeito para brincar! 🤎 Com seu design flexível, ele cabe na palma da mão e é ótimo para relaxar. ✨",
+      "category": "Miniatura",
+      "price": 29.5,
+      "badge": "Articulado 🤎",
+      "discount": 0,
+      "model3d": "",
+      "image": "https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_be4379089642f8.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+      "gallery": [
+        "https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_7e37fee09d00d8.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+        "https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_9479d317242068.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+        "https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_08e4e96074b9a8.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp"
+      ],
+      "colorSections": [
+        {
+          "name": "cor do Corpo",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        },
+        {
+          "name": "cor da Pelagem",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        }
+      ],
+      "colors": [
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        },
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        }
+      ]
     }
   ]
 }
