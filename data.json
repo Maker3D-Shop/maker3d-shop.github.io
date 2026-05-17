@@ -153,6 +153,86 @@
           "hex": "#000000"
         }
       ]
+    },
+    {
+      "id": 1779036803058,
+      "name": "Mini Polvo",
+      "emoji": "📦",
+      "desc": ".",
+      "category": "Articulado",
+      "price": 20,
+      "badge": "Fofo",
+      "discount": 0,
+      "model3d": "",
+      "image": "https://makerworld.bblmw.com/makerworld/model/US7275b0b14b2b1b/design/2023-08-16_68wwjqr9j9b0.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+      "gallery": [
+        "https://makerworld.bblmw.com/makerworld/model/US7275b0b14b2b1b/design/2023-08-16_b0qekzgmoxkm.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+        "https://makerworld.bblmw.com/makerworld/model/US7275b0b14b2b1b/design/2023-08-16_xf0l69nfg8el.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+        "https://makerworld.bblmw.com/makerworld/model/US7275b0b14b2b1b/design/2023-08-16_jpm8z97sbvqx.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+        "https://makerworld.bblmw.com/makerworld/model/US7275b0b14b2b1b/design/2023-08-16_l5jj55w807sw.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp"
+      ],
+      "colorSections": [
+        {
+          "name": "Superior",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        },
+        {
+          "name": "Inferior",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        }
+      ],
+      "colors": [
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        },
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        }
+      ]
     }
   ]
 }
