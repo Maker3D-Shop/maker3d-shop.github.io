@@ -382,6 +382,86 @@
           "hex": "#000000"
         }
       ]
+    },
+    {
+      "id": 1779043350679,
+      "name": "Cone Espiral🌀",
+      "emoji": "📦",
+      "desc": "Cone espiral mágico impresso em 3D, o fidget toy perfeito para relaxar e se encantar! 🌀✨\nCom um design de ilusão de ótica fascinante, as duas peças se encaixam e giram suavemente. 🤩\n\n-Disponível em cores vibrantes, é ideal para decorar sua mesa ou aliviar o estresse do dia a dia.- 🎨",
+      "category": "Fidget Toy",
+      "price": null,
+      "badge": "Fidget Toy ✨",
+      "discount": 0,
+      "model3d": "",
+      "image": "https://makerworld.bblmw.com/makerworld/model/USa85d1c6d202941/design/2024-12-27_2f172a7e4ed22.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+      "gallery": [
+        "https://makerworld.bblmw.com/makerworld/model/USa85d1c6d202941/design/2024-12-27_f7da9fca8a055.gif?x-oss-process=image/resize,w_1000/format,webp",
+        "https://makerworld.bblmw.com/makerworld/model/USa85d1c6d202941/design/2024-12-27_3b37b731f5c7b.jpg?x-oss-process=image/resize,w_1000/format,webp",
+        "https://makerworld.bblmw.com/makerworld/model/USa85d1c6d202941/design/2024-12-27_fe0648254916b.jpg?x-oss-process=image/resize,w_1000/format,webp",
+        "https://makerworld.bblmw.com/makerworld/model/USa85d1c6d202941/design/2025-10-07_1370d382af63c.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp"
+      ],
+      "colorSections": [
+        {
+          "name": "cor do Cone",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        },
+        {
+          "name": "cor do Encaixe",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        }
+      ],
+      "colors": [
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        },
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        }
+      ]
     }
   ]
 }
