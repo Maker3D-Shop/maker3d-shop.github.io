@@ -240,9 +240,9 @@
     },
     {
       "id": 1779038443112,
-      "name": "Porta Batom",
+      "name": "Porta Batom🌸",
       "emoji": "📦",
-      "desc": ".",
+      "desc": "Porta-batom chaveiro super fofo com textura de florzinhas em relevo! 🌸 Perfeito para proteger e levar seu hidratante labial ou batom favorito sempre com você, seja na bolsa ou pendurado nas chaves.🎀✨",
       "category": "Acessórios",
       "price": 35,
       "badge": "Novo✨",
@@ -252,8 +252,39 @@
       "gallery": [
         "https://makerworld.bblmw.com/makerworld/model/US23a8a1f23a9c84/design/e9011f9744d8c675.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp"
       ],
-      "colorSections": [],
-      "colors": []
+      "colorSections": [
+        {
+          "name": "Cores disponíveis",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        }
+      ],
+      "colors": [
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        }
+      ]
     }
   ]
 }
