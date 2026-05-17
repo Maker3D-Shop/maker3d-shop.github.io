@@ -285,6 +285,55 @@
           "hex": "#000000"
         }
       ]
+    },
+    {
+      "id": 1779041587144,
+      "name": "Tubarão",
+      "emoji": "📦",
+      "desc": "Tubarão articulado impresso em 3D, super divertido e relaxante para brincar! 🦈✨\nCom movimentos flexíveis e design incrível, é perfeito como fidget toy ou item de decoração. 🌊",
+      "category": "Articulado",
+      "price": 23,
+      "badge": "Fidget Toy 🌀",
+      "discount": 0,
+      "model3d": "",
+      "image": "https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_51a2cb930b324.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+      "gallery": [
+        "https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_bd87f059d01fd.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+        "https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_b705f236b4828.jpg?x-oss-process=image/resize,w_1000/format,webp"
+      ],
+      "colorSections": [
+        {
+          "name": "Cores disponíveis",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        }
+      ],
+      "colors": [
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        }
+      ]
     }
   ]
 }
