@@ -64,8 +64,8 @@
   }
   nav.scrolled { box-shadow:0 4px 32px rgba(204,122,0,0.15); }
   .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-  .nav-logo-img-wrap { width:40px; height:40px; border-radius:50%; overflow:hidden; background:linear-gradient(135deg,var(--orange-main),var(--orange-deep)); display:flex; align-items:center; justify-content:center; }
-  .nav-logo-img-wrap img { width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply; }
+  .nav-logo-img-wrap { width:45px; height:45px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .nav-logo-img-wrap img { width:100%; height:100%; object-fit:contain; }
   .nav-logo span { font-family:'DM Serif Display',serif; font-size:1.4rem; color:var(--orange-main); letter-spacing:-0.02em; }
   .nav-links { display:flex; gap:4px; list-style:none; }
   .nav-links a { display:block; padding:8px 16px; text-decoration:none; color:var(--text-mid); font-weight:500; font-size:0.92rem; border-radius:var(--radius-pill); transition:var(--transition); }
@@ -133,15 +133,15 @@
   .carousel-title { text-align:center; margin-bottom:36px; font-family:'DM Serif Display',serif; font-size:2rem; color:var(--text-dark); }
   .carousel-title span { color:var(--orange-main); }
   .carousel-wrapper { position:relative; overflow:hidden; touch-action:pan-y; }
-  .carousel-track { display:flex; gap:24px; padding:12px 5%; transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); will-change:transform; }
-  .carousel-card { min-width:272px; flex-shrink:0; background:var(--off-white); border-radius:var(--radius-card); overflow:hidden; box-shadow:var(--shadow-card); border:1px solid rgba(255,158,27,0.1); transition:var(--transition); cursor:pointer; }
+  .carousel-track { display:flex; gap:24px; padding:12px 5%; transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); will-change:transform; align-items: stretch; /* Força mesma altura */ }
+  .carousel-card { min-width:272px; flex-shrink:0; background:var(--off-white); border-radius:var(--radius-card); overflow:hidden; box-shadow:var(--shadow-card); border:1px solid rgba(255,158,27,0.1); transition:var(--transition); cursor:pointer; display: flex; flex-direction: column; /* Organiza por coluna */ }
   .carousel-card:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 20px 48px rgba(204,122,0,0.2); }
   .carousel-card-img { width:100%; height:180px; display:flex; align-items:center; justify-content:center; font-size:4rem; position:relative; overflow:hidden; }
   .carousel-card-img img { width:100%; height:100%; object-fit:cover; }
-  .carousel-card-body { padding:16px 18px 20px; }
+  .carousel-card-body { padding:16px 18px 20px; display: flex; flex-direction: column; flex: 1; }
   .carousel-card-body h3 { font-size:1rem; font-weight:700; margin-bottom:5px; color:var(--text-dark); }
   .carousel-card-body p { font-size:0.85rem; color:var(--text-mid); line-height:1.5; }
-  .carousel-card-price { font-size:1.1rem; font-weight:800; color:var(--orange-main); margin-top:10px; }
+  .carousel-card-price { font-size:1.1rem; font-weight:800; color:var(--orange-main); margin-top: auto; /* Empurra o preço pro final do card */ }
   .carousel-dots { display:flex; justify-content:center; gap:8px; margin-top:24px; }
   .dot { width:8px; height:8px; border-radius:50%; background:var(--gray-mid); cursor:pointer; transition:var(--transition); border:none; }
   .dot.active { background:var(--orange-main); width:24px; border-radius:var(--radius-pill); }
@@ -383,10 +383,8 @@
   .about-text h1 span { color:var(--orange-main); }
   .about-text p { font-size:0.98rem; color:var(--text-mid); line-height:1.8; margin-bottom:14px; }
   .about-visual { display:flex; align-items:center; justify-content:center; }
-  .about-logo-wrap { width:230px; height:230px; background:linear-gradient(135deg,var(--orange-main),var(--orange-deep)); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 20px 60px rgba(255,158,27,0.4); position:relative; overflow:hidden; }
-  .about-logo-wrap::before { content:''; position:absolute; inset:-14px; border-radius:50%; border:2px dashed rgba(255,255,255,0.3); animation:spin 22s linear infinite; pointer-events:none; }
-  .about-logo-wrap img { width:62%; height:62%; object-fit:contain; mix-blend-mode:multiply; filter:brightness(0) invert(1); }
-  .about-logo-wrap svg { width:62%; }
+  .about-logo-wrap { width:240px; height:240px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .about-logo-wrap img { width:100%; height:100%; object-fit:contain; }
   .about-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; padding:0 5% 56px; max-width:1200px; margin:0 auto; }
   .stat-box { background:rgba(255,255,255,0.85); backdrop-filter:blur(16px); border-radius:var(--radius-card); padding:26px 18px; text-align:center; box-shadow:var(--shadow-card); border:1px solid rgba(255,158,27,0.1); transition:var(--transition); cursor:default; }
   .stat-box:hover { transform:translateY(-4px); border-color:rgba(255,158,27,0.3); }
@@ -874,7 +872,7 @@ let currentModal = null;
 let currentGalleryIdx = 0;
 let currentGalleryImages = [];
 let fullscreenIdx = 0;
-let selectedColors = {}; // productId → {name, hex}
+let selectedColors = {}; // productId → array de {name, hex} (uma por seção)
 let searchTimeout = null;
 
 // Converte URL GitHub blob → raw
@@ -887,16 +885,14 @@ function toRaw(url) {
 
 // Carrega do GitHub, fallback localStorage, fallback default
 async function loadData() {
-  // 1. Primeiro tenta ver se tem algo salvo localmente (útil se você acabou de editar no Admin)
   try {
     const local = localStorage.getItem('maker3d_products');
     if (local) { 
       products = JSON.parse(local); 
-      return; // Se achou local, usa ele e pronto!
+      return;
     }
   } catch(e) {}
 
-  // 2. Se não tem local (cliente normal acessando), busca do GitHub
   try {
     const resp = await fetch(GITHUB_RAW + '?t=' + Date.now(), { cache: 'no-store' });
     if (resp.ok) {
@@ -908,7 +904,6 @@ async function loadData() {
     }
   } catch(e) {}
   
-  // 3. Fallback final
   products = defaultProducts;
 }
 
@@ -1012,7 +1007,6 @@ function renderCarousel() {
   }).join('');
   dots.innerHTML = carouselProducts.map((_,i)=>`<button class="dot ${i===0?'active':''}" onclick="goSlide(${i})" aria-label="Slide ${i+1}"></button>`).join('');
 
-  // Touch
   const wr = document.getElementById('carouselWrapper');
   wr.addEventListener('touchstart',e=>{isDrag=true;startX=e.touches[0].clientX;},{passive:true});
   wr.addEventListener('touchmove',e=>{if(isDrag)curX=e.touches[0].clientX;},{passive:true});
@@ -1063,7 +1057,7 @@ function renderProducts() {
     const hasImg = !!rawImg;
     const disc = p.discount||0;
     const cols = getColors(p);
-    const selColor = selectedColors[p.id] || (cols.length?cols[0]:null);
+    const selColor = selectedColors[p.id] ? selectedColors[p.id][0] : (cols.length?cols[0]:null);
 
     const colDotsHtml = cols.map((c,ci) => {
       const isSel = selColor && c.hex===selColor.hex;
@@ -1111,18 +1105,17 @@ function renderProducts() {
     </div>`;
   }).join('');
 
-  // Click handlers (event delegation)
   grid.querySelectorAll('.product-card').forEach(card => {
     card.addEventListener('click', handleCardClick);
     card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') handleCardClick.call(card, e); });
   });
 
-  // Color dots — event delegation on grid
   grid.querySelectorAll('.color-dot').forEach(dot => {
     dot.addEventListener('click', e => {
       e.stopPropagation();
       const pid = parseInt(dot.dataset.pid);
-      selectedColors[pid] = { name: dot.dataset.name, hex: dot.dataset.hex };
+      if (!Array.isArray(selectedColors[pid])) selectedColors[pid] = [{ name: dot.dataset.name, hex: dot.dataset.hex }];
+      else selectedColors[pid][0] = { name: dot.dataset.name, hex: dot.dataset.hex };
       const container = document.getElementById('cdots-'+pid);
       if (container) {
         container.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
@@ -1151,32 +1144,22 @@ function getColors(p) {
   return [];
 }
 
-// NOVO: renderFilters
 function renderFilters() {
   const container = document.getElementById('filterPills');
   if (!container) return;
-
-  // Extrai as categorias únicas dos produtos atuais
   const categorias = [...new Set(products.map(p => p.category).filter(Boolean))];
-  
-  // Botão "Todos"
   let html = `<button class="filter-pill ${currentFilter === 'todos' ? 'active' : ''}" onclick="setFilter('todos')">Todos</button>`;
-  
-  // Cria um botão para cada categoria encontrada
   categorias.forEach(cat => {
-    // Coloca a primeira letra em maiúscula (ex: "geek" -> "Geek")
     const nomeExibicao = cat.charAt(0).toUpperCase() + cat.slice(1);
     html += `<button class="filter-pill ${currentFilter === cat ? 'active' : ''}" onclick="setFilter('${cat}')">${nomeExibicao}</button>`;
   });
-  
   container.innerHTML = html;
 }
 
-// NOVO: setFilter atualizado
 function setFilter(cat) {
   currentFilter = cat;
-  renderFilters();   // Atualiza a cor do botão ativo
-  renderProducts();  // Mostra os produtos daquela categoria
+  renderFilters();
+  renderProducts();
 }
 
 function onSearch(val) {
@@ -1192,7 +1175,7 @@ function clearSearch() {
 }
 
 // ════════════════════════════════════════
-// MODAL
+// MODAL – MÚLTIPLAS CORES CORRIGIDO
 // ════════════════════════════════════════
 let threeRenderer=null, threeScene=null, threeCamera=null, threeAnimFrame=null;
 let wireMode=false, isDrag3d=false, lastMouse3d={x:0,y:0}, rot3d={x:0,y:0};
@@ -1203,15 +1186,12 @@ function openModal(id) {
   currentModal = p;
   currentGalleryIdx = 0;
 
-  // Reset 3D state
   const box = document.getElementById('modalBox');
   box.classList.remove('mode-3d');
 
-  // Title
   document.getElementById('modalTitle').textContent = p.name;
   document.getElementById('modalTitle3d').textContent = p.name;
 
-  // Price
   const pr = document.getElementById('modalPriceRow');
   const p3 = document.getElementById('modalPrice3d');
   if (p.price) {
@@ -1228,7 +1208,6 @@ function openModal(id) {
     p3.textContent = 'Sob consulta';
   }
 
-  // Print info
   document.getElementById('modalPrintInfo').innerHTML = p.price ? `
     <div class="print-info-item"><strong>~${Math.round((p.price||50)/8)}h</strong>Impressão</div>
     <div class="print-info-item"><strong>~${Math.round((p.price||50)*1.5)}g</strong>Material</div>
@@ -1236,42 +1215,56 @@ function openModal(id) {
 
   document.getElementById('modalDesc').textContent = p.desc;
 
-  // Colors in modal
-  const cols = getColors(p);
-  const selColor = selectedColors[p.id] || (cols.length?cols[0]:null);
-  if (selColor && !selectedColors[p.id]) selectedColors[p.id] = selColor;
+  // ===== SISTEMA DE MÚLTIPLAS CORES ATUALIZADO =====
+  let sections = p.colorSections || [];
+  if (sections.length === 0 && p.colors && p.colors.length > 0) {
+    sections = [{ name: 'Cores disponíveis', colors: p.colors }];
+  }
 
-  document.getElementById('modalColors').innerHTML = cols.length ? `
-    <div class="modal-colors-label">🎨 Escolha a cor:</div>
-    <div style="display:flex;gap:9px;flex-wrap:wrap" id="modalColorDots">
-      ${cols.map(c=>`<button class="color-dot ${selColor&&c.hex===selColor.hex?'selected':''}" style="background:${c.hex};width:26px;height:26px" data-pid="${p.id}" data-name="${c.name}" data-hex="${c.hex}" title="${c.name}" type="button" aria-label="Cor ${c.name}"></button>`).join('')}
-    </div>
-    <div class="modal-color-name" id="modalColorName">Cor selecionada: ${selColor?.name||''}</div>` : '';
+  if (!selectedColors[p.id] || !Array.isArray(selectedColors[p.id])) {
+    selectedColors[p.id] = sections.map(s => s.colors.length ? s.colors[0] : null);
+  }
 
-  // Modal color selection
+  let colorsHtml = '';
+  if (sections.length > 0 && sections[0].colors && sections[0].colors.length > 0) {
+    colorsHtml = sections.map((sec, sIdx) => {
+      const sel = selectedColors[p.id][sIdx] || (sec.colors.length ? sec.colors[0] : null);
+      if(!selectedColors[p.id][sIdx]) selectedColors[p.id][sIdx] = sel;
+
+      return `
+        <div style="margin-bottom: 16px;">
+          <div class="modal-colors-label">${sec.name}:</div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap" class="modalColorDotsSection" data-sidx="${sIdx}">
+            ${sec.colors.map(c => `
+              <button class="color-dot ${sel && c.hex === sel.hex ? 'selected' : ''}" 
+                      style="background:${c.hex};width:26px;height:26px" 
+                      data-pid="${p.id}" data-sidx="${sIdx}" data-name="${c.name}" data-hex="${c.hex}" 
+                      title="${c.name}" type="button" aria-label="Cor ${c.name}"></button>
+            `).join('')}
+          </div>
+          <div class="modal-color-name" id="modalColorName-${sIdx}" style="margin-top: 6px;">Cor selecionada: ${sel ? sel.name : ''}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  document.getElementById('modalColors').innerHTML = colorsHtml;
+
   setTimeout(() => {
-    document.querySelectorAll('#modalColorDots .color-dot').forEach(dot => {
+    document.querySelectorAll('.modalColorDotsSection .color-dot').forEach(dot => {
       dot.addEventListener('click', () => {
         const pid = parseInt(dot.dataset.pid);
-        selectedColors[pid] = {name:dot.dataset.name, hex:dot.dataset.hex};
-        document.querySelectorAll('#modalColorDots .color-dot').forEach(d=>d.classList.remove('selected'));
+        const sIdx = parseInt(dot.dataset.sidx);
+        selectedColors[pid][sIdx] = {name: dot.dataset.name, hex: dot.dataset.hex};
+        const parent = dot.closest('.modalColorDotsSection');
+        parent.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
         dot.classList.add('selected');
-        const lbl = document.getElementById('modalColorName');
-        if (lbl) lbl.textContent = 'Cor selecionada: '+dot.dataset.name;
-        // Sync back to product grid
-        const gc = document.getElementById('cdots-'+pid);
-        if (gc) {
-          gc.querySelectorAll('.color-dot').forEach(d=>{
-            d.classList.toggle('selected', d.dataset.hex===dot.dataset.hex);
-          });
-          const gl = document.getElementById('clabel-'+pid);
-          if (gl) gl.textContent = dot.dataset.name;
-        }
+        const lbl = document.getElementById('modalColorName-' + sIdx);
+        if (lbl) lbl.textContent = 'Cor selecionada: ' + dot.dataset.name;
       });
     });
   }, 0);
 
-  // Gallery
+  // Gallery e 3D
   const rawImg = toRaw(p.image);
   const imgs = [];
   if (rawImg) imgs.push(rawImg);
@@ -1279,7 +1272,6 @@ function openModal(id) {
   currentGalleryImages = imgs;
   buildGallery(p);
 
-  // 3D tab
   const rawModel = toRaw(p.model3d);
   const modelTab = document.getElementById('tab-model');
   if (rawModel) { modelTab.style.display=''; } else { modelTab.style.display='none'; switchMedia('gallery'); }
@@ -1326,7 +1318,6 @@ function setGalleryImg(i) {
 function galleryPrev() { if(!currentGalleryImages.length)return; setGalleryImg((currentGalleryIdx-1+currentGalleryImages.length)%currentGalleryImages.length); }
 function galleryNext() { if(!currentGalleryImages.length)return; setGalleryImg((currentGalleryIdx+1)%currentGalleryImages.length); }
 
-// Gallery touch swipe
 let galTx=0;
 document.addEventListener('touchstart',e=>{if(document.getElementById('panel-gallery').classList.contains('active'))galTx=e.touches[0].clientX;},{passive:true});
 document.addEventListener('touchend',e=>{
@@ -1346,7 +1337,6 @@ function closeFullscreen() { document.getElementById('fullscreenOverlay').classL
 function fullscreenPrev() { if(!currentGalleryImages.length)return; fullscreenIdx=(fullscreenIdx-1+currentGalleryImages.length)%currentGalleryImages.length; document.getElementById('fullscreenImg').src=currentGalleryImages[fullscreenIdx]; }
 function fullscreenNext() { if(!currentGalleryImages.length)return; fullscreenIdx=(fullscreenIdx+1)%currentGalleryImages.length; document.getElementById('fullscreenImg').src=currentGalleryImages[fullscreenIdx]; }
 
-// ─── MEDIA SWITCHER ───
 function switchMedia(type) {
   document.querySelectorAll('.media-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.media-panel').forEach(p=>p.classList.remove('active'));
@@ -1391,7 +1381,6 @@ function init3d(modelUrl) {
   addDemoModel();
   loading.style.display='none';
 
-  // Interaction
   canvas.addEventListener('mousedown', e=>{isDrag3d=true;lastMouse3d={x:e.clientX,y:e.clientY};});
   canvas.addEventListener('mousemove', e=>{
     if(!isDrag3d)return;
@@ -1405,7 +1394,6 @@ function init3d(modelUrl) {
   canvas.addEventListener('mouseleave',()=>isDrag3d=false);
   canvas.addEventListener('wheel',e=>{threeCamera.position.z=Math.max(1.5,Math.min(8,threeCamera.position.z+e.deltaY*0.008));},{passive:true});
 
-  // Touch for 3D
   let t3s={x:0,y:0};
   canvas.addEventListener('touchstart',e=>{isDrag3d=true;t3s={x:e.touches[0].clientX,y:e.touches[0].clientY};},{passive:true});
   canvas.addEventListener('touchmove',e=>{
@@ -1472,7 +1460,7 @@ function addToCartFromModal() {
 }
 
 // ════════════════════════════════════════
-// CART
+// CART – MÚLTIPLAS CORES
 // ════════════════════════════════════════
 function loadCart() {
   try { cart=JSON.parse(localStorage.getItem('maker3d_cart')||'[]'); } catch(e) { cart=[]; }
@@ -1482,13 +1470,18 @@ function saveCart() { localStorage.setItem('maker3d_cart',JSON.stringify(cart));
 function addToCart(id) {
   const p = products.find(x=>x.id===id);
   if(!p) return;
-  const color = selectedColors[id] || getColors(p)[0] || null;
-  const existing = cart.find(c=>c.id===id && c.selectedColor?.hex===(color?.hex||''));
+  
+  const colsArr = selectedColors[id] || [];
+  const chosenColors = colsArr.filter(c => c !== null);
+
+  const existing = cart.find(c => c.id === id && JSON.stringify(c.selectedColors) === JSON.stringify(chosenColors));
+  
   if(existing) existing.qty++;
-  else cart.push({...p, qty:1, selectedColor:color});
+  else cart.push({...p, qty:1, selectedColors: chosenColors});
+  
   saveCart();
   updateCartUI();
-  // Bump animation
+  
   const cc = document.getElementById('cartCount');
   cc.classList.remove('bump');
   void cc.offsetWidth;
@@ -1520,10 +1513,15 @@ function updateCartUI() {
   }
   footer.style.display='block';
   document.getElementById('cartTotal').textContent=`R$ ${total.toFixed(2).replace('.',',')}`;
+  
   items.innerHTML = cart.map((item,i)=>{
     const rawI=toRaw(item.image);
     const price=(item.price||0)*(item.discount>0?(1-item.discount/100):1);
-    const colorInfo = item.selectedColor ? `<div class="cart-item-color"><div class="cart-item-color-dot" style="background:${item.selectedColor.hex}"></div>${item.selectedColor.name}</div>` : '';
+    
+    const colorInfo = (item.selectedColors && item.selectedColors.length > 0)
+      ? item.selectedColors.map(sc => `<div class="cart-item-color"><div class="cart-item-color-dot" style="background:${sc.hex}"></div>${sc.name}</div>`).join('')
+      : '';
+      
     return `<div class="cart-item">
       <div class="cart-item-img">${rawI?`<img src="${rawI}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.textContent='${item.emoji}'">`:(item.emoji||'📦')}</div>
       <div class="cart-item-info"><h4>${item.name}</h4>${colorInfo}<span>${item.price?'R$ '+price.toFixed(2).replace('.',','):'Sob consulta'}</span></div>
@@ -1546,7 +1544,10 @@ function checkout() {
   if(!cart.length) return;
   const lines = cart.map(c=>{
     const price=(c.price||0)*(c.discount>0?(1-c.discount/100):1);
-    const colorStr = c.selectedColor ? ` (${c.selectedColor.name})` : '';
+    const colorStr = (c.selectedColors && c.selectedColors.length > 0) 
+      ? ` (${c.selectedColors.map(sc => sc.name).join(', ')})` 
+      : '';
+      
     return `• ${c.name}${colorStr} x${c.qty}${c.price?' — R$ '+price.toFixed(2).replace('.',','):''}`;
   });
   const total = cart.reduce((s,c)=>s+(c.price||0)*(c.discount>0?(1-c.discount/100):1)*c.qty,0);
@@ -1581,9 +1582,6 @@ function showToast(msg,type='') {
 }
 function acceptCookies() { document.getElementById('cookieBanner').classList.remove('show'); localStorage.setItem('maker3d_cookies','1'); }
 
-// ════════════════════════════════════════
-// KEYBOARD SHORTCUTS
-// ════════════════════════════════════════
 document.addEventListener('keydown',e=>{
   const fsOpen = document.getElementById('fullscreenOverlay').classList.contains('open');
   const modOpen = document.getElementById('modalOverlay').classList.contains('open');
@@ -1598,7 +1596,6 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-// Fullscreen touch swipe
 let fsStartX=0;
 document.getElementById('fullscreenOverlay').addEventListener('touchstart',e=>{fsStartX=e.touches[0].clientX;},{passive:true});
 document.getElementById('fullscreenOverlay').addEventListener('touchend',e=>{const d=fsStartX-e.changedTouches[0].clientX;if(Math.abs(d)>40){d>0?fullscreenNext():fullscreenPrev();}});
@@ -1610,13 +1607,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   loadCart();
   updateCartUI();
 
-  // Render skeletons while loading
   document.getElementById('productsGrid').innerHTML = Array(6).fill('<div class="skeleton skeleton-card"></div>').join('');
 
   await loadData();
 
   renderCarousel();
-  renderFilters(); // <--- NOVO: Chama renderFilters antes de renderProducts
+  renderFilters();
   renderProducts();
   initReveal();
 
