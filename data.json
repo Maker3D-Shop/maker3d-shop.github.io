@@ -126,52 +126,6 @@
       "custom": true
     },
     {
-      "id": 1778451047093,
-      "name": "Ameba",
-      "emoji": "📦",
-      "desc": "....",
-      "category": "funcional",
-      "price": 20,
-      "badge": "Nuevo",
-      "discount": 10,
-      "model3d": "",
-      "image": "",
-      "gallery": [],
-      "colorSections": [
-        {
-          "name": "Cores disponíveis",
-          "colors": [
-            {
-              "name": "Azul Royal",
-              "hex": "#2c3e7a"
-            },
-            {
-              "name": "Magenta",
-              "hex": "#ec00f0"
-            },
-            {
-              "name": "Avelã",
-              "hex": "#bf540d"
-            }
-          ]
-        }
-      ],
-      "colors": [
-        {
-          "name": "Azul Royal",
-          "hex": "#2c3e7a"
-        },
-        {
-          "name": "Magenta",
-          "hex": "#ec00f0"
-        },
-        {
-          "name": "Avelã",
-          "hex": "#bf540d"
-        }
-      ]
-    },
-    {
       "id": 1779032179399,
       "name": "macumba em pó",
       "emoji": "📦",
