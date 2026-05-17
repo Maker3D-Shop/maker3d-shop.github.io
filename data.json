@@ -126,44 +126,6 @@
       "custom": true
     },
     {
-      "id": 1779032179399,
-      "name": "macumba em pó",
-      "emoji": "📦",
-      "desc": "ooooo",
-      "category": "decorativo",
-      "price": 44.9,
-      "badge": "nuebo",
-      "discount": 0,
-      "model3d": "",
-      "image": "",
-      "gallery": [],
-      "colorSections": [
-        {
-          "name": "Cores disponíveis",
-          "colors": [
-            {
-              "name": "Transparente",
-              "hex": "#d0e8f0"
-            },
-            {
-              "name": "Preto",
-              "hex": "#000000"
-            }
-          ]
-        }
-      ],
-      "colors": [
-        {
-          "name": "Transparente",
-          "hex": "#d0e8f0"
-        },
-        {
-          "name": "Preto",
-          "hex": "#000000"
-        }
-      ]
-    },
-    {
       "id": 1779032491357,
       "name": "vaso",
       "emoji": "📦",
