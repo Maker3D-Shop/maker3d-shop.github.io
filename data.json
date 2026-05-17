@@ -233,6 +233,21 @@
           "hex": "#000000"
         }
       ]
+    },
+    {
+      "id": 1779036994512,
+      "name": "O Olho",
+      "emoji": "📦",
+      "desc": ".",
+      "category": "Giroscópio",
+      "price": 15,
+      "badge": "Fofo",
+      "discount": 0,
+      "model3d": "",
+      "image": "https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_bae8b9dea7937.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+      "gallery": [],
+      "colorSections": [],
+      "colors": []
     }
   ]
 }
