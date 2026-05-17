@@ -192,14 +192,18 @@
       "id": 1779036994512,
       "name": "O Olho",
       "emoji": "📦",
-      "desc": ".",
-      "category": "Giroscópio",
+      "desc": "Olho Giroscópio impresso em 3D. Com anéis giratórios super divertidos, é o fidget toy perfeito para aliviar o estresse, focar a mente ou usar como um chaveiro super criativo!",
+      "category": "Fidget Toy",
       "price": 15,
-      "badge": "Fofo",
+      "badge": "Antiestresse",
       "discount": 0,
       "model3d": "",
       "image": "https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_bae8b9dea7937.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
-      "gallery": [],
+      "gallery": [
+        "https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_fd01d5858a26a.jpg?x-oss-process=image/resize,w_1000/format,webp",
+        "https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_3f95e2f0fe3ea.jpg?x-oss-process=image/resize,w_1000/format,webp",
+        "https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_e5b28ef618027.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp"
+      ],
       "colorSections": [],
       "colors": []
     },
