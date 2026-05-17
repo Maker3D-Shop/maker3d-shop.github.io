@@ -170,6 +170,83 @@
           "hex": "#000000"
         }
       ]
+    },
+    {
+      "id": 1779035132088,
+      "name": "Mini Dragão",
+      "emoji": "🐉",
+      "desc": ".",
+      "category": "Miniatura",
+      "price": 15,
+      "badge": "fofo",
+      "discount": 0,
+      "model3d": "",
+      "image": "https://makerworld.bblmw.com/makerworld/model/US62ded14bdbae8c/design/2025-03-03_38aeb2192ab8d8.png?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+      "gallery": [
+        "https://makerworld.bblmw.com/makerworld/model/US62ded14bdbae8c/design/2025-03-03_9345fab102962.png?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp"
+      ],
+      "colorSections": [
+        {
+          "name": "Corpo",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        },
+        {
+          "name": "Cristal",
+          "colors": [
+            {
+              "name": "Avelã",
+              "hex": "#bf540d"
+            },
+            {
+              "name": "Azul Cobalto",
+              "hex": "#0d54bf"
+            },
+            {
+              "name": "Preto",
+              "hex": "#000000"
+            }
+          ]
+        }
+      ],
+      "colors": [
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        },
+        {
+          "name": "Avelã",
+          "hex": "#bf540d"
+        },
+        {
+          "name": "Azul Cobalto",
+          "hex": "#0d54bf"
+        },
+        {
+          "name": "Preto",
+          "hex": "#000000"
+        }
+      ]
     }
   ]
 }
