@@ -204,39 +204,8 @@
         "https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_3f95e2f0fe3ea.jpg?x-oss-process=image/resize,w_1000/format,webp",
         "https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_e5b28ef618027.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp"
       ],
-      "colorSections": [
-        {
-          "name": "Cores disponíveis",
-          "colors": [
-            {
-              "name": "Avelã",
-              "hex": "#bf540d"
-            },
-            {
-              "name": "Azul Cobalto",
-              "hex": "#0d54bf"
-            },
-            {
-              "name": "Preto",
-              "hex": "#000000"
-            }
-          ]
-        }
-      ],
-      "colors": [
-        {
-          "name": "Avelã",
-          "hex": "#bf540d"
-        },
-        {
-          "name": "Azul Cobalto",
-          "hex": "#0d54bf"
-        },
-        {
-          "name": "Preto",
-          "hex": "#000000"
-        }
-      ]
+      "colorSections": [],
+      "colors": []
     },
     {
       "id": 1779038443112,
