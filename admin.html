@@ -445,11 +445,10 @@ function configureToken() {
   }
 }
 
-// ─── ATUALIZA LISTA DE CATEGORIAS (NOVA FUNÇÃO CORRIGIDA) ───
+// ─── ATUALIZA LISTA DE CATEGORIAS ───
 function updateCategoryList() {
   const dlist = document.getElementById('categoryList');
   if (!dlist) return;
-  // Pega todas as categorias únicas que já existem nos produtos
   const categoriasUnicas = [...new Set(products.map(p => p.category).filter(Boolean))];
   dlist.innerHTML = categoriasUnicas.map(c => `<option value="${c}">`).join('');
 }
@@ -457,8 +456,6 @@ function updateCategoryList() {
 // ─── GITHUB API ───
 async function uploadToGitHub(path, contentBase64, commitMessage, token) {
   const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`;
-
-  // Tenta pegar SHA (arquivo existente)
   let sha = null;
   try {
     const getRes = await fetch(url, {
@@ -490,7 +487,6 @@ async function uploadToGitHub(path, contentBase64, commitMessage, token) {
 }
 
 async function saveStateToGitHub(val) {
-  // Salva localmente primeiro
   localStorage.setItem('maker3d_products', JSON.stringify(val));
 
   let token = getGHToken();
@@ -566,7 +562,7 @@ function saveState(key, val)  { localStorage.setItem(key, JSON.stringify(val)); 
 let products     = loadState('maker3d_products', DEFAULT_PRODUCTS);
 let globalColors = loadState('maker3d_global_colors', DEFAULT_GLOBAL_COLORS);
 let editingId    = null;
-let editingImages = []; // [{src, isBase64, ext}]
+let editingImages = [];
 
 // ─── TABS ───
 function showTab(name) {
@@ -579,13 +575,32 @@ function showTab(name) {
   if(name==='calc')     calcular();
 }
 
-function initAdmin() {
+// ════════════════════════════════════════
+// 🔄 NOVA FUNÇÃO initAdmin (carrega do GitHub)
+// ════════════════════════════════════════
+async function initAdmin() {
+  // 1. Tenta carregar do GitHub primeiro (repositório público)
+  try {
+    const resp = await fetch('https://raw.githubusercontent.com/Maker3D-Shop/maker3d-shop.github.io/main/data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.products && data.products.length) {
+        products = data.products;
+        saveState('maker3d_products', products); // Atualiza cache local
+      }
+    }
+  } catch(e) {
+    // Se falhar (offline), mantém o que já está em products (carregado do localStorage)
+  }
+
+  // 2. Renderiza tudo
   renderProductList();
   renderGlobalColors();
   calcular();
   setupDropZone();
   updateTokenUI();
 }
+
 if(sessionStorage.getItem('maker3d_admin')==='1') initAdmin();
 
 // ─── PRODUCT LIST ───
@@ -735,12 +750,12 @@ function openEditProduct(id) {
 }
 
 function openModal() { 
-  updateCategoryList(); // Atualiza datalist de categorias
+  updateCategoryList();
   document.getElementById('productModal').classList.add('open'); 
 }
 function closeModal() { document.getElementById('productModal').classList.remove('open'); }
 
-// ─── SAVE PRODUCT (async — faz upload das imagens no GitHub) ───
+// ─── SAVE PRODUCT ───
 async function saveProduct() {
   const name = document.getElementById('p_name').value.trim();
   const desc = document.getElementById('p_desc').value.trim();
@@ -757,18 +772,15 @@ async function saveProduct() {
     }
   }
 
-  // Desabilitar botão para evitar duplo clique
   const saveBtn = document.getElementById('saveProductBtn');
   saveBtn.disabled = true;
   saveBtn.textContent = '⏳ Salvando...';
 
   try {
-    // ── Upload de imagens para o GitHub ──
     const finalUrls = [];
     for(let i = 0; i < editingImages.length; i++) {
       const img = editingImages[i];
       if(img.isBase64) {
-        // Extrai dados base64 puros (remove cabeçalho data:image/xxx;base64,)
         const base64Data = img.src.split(',')[1];
         const ext = (img.ext || img.src.substring('data:image/'.length, img.src.indexOf(';base64'))) || 'png';
         const fileName = `images/produto_${Date.now()}_${i}.${ext}`;
@@ -776,7 +788,6 @@ async function saveProduct() {
         showSaving(`Enviando imagem ${i+1} de ${editingImages.filter(x=>x.isBase64).length}...`, fileName);
         try {
           const ghRes = await uploadToGitHub(fileName, base64Data, `Upload imagem: ${fileName}`, token);
-          // Usa a URL raw do GitHub para exibição
           const rawUrl = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${fileName}`;
           finalUrls.push(rawUrl);
         } catch(err) {
@@ -793,7 +804,6 @@ async function saveProduct() {
 
     hideSaving();
 
-    // ── Coleta seções de cores ──
     const sectionEls = document.querySelectorAll('.color-section');
     const colorSections = Array.from(sectionEls).map(el => {
       const secName  = el.querySelector('.cs-name').value.trim() || 'Cores disponíveis';
@@ -826,7 +836,6 @@ async function saveProduct() {
       products.push({ id: Date.now(), ...productData });
     }
 
-    // ── Salva data.json no GitHub ──
     await saveStateToGitHub(products);
 
     closeModal();
@@ -1004,7 +1013,6 @@ function showToast(msg) {
   setTimeout(()=>t.classList.remove('show'),3200);
 }
 
-// Close modal on overlay click
 document.getElementById('productModal').addEventListener('click', e => {
   if(e.target===document.getElementById('productModal')) closeModal();
 });
