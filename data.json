@@ -479,6 +479,57 @@
       ],
       "colorSections": [],
       "colors": []
+    },
+    {
+      "id": 1783942729445,
+      "name": "Estrela Flexível ⭐",
+      "emoji": "📦",
+      "desc": "Estrela do mar articulada super fofa com textura de escamas em relevo! 🌊 Perfeita para se divertir com seus movimentos fluidos ou relaxar em qualquer lugar, seja como brinquedo antiestresse ou decoração interativa.⭐🐚",
+      "category": "Articulado",
+      "price": 70,
+      "badge": "Popular",
+      "discount": -20,
+      "model3d": "",
+      "image": "https://makerworld.bblmw.com/makerworld/model/US58e8e7fedc0451/design/2025-07-17_736615c4896bc.gif?x-oss-process=image/resize,w_1000/format,webp",
+      "gallery": [
+        "https://makerworld.bblmw.com/makerworld/model/1615537/comment/be6fe350-ee30-11f0-a971-ff817b54094d.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+        "https://makerworld.bblmw.com/makerworld/model/1615537/1704755/ratings/41f4ee10-c99b-11f0-9822-d9497e3c77ac.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+        "https://makerworld.bblmw.com/makerworld/comment/20260215/1512392838/b6eeeaebb9adc812.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp",
+        "https://makerworld.bblmw.com/makerworld/model/US58e8e7fedc0451/design/2025-07-17_400696c93c7cd.jpg?x-oss-process=image/resize,w_1000/format,webp"
+      ],
+      "colorSections": [
+        {
+          "name": "Cores disponíveis",
+          "colors": [
+            {
+              "name": "Preto",
+              "hex": "#2c2c2c"
+            },
+            {
+              "name": "Verde",
+              "hex": "#27ae60"
+            },
+            {
+              "name": "Dourado",
+              "hex": "#f0a500"
+            }
+          ]
+        }
+      ],
+      "colors": [
+        {
+          "name": "Preto",
+          "hex": "#2c2c2c"
+        },
+        {
+          "name": "Verde",
+          "hex": "#27ae60"
+        },
+        {
+          "name": "Dourado",
+          "hex": "#f0a500"
+        }
+      ]
     }
   ]
 }
