@@ -2,7 +2,7 @@
 // Maker3D — Smart Cart, Coupons, Free Shipping Progress & Database Order Sync
 // ═══════════════════════════════════════════════════════════════════════════
 import { store } from '../config/store.js';
-import { getSelectedColorsForProduct, getProductColors } from './catalog.js';
+import { getSelectedColorsForProduct, getProductColors, openModal } from './catalog.js';
 import { toRawUrl } from './viewer3d.js';
 import { showToast, showPage } from './ui.js';
 import { dbService } from '../services/db.js';
@@ -12,8 +12,7 @@ export function addToCart(pid) {
   if (!p) return;
 
   if (p.custom) {
-    showPage('orcamento');
-    showToast('📐 Envie seu arquivo STL ou configure sua peça sob medida!');
+    openModal(p.id);
     return;
   }
 

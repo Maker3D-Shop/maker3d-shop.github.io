@@ -364,18 +364,24 @@ export function openModal(pid) {
       pr.innerHTML = `<span class="modal-price">R$ ${Number(p.price).toFixed(2).replace('.', ',')}</span>`;
     }
   } else {
-    pr.innerHTML = `<span class="modal-price">Preço sob consulta</span>`;
+    pr.innerHTML = `<span class="modal-price">${p.custom ? 'Orçamento Personalizado' : 'Preço sob consulta'}</span>`;
   }
 
-  document.getElementById('modalPrintInfo').innerHTML = `
-    <div class="print-info-item"><strong>~${Math.max(1, Math.round((p.price || 35) / 7))}h</strong>Impressão 3D</div>
-    <div class="print-info-item"><strong>PLA Premium</strong>Material Biodegradável</div>
-    <div class="print-info-item"><strong>0,12 mm</strong>Alta Precisão</div>
-  `;
+  document.getElementById('modalPrintInfo').innerHTML = p.custom
+    ? `
+      <div class="print-info-item"><strong>STL / 3MF / Ideia</strong>Qualquer Modelo</div>
+      <div class="print-info-item"><strong>PLA • PETG • TPU</strong>Escolha o Material</div>
+      <div class="print-info-item"><strong>Orçamento Rápido</strong>Direto no Pop-up</div>
+    `
+    : `
+      <div class="print-info-item"><strong>~${Math.max(1, Math.round((p.price || 35) / 7))}h</strong>Impressão 3D</div>
+      <div class="print-info-item"><strong>PLA Premium</strong>Material Biodegradável</div>
+      <div class="print-info-item"><strong>0,12 mm</strong>Alta Precisão</div>
+    `;
 
   document.getElementById('modalDesc').textContent = p.desc || '';
 
-  // Multi-section colors
+  // Multi-section colors or Custom Piece Popup Configurator
   let sections = p.colorSections || [];
   if (!sections.length && p.colors && p.colors.length) {
     sections = [{ name: 'Cores disponíveis', colors: p.colors }];
@@ -385,7 +391,34 @@ export function openModal(pid) {
   }
 
   const colorsContainer = document.getElementById('modalColors');
-  if (sections.length && sections[0].colors && sections[0].colors.length) {
+  const modalActionBtn = document.getElementById('modalPrimaryActionBtn');
+
+  if (p.custom) {
+    colorsContainer.innerHTML = `
+      <div style="background:var(--bg-primary);border:1.5px solid var(--border-strong);border-radius:16px;padding:16px;margin-top:8px">
+        <div style="font-size:0.86rem;font-weight:700;color:var(--brand-primary);margin-bottom:10px">✨ Configure sua Peça Sob Medida neste Pop-up</div>
+        <div class="admin-input-group" style="margin-bottom:10px">
+          <label>Material Desejado</label>
+          <select id="customModalMaterial" class="sort-select" style="width:100%;border-radius:10px">
+            <option value="PLA Premium (Decorativo / Articulado)">PLA Premium (Decorativo / Articulado)</option>
+            <option value="PETG (Alta Resistência Mecânica)">PETG (Alta Resistência Mecânica)</option>
+            <option value="TPU Flex (Flexível)">TPU Flex (Flexível)</option>
+          </select>
+        </div>
+        <div class="admin-input-group" style="margin-bottom:10px">
+          <label>Link do Modelo (MakerWorld, Thingiverse, Printables) ou Nome do Arquivo STL</label>
+          <input type="text" id="customModalLink" placeholder="Ex: https://makerworld.com/... ou MeuArquivo.stl">
+        </div>
+        <div class="admin-input-group" style="margin-bottom:4px">
+          <label>Descrição da Ideia, Tamanho e Cores</label>
+          <textarea id="customModalNotes" rows="2" placeholder="Descreva como você quer sua peça 3D, tamanho aproximado e cores..."></textarea>
+        </div>
+      </div>
+    `;
+    if (modalActionBtn) {
+      modalActionBtn.innerHTML = 'Solicitar Orçamento no WhatsApp 🚀';
+    }
+  } else if (sections.length && sections[0].colors && sections[0].colors.length) {
     colorsContainer.innerHTML = sections.map((sec, sIdx) => {
       const sel = selectedColors[p.id][sIdx] || sec.colors[0];
       selectedColors[p.id][sIdx] = sel;
@@ -403,8 +436,14 @@ export function openModal(pid) {
         </div>
       `;
     }).join('');
+    if (modalActionBtn) {
+      modalActionBtn.innerHTML = 'Adicionar ao Carrinho 🛒';
+    }
   } else {
     colorsContainer.innerHTML = '';
+    if (modalActionBtn) {
+      modalActionBtn.innerHTML = 'Adicionar ao Carrinho 🛒';
+    }
   }
 
   // Gallery setup
@@ -445,7 +484,18 @@ function buildGallery(p) {
   if (!main || !thumbs) return;
 
   if (currentGalleryImages.length) {
-    main.innerHTML = `<img id="galleryMainImg" src="${currentGalleryImages[0]}" alt="${p.name}" onerror="this.style.display='none'">`;
+    const hasMany = currentGalleryImages.length > 1;
+    main.innerHTML = `
+      <img id="galleryMainImg" src="${currentGalleryImages[0]}" alt="${p.name}" onerror="this.style.display='none'">
+      ${hasMany ? `
+        <div class="gallery-nav">
+          <button class="gallery-nav-btn" onclick="event.stopPropagation(); window.makerApp.setGalleryImg(window.makerApp.getGalleryIdx() - 1)" aria-label="Foto anterior" type="button">‹</button>
+          <button class="gallery-nav-btn" onclick="event.stopPropagation(); window.makerApp.setGalleryImg(window.makerApp.getGalleryIdx() + 1)" aria-label="Próxima foto" type="button">›</button>
+        </div>
+        <div id="galleryCounterBadge" style="position:absolute;bottom:10px;right:14px;background:rgba(18,12,6,0.72);color:#fff;padding:3px 10px;border-radius:99px;font-size:0.74rem;font-weight:700;backdrop-filter:blur(4px)">1 / ${currentGalleryImages.length}</div>
+      ` : ''}
+    `;
+    thumbs.style.display = hasMany ? 'flex' : 'none';
     thumbs.innerHTML = currentGalleryImages.map((url, i) => `
       <div class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="window.makerApp.setGalleryImg(${i})">
         <img src="${url}" alt="Miniatura ${i + 1}" loading="lazy">
@@ -453,8 +503,13 @@ function buildGallery(p) {
     `).join('');
   } else {
     main.innerHTML = `<div style="font-size:5.5rem;display:flex;align-items:center;justify-content:center;height:100%">${p.emoji || '📦'}</div>`;
+    thumbs.style.display = 'none';
     thumbs.innerHTML = '';
   }
+}
+
+export function getGalleryIdx() {
+  return currentGalleryIdx;
 }
 
 export function setGalleryImg(i) {
@@ -462,6 +517,8 @@ export function setGalleryImg(i) {
   currentGalleryIdx = (i + currentGalleryImages.length) % currentGalleryImages.length;
   const img = document.getElementById('galleryMainImg');
   if (img) img.src = currentGalleryImages[currentGalleryIdx];
+  const counter = document.getElementById('galleryCounterBadge');
+  if (counter) counter.textContent = `${currentGalleryIdx + 1} / ${currentGalleryImages.length}`;
   document.querySelectorAll('.gallery-thumb').forEach((t, idx) => t.classList.toggle('active', idx === currentGalleryIdx));
 }
 
@@ -486,10 +543,24 @@ export function closeModal() {
 }
 
 export function addToCartFromModal() {
-  if (currentModalProduct) {
-    addToCart(currentModalProduct.id);
+  if (!currentModalProduct) return;
+
+  if (currentModalProduct.custom) {
+    const mat = document.getElementById('customModalMaterial')?.value || 'PLA Premium';
+    const link = document.getElementById('customModalLink')?.value.trim() || 'Não informado';
+    const notes = document.getElementById('customModalNotes')?.value.trim() || 'Quero fazer uma peça sob medida';
+    const phone = store.state.settings?.whatsappNumber || '5531984566047';
+    const msg = `Olá Maker3D! 👋\n\nGostaria de orçar uma *✨ Peça Customizada Sob Medida*:\n\n• *Material:* ${mat}\n• *Modelo / Link / STL:* ${link}\n• *Detalhes da Ideia:* ${notes}`;
+    showToast('🚀 Abrindo WhatsApp com os dados da sua peça!', 'success');
     closeModal();
+    setTimeout(() => {
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }, 350);
+    return;
   }
+
+  addToCart(currentModalProduct.id);
+  closeModal();
 }
 
 export function shareCurrentProduct() {
