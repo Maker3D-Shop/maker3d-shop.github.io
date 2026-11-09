@@ -1,0 +1,773 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// Maker3D — Hidden Admin Vault Console ("Site Admin Escondido")
+// Unlocked via:
+//   - Secret shortcut: Ctrl + Shift + A (or Cmd + Shift + A)
+//   - Secret 5-click on the Maker3D Logo or Footer Copyright
+//   - Direct URL hash: #vault-admin
+//   - Authenticated Google Admin Account
+// ═══════════════════════════════════════════════════════════════════════════
+import { store } from '../config/store.js';
+import { dbService } from '../services/db.js';
+import { authService } from '../services/auth.js';
+import { showToast, applyBrandSettings, renderFAQs } from './ui.js';
+import { renderProducts, renderFilters, renderCarousel } from './catalog.js';
+import { toRawUrl } from './viewer3d.js';
+
+let adminAuthenticated = sessionStorage.getItem('maker3d_admin_auth') === '1';
+let activeAdminTab = 'dashboard';
+let editingProductId = null;
+let editingProductImages = [];
+let logoClickCount = 0;
+let logoClickTimer = null;
+
+export function initSecretAdminTriggers() {
+  // 1. Keyboard shortcut Ctrl+Shift+A / Cmd+Shift+A
+  window.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
+      e.preventDefault();
+      openAdminVault();
+    }
+  });
+
+  // 2. Hash trigger (#vault-admin or #admin)
+  const checkHash = () => {
+    if (window.location.hash === '#vault-admin' || window.location.hash === '#admin') {
+      openAdminVault();
+    }
+  };
+  window.addEventListener('hashchange', checkHash);
+  setTimeout(checkHash, 400);
+
+  // 3. Secret 5x click on Logo or Footer copyright
+  document.querySelectorAll('.secret-admin-trigger').forEach(el => {
+    el.addEventListener('click', () => {
+      logoClickCount++;
+      clearTimeout(logoClickTimer);
+      if (logoClickCount >= 5) {
+        logoClickCount = 0;
+        openAdminVault();
+      } else {
+        logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1600);
+      }
+    });
+  });
+}
+
+export function openAdminVault() {
+  const overlay = document.getElementById('adminVaultOverlay');
+  if (!overlay) return;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  const currUser = store.state.currentUser;
+  if (currUser && authService.checkIsAdmin(currUser.email)) {
+    adminAuthenticated = true;
+    sessionStorage.setItem('maker3d_admin_auth', '1');
+  }
+
+  renderAdminVaultView();
+}
+
+export function closeAdminVault() {
+  const overlay = document.getElementById('adminVaultOverlay');
+  if (overlay) overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  if (window.location.hash === '#vault-admin' || window.location.hash === '#admin') {
+    history.replaceState(null, '', window.location.pathname);
+  }
+}
+
+export function verifyAdminPin() {
+  const pinInput = document.getElementById('adminVaultPinInput');
+  const pin = (pinInput?.value || '').trim();
+  const validPin = store.state.settings.adminPin || 'maker3d2026';
+
+  if (pin === validPin) {
+    adminAuthenticated = true;
+    sessionStorage.setItem('maker3d_admin_auth', '1');
+    showToast('🔓 Acesso Administrativo liberado!', 'success');
+    renderAdminVaultView();
+  } else {
+    showToast('❌ Senha/PIN incorreto.', 'error');
+  }
+}
+
+export async function loginAdminWithGoogle() {
+  const profile = await authService.signInWithGoogle();
+  if (profile) {
+    adminAuthenticated = true;
+    sessionStorage.setItem('maker3d_admin_auth', '1');
+    showToast(`🔓 Painel Admin desbloqueado por ${profile.displayName}`, 'success');
+    renderAdminVaultView();
+  }
+}
+
+export function switchAdminTab(tabId) {
+  activeAdminTab = tabId;
+  renderAdminVaultView();
+}
+
+export function renderAdminVaultView() {
+  const gate = document.getElementById('adminAuthGate');
+  const workspace = document.getElementById('adminVaultWorkspace');
+  if (!gate || !workspace) return;
+
+  if (!adminAuthenticated) {
+    gate.style.display = 'flex';
+    workspace.style.display = 'none';
+    return;
+  }
+
+  gate.style.display = 'none';
+  workspace.style.display = 'flex';
+
+  document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === activeAdminTab);
+  });
+
+  const main = document.getElementById('adminVaultContent');
+  if (!main) return;
+
+  if (activeAdminTab === 'dashboard') {
+    main.innerHTML = renderDashboardTab();
+  } else if (activeAdminTab === 'products') {
+    main.innerHTML = renderProductsTab();
+  } else if (activeAdminTab === 'cms') {
+    main.innerHTML = renderCmsTab();
+  } else if (activeAdminTab === 'orders') {
+    main.innerHTML = renderOrdersTab();
+  } else if (activeAdminTab === 'coupons') {
+    main.innerHTML = renderCouponsAndColorsTab();
+  } else if (activeAdminTab === 'calc') {
+    main.innerHTML = renderCalcTab();
+    setTimeout(runAdminCalculator, 30);
+  } else if (activeAdminTab === 'cloud') {
+    main.innerHTML = renderCloudDatabaseTab();
+  }
+}
+
+function renderDashboardTab() {
+  const products = store.state.products || [];
+  const orders = store.state.orders || [];
+  const users = store.state.users || [];
+  const revenue = orders.reduce((acc, o) => acc + (Number(o.total) || 0), 0);
+
+  return `
+    <div class="admin-top-bar">
+      <div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:1.85rem">Visão Geral da Loja</h2>
+        <p style="color:var(--text-secondary);font-size:0.88rem">Gerencie todos os módulos do site em tempo real</p>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-secondary btn-sm" onclick="window.makerApp.exportDatabaseJson()">⬇ Exportar JSON</button>
+        <button class="btn-primary btn-sm" onclick="window.makerApp.syncEverythingToCloud()">☁️ Publicar Alterações</button>
+      </div>
+    </div>
+
+    <div class="admin-kpi-grid">
+      <div class="admin-kpi-card">
+        <small>📦 Produtos Ativos</small>
+        <div class="kpi-val">${products.length}</div>
+        <span style="font-size:0.78rem;color:var(--success)">Catálogo sincronizado</span>
+      </div>
+      <div class="admin-kpi-card">
+        <small>🛍️ Pedidos / Orçamentos</small>
+        <div class="kpi-val">${orders.length}</div>
+        <span style="font-size:0.78rem;color:var(--text-muted)">Via Carrinho & STL Lab</span>
+      </div>
+      <div class="admin-kpi-card">
+        <small>💰 Volume Estimado</small>
+        <div class="kpi-val">R$ ${revenue.toFixed(2).replace('.', ',')}</div>
+        <span style="font-size:0.78rem;color:var(--brand-primary)">Ticket médio dinâmico</span>
+      </div>
+      <div class="admin-kpi-card">
+        <small>👥 Contas Google no DB</small>
+        <div class="kpi-val">${users.length}</div>
+        <span style="font-size:0.78rem;color:var(--info)">Usuários autenticados</span>
+      </div>
+    </div>
+
+    <div class="admin-panel-card">
+      <div class="admin-panel-header">
+        <h3>🚀 Ações Rápidas do Administrador</h3>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn-primary btn-sm" onclick="window.makerApp.switchAdminTab('products'); window.makerApp.openAdminProductEditor()">＋ Cadastrar Novo Produto</button>
+        <button class="btn-secondary btn-sm" onclick="window.makerApp.switchAdminTab('cms')">🎨 Editar Textos, Cores & Banner</button>
+        <button class="btn-secondary btn-sm" onclick="window.makerApp.switchAdminTab('coupons')">🎟️ Gerenciar Cupons & Filamentos</button>
+        <button class="btn-secondary btn-sm" onclick="window.makerApp.switchAdminTab('cloud')">🔥 Configurar Firebase / GitHub</button>
+      </div>
+    </div>
+
+    <div class="admin-panel-card">
+      <div class="admin-panel-header">
+        <h3>👥 Últimos Clientes Conectados (Google Auth Database)</h3>
+      </div>
+      ${users.length ? `
+        <table class="admin-table">
+          <thead>
+            <tr><th>Cliente</th><th>E-mail</th><th>Provedor</th><th>Último Acesso</th></tr>
+          </thead>
+          <tbody>
+            ${users.slice(0, 8).map(u => `
+              <tr>
+                <td style="display:flex;align-items:center;gap:8px">
+                  <img src="${u.photoURL || ''}" style="width:26px;height:26px;border-radius:50%" onerror="this.style.display='none'">
+                  <strong>${u.displayName || 'Usuário'}</strong>
+                </td>
+                <td>${u.email}</td>
+                <td><span class="status-pill done">${u.provider || 'Google'}</span></td>
+                <td>${u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString('pt-BR') : 'Agora'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      ` : `<p style="color:var(--text-muted);font-size:0.88rem">Nenhum cliente logado ainda. Teste o botão "Entrar com Google" no topo do site!</p>`}
+    </div>
+  `;
+}
+
+function renderProductsTab() {
+  const products = store.state.products || [];
+  return `
+    <div class="admin-top-bar">
+      <div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:1.8rem">Gerenciador de Produtos</h2>
+        <p style="color:var(--text-secondary);font-size:0.88rem">Adicione, edite preços, descontos, fotos, modelos 3D (.glb) e seções de cores</p>
+      </div>
+      <button class="btn-primary btn-sm" onclick="window.makerApp.openAdminProductEditor()">＋ Novo Produto</button>
+    </div>
+
+    <div id="adminProductEditorBox" class="admin-panel-card" style="display:none;border:2px solid var(--brand-primary)"></div>
+
+    <div class="admin-panel-card">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Desconto</th><th>3D</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+          ${products.map(p => {
+            const rawImg = toRawUrl(p.image);
+            return `
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="width:42px;height:42px;border-radius:8px;background:var(--brand-pale);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.3rem">
+                      ${rawImg ? `<img src="${rawImg}" style="width:100%;height:100%;object-fit:cover">` : (p.emoji || '📦')}
+                    </div>
+                    <div>
+                      <strong>${p.name}</strong>
+                      ${p.badge ? `<span style="font-size:0.7rem;background:var(--brand-pale);color:var(--brand-deep);padding:2px 7px;border-radius:99px;margin-left:6px">${p.badge}</span>` : ''}
+                    </div>
+                  </div>
+                </td>
+                <td>${p.category || '-'}</td>
+                <td><strong>${p.price ? 'R$ ' + Number(p.price).toFixed(2).replace('.', ',') : 'Sob Consulta'}</strong></td>
+                <td>${p.discount > 0 ? `<span class="status-pill done">-${p.discount}%</span>` : '0%'}</td>
+                <td>${p.model3d ? '🔲 Sim' : '—'}</td>
+                <td>
+                  <div style="display:flex;gap:6px">
+                    <button class="btn-secondary btn-sm" onclick="window.makerApp.openAdminProductEditor('${p.id}')">✏️ Editar</button>
+                    <button class="btn-secondary btn-sm" style="border-color:var(--danger);color:var(--danger)" onclick="window.makerApp.deleteAdminProduct('${p.id}')">🗑</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+export function openAdminProductEditor(pid = null) {
+  const box = document.getElementById('adminProductEditorBox');
+  if (!box) return;
+  const prod = pid ? store.state.products.find(p => String(p.id) === String(pid)) : null;
+  editingProductId = prod ? prod.id : null;
+  editingProductImages = [];
+  if (prod) {
+    if (prod.image) editingProductImages.push(prod.image);
+    (prod.gallery || []).forEach(g => {
+      if (g && !editingProductImages.includes(g)) editingProductImages.push(g);
+    });
+  }
+
+  box.style.display = 'block';
+  box.innerHTML = `
+    <div class="admin-panel-header">
+      <h3>${prod ? '✏️ Editando: ' + prod.name : '✨ Novo Produto'}</h3>
+      <button class="icon-btn" onclick="document.getElementById('adminProductEditorBox').style.display='none'">✕</button>
+    </div>
+    <div class="admin-form-grid">
+      <div class="admin-input-group">
+        <label>Nome do Produto *</label>
+        <input type="text" id="adm_p_name" value="${prod ? prod.name : ''}" placeholder="Ex: Dragão Articulado">
+      </div>
+      <div class="admin-input-group">
+        <label>Emoji / Ícone</label>
+        <input type="text" id="adm_p_emoji" value="${prod ? (prod.emoji || '📦') : '📦'}">
+      </div>
+      <div class="admin-input-group">
+        <label>Categoria</label>
+        <input type="text" id="adm_p_category" value="${prod ? (prod.category || 'Articulado') : 'Articulado'}">
+      </div>
+      <div class="admin-input-group">
+        <label>Preço (R$) — deixe vazio para Sob Consulta</label>
+        <input type="number" id="adm_p_price" step="0.01" value="${prod && prod.price !== null ? prod.price : ''}">
+      </div>
+      <div class="admin-input-group">
+        <label>Badge de Destaque</label>
+        <input type="text" id="adm_p_badge" value="${prod ? (prod.badge || '') : ''}" placeholder="Ex: Novo ✨, Popular">
+      </div>
+      <div class="admin-input-group">
+        <label>Desconto (%)</label>
+        <input type="number" id="adm_p_discount" min="0" max="90" value="${prod ? (prod.discount || 0) : 0}">
+      </div>
+    </div>
+    <div class="admin-input-group">
+      <label>Descrição Completa *</label>
+      <textarea id="adm_p_desc" rows="3">${prod ? (prod.desc || '') : ''}</textarea>
+    </div>
+    <div class="admin-form-grid">
+      <div class="admin-input-group">
+        <label>URL da Imagem Principal (Capa)</label>
+        <input type="text" id="adm_p_image" value="${prod ? (prod.image || '') : ''}" placeholder="https://... ou assets/...">
+      </div>
+      <div class="admin-input-group">
+        <label>URL do Modelo 3D (.glb / .gltf)</label>
+        <input type="text" id="adm_p_model3d" value="${prod ? (prod.model3d || '') : ''}" placeholder="assets/products/models/p1.glb">
+      </div>
+    </div>
+    <div class="admin-input-group">
+      <label>URLs da Galeria Extra (separadas por vírgula)</label>
+      <input type="text" id="adm_p_gallery" value="${prod && prod.gallery ? prod.gallery.join(', ') : ''}" placeholder="https://img1.webp, https://img2.webp">
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px">
+      <button class="btn-secondary btn-sm" onclick="document.getElementById('adminProductEditorBox').style.display='none'">Cancelar</button>
+      <button class="btn-primary btn-sm" onclick="window.makerApp.saveAdminProduct()">💾 Salvar no Site & Database</button>
+    </div>
+  `;
+  box.scrollIntoView({ behavior: 'smooth' });
+}
+
+export async function saveAdminProduct() {
+  const name = document.getElementById('adm_p_name')?.value.trim();
+  const desc = document.getElementById('adm_p_desc')?.value.trim();
+  if (!name || !desc) {
+    showToast('❗ Preencha nome e descrição do produto.', 'error');
+    return;
+  }
+
+  const priceRaw = document.getElementById('adm_p_price')?.value;
+  const price = priceRaw !== '' ? parseFloat(priceRaw) : null;
+  const galleryRaw = document.getElementById('adm_p_gallery')?.value || '';
+  const gallery = galleryRaw.split(',').map(s => s.trim()).filter(Boolean);
+  const globalCols = store.state.globalColors.slice(0, 4).map(c => ({ name: c.name, hex: c.hex }));
+
+  const products = [...store.state.products];
+  if (editingProductId !== null) {
+    const idx = products.findIndex(p => String(p.id) === String(editingProductId));
+    if (idx >= 0) {
+      products[idx] = {
+        ...products[idx],
+        name,
+        emoji: document.getElementById('adm_p_emoji')?.value.trim() || '📦',
+        category: document.getElementById('adm_p_category')?.value.trim() || 'Articulado',
+        price,
+        badge: document.getElementById('adm_p_badge')?.value.trim() || '',
+        discount: parseInt(document.getElementById('adm_p_discount')?.value || '0', 10),
+        desc,
+        image: document.getElementById('adm_p_image')?.value.trim() || '',
+        model3d: document.getElementById('adm_p_model3d')?.value.trim() || '',
+        gallery
+      };
+    }
+  } else {
+    products.unshift({
+      id: Date.now(),
+      name,
+      emoji: document.getElementById('adm_p_emoji')?.value.trim() || '📦',
+      category: document.getElementById('adm_p_category')?.value.trim() || 'Articulado',
+      price,
+      badge: document.getElementById('adm_p_badge')?.value.trim() || 'Novo ✨',
+      discount: parseInt(document.getElementById('adm_p_discount')?.value || '0', 10),
+      rating: 5.0,
+      reviewsCount: 1,
+      desc,
+      image: document.getElementById('adm_p_image')?.value.trim() || '',
+      model3d: document.getElementById('adm_p_model3d')?.value.trim() || '',
+      gallery,
+      colorSections: [{ name: 'Cores disponíveis', colors: globalCols }],
+      colors: globalCols
+    });
+  }
+
+  store.update('products', products, 'maker3d_products');
+  await dbService.saveStoreData();
+  renderProducts();
+  renderFilters();
+  renderCarousel();
+  renderAdminVaultView();
+  showToast('✅ Produto atualizado ao vivo no site!', 'success');
+}
+
+export async function deleteAdminProduct(pid) {
+  if (!confirm('Deseja realmente excluir este produto do catálogo?')) return;
+  const products = store.state.products.filter(p => String(p.id) !== String(pid));
+  store.update('products', products, 'maker3d_products');
+  await dbService.saveStoreData();
+  renderProducts();
+  renderFilters();
+  renderCarousel();
+  renderAdminVaultView();
+  showToast('🗑 Produto removido com sucesso.');
+}
+
+function renderCmsTab() {
+  const s = store.state.settings;
+  return `
+    <div class="admin-top-bar">
+      <div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:1.8rem">Editor Visual do Site (CMS Ao Vivo)</h2>
+        <p style="color:var(--text-secondary);font-size:0.88rem">Qualquer alteração feita aqui muda o site imediatamente</p>
+      </div>
+      <button class="btn-primary btn-sm" onclick="window.makerApp.saveCmsSettings()">💾 Aplicar Alterações no Site</button>
+    </div>
+
+    <div class="admin-panel-card">
+      <h3 style="margin-bottom:16px">🎨 Identidade Visual & Barra de Promoção</h3>
+      <div class="admin-form-grid">
+        <div class="admin-input-group">
+          <label>Nome da Marca</label>
+          <input type="text" id="cms_brandName" value="${s.brandName || 'Maker3D'}">
+        </div>
+        <div class="admin-input-group">
+          <label>Cor Principal do Tema (Hex)</label>
+          <input type="color" id="cms_primaryColor" value="${s.primaryColor || '#ff9e1b'}" style="height:42px;cursor:pointer">
+        </div>
+        <div class="admin-input-group">
+          <label>Texto da Barra de Anúncio Topo</label>
+          <input type="text" id="cms_promoBarText" value="${s.promoBarText || ''}">
+        </div>
+        <div class="admin-input-group">
+          <label>Meta para Frete Grátis (R$)</label>
+          <input type="number" id="cms_freeShip" value="${s.freeShippingThreshold || 120}">
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-panel-card">
+      <h3 style="margin-bottom:16px">🏠 Textos da Página Inicial (Hero) & Contatos</h3>
+      <div class="admin-form-grid">
+        <div class="admin-input-group">
+          <label>Selo Superior (Hero Badge)</label>
+          <input type="text" id="cms_heroBadge" value="${s.heroBadge || ''}">
+        </div>
+        <div class="admin-input-group">
+          <label>WhatsApp Oficial (apenas números com DDI+DDD)</label>
+          <input type="text" id="cms_whatsapp" value="${s.whatsappNumber || '5531984566047'}">
+        </div>
+      </div>
+      <div class="admin-input-group">
+        <label>Título Principal do Hero (aceita &lt;em&gt; para destaque)</label>
+        <input type="text" id="cms_heroTitle" value="${(s.heroTitleHtml || '').replace(/"/g, '&quot;')}">
+      </div>
+      <div class="admin-input-group">
+        <label>Subtítulo do Hero</label>
+        <textarea id="cms_heroSubtitle" rows="2">${s.heroSubtitle || ''}</textarea>
+      </div>
+      <div class="admin-form-grid">
+        <div class="admin-input-group">
+          <label>E-mails Administradores (separados por vírgula)</label>
+          <input type="text" id="cms_adminEmails" value="${(s.adminEmails || []).join(', ')}">
+        </div>
+        <div class="admin-input-group">
+          <label>PIN Secreto do Painel Admin</label>
+          <input type="text" id="cms_adminPin" value="${s.adminPin || 'maker3d2026'}">
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export async function saveCmsSettings() {
+  const next = {
+    ...store.state.settings,
+    brandName: document.getElementById('cms_brandName')?.value.trim() || 'Maker3D',
+    primaryColor: document.getElementById('cms_primaryColor')?.value || '#ff9e1b',
+    promoBarText: document.getElementById('cms_promoBarText')?.value.trim() || '',
+    freeShippingThreshold: parseFloat(document.getElementById('cms_freeShip')?.value || '120'),
+    heroBadge: document.getElementById('cms_heroBadge')?.value.trim() || '',
+    whatsappNumber: document.getElementById('cms_whatsapp')?.value.trim() || '5531984566047',
+    heroTitleHtml: document.getElementById('cms_heroTitle')?.value || '',
+    heroSubtitle: document.getElementById('cms_heroSubtitle')?.value.trim() || '',
+    adminEmails: (document.getElementById('cms_adminEmails')?.value || '').split(',').map(s => s.trim()).filter(Boolean),
+    adminPin: document.getElementById('cms_adminPin')?.value.trim() || 'maker3d2026'
+  };
+
+  store.update('settings', next, 'maker3d_settings');
+  applyBrandSettings();
+  await dbService.saveStoreData();
+  showToast('✨ Visual e configurações do site atualizados em tempo real!', 'success');
+}
+
+function renderOrdersTab() {
+  const orders = store.state.orders || [];
+  return `
+    <div class="admin-top-bar">
+      <div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:1.8rem">Pedidos & Orçamentos</h2>
+        <p style="color:var(--text-secondary);font-size:0.88rem">Acompanhe e altere o status de produção das peças</p>
+      </div>
+    </div>
+    <div class="admin-panel-card">
+      ${orders.length ? `
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>Cliente</th><th>Itens</th><th>Total</th><th>Status</th><th>Data</th></tr>
+          </thead>
+          <tbody>
+            ${orders.map((o, idx) => `
+              <tr>
+                <td><strong>#${o.id}</strong></td>
+                <td>${o.user?.name || 'Visitante'}<br><small style="color:var(--text-muted)">${o.user?.email || ''}</small></td>
+                <td>${(o.items || []).map(i => `${i.qty}x ${i.name}`).join('<br>')}</td>
+                <td><strong>R$ ${Number(o.total || 0).toFixed(2).replace('.', ',')}</strong></td>
+                <td>
+                  <select onchange="window.makerApp.updateOrderStatus(${idx}, this.value)" style="padding:5px 8px;border-radius:8px">
+                    <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>⏳ Pendente</option>
+                    <option value="printing" ${o.status === 'printing' ? 'selected' : ''}>🖨️ Imprimindo 3D</option>
+                    <option value="done" ${o.status === 'done' ? 'selected' : ''}>✅ Enviado / Concluído</option>
+                  </select>
+                </td>
+                <td>${new Date(o.createdAt).toLocaleDateString('pt-BR')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      ` : `<p style="color:var(--text-muted)">Nenhum pedido registrado ainda.</p>`}
+    </div>
+  `;
+}
+
+export async function updateOrderStatus(idx, status) {
+  const orders = [...store.state.orders];
+  if (orders[idx]) {
+    orders[idx].status = status;
+    store.update('orders', orders, 'maker3d_orders');
+    showToast('✅ Status do pedido atualizado!', 'success');
+  }
+}
+
+function renderCouponsAndColorsTab() {
+  const coupons = store.state.coupons || [];
+  const colors = store.state.globalColors || [];
+  return `
+    <div class="admin-top-bar">
+      <h2 style="font-family:'DM Serif Display',serif;font-size:1.8rem">Cupons de Desconto & Filamentos</h2>
+    </div>
+
+    <div class="admin-panel-card">
+      <div class="admin-panel-header">
+        <h3>🎟️ Cupons Ativos</h3>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <input type="text" id="newCouponCode" placeholder="Código (ex: NATAL25)" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border-subtle)">
+        <input type="number" id="newCouponPct" placeholder="% Desconto" style="width:130px;padding:8px 12px;border-radius:8px;border:1px solid var(--border-subtle)">
+        <button class="btn-primary btn-sm" onclick="window.makerApp.addAdminCoupon()">＋ Criar Cupom</button>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        ${coupons.map((c, i) => `
+          <div style="background:var(--brand-pale);border:1px solid var(--border-strong);padding:10px 14px;border-radius:12px;display:flex;align-items:center;gap:10px">
+            <strong>${c.code}</strong>
+            <span class="status-pill done">-${c.discountPct}%</span>
+            <button style="background:none;border:none;color:var(--danger);cursor:pointer" onclick="window.makerApp.removeAdminCoupon(${i})">✕</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="admin-panel-card">
+      <div class="admin-panel-header">
+        <h3>🎨 Paleta Global de Filamentos</h3>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <input type="text" id="newFilName" placeholder="Nome da cor (ex: Azul Silk)" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border-subtle)">
+        <input type="color" id="newFilHex" value="#ff9e1b" style="height:38px;width:60px">
+        <button class="btn-primary btn-sm" onclick="window.makerApp.addAdminFilament()">＋ Adicionar Filamento</button>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        ${colors.map((c, i) => `
+          <div style="background:var(--bg-primary);border:1px solid var(--border-subtle);padding:8px 12px;border-radius:99px;display:flex;align-items:center;gap:8px">
+            <span style="width:18px;height:18px;border-radius:50%;background:${c.hex};display:inline-block;border:1px solid rgba(0,0,0,0.2)"></span>
+            <strong style="font-size:0.84rem">${c.name}</strong>
+            <button style="background:none;border:none;color:var(--danger);cursor:pointer" onclick="window.makerApp.removeAdminFilament(${i})">✕</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+export async function addAdminCoupon() {
+  const code = document.getElementById('newCouponCode')?.value.trim().toUpperCase();
+  const pct = parseInt(document.getElementById('newCouponPct')?.value || '10', 10);
+  if (!code) return;
+  const coupons = [...store.state.coupons, { code, discountPct: pct, minOrder: 0, active: true }];
+  store.update('coupons', coupons, 'maker3d_coupons');
+  await dbService.saveStoreData();
+  renderAdminVaultView();
+  showToast(`🎟️ Cupom ${code} criado!`, 'success');
+}
+
+export async function removeAdminCoupon(idx) {
+  const coupons = [...store.state.coupons];
+  coupons.splice(idx, 1);
+  store.update('coupons', coupons, 'maker3d_coupons');
+  await dbService.saveStoreData();
+  renderAdminVaultView();
+}
+
+export async function addAdminFilament() {
+  const name = document.getElementById('newFilName')?.value.trim();
+  const hex = document.getElementById('newFilHex')?.value || '#ff9e1b';
+  if (!name) return;
+  const colors = [...store.state.globalColors, { name, hex, priceAdd: 0 }];
+  store.update('globalColors', colors, 'maker3d_global_colors');
+  await dbService.saveStoreData();
+  renderAdminVaultView();
+  showToast(`🎨 Filamento ${name} adicionado!`, 'success');
+}
+
+export async function removeAdminFilament(idx) {
+  const colors = [...store.state.globalColors];
+  colors.splice(idx, 1);
+  store.update('globalColors', colors, 'maker3d_global_colors');
+  await dbService.saveStoreData();
+  renderAdminVaultView();
+}
+
+function renderCalcTab() {
+  return `
+    <div class="admin-top-bar">
+      <h2 style="font-family:'DM Serif Display',serif;font-size:1.8rem">Calculadora Industrial de Precificação 3D</h2>
+    </div>
+    <div class="admin-panel-card">
+      <div class="admin-form-grid">
+        <div>
+          <div class="admin-input-group"><label>⏱️ Tempo de impressão (horas)</label><input type="number" id="ac_horas" value="4" step="0.5" oninput="window.makerApp.runAdminCalculator()"></div>
+          <div class="admin-input-group"><label>🧵 Filamento usado (gramas)</label><input type="number" id="ac_gramas" value="80" oninput="window.makerApp.runAdminCalculator()"></div>
+          <div class="admin-input-group"><label>💰 Preço do filamento (R$/kg)</label><input type="number" id="ac_fila" value="120" oninput="window.makerApp.runAdminCalculator()"></div>
+          <div class="admin-input-group"><label>⚡ Potência da Impressora (Watts)</label><input type="number" id="ac_watts" value="200" oninput="window.makerApp.runAdminCalculator()"></div>
+          <div class="admin-input-group"><label>📈 Margem de Lucro (%)</label><input type="number" id="ac_margem" value="60" oninput="window.makerApp.runAdminCalculator()"></div>
+        </div>
+        <div style="background:linear-gradient(135deg,var(--brand-primary),var(--brand-deep));border-radius:20px;padding:32px;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+          <span style="font-size:0.9rem;opacity:0.9">Preço de Venda Sugerido</span>
+          <div id="ac_resultPrice" style="font-family:'DM Serif Display',serif;font-size:3.2rem;margin:8px 0">R$ 0,00</div>
+          <small id="ac_resultBase" style="opacity:0.85">Custo de produção: R$ 0,00</small>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function runAdminCalculator() {
+  const v = id => parseFloat(document.getElementById(id)?.value) || 0;
+  const h = v('ac_horas');
+  const g = v('ac_gramas');
+  const pf = v('ac_fila');
+  const w = v('ac_watts');
+  const m = v('ac_margem');
+
+  const cFila = (g / 1000) * pf;
+  const cEner = ((w / 1000) * h) * 0.85;
+  const cManut = h * 2.5;
+  const base = cFila + cEner + cManut + 2.0;
+  const finalP = base * (1 + m / 100);
+
+  const pEl = document.getElementById('ac_resultPrice');
+  const bEl = document.getElementById('ac_resultBase');
+  if (pEl) pEl.textContent = 'R$ ' + finalP.toFixed(2).replace('.', ',');
+  if (bEl) bEl.textContent = 'Custo base de produção: R$ ' + base.toFixed(2).replace('.', ',');
+}
+
+function renderCloudDatabaseTab() {
+  const fb = dbService.getFirebaseConfig() || {};
+  const ghToken = sessionStorage.getItem('gh_token') || '';
+  return `
+    <div class="admin-top-bar">
+      <div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:1.8rem">Database Cloud (Firebase Firestore & GitHub Sync)</h2>
+        <p style="color:var(--text-secondary);font-size:0.88rem">Conecte seu projeto Firebase e/ou Token do GitHub para persistência global na nuvem</p>
+      </div>
+    </div>
+
+    <div class="admin-panel-card">
+      <h3 style="margin-bottom:12px">🔥 Configuração do Firebase (Auth Google + Firestore Database)</h3>
+      <p style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:16px">
+        Cole as credenciais do seu Web App do Console do Firebase para sincronizar usuários Google, produtos e pedidos no Cloud Firestore.
+      </p>
+      <div class="admin-form-grid">
+        <div class="admin-input-group"><label>apiKey</label><input type="text" id="fb_apiKey" value="${fb.apiKey || ''}" placeholder="AIzaSy..."></div>
+        <div class="admin-input-group"><label>authDomain</label><input type="text" id="fb_authDomain" value="${fb.authDomain || ''}" placeholder="seu-projeto.firebaseapp.com"></div>
+        <div class="admin-input-group"><label>projectId</label><input type="text" id="fb_projectId" value="${fb.projectId || ''}" placeholder="seu-projeto"></div>
+        <div class="admin-input-group"><label>appId</label><input type="text" id="fb_appId" value="${fb.appId || ''}" placeholder="1:123456:web:abcdef"></div>
+      </div>
+      <button class="btn-primary btn-sm" onclick="window.makerApp.saveAdminFirebaseConfig()">🔥 Salvar e Conectar Firebase</button>
+    </div>
+
+    <div class="admin-panel-card">
+      <h3 style="margin-bottom:12px">🐙 Sincronização Direta com GitHub (data.json)</h3>
+      <div class="admin-input-group">
+        <label>Personal Access Token do GitHub (escopo repo)</label>
+        <input type="password" id="adm_gh_token" value="${ghToken}" placeholder="ghp_...">
+      </div>
+      <button class="btn-primary btn-sm" onclick="window.makerApp.syncEverythingToCloud()">🚀 Enviar Catálogo para GitHub & Cloud Agora</button>
+    </div>
+  `;
+}
+
+export async function saveAdminFirebaseConfig() {
+  const cfg = {
+    apiKey: document.getElementById('fb_apiKey')?.value.trim() || '',
+    authDomain: document.getElementById('fb_authDomain')?.value.trim() || '',
+    projectId: document.getElementById('fb_projectId')?.value.trim() || '',
+    appId: document.getElementById('fb_appId')?.value.trim() || ''
+  };
+  dbService.saveFirebaseConfig(cfg);
+  await dbService.init();
+  showToast('🔥 Configuração Firebase salva e inicializada!', 'success');
+}
+
+export async function syncEverythingToCloud() {
+  const tokenInput = document.getElementById('adm_gh_token');
+  if (tokenInput && tokenInput.value.trim()) {
+    sessionStorage.setItem('gh_token', tokenInput.value.trim());
+  }
+  const ghToken = sessionStorage.getItem('gh_token') || '';
+  try {
+    await dbService.saveStoreData({ syncGitHub: !!ghToken, ghToken });
+    showToast(ghToken ? '✅ Sincronizado com GitHub + Database!' : '✅ Salvo no Database Local/Cloud!', 'success');
+  } catch (err) {
+    showToast('❌ Erro ao enviar para GitHub: ' + err.message, 'error');
+  }
+}
+
+export function exportDatabaseJson() {
+  const data = {
+    products: store.state.products,
+    settings: store.state.settings,
+    coupons: store.state.coupons,
+    faqs: store.state.faqs,
+    globalColors: store.state.globalColors,
+    orders: store.state.orders,
+    users: store.state.users
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'maker3d-database-backup.json';
+  a.click();
+  showToast('📦 Backup JSON baixado!');
+}
