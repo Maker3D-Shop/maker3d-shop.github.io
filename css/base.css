@@ -10,6 +10,8 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 body {
@@ -17,6 +19,9 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  position: relative;
   line-height: 1.6;
   transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
@@ -57,8 +62,8 @@ body {
   animation: gradientMove 8s ease infinite;
   color: #fff;
   text-align: center;
-  padding: 7px 4%;
-  font-size: 0.8rem;
+  padding: 7px 34px 7px 4%;
+  font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   position: relative;
@@ -66,7 +71,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 100vw;
+  overflow: hidden;
 }
 .promo-bar span.promo-pill {
   background: rgba(255, 255, 255, 0.22);
@@ -484,6 +492,42 @@ footer.site-footer {
   }
 }
 @media (max-width: 768px) {
+  nav#mainNav {
+    padding: 0 4%;
+    height: 62px;
+    gap: 8px;
+  }
+  .nav-logo {
+    gap: 8px;
+    min-width: 0;
+  }
+  .nav-logo-img-wrap {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+  .nav-logo-brand {
+    font-size: 1.2rem;
+  }
+  .nav-logo-tag {
+    display: none;
+  }
+  .nav-actions {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
+  }
+  .user-auth-btn {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+  .user-auth-btn span.user-name-label {
+    display: none;
+  }
   .nav-links {
     display: none;
     flex-direction: column;
@@ -505,8 +549,30 @@ footer.site-footer {
   }
   .footer-grid {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
-  .user-auth-btn span.user-name-label {
+  .newsletter-form {
+    flex-wrap: wrap;
+  }
+  .newsletter-form input,
+  .newsletter-form button {
+    width: 100%;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+  }
+  .mouse-light {
     display: none;
+  }
+}
+@media (max-width: 390px) {
+  .nav-logo-brand {
+    font-size: 1.05rem;
+  }
+  .icon-btn {
+    width: 33px;
+    height: 33px;
   }
 }

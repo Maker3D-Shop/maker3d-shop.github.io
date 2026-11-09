@@ -122,6 +122,30 @@ export function renderCarousel() {
 
   dots.innerHTML = list.map((_, i) => `<button class="dot ${i === 0 ? 'active' : ''}" onclick="window.makerApp.goSlide(${i})" aria-label="Slide ${i + 1}"></button>`).join('');
 
+  if (!track.dataset.touchBound) {
+    track.dataset.touchBound = '1';
+    let startX = 0;
+    let curX = 0;
+    let dragging = false;
+    track.addEventListener('touchstart', e => {
+      if (!e.touches.length) return;
+      dragging = true;
+      startX = e.touches[0].clientX;
+      curX = startX;
+    }, { passive: true });
+    track.addEventListener('touchmove', e => {
+      if (dragging && e.touches.length) curX = e.touches[0].clientX;
+    }, { passive: true });
+    track.addEventListener('touchend', () => {
+      if (!dragging) return;
+      const diff = startX - curX;
+      if (Math.abs(diff) > 36) {
+        diff > 0 ? nextSlide(list.length) : prevSlide();
+      }
+      dragging = false;
+    });
+  }
+
   clearInterval(carouselTimer);
   carouselTimer = setInterval(() => nextSlide(list.length), 4200);
 }

@@ -1357,9 +1357,152 @@
   .hero {
     grid-template-columns: 1fr;
     text-align: center;
-    padding-top: 36px;
+    padding: 32px 5% 40px;
+    gap: 28px;
+    min-height: auto;
+  }
+  .hero-content,
+  .hero-showcase,
+  .stl-viewer-card,
+  .stl-controls-card {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
   }
   .hero p { margin-left: auto; margin-right: auto; }
   .hero-buttons, .hero-trust-strip { justify-content: center; }
-  .stl-lab-grid { grid-template-columns: 1fr; }
+  .stl-lab-grid { grid-template-columns: 1fr; gap: 20px; }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 24px 4% 32px;
+  }
+  .hero h1 {
+    font-size: clamp(1.9rem, 8vw, 2.5rem);
+    word-break: break-word;
+  }
+  .hero p {
+    font-size: 0.95rem;
+    margin-bottom: 22px;
+  }
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .hero-buttons .btn-primary,
+  .hero-buttons .btn-secondary {
+    width: 100%;
+  }
+  .hero-trust-strip {
+    gap: 12px;
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .hero-showcase {
+    padding: 14px;
+    min-height: auto;
+  }
+  #hero3dCanvas {
+    height: 230px !important;
+    max-width: 100%;
+  }
+  .hero-showcase-bar {
+    justify-content: center;
+  }
+  .carousel-card {
+    min-width: min(260px, 82vw);
+    max-width: min(260px, 82vw);
+  }
+  .search-bar {
+    min-width: 100%;
+    width: 100%;
+  }
+  .toolbar-top {
+    gap: 10px;
+  }
+  .sort-select,
+  .price-filter-wrap {
+    flex: 1;
+    min-width: 0;
+    justify-content: space-between;
+  }
+  .filter-pills {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 6px;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-pill {
+    flex-shrink: 0;
+  }
+  .products-meta-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .products-grid,
+  .products-grid.compact-view {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+    gap: 18px;
+    padding: 18px 4% 52px;
+  }
+  .stl-lab-section {
+    padding: 28px 4%;
+  }
+  .stl-viewer-card,
+  .stl-controls-card {
+    padding: 18px 14px;
+  }
+  #stlLabCanvas {
+    height: 240px !important;
+    max-width: 100%;
+  }
+  .material-cards-row {
+    grid-template-columns: 1fr;
+  }
+  .quote-result-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .quote-result-banner button {
+    width: 100%;
+  }
+  .modal-overlay {
+    padding: 10px;
+  }
+  .modal-content {
+    padding: 18px 16px 24px;
+  }
+  .gallery-main,
+  .viewer-3d-wrap {
+    height: 240px;
+  }
+  .cart-fab {
+    width: 50px;
+    height: 50px;
+    bottom: 18px;
+    right: 16px;
+    font-size: 1.2rem;
+  }
+  .whatsapp-fab {
+    width: 50px;
+    height: 50px;
+    bottom: 18px;
+    left: 16px;
+  }
+  .back-top {
+    bottom: 78px;
+    right: 20px;
+    width: 38px;
+    height: 38px;
+  }
+  .toast {
+    right: 14px;
+    left: 14px;
+    bottom: 80px;
+    max-width: none;
+  }
 }

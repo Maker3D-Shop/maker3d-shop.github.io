@@ -160,6 +160,7 @@
   padding: 24px;
   box-shadow: var(--shadow-xs);
   margin-bottom: 24px;
+  overflow-x: auto;
 }
 .admin-panel-header {
   display: flex;
@@ -247,6 +248,16 @@
   .admin-vault-nav {
     flex-direction: row;
     overflow-x: auto;
+    padding: 10px 12px;
+  }
+  .admin-nav-btn {
+    white-space: nowrap;
+  }
+  .admin-vault-main {
+    padding: 18px 14px;
+  }
+  .admin-panel-card {
+    padding: 16px 14px;
   }
   .admin-form-grid {
     grid-template-columns: 1fr;

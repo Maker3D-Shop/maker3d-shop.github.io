@@ -46,7 +46,16 @@ class Viewer3DManager {
 
     this.heroRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     this.heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.heroRenderer.setSize(w, h);
+    this.heroRenderer.setSize(w, h, false);
+
+    window.addEventListener('resize', () => {
+      if (!canvas || !this.heroRenderer || !this.heroCamera) return;
+      const nw = canvas.clientWidth || 300;
+      const nh = canvas.clientHeight || 230;
+      this.heroCamera.aspect = nw / nh;
+      this.heroCamera.updateProjectionMatrix();
+      this.heroRenderer.setSize(nw, nh, false);
+    });
 
     const amb = new THREE.AmbientLight(0xffffff, 0.75);
     this.heroScene.add(amb);
@@ -92,6 +101,18 @@ class Viewer3DManager {
       group.rotation.x += (e.clientY - prev.y) * 0.012;
       prev = { x: e.clientX, y: e.clientY };
     });
+    canvas.addEventListener('touchstart', e => {
+      if (!e.touches.length) return;
+      isDragging = true;
+      prev = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: true });
+    canvas.addEventListener('touchmove', e => {
+      if (!isDragging || !e.touches.length) return;
+      group.rotation.y += (e.touches[0].clientX - prev.x) * 0.012;
+      group.rotation.x += (e.touches[0].clientY - prev.y) * 0.012;
+      prev = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: true });
+    canvas.addEventListener('touchend', () => { isDragging = false; });
 
     // Try loading real GLB model p1.glb if GLTFLoader is available
     if (THREE.GLTFLoader) {
@@ -156,7 +177,7 @@ class Viewer3DManager {
 
     this.modalRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     this.modalRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.modalRenderer.setSize(w, h);
+    this.modalRenderer.setSize(w, h, false);
 
     this.modalScene.add(new THREE.AmbientLight(0xffffff, 0.85));
     const dir = new THREE.DirectionalLight(0xffb347, 1.4);
@@ -208,6 +229,18 @@ class Viewer3DManager {
       this.modalModelGroup.rotation.x += (e.clientY - last.y) * 0.01;
       last = { x: e.clientX, y: e.clientY };
     };
+    canvas.ontouchstart = e => {
+      if (!e.touches.length) return;
+      drag = true;
+      last = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    };
+    canvas.ontouchmove = e => {
+      if (!drag || !this.modalModelGroup || !e.touches.length) return;
+      this.modalModelGroup.rotation.y += (e.touches[0].clientX - last.x) * 0.012;
+      this.modalModelGroup.rotation.x += (e.touches[0].clientY - last.y) * 0.01;
+      last = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    };
+    canvas.ontouchend = () => { drag = false; };
     canvas.onwheel = e => {
       if (!this.modalCamera) return;
       this.modalCamera.position.z = Math.max(1.4, Math.min(8, this.modalCamera.position.z + e.deltaY * 0.005));
@@ -283,7 +316,16 @@ class Viewer3DManager {
 
     this.stlRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     this.stlRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.stlRenderer.setSize(w, h);
+    this.stlRenderer.setSize(w, h, false);
+
+    window.addEventListener('resize', () => {
+      if (!canvas || !this.stlRenderer || !this.stlCamera) return;
+      const nw = canvas.clientWidth || 300;
+      const nh = canvas.clientHeight || 240;
+      this.stlCamera.aspect = nw / nh;
+      this.stlCamera.updateProjectionMatrix();
+      this.stlRenderer.setSize(nw, nh, false);
+    });
 
     this.stlScene.add(new THREE.AmbientLight(0xffffff, 0.8));
     const dLight = new THREE.DirectionalLight(0xff9e1b, 1.4);
@@ -308,6 +350,18 @@ class Viewer3DManager {
       this.stlMesh.rotation.x += (e.clientY - prev.y) * 0.012;
       prev = { x: e.clientX, y: e.clientY };
     });
+    canvas.addEventListener('touchstart', e => {
+      if (!e.touches.length) return;
+      drag = true;
+      prev = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: true });
+    canvas.addEventListener('touchmove', e => {
+      if (!drag || !this.stlMesh || !e.touches.length) return;
+      this.stlMesh.rotation.y += (e.touches[0].clientX - prev.x) * 0.012;
+      this.stlMesh.rotation.x += (e.touches[0].clientY - prev.y) * 0.012;
+      prev = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: true });
+    canvas.addEventListener('touchend', () => { drag = false; });
 
     const loop = () => {
       requestAnimationFrame(loop);
