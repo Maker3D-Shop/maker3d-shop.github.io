@@ -41,8 +41,8 @@
       <img src="logo.png?v=2" alt="Maker3D" onerror="this.src='https://raw.githubusercontent.com/Maker3D-Shop/maker3d-shop.github.io/main/logo.png'">
     </div>
     <div style="text-align:center">
-      <strong style="display:block;font-size:1.1rem;letter-spacing:0.06em">MAKER3D STUDIO</strong>
-      <small style="color:#94a3b8;font-size:0.78rem">Carregando catálogo e perfis de impressão 3D...</small>
+      <strong style="display:block;font-size:1.1rem;letter-spacing:0.06em;color:var(--text-primary)">MAKER3D STUDIO</strong>
+      <small style="color:var(--text-secondary);font-size:0.78rem">Carregando catálogo e perfis de impressão 3D...</small>
     </div>
     <div class="loadscreen-bar">
       <div class="loadscreen-bar-fill"></div>
@@ -177,9 +177,9 @@
             </div>
           </div>
 
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.78rem;color:#94a3b8">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border-strong);font-size:0.78rem;color:var(--text-secondary)">
             <span>Sincronização de Conta: Coleções, Curtidas, Carrinho e Compras</span>
-            <a href="catalogo/" onclick="window.makerApp.showPage('produtos');return false;" style="color:var(--brand-mid);font-weight:700;text-decoration:none">Ver Modelos →</a>
+            <a href="catalogo/" onclick="window.makerApp.showPage('produtos');return false;" style="color:var(--brand-primary);font-weight:800;text-decoration:none">Ver Modelos →</a>
           </div>
         </div>
       </div>
@@ -335,7 +335,7 @@
               <div class="media-panel" id="panel-model">
                 <div class="viewer-3d-wrap" style="height:420px">
                   <canvas id="modal3dCanvas"></canvas>
-                  <div id="viewer3dLoading" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#fff;background:rgba(15,23,42,0.75);font-weight:600">
+                  <div id="viewer3dLoading" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:var(--text-primary);background:rgba(253,250,245,0.88);font-weight:700">
                     Carregando malha 3D...
                   </div>
                   <div class="viewer-3d-controls">
@@ -460,10 +460,10 @@
 
             <div class="quote-result-banner">
               <div>
-                <small id="stlEstRateInfo" style="opacity:0.9;display:block">Base PLA: R$ 150,00/kg (R$ 0,15/g)</small>
+                <small id="stlEstRateInfo" style="color:var(--text-secondary);display:block;font-weight:600">Base PLA: R$ 150,00/kg (R$ 0,15/g)</small>
                 <div class="price-big" id="stlEstPrice">R$ 22,00</div>
               </div>
-              <button class="btn-secondary" style="background:#fff;color:#0f172a;border:none" onclick="window.makerApp.sendStlQuoteToWhatsApp()" type="button">
+              <button class="btn-primary" onclick="window.makerApp.sendStlQuoteToWhatsApp()" type="button">
                 Solicitar Produção →
               </button>
             </div>
@@ -818,7 +818,7 @@
         </nav>
 
         <div class="admin-vault-footer">
-          <button class="admin-nav-btn" style="color:var(--brand-light)" onclick="window.makerApp.closeAdminVault()">Voltar para a Loja</button>
+          <button class="admin-nav-btn" style="color:var(--brand-deep)" onclick="window.makerApp.closeAdminVault()">Voltar para a Loja</button>
         </div>
       </aside>
 
@@ -845,7 +845,7 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="footer-brand-name">
-          <img src="logo.png?v=2" alt="Maker3D" style="width:38px;height:38px;object-fit:contain;border-radius:50%;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.35))" onerror="this.style.display='none'">
+          <img src="logo.png?v=2" alt="Maker3D" style="width:38px;height:38px;object-fit:contain;border-radius:50%" onerror="this.style.display='none'">
           <span class="dynamic-brand-name">Maker3D</span>
         </div>
         <p>Manufatura aditiva de alta precisão. Modelos 3D verificados e impressão sob demanda com PLA, PETG e Trust/TPU.</p>
@@ -873,7 +873,7 @@
 
       <div class="footer-col">
         <h4>Boletim Técnico</h4>
-        <p style="font-size:0.83rem;color:rgba(255,255,255,0.65)">Receba novos perfis de impressão e cupons:</p>
+        <p style="font-size:0.83rem;color:var(--text-secondary)">Receba novos perfis de impressão e cupons:</p>
         <div class="newsletter-form">
           <input type="email" id="newsletterEmail" placeholder="Seu e-mail...">
           <button onclick="document.getElementById('newsletterEmail').value='';window.makerApp.showPage('produtos')" type="button">Inscrever</button>

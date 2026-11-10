@@ -665,7 +665,7 @@ function buildGallery(p) {
           <button class="gallery-nav-btn" onclick="event.stopPropagation(); window.makerApp.setGalleryImg(window.makerApp.getGalleryIdx() - 1)" aria-label="Foto anterior" type="button">‹</button>
           <button class="gallery-nav-btn" onclick="event.stopPropagation(); window.makerApp.setGalleryImg(window.makerApp.getGalleryIdx() + 1)" aria-label="Próxima foto" type="button">›</button>
         </div>
-        <div id="galleryCounterBadge" style="position:absolute;bottom:12px;right:14px;background:rgba(15,23,42,0.78);color:#fff;padding:4px 11px;border-radius:99px;font-size:0.75rem;font-weight:700;backdrop-filter:blur(4px)">1 / ${currentGalleryImages.length}</div>
+        <div id="galleryCounterBadge" style="position:absolute;bottom:12px;right:14px;background:rgba(255,253,249,0.92);color:var(--text-primary);border:1px solid var(--border-strong);padding:4px 12px;border-radius:99px;font-size:0.75rem;font-weight:800;backdrop-filter:blur(4px)">1 / ${currentGalleryImages.length}</div>
       ` : ''}
     `;
     thumbs.style.display = hasMany ? 'flex' : 'none';
@@ -708,7 +708,7 @@ export function switchMedia(type) {
   document.getElementById('panel-' + type)?.classList.add('active');
 
   if (type === 'model' && currentDetailProduct) {
-    const firstColor = (selectedColors[currentDetailProduct.id] && selectedColors[currentDetailProduct.id][0]?.hex) || '#ff7a00';
+    const firstColor = (selectedColors[currentDetailProduct.id] && selectedColors[currentDetailProduct.id][0]?.hex) || '#ff9e1b';
     viewer3D.initModal3D(currentDetailProduct.model3d, firstColor);
   } else {
     viewer3D.destroyModal3D();

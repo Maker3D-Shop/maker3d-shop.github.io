@@ -142,8 +142,8 @@ class DatabaseService {
     }
     if (data && data.settings) {
       const mergedSettings = { ...store.state.settings, ...data.settings };
-      if (!mergedSettings.primaryColor || mergedSettings.primaryColor === '#00ae42') {
-        mergedSettings.primaryColor = '#ff7a00';
+      if (!mergedSettings.primaryColor || mergedSettings.primaryColor === '#00ae42' || mergedSettings.primaryColor === '#ff7a00') {
+        mergedSettings.primaryColor = '#ff9e1b';
       }
       store.update('settings', mergedSettings, 'maker3d_settings');
     }

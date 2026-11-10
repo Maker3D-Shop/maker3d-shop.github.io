@@ -171,7 +171,7 @@ class Viewer3DManager {
     const h = canvas.clientHeight || 380;
 
     this.modalScene = new THREE.Scene();
-    this.modalScene.background = new THREE.Color(0x141222);
+    this.modalScene.background = new THREE.Color(0xf7f1e6);
     this.modalCamera = new THREE.PerspectiveCamera(50, w / h, 0.1, 200);
     this.modalCamera.position.set(0, 1.1, 3.5);
 
@@ -179,12 +179,12 @@ class Viewer3DManager {
     this.modalRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.modalRenderer.setSize(w, h, false);
 
-    this.modalScene.add(new THREE.AmbientLight(0xffffff, 0.85));
-    const dir = new THREE.DirectionalLight(0xffb347, 1.4);
+    this.modalScene.add(new THREE.AmbientLight(0xffffff, 0.92));
+    const dir = new THREE.DirectionalLight(0xffb84d, 1.35);
     dir.position.set(5, 8, 6);
     this.modalScene.add(dir);
 
-    const grid = new THREE.GridHelper(6, 12, 0x3b3561, 0x221e3a);
+    const grid = new THREE.GridHelper(6, 12, 0xffb84d, 0xe5d3b8);
     grid.position.y = -1.2;
     this.modalScene.add(grid);
 
@@ -309,7 +309,7 @@ class Viewer3DManager {
     const h = canvas.clientHeight || 320;
 
     this.stlScene = new THREE.Scene();
-    this.stlScene.background = new THREE.Color(0x14121d);
+    this.stlScene.background = new THREE.Color(0xf7f1e6);
     this.stlCamera = new THREE.PerspectiveCamera(50, w / h, 0.1, 1000);
     this.stlCamera.position.set(0, 45, 110);
     this.stlCamera.lookAt(0, 0, 0);
@@ -327,12 +327,12 @@ class Viewer3DManager {
       this.stlRenderer.setSize(nw, nh, false);
     });
 
-    this.stlScene.add(new THREE.AmbientLight(0xffffff, 0.8));
-    const dLight = new THREE.DirectionalLight(0xff9e1b, 1.4);
+    this.stlScene.add(new THREE.AmbientLight(0xffffff, 0.9));
+    const dLight = new THREE.DirectionalLight(0xff9e1b, 1.35);
     dLight.position.set(60, 100, 80);
     this.stlScene.add(dLight);
 
-    const grid = new THREE.GridHelper(160, 16, 0xff9e1b, 0x2c2840);
+    const grid = new THREE.GridHelper(160, 16, 0xff9e1b, 0xe5d3b8);
     grid.position.y = -25;
     this.stlScene.add(grid);
 

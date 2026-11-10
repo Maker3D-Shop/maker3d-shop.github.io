@@ -5,8 +5,8 @@
 export const DEFAULT_SITE_SETTINGS = {
   brandName: 'Maker3D',
   brandTagline: 'Impressão 3D de Alta Precisão',
-  primaryColor: '#ff7a00',
-  accentOrange: '#ff9e1b',
+  primaryColor: '#ff9e1b',
+  accentOrange: '#ffb84d',
   promoBarActive: false,
   promoBarText: '',
   promoPill: 'MAKER3D PRO',

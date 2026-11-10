@@ -1,61 +1,62 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Maker3D — Logo Orange Palette & Industrial MakerWorld Design Tokens
+   Maker3D — Light Variations of #ff9e1b, Off-White Surfaces & Organic Geometry
    ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --brand-primary: #ff7a00;
-  --brand-deep:    #c95600;
-  --brand-mid:     #ff9e1b;
-  --brand-light:   #ffb84d;
-  --brand-pale:    rgba(255, 122, 0, 0.08);
-  --brand-glow:    rgba(255, 122, 0, 0.16);
+  --brand-primary: #ff9e1b;
+  --brand-deep:    #f28b00;
+  --brand-mid:     #ffb84d;
+  --brand-light:   #ffd285;
+  --brand-soft:    #ffe6b8;
+  --brand-pale:    #fff5e4;
+  --brand-glow:    rgba(255, 158, 27, 0.22);
 
-  /* Clean Professional Surfaces (No dark side clouds/vignettes) */
-  --bg-primary:    #f8f9fb;
-  --bg-secondary:  #ffffff;
-  --bg-tertiary:   #f1f4f8;
-  --bg-glass:      rgba(255, 255, 255, 0.94);
-  --bg-nav:        rgba(255, 255, 255, 0.96);
-  --bg-card:       #ffffff;
+  /* Off-White & Warm Cream Organic Surfaces (No Dark Colors) */
+  --bg-primary:    #fdfaf5;
+  --bg-secondary:  #fffdf9;
+  --bg-tertiary:   #f7f1e6;
+  --bg-glass:      rgba(255, 253, 249, 0.92);
+  --bg-nav:        rgba(253, 250, 245, 0.94);
+  --bg-card:       #fffdf9;
 
-  /* Typography Colors */
-  --text-primary:   #141821;
-  --text-secondary: #475569;
-  --text-muted:     #64748b;
-  --text-inverse:   #ffffff;
+  /* Warm Organic Typography Colors (No Stark Black or Dark Slate) */
+  --text-primary:   #3d2e1e;
+  --text-secondary: #6e5a44;
+  --text-muted:     #9c856c;
+  --text-inverse:   #fffdf9;
 
-  /* Borders & Dividers */
-  --border-subtle:  #e5e9f0;
-  --border-strong:  #cbd5e1;
-  --border-neutral: rgba(20, 24, 33, 0.07);
+  /* Warm Organic Borders & Dividers */
+  --border-subtle:  #f0e6d6;
+  --border-strong:  #e5d3b8;
+  --border-neutral: rgba(61, 46, 30, 0.08);
 
   /* Status Colors */
   --success:       #10b981;
   --success-bg:    rgba(16, 185, 129, 0.12);
   --warning:       #f59e0b;
-  --warning-bg:    rgba(245, 158, 11, 0.12);
+  --warning-bg:    rgba(245, 158, 11, 0.14);
   --danger:        #ef4444;
   --danger-bg:     rgba(239, 68, 68, 0.12);
-  --info:          #3b82f6;
-  --info-bg:       rgba(59, 130, 246, 0.12);
+  --info:          #ff9e1b;
+  --info-bg:       rgba(255, 158, 27, 0.14);
 
-  /* Clean Crisp Shadows (No wide dark lateral spread) */
-  --shadow-xs:     0 1px 2px rgba(20, 24, 33, 0.04);
-  --shadow-sm:     0 2px 8px rgba(20, 24, 33, 0.05);
-  --shadow-md:     0 6px 18px rgba(20, 24, 33, 0.06);
-  --shadow-lg:     0 12px 28px rgba(20, 24, 33, 0.08);
-  --shadow-btn:    0 4px 14px rgba(255, 122, 0, 0.28);
+  /* Soft Warm Organic Shadows */
+  --shadow-xs:     0 2px 6px rgba(180, 130, 70, 0.06);
+  --shadow-sm:     0 6px 16px rgba(180, 130, 70, 0.08);
+  --shadow-md:     0 12px 28px rgba(180, 130, 70, 0.10);
+  --shadow-lg:     0 20px 44px rgba(180, 130, 70, 0.13);
+  --shadow-btn:    0 8px 22px rgba(255, 158, 27, 0.30);
 
-  /* Radii (Crisp Industrial Geometry) */
-  --radius-xs:     6px;
-  --radius-sm:     8px;
-  --radius-md:     12px;
-  --radius-card:   14px;
-  --radius-lg:     18px;
+  /* Organic Fluid Radii */
+  --radius-xs:     12px;
+  --radius-sm:     16px;
+  --radius-md:     22px;
+  --radius-card:   28px;
+  --radius-lg:     34px;
   --radius-pill:   999px;
 
-  /* Transitions */
+  /* Fluid Spring Transitions */
   --ease-spring:   cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-smooth:   cubic-bezier(0.22, 1, 0.36, 1);
-  --transition:    all 0.22s var(--ease-smooth);
-  --transition-bounce: all 0.25s var(--ease-spring);
+  --ease-smooth:   cubic-bezier(0.25, 1, 0.5, 1);
+  --transition:    all 0.28s var(--ease-smooth);
+  --transition-bounce: all 0.34s var(--ease-spring);
 }

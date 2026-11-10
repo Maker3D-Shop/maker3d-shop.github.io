@@ -25,7 +25,7 @@ export function applyBrandSettings() {
   const s = store.state.settings;
   if (!s) return;
 
-  const pColor = (!s.primaryColor || s.primaryColor === '#00ae42') ? '#ff7a00' : s.primaryColor;
+  const pColor = (!s.primaryColor || s.primaryColor === '#00ae42' || s.primaryColor === '#ff7a00') ? '#ff9e1b' : s.primaryColor;
   document.documentElement.style.setProperty('--brand-primary', pColor);
 
   const heroBadge = document.getElementById('heroBadgeText');

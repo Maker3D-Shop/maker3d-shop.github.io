@@ -55,13 +55,13 @@ body {
   transition: width 0.08s linear;
 }
 
-/* Full-Page Initial Loadscreen */
+/* Full-Page Initial Loadscreen (Warm Off-White & #ff9e1b Organic Style) */
 .site-loadscreen {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: #0f172a;
-  color: #ffffff;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,7 +87,7 @@ body {
   position: absolute;
   inset: -6px;
   border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.12);
+  border: 3px solid var(--brand-soft);
   border-top-color: var(--brand-primary);
   animation: spinLoader 0.9s linear infinite;
 }
@@ -99,15 +99,15 @@ body {
 }
 .loadscreen-bar {
   width: 180px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.12);
+  height: 5px;
+  background: var(--brand-soft);
   border-radius: 99px;
   overflow: hidden;
 }
 .loadscreen-bar-fill {
   height: 100%;
   width: 45%;
-  background: var(--brand-primary);
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-mid));
   border-radius: 99px;
   animation: loadBarMove 1.1s ease-in-out infinite alternate;
 }
@@ -127,7 +127,7 @@ body {
   margin-top: -14px;
   margin-left: -14px;
   border-radius: 50%;
-  border: 2.5px solid rgba(15, 23, 42, 0.12);
+  border: 2.5px solid var(--brand-soft);
   border-top-color: var(--brand-primary);
   animation: spinLoader 0.75s linear infinite;
   z-index: 2;
@@ -409,14 +409,16 @@ main {
   line-height: 1.7;
 }
 
-/* Footer */
+/* Footer (Warm Off-White & Organic Cream Structure — No Dark Colors) */
 footer.site-footer {
-  background: #140d06;
-  color: rgba(255, 255, 255, 0.78);
-  padding: 64px 5% 28px;
+  background: linear-gradient(180deg, var(--bg-tertiary) 0%, var(--brand-pale) 100%);
+  color: var(--text-secondary);
+  padding: 68px 5% 32px;
   position: relative;
   z-index: 1;
-  border-top: 1px solid rgba(255, 158, 27, 0.18);
+  border-top: 1px solid var(--border-strong);
+  border-radius: 44px 44px 0 0;
+  margin-top: 32px;
 }
 .footer-grid {
   display: grid;
@@ -428,7 +430,7 @@ footer.site-footer {
 .footer-brand-name {
   font-family: 'DM Serif Display', serif;
   font-size: 1.5rem;
-  color: #fff;
+  color: var(--brand-primary);
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -437,11 +439,11 @@ footer.site-footer {
 .footer-brand p {
   font-size: 0.88rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--text-secondary);
   max-width: 290px;
 }
 .footer-col h4 {
-  color: #fff;
+  color: var(--text-primary);
   font-size: 0.86rem;
   font-weight: 800;
   margin-bottom: 16px;
@@ -455,7 +457,7 @@ footer.site-footer {
   gap: 9px;
 }
 .footer-col ul li a {
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.88rem;
   transition: color 0.2s, transform 0.2s;
@@ -463,7 +465,7 @@ footer.site-footer {
   display: inline-block;
 }
 .footer-col ul li a:hover {
-  color: var(--brand-light);
+  color: var(--brand-primary);
   transform: translateX(3px);
 }
 .newsletter-form {
@@ -473,11 +475,11 @@ footer.site-footer {
 }
 .newsletter-form input {
   flex: 1;
-  padding: 10px 14px;
+  padding: 10px 16px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.07);
-  color: #fff;
+  border: 1.5px solid var(--border-strong);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   font-family: 'Outfit', sans-serif;
   font-size: 0.86rem;
   outline: none;
@@ -486,20 +488,21 @@ footer.site-footer {
   border-color: var(--brand-primary);
 }
 .newsletter-form button {
-  padding: 10px 18px;
+  padding: 10px 20px;
   border-radius: var(--radius-pill);
   border: none;
-  background: var(--brand-primary);
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-mid));
   color: #fff;
   font-weight: 700;
   cursor: pointer;
   transition: var(--transition);
+  box-shadow: var(--shadow-btn);
 }
 .newsletter-form button:hover {
   background: var(--brand-deep);
 }
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-strong);
   padding-top: 22px;
   max-width: 1240px;
   margin: 0 auto;
@@ -509,7 +512,7 @@ footer.site-footer {
   flex-wrap: wrap;
   gap: 12px;
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 .footer-bottom-links {
   display: flex;
@@ -517,13 +520,13 @@ footer.site-footer {
   align-items: center;
 }
 .footer-bottom-links a {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.2s;
   cursor: pointer;
 }
 .footer-bottom-links a:hover {
-  color: var(--brand-light);
+  color: var(--brand-primary);
 }
 
 /* Responsive Media Queries */

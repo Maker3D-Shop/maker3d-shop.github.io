@@ -445,7 +445,7 @@ function renderCmsTab() {
         </div>
         <div class="admin-input-group">
           <label>Cor Principal do Tema (Hex)</label>
-          <input type="color" id="cms_primaryColor" value="${s.primaryColor || '#ff7a00'}" style="height:42px;cursor:pointer">
+          <input type="color" id="cms_primaryColor" value="${s.primaryColor || '#ff9e1b'}" style="height:42px;cursor:pointer">
         </div>
         <div class="admin-input-group">
           <label>Texto da Barra de Anúncio Topo</label>
@@ -496,7 +496,7 @@ export async function saveCmsSettings() {
   const next = {
     ...store.state.settings,
     brandName: document.getElementById('cms_brandName')?.value.trim() || 'Maker3D',
-    primaryColor: document.getElementById('cms_primaryColor')?.value || '#ff7a00',
+    primaryColor: document.getElementById('cms_primaryColor')?.value || '#ff9e1b',
     promoBarText: document.getElementById('cms_promoBarText')?.value.trim() || '',
     freeShippingThreshold: parseFloat(document.getElementById('cms_freeShip')?.value || '120'),
     heroBadge: document.getElementById('cms_heroBadge')?.value.trim() || '',
@@ -595,7 +595,7 @@ function renderCouponsAndColorsTab() {
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
         <input type="text" id="newFilName" placeholder="Nome da cor (ex: Azul Silk)" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border-subtle)">
-        <input type="color" id="newFilHex" value="#ff7a00" style="height:38px;width:60px">
+        <input type="color" id="newFilHex" value="#ff9e1b" style="height:38px;width:60px">
         <button class="btn-primary btn-sm" onclick="window.makerApp.addAdminFilament()">+ Adicionar Filamento</button>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -632,7 +632,7 @@ export async function removeAdminCoupon(idx) {
 
 export async function addAdminFilament() {
   const name = document.getElementById('newFilName')?.value.trim();
-  const hex = document.getElementById('newFilHex')?.value || '#ff7a00';
+  const hex = document.getElementById('newFilHex')?.value || '#ff9e1b';
   if (!name) return;
   const colors = [...store.state.globalColors, { name, hex, priceAdd: 0 }];
   store.update('globalColors', colors, 'maker3d_global_colors');
