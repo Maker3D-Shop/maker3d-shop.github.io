@@ -445,7 +445,7 @@ function renderCmsTab() {
         </div>
         <div class="admin-input-group">
           <label>Cor Principal do Tema (Hex)</label>
-          <input type="color" id="cms_primaryColor" value="${s.primaryColor || '#00ae42'}" style="height:42px;cursor:pointer">
+          <input type="color" id="cms_primaryColor" value="${s.primaryColor || '#ff7a00'}" style="height:42px;cursor:pointer">
         </div>
         <div class="admin-input-group">
           <label>Texto da Barra de Anúncio Topo</label>
@@ -496,7 +496,7 @@ export async function saveCmsSettings() {
   const next = {
     ...store.state.settings,
     brandName: document.getElementById('cms_brandName')?.value.trim() || 'Maker3D',
-    primaryColor: document.getElementById('cms_primaryColor')?.value || '#00ae42',
+    primaryColor: document.getElementById('cms_primaryColor')?.value || '#ff7a00',
     promoBarText: document.getElementById('cms_promoBarText')?.value.trim() || '',
     freeShippingThreshold: parseFloat(document.getElementById('cms_freeShip')?.value || '120'),
     heroBadge: document.getElementById('cms_heroBadge')?.value.trim() || '',
@@ -595,7 +595,7 @@ function renderCouponsAndColorsTab() {
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
         <input type="text" id="newFilName" placeholder="Nome da cor (ex: Azul Silk)" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border-subtle)">
-        <input type="color" id="newFilHex" value="#00ae42" style="height:38px;width:60px">
+        <input type="color" id="newFilHex" value="#ff7a00" style="height:38px;width:60px">
         <button class="btn-primary btn-sm" onclick="window.makerApp.addAdminFilament()">+ Adicionar Filamento</button>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -632,7 +632,7 @@ export async function removeAdminCoupon(idx) {
 
 export async function addAdminFilament() {
   const name = document.getElementById('newFilName')?.value.trim();
-  const hex = document.getElementById('newFilHex')?.value || '#00ae42';
+  const hex = document.getElementById('newFilHex')?.value || '#ff7a00';
   if (!name) return;
   const colors = [...store.state.globalColors, { name, hex, priceAdd: 0 }];
   store.update('globalColors', colors, 'maker3d_global_colors');
@@ -673,7 +673,7 @@ function renderCalcTab() {
         </div>
         <div style="background:linear-gradient(135deg,#111827,#1f2937);border-radius:16px;padding:32px;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
           <span style="font-size:0.9rem;opacity:0.8">Preço de Venda Sugerido</span>
-          <div id="ac_resultPrice" style="font-size:3rem;font-weight:800;color:#00ae42;margin:8px 0">R$ 0,00</div>
+          <div id="ac_resultPrice" style="font-size:3rem;font-weight:800;color:#ff9e1b;margin:8px 0">R$ 0,00</div>
           <small id="ac_resultBase" style="opacity:0.8">Custo de produção: R$ 0,00</small>
         </div>
       </div>

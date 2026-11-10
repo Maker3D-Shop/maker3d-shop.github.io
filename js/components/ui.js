@@ -25,18 +25,8 @@ export function applyBrandSettings() {
   const s = store.state.settings;
   if (!s) return;
 
-  if (s.primaryColor) {
-    document.documentElement.style.setProperty('--brand-primary', s.primaryColor);
-  }
-
-  const promoBar = document.getElementById('promoBar');
-  const promoText = document.getElementById('promoBarText');
-  const promoPill = document.getElementById('promoBarPill');
-  if (promoBar) {
-    promoBar.style.display = s.promoBarActive ? 'flex' : 'none';
-    if (promoText) promoText.textContent = s.promoBarText || '';
-    if (promoPill) promoPill.textContent = s.promoPill || 'MAKERWORLD PRO';
-  }
+  const pColor = (!s.primaryColor || s.primaryColor === '#00ae42') ? '#ff7a00' : s.primaryColor;
+  document.documentElement.style.setProperty('--brand-primary', pColor);
 
   const heroBadge = document.getElementById('heroBadgeText');
   const heroTitle = document.getElementById('heroTitleText');
@@ -50,7 +40,23 @@ export function applyBrandSettings() {
   });
 }
 
-export function showPage(id) {
+const PAGE_ROUTE_MAP = {
+  inicio: '',
+  produtos: 'catalogo/',
+  produto: 'produto/',
+  orcamento: 'laboratorio-stl/',
+  parceiros: 'parceiros/',
+  sobre: 'sobre/',
+  contato: 'contato/'
+};
+
+function getRepoBaseUrl() {
+  const baseEl = document.querySelector('base');
+  if (baseEl && baseEl.href) return baseEl.href;
+  return window.location.origin + '/';
+}
+
+export function showPage(id, pushRoute = true, queryParams = '') {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + id);
   if (target) target.classList.add('active');
@@ -59,6 +65,19 @@ export function showPage(id) {
   const navId = id === 'produto' ? 'produtos' : id;
   const nav = document.getElementById('nav-' + navId);
   if (nav) nav.classList.add('active');
+
+  if (pushRoute && window.history && window.history.pushState) {
+    try {
+      const subPath = PAGE_ROUTE_MAP[id] !== undefined ? PAGE_ROUTE_MAP[id] : '';
+      const base = getRepoBaseUrl();
+      const targetUrl = new URL(subPath + (queryParams || ''), base);
+      if (window.location.href !== targetUrl.href) {
+        window.history.pushState({ page: id, queryParams }, '', targetUrl.href);
+      }
+    } catch (_) {
+      // Fallback if running on file:// protocol
+    }
+  }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
   document.getElementById('navLinks')?.classList.remove('open');

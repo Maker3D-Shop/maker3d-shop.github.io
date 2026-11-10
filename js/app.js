@@ -365,12 +365,42 @@ window.addEventListener('DOMContentLoaded', async () => {
     hideSiteLoadscreen();
   }, 380);
 
-  // Check URL deep link (?product=ID)
+  // Check URL deep link (?id=ID or ?product=ID) or Subdirectory Route
   const params = new URLSearchParams(window.location.search);
-  const pid = params.get('product');
+  const pid = params.get('id') || params.get('product');
+  const pathStr = (window.location.pathname || '').toLowerCase();
+  const initialPage = window.__MAKER3D_INITIAL_PAGE || (
+    pathStr.includes('/catalogo') ? 'produtos' :
+    pathStr.includes('/produto') ? 'produto' :
+    pathStr.includes('/laboratorio-stl') ? 'orcamento' :
+    pathStr.includes('/parceiros') ? 'parceiros' :
+    pathStr.includes('/sobre') ? 'sobre' :
+    pathStr.includes('/contato') ? 'contato' : null
+  );
+
   if (pid) {
-    setTimeout(() => openModal(pid), 350);
+    setTimeout(() => openModal(pid), 260);
+  } else if (initialPage === 'produto') {
+    const firstProd = (store.state.products || [])[0];
+    if (firstProd) {
+      setTimeout(() => openModal(firstProd.id), 260);
+    } else {
+      showPage('produtos', false);
+    }
+  } else if (initialPage) {
+    showPage(initialPage, false);
   }
+
+  window.addEventListener('popstate', (ev) => {
+    const st = ev.state;
+    const curParams = new URLSearchParams(window.location.search);
+    const curPid = curParams.get('id') || curParams.get('product');
+    if (curPid) {
+      openModal(curPid);
+    } else if (st && st.page) {
+      showPage(st.page, false);
+    }
+  });
 
   // Subscribe to store updates
   store.subscribe((_, key) => {

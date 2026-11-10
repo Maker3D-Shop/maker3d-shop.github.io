@@ -5,13 +5,13 @@
 export const DEFAULT_SITE_SETTINGS = {
   brandName: 'Maker3D',
   brandTagline: 'Impressão 3D de Alta Precisão',
-  primaryColor: '#00ae42',
-  accentOrange: '#ff6b00',
-  promoBarActive: true,
-  promoBarText: 'FRETE GRÁTIS em pedidos acima de R$ 120 • Use o cupom MAKER10 para 10% OFF na primeira compra',
-  promoPill: 'MAKERWORLD PRO',
+  primaryColor: '#ff7a00',
+  accentOrange: '#ff9e1b',
+  promoBarActive: false,
+  promoBarText: '',
+  promoPill: 'MAKER3D PRO',
   freeShippingThreshold: 120,
-  heroBadge: 'MANUFATURA ADITIVA DE PRECISÃO • BAMBU STUDIO PROFILES',
+  heroBadge: 'MANUFATURA ADITIVA DE PRECISÃO • PERFIS CALIBRADOS',
   heroTitleHtml: 'Modelos 3D & <em>Peças Técnicas</em> Sob Demanda',
   heroSubtitle: 'Catálogo profissional de modelos impressos em alta definição (0.12 mm) com filamentos calibrados PLA (R$ 150/kg), PETG (R$ 120/kg) e TPU/Trust (R$ 200/kg).',
   whatsappNumber: '5531984566047',
@@ -30,6 +30,25 @@ export const DEFAULT_SITE_SETTINGS = {
     TPU: 200
   }
 };
+
+export const DEFAULT_PARTNERS = [
+  {
+    id: 'partner-nossa-barbearia',
+    name: 'Nossa Barbearia',
+    location: 'Congonhas, MG',
+    category: 'Barbearia & Lifestyle',
+    piecesProduced: 350,
+    materialUsed: 'PLA Premium & PETG Personalizado',
+    status: 'Parceiro Oficial Verificado',
+    summary: 'Produção em série de aproximadamente 350 brindes personalizados em 3D com a identidade visual da Nossa Barbearia (Congonhas), desenvolvidos com alta precisão dimensional e acabamento exclusivo para clientes.',
+    highlights: [
+      '~350 peças produzidas em lote seriado',
+      'Personalização com identidade da barbearia',
+      'Controle de qualidade individual peça a peça',
+      'Parceria local em Congonhas — MG'
+    ]
+  }
+];
 
 export const DEFAULT_COUPONS = [
   { code: 'MAKER10', discountPct: 10, minOrder: 0, active: true, desc: '10% OFF de boas-vindas' },
@@ -612,6 +631,7 @@ class Store {
       ]),
       orders: this.loadLocal('maker3d_orders', []),
       reviews: this.loadLocal('maker3d_reviews', {}),
+      partners: this.loadLocal('maker3d_partners', DEFAULT_PARTNERS),
       users: this.loadLocal('maker3d_users', []),
       currentUser: this.loadLocal('maker3d_current_user', null),
       activeCoupon: null

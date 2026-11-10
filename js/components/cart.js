@@ -108,6 +108,10 @@ export function getCartSubtotal() {
   }, 0);
 }
 
+const SVG_SHOPPING_BAG_LARGE = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-primary);opacity:0.75"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`;
+const SVG_TRASH_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`;
+const SVG_CUBE_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-primary)"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`;
+
 export function updateCartUI() {
   const cart = store.state.cart || [];
   const count = cart.reduce((s, c) => s + c.qty, 0);
@@ -133,7 +137,7 @@ export function updateCartUI() {
     const pct = Math.min(100, (finalTotal / threshold) * 100);
     shipFill.style.width = pct + '%';
     if (finalTotal >= threshold) {
-      shipText.innerHTML = '🎉 Parabéns! Você ganhou <strong>FRETE GRÁTIS</strong>!';
+      shipText.innerHTML = 'Parabéns! Você ganhou <strong>FRETE GRÁTIS</strong>!';
     } else {
       const diff = (threshold - finalTotal).toFixed(2).replace('.', ',');
       shipText.innerHTML = `Faltam <strong>R$ ${diff}</strong> para ganhar <strong>Frete Grátis</strong>!`;
@@ -146,8 +150,8 @@ export function updateCartUI() {
 
   if (!cart.length) {
     itemsContainer.innerHTML = `<div style="text-align:center;padding:52px 16px;color:var(--text-muted)">
-      <div style="font-size:3.4rem;margin-bottom:10px">🛒</div>
-      <p>Seu carrinho está vazio.<br>Explore nossas peças em 3D!</p>
+      <div style="margin-bottom:12px;display:flex;justify-content:center">${SVG_SHOPPING_BAG_LARGE}</div>
+      <p>Sua sacola está vazia.<br>Explore nossas peças em 3D!</p>
     </div>`;
     footer.style.display = 'none';
     return;
@@ -172,8 +176,8 @@ export function updateCartUI() {
 
     return `
       <div style="display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border-subtle)">
-        <div style="width:54px;height:54px;border-radius:10px;background:var(--brand-pale);display:flex;align-items:center;justify-content:center;font-size:1.5rem;overflow:hidden;flex-shrink:0">
-          ${rawImg ? `<img src="${rawImg}" style="width:100%;height:100%;object-fit:cover">` : (item.emoji || '📦')}
+        <div style="width:54px;height:54px;border-radius:10px;background:var(--brand-pale);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+          ${rawImg ? `<img src="${rawImg}" style="width:100%;height:100%;object-fit:cover">` : SVG_CUBE_ICON}
         </div>
         <div style="flex:1;min-width:0">
           <strong style="display:block;font-size:0.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</strong>
@@ -185,7 +189,7 @@ export function updateCartUI() {
           <strong style="font-size:0.88rem;min-width:18px;text-align:center">${item.qty}</strong>
           <button class="icon-btn" style="width:26px;height:26px;font-size:0.85rem" onclick="window.makerApp.changeCartQty(${i}, 1)">+</button>
         </div>
-        <button class="icon-btn" style="width:28px;height:28px;color:var(--danger);font-size:0.78rem" onclick="window.makerApp.removeFromCart(${i})">🗑</button>
+        <button class="icon-btn" style="width:28px;height:28px;color:var(--danger)" onclick="window.makerApp.removeFromCart(${i})" aria-label="Remover item">${SVG_TRASH_ICON}</button>
       </div>
     `;
   }).join('');

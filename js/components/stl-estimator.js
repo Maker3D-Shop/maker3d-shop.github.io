@@ -15,8 +15,8 @@ let stlQuoteState = {
   infill: 20,
   layerHeight: '0.16',
   scalePct: 100,
-  colorHex: '#00ae42',
-  colorName: 'Verde Bambu'
+  colorHex: '#ff7a00',
+  colorName: 'Laranja Maker3D'
 };
 
 export const MATERIAL_RATES = {
@@ -136,7 +136,7 @@ export async function sendStlQuoteToWhatsApp() {
       name: `Impressão Sob Medida (${stlQuoteState.fileName})`,
       qty: 1,
       price: stlQuoteState.estimatedPrice,
-      selectedColors: [{ name: `${stlQuoteState.material} (R$ ${matInfo.pricePerKg}/kg)`, hex: '#00ae42' }]
+      selectedColors: [{ name: `${stlQuoteState.material} (R$ ${matInfo.pricePerKg}/kg)`, hex: '#ff7a00' }]
     }],
     total: stlQuoteState.estimatedPrice,
     notes: `Material: ${stlQuoteState.material} (R$ ${matInfo.pricePerKg}/kg) | Preenchimento: ${stlQuoteState.infill}% | Escala: ${stlQuoteState.scalePct}% | ${desc}`

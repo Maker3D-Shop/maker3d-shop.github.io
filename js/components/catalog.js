@@ -19,6 +19,13 @@ let selectedFilamentMaterial = 'PLA'; // PLA (150) | PETG (120) | TPU (200)
 let carouselIdx = 0;
 let carouselTimer = null;
 
+const SVG_HEART_OUTLINE = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+const SVG_HEART_FILLED = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+const SVG_BOOKMARK_OUTLINE = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+const SVG_BOOKMARK_FILLED = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+const SVG_DOWNLOAD_ICON = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+const SVG_LAYERS_ICON = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`;
+
 export function getProductColors(p) {
   if (p.colors && p.colors.length) return p.colors;
   if (p.colorSections) return p.colorSections.flatMap(s => s.colors || []);
@@ -54,7 +61,7 @@ export function toggleWishlist(pid, ev) {
     if (likeBtn) {
       const liked = isLiked(pid);
       likeBtn.classList.toggle('active', liked);
-      likeBtn.innerHTML = liked ? '♥ Curtido' : '♡ Curtir';
+      likeBtn.innerHTML = `${liked ? SVG_HEART_FILLED : SVG_HEART_OUTLINE} <span>${liked ? 'Curtido' : 'Curtir'}</span>`;
     }
   }
 }
@@ -87,7 +94,7 @@ export function toggleSaveToCollection(pid, ev) {
     if (colBtn) {
       const saved = isSavedInCollection(pid);
       colBtn.classList.toggle('active', saved);
-      colBtn.innerHTML = saved ? '★ Na Coleção' : '☆ Salvar na Coleção';
+      colBtn.innerHTML = `${saved ? SVG_BOOKMARK_FILLED : SVG_BOOKMARK_OUTLINE} <span>${saved ? 'Na Coleção' : 'Salvar na Coleção'}</span>`;
     }
   }
 }
@@ -371,10 +378,10 @@ export function renderProducts() {
         ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
         <div class="card-top-actions">
           <button class="wishlist-card-btn ${inCol ? 'liked' : ''}" onclick="window.makerApp.toggleSaveToCollection('${p.id}', event)" title="Salvar na Coleção" type="button">
-            ${inCol ? '★' : '☆'}
+            ${inCol ? SVG_BOOKMARK_FILLED : SVG_BOOKMARK_OUTLINE}
           </button>
           <button class="wishlist-card-btn ${liked ? 'liked' : ''}" onclick="window.makerApp.toggleWishlist('${p.id}', event)" title="Curtir modelo" type="button">
-            ${liked ? '♥' : '♡'}
+            ${liked ? SVG_HEART_FILLED : SVG_HEART_OUTLINE}
           </button>
         </div>
         <div class="product-img img-loader-wrap">
@@ -395,8 +402,8 @@ export function renderProducts() {
           </div>
           <p>${(p.desc || '').substring(0, 82)}…</p>
           <div class="makerworld-card-metrics">
-            <span>⬇ ${p.downloadsCount || 420}</span>
-            <span>🖨 ${p.printsCount || 260}</span>
+            <span style="display:inline-flex;align-items:center;gap:4px">${SVG_DOWNLOAD_ICON} ${p.downloadsCount || 420}</span>
+            <span style="display:inline-flex;align-items:center;gap:4px">${SVG_LAYERS_ICON} ${p.printsCount || 260}</span>
             <span>${p.material || 'PLA'}</span>
           </div>
           ${uniqueCols.length ? `
@@ -452,8 +459,8 @@ export function openModal(pid) {
   currentGalleryIdx = 0;
   selectedFilamentMaterial = 'PLA';
 
-  // Switch SPA to dedicated product page (#page-produto)
-  showPage('produto');
+  // Switch SPA to dedicated product page (#page-produto) and update subdirectory URL (/produto/?id=...)
+  showPage('produto', true, `?id=${encodeURIComponent(p.id)}`);
 
   // Update Breadcrumb & Header
   const breadCat = document.getElementById('detailBreadcrumbCat');
@@ -469,12 +476,12 @@ export function openModal(pid) {
   if (likeBtn) {
     const liked = isLiked(p.id);
     likeBtn.classList.toggle('active', liked);
-    likeBtn.innerHTML = liked ? '♥ Curtido' : '♡ Curtir';
+    likeBtn.innerHTML = `${liked ? SVG_HEART_FILLED : SVG_HEART_OUTLINE} <span>${liked ? 'Curtido' : 'Curtir'}</span>`;
   }
   if (colBtn) {
     const saved = isSavedInCollection(p.id);
     colBtn.classList.toggle('active', saved);
-    colBtn.innerHTML = saved ? '★ Na Coleção' : '☆ Salvar na Coleção';
+    colBtn.innerHTML = `${saved ? SVG_BOOKMARK_FILLED : SVG_BOOKMARK_OUTLINE} <span>${saved ? 'Na Coleção' : 'Salvar na Coleção'}</span>`;
   }
 
   updateDetailPriceDisplay();
@@ -701,7 +708,7 @@ export function switchMedia(type) {
   document.getElementById('panel-' + type)?.classList.add('active');
 
   if (type === 'model' && currentDetailProduct) {
-    const firstColor = (selectedColors[currentDetailProduct.id] && selectedColors[currentDetailProduct.id][0]?.hex) || '#00ae42';
+    const firstColor = (selectedColors[currentDetailProduct.id] && selectedColors[currentDetailProduct.id][0]?.hex) || '#ff7a00';
     viewer3D.initModal3D(currentDetailProduct.model3d, firstColor);
   } else {
     viewer3D.destroyModal3D();
@@ -735,9 +742,11 @@ export function addToCartFromModal() {
 
 export function shareCurrentProduct() {
   if (!currentDetailProduct) return;
-  const url = `${window.location.origin}${window.location.pathname}?product=${currentDetailProduct.id}`;
+  const baseEl = document.querySelector('base');
+  const baseHref = (baseEl && baseEl.href) ? baseEl.href : (window.location.origin + '/');
+  const url = new URL(`produto/?id=${encodeURIComponent(currentDetailProduct.id)}`, baseHref).href;
   navigator.clipboard?.writeText(url);
-  showToast('Link da página do produto copiado!', 'success');
+  showToast('Link da página dedicada do produto copiado!', 'success');
 }
 
 export function toggleCurrentDetailLike() {

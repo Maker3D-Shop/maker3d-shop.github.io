@@ -262,7 +262,7 @@ class AuthService {
 
     const uid = this.pendingGoogleUser?.uid || ('usr_' + btoa(email).replace(/[^a-zA-Z0-9]/g, '').slice(0, 12));
     const photoURL = this.pendingGoogleUser?.photoURL ||
-      `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=00ae42&color=fff&bold=true`;
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=ff7a00&color=fff&bold=true`;
 
     const profile = await dbService.saveUserRecord({
       uid,

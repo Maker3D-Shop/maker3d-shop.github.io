@@ -1,32 +1,32 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Maker3D — Industrial MakerWorld / Bambu Studio Design Tokens
+   Maker3D — Logo Orange Palette & Industrial MakerWorld Design Tokens
    ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --brand-primary: #00ae42;
-  --brand-deep:    #008a34;
-  --brand-mid:     #22c55e;
-  --brand-light:   #4ade80;
-  --brand-pale:    rgba(0, 174, 66, 0.08);
-  --brand-glow:    rgba(0, 174, 66, 0.22);
+  --brand-primary: #ff7a00;
+  --brand-deep:    #c95600;
+  --brand-mid:     #ff9e1b;
+  --brand-light:   #ffb84d;
+  --brand-pale:    rgba(255, 122, 0, 0.08);
+  --brand-glow:    rgba(255, 122, 0, 0.16);
 
-  /* Clean Professional Surfaces */
-  --bg-primary:    #f4f6f8;
+  /* Clean Professional Surfaces (No dark side clouds/vignettes) */
+  --bg-primary:    #f8f9fb;
   --bg-secondary:  #ffffff;
-  --bg-tertiary:   #eaeef2;
-  --bg-glass:      rgba(255, 255, 255, 0.92);
-  --bg-nav:        rgba(255, 255, 255, 0.95);
+  --bg-tertiary:   #f1f4f8;
+  --bg-glass:      rgba(255, 255, 255, 0.94);
+  --bg-nav:        rgba(255, 255, 255, 0.96);
   --bg-card:       #ffffff;
 
   /* Typography Colors */
-  --text-primary:   #0f172a;
+  --text-primary:   #141821;
   --text-secondary: #475569;
   --text-muted:     #64748b;
   --text-inverse:   #ffffff;
 
   /* Borders & Dividers */
-  --border-subtle:  #e2e8f0;
+  --border-subtle:  #e5e9f0;
   --border-strong:  #cbd5e1;
-  --border-neutral: rgba(15, 23, 42, 0.08);
+  --border-neutral: rgba(20, 24, 33, 0.07);
 
   /* Status Colors */
   --success:       #10b981;
@@ -38,12 +38,12 @@
   --info:          #3b82f6;
   --info-bg:       rgba(59, 130, 246, 0.12);
 
-  /* Shadows */
-  --shadow-xs:     0 1px 3px rgba(15, 23, 42, 0.05);
-  --shadow-sm:     0 4px 12px rgba(15, 23, 42, 0.06);
-  --shadow-md:     0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
-  --shadow-lg:     0 16px 40px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.06);
-  --shadow-btn:    0 4px 14px rgba(0, 174, 66, 0.3);
+  /* Clean Crisp Shadows (No wide dark lateral spread) */
+  --shadow-xs:     0 1px 2px rgba(20, 24, 33, 0.04);
+  --shadow-sm:     0 2px 8px rgba(20, 24, 33, 0.05);
+  --shadow-md:     0 6px 18px rgba(20, 24, 33, 0.06);
+  --shadow-lg:     0 12px 28px rgba(20, 24, 33, 0.08);
+  --shadow-btn:    0 4px 14px rgba(255, 122, 0, 0.28);
 
   /* Radii (Crisp Industrial Geometry) */
   --radius-xs:     6px;
