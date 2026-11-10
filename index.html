@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="light">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maker3D — Impressão 3D Especializada & Modelagem Sob Medida</title>
-  <meta name="description" content="Impressão 3D de alta precisão: peças articuladas, colecionáveis, utilitários e orçamentos STL em tempo real. Qualidade industrial e acabamento artesanal.">
-  <meta property="og:title" content="Maker3D — Impressão 3D Especializada">
-  <meta property="og:description" content="Transformamos ideias em realidade 3D. Explore nosso catálogo interativo ou envie seu arquivo STL.">
+  <title>Maker3D — Impressão 3D Profissional & Catálogo de Modelos</title>
+  <meta name="description" content="Manufatura aditiva de precisão: modelos verificados com perfis Bambu Studio, cálculo técnico de filamento PLA (R$ 150/kg), PETG (R$ 120/kg) e TPU/Trust (R$ 200/kg).">
+  <meta property="og:title" content="Maker3D — Manufatura Aditiva & Catálogo 3D">
+  <meta property="og:description" content="Catálogo técnico de modelos impressos em 3D e laboratório STL sob medida.">
   <meta property="og:type" content="website">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Modular CSS Architecture -->
   <link rel="stylesheet" href="css/variables.css">
@@ -21,55 +21,64 @@
   <link rel="stylesheet" href="css/admin-vault.css">
   <link rel="stylesheet" href="css/animations.css">
 
-  <!-- Three.js & GLTFLoader for Real 3D Model Rendering -->
+  <!-- Google Identity Services OAuth SDK -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Three.js & GLTFLoader for Product Page 3D & STL Lab -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 <body>
 
+  <!-- Full-Page Initial Loadscreen -->
+  <div class="site-loadscreen" id="siteLoadscreen">
+    <div class="loadscreen-logo-ring">
+      <img src="logo.png?v=2" alt="Maker3D" onerror="this.src='https://raw.githubusercontent.com/Maker3D-Shop/maker3d-shop.github.io/main/logo.png'">
+    </div>
+    <div style="text-align:center">
+      <strong style="display:block;font-size:1.1rem;letter-spacing:0.06em">MAKER3D STUDIO</strong>
+      <small style="color:#94a3b8;font-size:0.78rem">Carregando catálogo e perfis de impressão 3D...</small>
+    </div>
+    <div class="loadscreen-bar">
+      <div class="loadscreen-bar-fill"></div>
+    </div>
+  </div>
+
   <!-- Reading / Scroll Progress Bar -->
   <div id="scrollProgress"></div>
 
-  <!-- Ambient Particle & Mouse Glow -->
-  <canvas id="particleCanvas"></canvas>
-  <div class="mouse-light" id="mouseLight"></div>
-
   <!-- Top Promotional Announcement Bar -->
   <div class="promo-bar" id="promoBar">
-    <span class="promo-pill" id="promoBarPill">NOVIDADE 3D</span>
-    <span id="promoBarText">🔥 FRETE GRÁTIS em pedidos acima de R$ 120! Use o cupom MAKER10 para 10% OFF na 1ª compra</span>
+    <span class="promo-pill" id="promoBarPill">MAKERWORLD PRO</span>
+    <span id="promoBarText">FRETE GRÁTIS em pedidos acima de R$ 120 • Use o cupom MAKER10 para 10% OFF na primeira compra</span>
     <button class="promo-bar-close" onclick="this.parentElement.style.display='none'" aria-label="Fechar aviso">✕</button>
   </div>
 
   <!-- Sticky Header & Navigation -->
   <header class="site-header">
     <nav id="mainNav">
-      <!-- Secret Admin Trigger (5 clicks on logo or Ctrl+Shift+A) -->
-      <div class="nav-logo secret-admin-trigger" onclick="window.makerApp.showPage('inicio')" title="Maker3D">
+      <div class="nav-logo" onclick="window.makerApp.showPage('inicio')" title="Maker3D">
         <div class="nav-logo-img-wrap">
           <img src="logo.png?v=2" alt="Maker3D" onerror="this.src='https://raw.githubusercontent.com/Maker3D-Shop/maker3d-shop.github.io/main/logo.png'">
         </div>
         <div class="nav-logo-text">
           <span class="nav-logo-brand dynamic-brand-name">Maker3D</span>
-          <span class="nav-logo-tag">Estúdio 3D</span>
+          <span class="nav-logo-tag">MakerWorld Studio</span>
         </div>
       </div>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="#inicio" onclick="window.makerApp.showPage('inicio');return false;" class="active" id="nav-inicio">🏠 Início</a></li>
-        <li><a href="#produtos" onclick="window.makerApp.showPage('produtos');return false;" id="nav-produtos">📦 Catálogo 3D</a></li>
-        <li><a href="#orcamento" onclick="window.makerApp.showPage('orcamento');return false;" id="nav-orcamento">📐 Laboratório STL</a></li>
-        <li><a href="#sobre" onclick="window.makerApp.showPage('sobre');return false;" id="nav-sobre">✨ Sobre Nós</a></li>
-        <li><a href="#contato" onclick="window.makerApp.showPage('contato');return false;" id="nav-contato">💬 Contato</a></li>
+        <li><a href="#inicio" onclick="window.makerApp.showPage('inicio');return false;" class="active" id="nav-inicio">Início</a></li>
+        <li><a href="#produtos" onclick="window.makerApp.showPage('produtos');return false;" id="nav-produtos">Catálogo 3D</a></li>
+        <li><a href="#orcamento" onclick="window.makerApp.showPage('orcamento');return false;" id="nav-orcamento">Laboratório STL</a></li>
+        <li><a href="#sobre" onclick="window.makerApp.showPage('sobre');return false;" id="nav-sobre">Sobre</a></li>
+        <li><a href="#contato" onclick="window.makerApp.showPage('contato');return false;" id="nav-contato">Contato</a></li>
       </ul>
 
       <div class="nav-actions">
-        <!-- Theme Switcher (Dark / Light) -->
-        <button class="icon-btn" id="themeToggleBtn" onclick="window.makerApp.toggleTheme()" aria-label="Alternar tema">🌙</button>
-
-        <!-- Wishlist Drawer Button -->
-        <button class="icon-btn" onclick="window.makerApp.toggleDrawer('wishlistDrawer')" title="Meus Favoritos" aria-label="Favoritos">
-          ❤️
+        <!-- Saved Collections & Likes Drawer Button -->
+        <button class="icon-btn" onclick="window.makerApp.toggleDrawer('wishlistDrawer')" title="Coleções & Curtidas" aria-label="Coleções e Curtidas">
+          ♥
           <span class="badge-counter" id="wishlistBadgeCount" style="display:none">0</span>
         </button>
 
@@ -79,9 +88,9 @@
           <span class="badge-counter" id="navCartCount" style="display:none">0</span>
         </button>
 
-        <!-- Google Login & User Profile Button -->
+        <!-- Google Login & Account Button -->
         <button class="user-auth-btn" id="navGoogleAuthBtn" onclick="window.makerApp.handleGoogleButtonClick()">
-          <span>Entrar com Google</span>
+          <span class="user-name-label">Entrar / Conta</span>
         </button>
 
         <button class="hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open');this.classList.toggle('open')" aria-label="Menu">
@@ -96,52 +105,82 @@
        ═══════════════════════════════════════════════════════════════════════ -->
   <main>
 
-    <!-- 1. PÁGINA INICIAL -->
+    <!-- 1. PÁGINA INICIAL (ESTILO MAKERWORLD / BAMBU STUDIO — SEM BLOCO 3D) -->
     <section class="page active" id="page-inicio">
       <div class="hero">
         <div class="hero-content">
-          <div class="hero-badge" id="heroBadgeText">🔶 Especialistas em Impressão 3D</div>
-          <h1 id="heroTitleText">Transformamos <em>Ideias</em> em Realidade 3D</h1>
-          <p id="heroSubtitleText">Peças articuladas, colecionáveis, utilitários e protótipos sob medida com precisão de 0,1mm e acabamento artesanal.</p>
+          <div class="hero-badge" id="heroBadgeText">MANUFATURA ADITIVA DE PRECISÃO • BAMBU STUDIO PROFILES</div>
+          <h1 id="heroTitleText">Modelos 3D & <em>Peças Técnicas</em> Sob Demanda</h1>
+          <p id="heroSubtitleText">Catálogo profissional de modelos impressos em alta definição (0.12 mm) com filamentos calibrados PLA (R$ 150/kg), PETG (R$ 120/kg) e TPU/Trust (R$ 200/kg).</p>
 
           <div class="hero-buttons">
-            <a href="#produtos" class="btn-primary" onclick="window.makerApp.showPage('produtos');return false;">Explorar Catálogo 📦</a>
-            <a href="#orcamento" class="btn-secondary" onclick="window.makerApp.showPage('orcamento');return false;">Orçar Arquivo STL 📐</a>
+            <a href="#produtos" class="btn-primary" onclick="window.makerApp.showPage('produtos');return false;">Explorar Catálogo 3D →</a>
+            <a href="#orcamento" class="btn-secondary" onclick="window.makerApp.showPage('orcamento');return false;">Orçar Arquivo STL</a>
           </div>
 
           <div class="hero-trust-strip">
             <div class="trust-metric">
-              <div class="trust-metric-icon">🎯</div>
-              <div><strong>0,10 mm</strong><span>Alta Precisão</span></div>
+              <div class="trust-metric-icon">0.10</div>
+              <div><strong>Tolerância 0,10 mm</strong><span>Perfis Verificados</span></div>
             </div>
             <div class="trust-metric">
-              <div class="trust-metric-icon">🌱</div>
-              <div><strong>PLA & PETG</strong><span>Materiais Premium</span></div>
+              <div class="trust-metric-icon">AMS</div>
+              <div><strong>Sistema Multicor</strong><span>Até 4 Filamentos</span></div>
             </div>
             <div class="trust-metric">
-              <div class="trust-metric-icon">⚡</div>
-              <div><strong>Envio 24-48h</strong><span>Para todo o Brasil</span></div>
+              <div class="trust-metric-icon">24h</div>
+              <div><strong>Expedição Rápida</strong><span>Envio para todo o Brasil</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Interactive 3D Showcase inside Hero -->
+        <!-- MakerWorld Technical Telemetry & Official Filament Rates Panel -->
         <div class="hero-showcase">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-            <span style="font-size:0.78rem;font-weight:700;color:var(--text-secondary)">🔲 Visualizador 3D Ao Vivo (Arraste para girar)</span>
-            <span class="section-eyebrow" style="margin:0;font-size:0.68rem">WebGL 3D</span>
+          <div class="mw-panel-header">
+            <span class="mw-panel-title">Especificações de Polímeros & Tabela por Kg</span>
+            <span class="mw-live-dot">● Perfis Calibrados</span>
           </div>
-          <canvas id="hero3dCanvas"></canvas>
-          <div class="hero-showcase-bar">
-            <span style="font-size:0.78rem;font-weight:700;color:var(--text-secondary)">Testar cor do filamento:</span>
-            <div class="hero-color-swatches">
-              <button class="hero-swatch active" style="background:#ff9e1b" onclick="window.makerApp.setHeroColor('#ff9e1b', this)" title="Laranja Maker3D"></button>
-              <button class="hero-swatch" style="background:#0d54bf" onclick="window.makerApp.setHeroColor('#0d54bf', this)" title="Azul Cobalto"></button>
-              <button class="hero-swatch" style="background:#bf540d" onclick="window.makerApp.setHeroColor('#bf540d', this)" title="Avelã"></button>
-              <button class="hero-swatch" style="background:#27ae60" onclick="window.makerApp.setHeroColor('#27ae60', this)" title="Verde Esmeralda"></button>
-              <button class="hero-swatch" style="background:#e53e3e" onclick="window.makerApp.setHeroColor('#e53e3e', this)" title="Vermelho Rubi"></button>
-              <button class="hero-swatch" style="background:#2c2c2c" onclick="window.makerApp.setHeroColor('#2c2c2c', this)" title="Preto Matte"></button>
+
+          <div class="mw-filament-cards">
+            <div class="mw-filament-card">
+              <span class="mw-mat-tag">PLA Premium / Silk</span>
+              <strong>R$ 150<small style="display:inline;font-size:0.75rem;font-weight:500">/kg</small></strong>
+              <small>R$ 0,15 / grama • Alta resolução visual e peças articuladas</small>
             </div>
+            <div class="mw-filament-card">
+              <span class="mw-mat-tag">PETG Estrutural</span>
+              <strong>R$ 120<small style="display:inline;font-size:0.75rem;font-weight:500">/kg</small></strong>
+              <small>R$ 0,12 / grama • Resistência mecânica, térmica e uso externo</small>
+            </div>
+            <div class="mw-filament-card">
+              <span class="mw-mat-tag">TPU / Trust Flex</span>
+              <strong>R$ 200<small style="display:inline;font-size:0.75rem;font-weight:500">/kg</small></strong>
+              <small>R$ 0,20 / grama • Elastômero industrial de absorção de impacto</small>
+            </div>
+          </div>
+
+          <div class="mw-specs-grid">
+            <div class="mw-spec-box">
+              <span>Altura de Camada</span>
+              <strong>0.08 – 0.20 mm</strong>
+            </div>
+            <div class="mw-spec-box">
+              <span>Preenchimento Padrão</span>
+              <strong>15% – 25% Gyroid</strong>
+            </div>
+            <div class="mw-spec-box">
+              <span>Volume de Construção</span>
+              <strong>256 × 256 × 256 mm</strong>
+            </div>
+            <div class="mw-spec-box">
+              <span>Formatos Aceitos</span>
+              <strong>.STL • .3MF • .STEP</strong>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.78rem;color:#94a3b8">
+            <span>Sincronização de Conta: Coleções, Curtidas, Carrinho e Compras</span>
+            <a href="#produtos" onclick="window.makerApp.showPage('produtos');return false;" style="color:#4ade80;font-weight:700;text-decoration:none">Ver Modelos →</a>
           </div>
         </div>
       </div>
@@ -149,9 +188,9 @@
       <!-- Featured Carousel -->
       <div class="carousel-section">
         <div class="section-header" style="margin-bottom:28px">
-          <div class="section-eyebrow">✨ Favoritos da Comunidade</div>
-          <h2>Peças em <span>Destaque</span></h2>
-          <p>Clique em qualquer criação para ver fotos detalhadas, escolher cores ou inspecionar em 3D.</p>
+          <div class="section-eyebrow">Modelos Verificados</div>
+          <h2>Destaques do <span>Catálogo</span></h2>
+          <p>Clique em qualquer modelo para abrir sua página técnica dedicada com fotos, especificações de camada e visualizador 3D.</p>
         </div>
         <div class="carousel-wrapper">
           <div class="carousel-track" id="carouselTrack"></div>
@@ -166,30 +205,30 @@
       <!-- Why Maker3D Features -->
       <div class="features">
         <div class="section-header reveal">
-          <div class="section-eyebrow">🚀 Padrão Maker3D</div>
-          <h2>Por que escolher a <span>Maker3D</span>?</h2>
-          <p>Unimos impressoras de última geração multicoloridas ao cuidado artesanal em cada camada.</p>
+          <div class="section-eyebrow">Engenharia & Qualidade</div>
+          <h2>Padrão Industrial <span>Maker3D</span></h2>
+          <p>Processo de manufatura aditiva controlado por perfis técnicos de fatiamento e polímeros certificados.</p>
         </div>
         <div class="features-grid">
           <div class="feature-card reveal">
-            <div class="feature-icon">🎯</div>
-            <h3>Resolução Ultra-Fina</h3>
-            <p>Camadas calibradas de até 0,10mm para superfícies suaves e articulações fluidas desde a mesa de impressão.</p>
+            <div class="feature-icon">0.12</div>
+            <h3>Perfis Calibrados</h3>
+            <p>Camadas uniformes de 0.12 mm e preenchimento Gyroid para máxima resistência isotrópica e articulações precisas.</p>
           </div>
           <div class="feature-card reveal">
-            <div class="feature-icon">🎨</div>
-            <h3>Impressão Multicor</h3>
-            <p>Combine diferentes cores na mesma peça (corpo, olhos, cristais e encaixes) com filamentos Silk e Matte.</p>
+            <div class="feature-icon">AMS</div>
+            <h3>Multimaterial & Multicor</h3>
+            <p>Troca automatizada de filamentos na mesma impressão com PLA (R$ 150/kg), PETG (R$ 120/kg) e Trust/TPU (R$ 200/kg).</p>
           </div>
           <div class="feature-card reveal">
-            <div class="feature-icon">📐</div>
-            <h3>Laboratório STL Online</h3>
-            <p>Já tem um modelo 3D do MakerWorld, Thingiverse ou Printables? Simule o peso e preço na hora em nosso site.</p>
+            <div class="feature-icon">STL</div>
+            <h3>Fatiamento Online</h3>
+            <p>Envie arquivos do MakerWorld, Printables ou projetos CAD próprios para cálculo instantâneo de volume e massa.</p>
           </div>
           <div class="feature-card reveal">
-            <div class="feature-icon">🔐</div>
-            <h3>Conta Google & Nuvem</h3>
-            <p>Faça login com Google para salvar seus favoritos, usar cupons exclusivos e acompanhar seus pedidos.</p>
+            <div class="feature-icon">DB</div>
+            <h3>Conta Sincronizada</h3>
+            <p>Suas coleções, modelos curtidos, itens no carrinho e histórico de objetos comprados ficam salvos na sua conta.</p>
           </div>
         </div>
       </div>
@@ -197,7 +236,7 @@
       <!-- Dynamic FAQ Section -->
       <div class="faq-section">
         <div class="section-header reveal">
-          <div class="section-eyebrow">❓ Dúvidas Comuns</div>
+          <div class="section-eyebrow">Especificações & Suporte</div>
           <h2>Perguntas <span>Frequentes</span></h2>
         </div>
         <div class="faq-list" id="faqListContainer"></div>
@@ -207,27 +246,28 @@
     <!-- 2. PÁGINA CATÁLOGO DE PRODUTOS -->
     <section class="page" id="page-produtos">
       <div class="products-hero">
-        <h1>Catálogo Interativo 3D</h1>
-        <p>Explore miniaturas articuladas, fidget toys, acessórios e decorações personalizadas.</p>
+        <h1>Catálogo de Modelos 3D</h1>
+        <p>Selecione qualquer cartão para abrir a página completa do produto com galeria, perfil de impressão e modelo 3D.</p>
       </div>
 
       <div class="products-toolbar">
         <div class="toolbar-top">
           <div class="search-bar">
             <span>🔍</span>
-            <input type="text" id="searchInput" placeholder="Buscar por nome, categoria ou descrição..." oninput="window.makerApp.setSort(document.getElementById('sortSelect').value)">
+            <input type="text" id="searchInput" placeholder="Buscar por modelo, categoria ou especificação..." oninput="window.makerApp.setSort(document.getElementById('sortSelect').value)">
+            <button class="search-clear" id="searchClearBtn" onclick="window.makerApp.resetCatalogFilters()" title="Limpar busca">✕</button>
           </div>
 
           <select id="sortSelect" class="sort-select" onchange="window.makerApp.setSort(this.value)" aria-label="Ordenar produtos">
-            <option value="featured">✨ Destaques</option>
-            <option value="price-asc">💰 Menor Preço</option>
-            <option value="price-desc">💎 Maior Preço</option>
-            <option value="discount">🔥 Maior Desconto</option>
-            <option value="name">🔤 Ordem A-Z</option>
+            <option value="featured">Ordenar: Destaques</option>
+            <option value="price-asc">Preço: Menor para Maior</option>
+            <option value="price-desc">Preço: Maior para Menor</option>
+            <option value="discount">Maior Desconto</option>
+            <option value="name">Ordem A–Z</option>
           </select>
 
           <div class="price-filter-wrap">
-            <span>Preço: <strong id="priceFilterVal">Todos</strong></span>
+            <span>Faixa de Preço: <strong id="priceFilterVal">Todos</strong></span>
             <input type="range" id="priceFilterRange" min="10" max="200" step="5" value="200" oninput="window.makerApp.setMaxPrice(this.value)">
           </div>
 
@@ -239,7 +279,7 @@
 
       <div class="products-meta-bar">
         <span id="productsCount">Carregando catálogo...</span>
-        <span>💡 Dica: clique em um card para abrir a galeria e o modelo 3D</span>
+        <span>Clique em um produto para abrir sua página dedicada</span>
       </div>
 
       <div class="products-grid" id="productsGrid">
@@ -250,11 +290,99 @@
       </div>
     </section>
 
+    <!-- 2B. PÁGINA DEDICADA DO PRODUTO (ABRE EM OUTRA PÁGINA AO INVÉS DE POPUP) -->
+    <section class="page" id="page-produto">
+      <div class="product-detail-page-wrap">
+        <div class="detail-breadcrumb-bar">
+          <div class="detail-breadcrumb-left">
+            <button class="detail-back-btn" onclick="window.makerApp.showPage('produtos')" type="button">
+              ← Voltar ao Catálogo
+            </button>
+            <span>/</span>
+            <span id="detailBreadcrumbCat">Catálogo 3D</span>
+            <span>/</span>
+            <strong id="detailBreadcrumbName" style="color:var(--text-primary)">Produto</strong>
+          </div>
+
+          <div class="detail-action-pills">
+            <button class="detail-pill-btn" id="detailLikeBtn" onclick="window.makerApp.toggleCurrentDetailLike()" type="button">♡ Curtir</button>
+            <button class="detail-pill-btn" id="detailCollectBtn" onclick="window.makerApp.toggleCurrentDetailCollection()" type="button">☆ Salvar na Coleção</button>
+            <button class="detail-pill-btn" onclick="window.makerApp.shareCurrentProduct()" type="button">Compartilhar Link</button>
+          </div>
+        </div>
+
+        <div class="product-detail-grid">
+          <!-- Coluna Esquerda: Galeria de Fotos com Loader + Visualizador 3D -->
+          <div class="product-detail-media-card">
+            <div class="media-switcher-container">
+              <div class="media-switcher-tabs">
+                <button class="media-tab active" id="tab-gallery" onclick="window.makerApp.switchMedia('gallery')" type="button">Fotos do Modelo</button>
+                <button class="media-tab" id="tab-model" onclick="window.makerApp.switchMedia('model')" type="button">Inspeção 3D</button>
+              </div>
+
+              <!-- Fotos -->
+              <div class="media-panel active" id="panel-gallery">
+                <div class="gallery-main img-loader-wrap" id="galleryMain" style="height:420px"></div>
+                <div class="gallery-thumbs" id="galleryThumbs"></div>
+              </div>
+
+              <!-- Visualizador 3D -->
+              <div class="media-panel" id="panel-model">
+                <div class="viewer-3d-wrap" style="height:420px">
+                  <canvas id="modal3dCanvas"></canvas>
+                  <div id="viewer3dLoading" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#fff;background:rgba(15,23,42,0.75);font-weight:600">
+                    Carregando malha 3D...
+                  </div>
+                  <div class="viewer-3d-controls">
+                    <button class="viewer-ctrl-btn" id="ctrl-wireframe" onclick="window.makerApp.toggleModalWireframe()" type="button">Wireframe</button>
+                    <button class="viewer-ctrl-btn" onclick="window.makerApp.resetModalCamera()" type="button">Centralizar Câmera</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coluna Direita: Especificações MakerWorld, Seleção de Polímero/Cores, Compra e Avaliações -->
+          <div class="product-detail-info-card">
+            <h1 id="modalTitle" style="font-size:1.85rem;font-weight:800;line-height:1.2;margin-bottom:8px"></h1>
+            <div class="modal-price-row" id="modalPriceRow"></div>
+
+            <div style="font-size:0.76rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:8px">
+              Parâmetros do Perfil de Impressão
+            </div>
+            <div class="modal-print-info" id="modalPrintInfo"></div>
+
+            <p id="modalDesc" style="color:var(--text-secondary);line-height:1.7;margin-bottom:20px;font-size:0.95rem"></p>
+
+            <div id="modalColors" style="margin-bottom:22px"></div>
+
+            <button class="btn-primary" id="modalPrimaryActionBtn" style="width:100%;font-size:1rem;padding:15px 24px" onclick="window.makerApp.addToCartFromModal()" type="button">
+              Adicionar ao Carrinho
+            </button>
+
+            <!-- Product Reviews stored in DB -->
+            <div class="modal-reviews-section">
+              <h4 style="margin-bottom:12px;font-size:0.92rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary)">Avaliações Técnicas de Clientes</h4>
+              <div id="modalReviewsList"></div>
+              <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                <select id="newReviewStars" class="sort-select" style="padding:8px 12px">
+                  <option value="5">★★★★★ (5/5)</option>
+                  <option value="4">★★★★☆ (4/5)</option>
+                </select>
+                <input type="text" id="newReviewText" placeholder="Adicione um comentário técnico sobre a peça..." style="flex:1;min-width:180px;padding:8px 12px;border-radius:8px;border:1px solid var(--border-subtle);background:var(--bg-primary);color:var(--text-primary)">
+                <button class="btn-secondary btn-sm" onclick="window.makerApp.submitModalReview()" type="button">Publicar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- 3. PÁGINA LABORATÓRIO STL & ORÇAMENTO SOB MEDIDA -->
     <section class="page" id="page-orcamento">
       <div class="products-hero">
         <h1>Laboratório 3D & Orçamento STL</h1>
-        <p>Arraste seu arquivo <strong>.STL</strong> para visualizar em 3D no navegador e calcular automaticamente peso, tempo e investimento.</p>
+        <p>Envie seu arquivo <strong>.STL</strong> para análise geométrica e cálculo automático baseado na tabela PLA (R$ 150/kg), PETG (R$ 120/kg) e Trust/TPU (R$ 200/kg).</p>
       </div>
 
       <div class="stl-lab-section">
@@ -262,43 +390,42 @@
           <div class="stl-viewer-card">
             <div class="stl-drop-zone" id="stlDropZone">
               <input type="file" id="stlFileInput" accept=".stl">
-              <div style="font-size:2.4rem;margin-bottom:6px">📤</div>
-              <strong>Arraste seu arquivo .STL aqui ou clique para enviar</strong>
-              <p style="font-size:0.8rem;color:var(--text-muted);margin-top:4px">Processamento 100% instantâneo no seu navegador via WebGL</p>
-              <div id="stlLoadedFileName" style="margin-top:8px;font-size:0.82rem;font-weight:700;color:var(--brand-primary)">📄 Modelo_Padrao_Demo.stl</div>
+              <strong style="display:block;font-size:1rem;margin-bottom:4px">Arraste seu arquivo .STL aqui ou clique para selecionar</strong>
+              <p style="font-size:0.8rem;color:var(--text-muted)">Cálculo de volume cm³ e massa em tempo real via WebGL</p>
+              <div id="stlLoadedFileName" style="margin-top:8px;font-size:0.82rem;font-weight:700;color:var(--brand-primary)">Modelo_Padrao_Demo.stl</div>
             </div>
 
             <canvas id="stlLabCanvas"></canvas>
 
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;text-align:center">
-              <div class="print-info-item"><strong id="stlEstGrams">34g</strong>Peso Estimado</div>
-              <div class="print-info-item"><strong id="stlEstHours">~2.5h</strong>Tempo de Impressão</div>
+              <div class="print-info-item"><strong id="stlEstGrams">34g</strong>Massa Estimada</div>
+              <div class="print-info-item"><strong id="stlEstHours">~2.0h</strong>Tempo de Máquina</div>
               <div class="print-info-item"><strong id="stlEstDims">55×55×48 mm</strong>Dimensões</div>
             </div>
           </div>
 
           <div class="stl-controls-card">
-            <h3 style="font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:14px">⚙️ Parâmetros da Impressão</h3>
+            <h3 style="font-size:1.35rem;font-weight:800;margin-bottom:14px">Parâmetros de Fatiamento</h3>
 
-            <label style="font-size:0.82rem;font-weight:700;color:var(--text-secondary)">1. Escolha o Material</label>
+            <label style="font-size:0.82rem;font-weight:700;color:var(--text-secondary)">1. Polímero (Tabela Oficial R$/kg)</label>
             <div class="material-cards-row">
               <button class="mat-option-btn active" onclick="window.makerApp.setStlMaterial('PLA', this)" type="button">
-                <strong>PLA Silk/Pro</strong>
-                <span>Decorativo & Brilho</span>
+                <strong>PLA — R$ 150/kg</strong>
+                <span>Detalhamento & Rigidez</span>
               </button>
               <button class="mat-option-btn" onclick="window.makerApp.setStlMaterial('PETG', this)" type="button">
-                <strong>PETG</strong>
-                <span>Alta Resistência</span>
+                <strong>PETG — R$ 120/kg</strong>
+                <span>Mecânico & Térmico</span>
               </button>
               <button class="mat-option-btn" onclick="window.makerApp.setStlMaterial('TPU', this)" type="button">
-                <strong>TPU Flex</strong>
-                <span>Flexível / Elástico</span>
+                <strong>Trust/TPU — R$ 200/kg</strong>
+                <span>Flexível & Impacto</span>
               </button>
             </div>
 
             <div style="margin:18px 0">
               <div style="display:flex;justify-content:space-between;font-size:0.84rem;font-weight:700;margin-bottom:6px">
-                <span>2. Escala do Modelo</span>
+                <span>2. Escala Dimensional</span>
                 <span id="stlScaleVal" style="color:var(--brand-primary)">100%</span>
               </div>
               <input type="range" id="stlScaleRange" min="50" max="200" step="5" value="100" style="width:100%;accent-color:var(--brand-primary)" oninput="window.makerApp.updateStlParams()">
@@ -306,33 +433,33 @@
 
             <div style="margin:18px 0">
               <div style="display:flex;justify-content:space-between;font-size:0.84rem;font-weight:700;margin-bottom:6px">
-                <span>3. Preenchimento Interno (Infill)</span>
+                <span>3. Densidade de Preenchimento (Infill)</span>
                 <span id="stlInfillVal" style="color:var(--brand-primary)">20%</span>
               </div>
               <input type="range" id="stlInfillRange" min="10" max="80" step="5" value="20" style="width:100%;accent-color:var(--brand-primary)" oninput="window.makerApp.updateStlParams()">
             </div>
 
             <div style="margin:18px 0">
-              <label style="display:block;font-size:0.84rem;font-weight:700;margin-bottom:6px">4. Qualidade da Camada</label>
-              <select id="stlLayerSelect" class="sort-select" style="width:100%;border-radius:12px" onchange="window.makerApp.updateStlParams()">
-                <option value="0.12">0.12 mm — Ultra Detalhado (Miniaturas)</option>
-                <option value="0.16" selected>0.16 mm — Alta Qualidade Padrão</option>
-                <option value="0.24">0.24 mm — Rápido & Estrutural</option>
+              <label style="display:block;font-size:0.84rem;font-weight:700;margin-bottom:6px">4. Resolução de Camada</label>
+              <select id="stlLayerSelect" class="sort-select" style="width:100%;border-radius:10px" onchange="window.makerApp.updateStlParams()">
+                <option value="0.12">0.12 mm — Alta Precisão (Superfície Fina)</option>
+                <option value="0.16" selected>0.16 mm — Perfil Padrão Otimizado</option>
+                <option value="0.24">0.24 mm — Estrutural Rápido</option>
               </select>
             </div>
 
             <div style="margin:18px 0">
-              <label style="display:block;font-size:0.84rem;font-weight:700;margin-bottom:6px">5. Observações ou Link do Modelo (MakerWorld / Thingiverse)</label>
-              <textarea id="stlCustomNotes" rows="2" style="width:100%;padding:10px 14px;border-radius:12px;border:1.5px solid var(--border-subtle);background:var(--bg-primary);color:var(--text-primary);font-family:'Outfit',sans-serif" placeholder="Cole o link do modelo ou descreva cores desejadas..."></textarea>
+              <label style="display:block;font-size:0.84rem;font-weight:700;margin-bottom:6px">5. Link do Modelo (MakerWorld / Printables) ou Observações</label>
+              <textarea id="stlCustomNotes" rows="2" style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border-subtle);background:var(--bg-primary);color:var(--text-primary);font-family:'Outfit',sans-serif" placeholder="Cole o link do projeto ou informe requisitos técnicos..."></textarea>
             </div>
 
             <div class="quote-result-banner">
               <div>
-                <small style="opacity:0.9;display:block">Orçamento Instantâneo Estimado</small>
-                <div class="price-big" id="stlEstPrice">R$ 25,00</div>
+                <small id="stlEstRateInfo" style="opacity:0.9;display:block">Base PLA: R$ 150,00/kg (R$ 0,15/g)</small>
+                <div class="price-big" id="stlEstPrice">R$ 22,00</div>
               </div>
-              <button class="btn-secondary" style="background:#fff;color:var(--brand-deep);border:none" onclick="window.makerApp.sendStlQuoteToWhatsApp()">
-                Solicitar Produção 🚀
+              <button class="btn-secondary" style="background:#fff;color:#0f172a;border:none" onclick="window.makerApp.sendStlQuoteToWhatsApp()" type="button">
+                Solicitar Produção →
               </button>
             </div>
           </div>
@@ -343,24 +470,24 @@
     <!-- 4. PÁGINA SOBRE NÓS -->
     <section class="page" id="page-sobre">
       <div class="products-hero">
-        <h1>A História da <span class="dynamic-brand-name">Maker3D</span></h1>
-        <p>Da paixão pela manufatura aditiva para centenas de peças entregues em todo o Brasil.</p>
+        <h1>Engenharia & Produção <span class="dynamic-brand-name">Maker3D</span></h1>
+        <p>Manufatura aditiva com controle de qualidade dimensional e materiais de alto desempenho.</p>
       </div>
       <div style="max-width:1080px;margin:36px auto;padding:0 5%;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:24px">
         <div class="feature-card">
-          <div class="feature-icon">🏆</div>
-          <h3>+500 Peças Entregues</h3>
-          <p>Cada peça passa por inspeção manual de acabamento, resistência e articulação antes do envio.</p>
+          <div class="feature-icon">500+</div>
+          <h3>Projetos Entregues</h3>
+          <p>Inspeção individual de tolerância, acabamento superficial e resistência mecânica antes da expedição.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🌈</div>
-          <h3>+30 Cores & Efeitos</h3>
-          <p>Trabalhamos com filamentos Silk, Dual-Color, Matte, Translúcido e Fluorescente.</p>
+          <div class="feature-icon">3</div>
+          <h3>Classes de Polímeros</h3>
+          <p>PLA Premium (R$ 150/kg), PETG Estrutural (R$ 120/kg) e Elastômero TPU/Trust (R$ 200/kg).</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">💖</div>
-          <h3>98% de Satisfação</h3>
-          <p>Atendimento humano e próximo pelo WhatsApp e Instagram, do projeto à entrega.</p>
+          <div class="feature-icon">98%</div>
+          <h3>Índice de Aprovação</h3>
+          <p>Suporte técnico direto para validação de arquivos STL, 3MF e encomendas sob demanda.</p>
         </div>
       </div>
     </section>
@@ -368,53 +495,53 @@
     <!-- 5. PÁGINA CONTATO -->
     <section class="page" id="page-contato">
       <div class="products-hero">
-        <h1>Vamos Conversar?</h1>
-        <p>Dúvidas, parcerias, brindes corporativos ou projetos personalizados.</p>
+        <h1>Central de Atendimento Técnico</h1>
+        <p>Orçamentos corporativos, lotes seriados ou dúvidas sobre materiais e envio.</p>
       </div>
       <div style="max-width:980px;margin:36px auto;padding:0 5%;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px">
         <div style="display:flex;flex-direction:column;gap:14px">
           <a href="https://wa.me/5531984566047" target="_blank" class="feature-card" style="text-align:left;text-decoration:none;display:flex;align-items:center;gap:16px;padding:20px">
-            <div class="feature-icon" style="margin:0;background:#e6fffa">💬</div>
+            <div class="feature-icon" style="margin:0">WA</div>
             <div>
-              <strong style="color:var(--text-primary);font-size:1.05rem;display:block">WhatsApp Direto</strong>
-              <span style="color:var(--text-secondary);font-size:0.86rem">+55 (31) 98456-6047 — Resposta rápida</span>
+              <strong style="color:var(--text-primary);font-size:1.02rem;display:block">WhatsApp Comercial</strong>
+              <span style="color:var(--text-secondary);font-size:0.86rem">+55 (31) 98456-6047 — Atendimento direto</span>
             </div>
           </a>
           <a href="https://www.instagram.com/maker3d.oficial" target="_blank" class="feature-card" style="text-align:left;text-decoration:none;display:flex;align-items:center;gap:16px;padding:20px">
-            <div class="feature-icon" style="margin:0;background:#fff0f6">📸</div>
+            <div class="feature-icon" style="margin:0">IG</div>
             <div>
-              <strong style="color:var(--text-primary);font-size:1.05rem;display:block">@maker3d.oficial</strong>
-              <span style="color:var(--text-secondary);font-size:0.86rem">Siga nossos bastidores e lançamentos no Instagram</span>
+              <strong style="color:var(--text-primary);font-size:1.02rem;display:block">@maker3d.oficial</strong>
+              <span style="color:var(--text-secondary);font-size:0.86rem">Portfólio de peças impressas e lançamentos</span>
             </div>
           </a>
           <a href="mailto:maker3d.suporte@gmail.com" class="feature-card" style="text-align:left;text-decoration:none;display:flex;align-items:center;gap:16px;padding:20px">
-            <div class="feature-icon" style="margin:0">✉️</div>
+            <div class="feature-icon" style="margin:0">@</div>
             <div>
-              <strong style="color:var(--text-primary);font-size:1.05rem;display:block">maker3d.suporte@gmail.com</strong>
-              <span style="color:var(--text-secondary);font-size:0.86rem">E-mail para projetos corporativos e arquivos</span>
+              <strong style="color:var(--text-primary);font-size:1.02rem;display:block">maker3d.suporte@gmail.com</strong>
+              <span style="color:var(--text-secondary);font-size:0.86rem">Envio de projetos CAD/STL e faturamento</span>
             </div>
           </a>
         </div>
 
         <div class="feature-card" style="text-align:left">
-          <h3 style="font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:16px">Envie uma Mensagem</h3>
+          <h3 style="font-size:1.35rem;font-weight:800;margin-bottom:16px">Enviar Solicitação</h3>
           <div class="admin-input-group">
-            <label>Seu Nome *</label>
-            <input type="text" id="formName" placeholder="Como podemos te chamar?">
+            <label>Seu Nome Completo *</label>
+            <input type="text" id="formName" placeholder="Digite seu nome">
           </div>
           <div class="admin-input-group">
-            <label>Seu WhatsApp ou E-mail *</label>
-            <input type="text" id="formContact" placeholder="(31) 99999-9999">
+            <label>WhatsApp ou E-mail *</label>
+            <input type="text" id="formContact" placeholder="(31) 99999-9999 ou seu@email.com">
           </div>
           <div class="admin-input-group">
             <label>Assunto</label>
-            <input type="text" id="formSubject" placeholder="Orçamento, dúvida ou pedido">
+            <input type="text" id="formSubject" placeholder="Cotação de peça, lote ou dúvida técnica">
           </div>
           <div class="admin-input-group">
             <label>Mensagem</label>
-            <textarea id="formMsg" rows="3" placeholder="Conte-nos sua ideia..."></textarea>
+            <textarea id="formMsg" rows="3" placeholder="Descreva os detalhes do seu projeto..."></textarea>
           </div>
-          <button class="btn-primary" style="width:100%" onclick="window.makerApp.submitContactForm()">Enviar Mensagem 🚀</button>
+          <button class="btn-primary" style="width:100%" onclick="window.makerApp.submitContactForm()" type="button">Enviar Mensagem →</button>
         </div>
       </div>
     </section>
@@ -422,80 +549,14 @@
   </main>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
-       MODAL DE DETALHES DO PRODUTO (GALERIA + 3D GLTF + AVALIAÇÕES)
-       ═══════════════════════════════════════════════════════════════════════ -->
-  <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)window.makerApp.closeModal()">
-    <div class="modal-box" id="modalBox">
-      <button class="modal-close" onclick="window.makerApp.closeModal()" aria-label="Fechar">✕</button>
-
-      <div class="media-switcher-container">
-        <div class="media-switcher-tabs">
-          <button class="media-tab active" id="tab-gallery" onclick="window.makerApp.switchMedia('gallery')">🖼 Fotos</button>
-          <button class="media-tab" id="tab-model" onclick="window.makerApp.switchMedia('model')">🔲 Visualizador 3D</button>
-        </div>
-
-        <!-- Fotos -->
-        <div class="media-panel active" id="panel-gallery">
-          <div class="gallery-main" id="galleryMain"></div>
-          <div class="gallery-thumbs" id="galleryThumbs"></div>
-        </div>
-
-        <!-- Visualizador 3D -->
-        <div class="media-panel" id="panel-model">
-          <div class="viewer-3d-wrap">
-            <canvas id="modal3dCanvas"></canvas>
-            <div id="viewer3dLoading" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#fff;background:rgba(0,0,0,0.5)">
-              Carregando malha 3D...
-            </div>
-            <div class="viewer-3d-controls">
-              <button class="viewer-ctrl-btn" id="ctrl-wireframe" onclick="window.makerApp.toggleModalWireframe()">⬡ Wireframe</button>
-              <button class="viewer-ctrl-btn" onclick="window.makerApp.resetModalCamera()">⟳ Centralizar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-content">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-          <h2 id="modalTitle" style="font-family:'DM Serif Display',serif;font-size:1.7rem"></h2>
-          <button class="icon-btn" onclick="window.makerApp.shareCurrentProduct()" title="Compartilhar link">🔗</button>
-        </div>
-        <div class="modal-price-row" id="modalPriceRow"></div>
-        <div class="modal-print-info" id="modalPrintInfo"></div>
-        <p id="modalDesc" style="color:var(--text-secondary);line-height:1.7;margin-bottom:18px"></p>
-
-        <div id="modalColors" style="margin-bottom:20px"></div>
-
-        <button class="btn-primary" id="modalPrimaryActionBtn" style="width:100%;font-size:1.02rem" onclick="window.makerApp.addToCartFromModal()">
-          Adicionar ao Carrinho 🛒
-        </button>
-
-        <!-- Product Reviews stored in DB -->
-        <div class="modal-reviews-section">
-          <h4 style="margin-bottom:12px;font-size:0.95rem">⭐ Avaliações de Clientes</h4>
-          <div id="modalReviewsList"></div>
-          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-            <select id="newReviewStars" class="sort-select" style="padding:7px 10px">
-              <option value="5">★★★★★ (5)</option>
-              <option value="4">★★★★☆ (4)</option>
-            </select>
-            <input type="text" id="newReviewText" placeholder="Deixe sua avaliação sobre esta peça..." style="flex:1;padding:8px 12px;border-radius:10px;border:1px solid var(--border-subtle);background:var(--bg-primary);color:var(--text-primary)">
-            <button class="btn-secondary btn-sm" onclick="window.makerApp.submitModalReview()">Publicar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════════════════
-       SIDE DRAWERS: CARRINHO, FAVORITOS & PERFIL GOOGLE
+       SIDE DRAWERS: CARRINHO, COLEÇÕES/CURTIDAS & CONTA
        ═══════════════════════════════════════════════════════════════════════ -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="window.makerApp.toggleDrawer('cartDrawer', false)"></div>
 
   <!-- Cart Drawer -->
   <aside class="side-drawer" id="cartDrawer" aria-label="Carrinho de compras">
     <div class="drawer-header">
-      <h2>🛒 Meu Carrinho</h2>
+      <h2>Meu Carrinho</h2>
       <button class="icon-btn" onclick="window.makerApp.toggleDrawer('cartDrawer', false)">✕</button>
     </div>
     <div class="drawer-body">
@@ -508,122 +569,158 @@
     <div class="drawer-footer" id="cartFooter" style="display:none">
       <div class="coupon-row">
         <input type="text" id="couponInput" placeholder="Cupom (ex: MAKER10)">
-        <button class="btn-secondary btn-sm" onclick="window.makerApp.applyCouponCode()">Aplicar</button>
+        <button class="btn-secondary btn-sm" onclick="window.makerApp.applyCouponCode()" type="button">Aplicar</button>
       </div>
-      <input type="text" id="cartOrderNotes" placeholder="Observações do pedido (opcional)..." style="width:100%;padding:8px 12px;border-radius:10px;border:1px solid var(--border-subtle);background:var(--bg-secondary);color:var(--text-primary);margin-bottom:12px;font-size:0.83rem">
+      <input type="text" id="cartOrderNotes" placeholder="Observações técnicas do pedido (opcional)..." style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--border-subtle);background:var(--bg-secondary);color:var(--text-primary);margin-bottom:12px;font-size:0.83rem">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
         <span style="font-weight:700;color:var(--text-secondary)">Total do Pedido</span>
         <strong id="cartTotal" style="font-size:1.35rem;color:var(--brand-primary)">R$ 0,00</strong>
       </div>
-      <button class="btn-primary" style="width:100%" onclick="window.makerApp.checkoutCart()">
-        Finalizar Pedido no WhatsApp 🚀
+      <button class="btn-primary" style="width:100%" onclick="window.makerApp.checkoutCart()" type="button">
+        Finalizar Pedido no WhatsApp →
       </button>
     </div>
   </aside>
 
-  <!-- Wishlist Drawer -->
-  <aside class="side-drawer" id="wishlistDrawer" aria-label="Lista de Favoritos">
+  <!-- Collections & Likes Drawer -->
+  <aside class="side-drawer" id="wishlistDrawer" aria-label="Coleções e Curtidas">
     <div class="drawer-header">
-      <h2>❤️ Meus Favoritos</h2>
+      <h2>Coleções & Curtidas</h2>
       <button class="icon-btn" onclick="window.makerApp.toggleDrawer('wishlistDrawer', false)">✕</button>
     </div>
     <div class="drawer-body" id="wishlistDrawerItems"></div>
   </aside>
 
-  <!-- Google Profile & Orders Drawer -->
-  <aside class="side-drawer" id="profileDrawer" aria-label="Minha Conta Google">
+  <!-- User Profile & Orders Drawer -->
+  <aside class="side-drawer" id="profileDrawer" aria-label="Minha Conta">
     <div class="drawer-header">
-      <h2>👤 Minha Conta</h2>
+      <h2>Minha Conta</h2>
       <button class="icon-btn" onclick="window.makerApp.toggleDrawer('profileDrawer', false)">✕</button>
     </div>
     <div class="drawer-body" id="userProfileDrawerBody"></div>
   </aside>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
-       GOOGLE OAUTH LOGIN MODAL (WORKS IMMEDIATELY + PERSISTS TO DATABASE)
+       MODAL DE AUTENTICAÇÃO GOOGLE OAUTH & REGISTRO DE CONTA (SEM VALORES PRÉ-PREENCHIDOS)
        ═══════════════════════════════════════════════════════════════════════ -->
-  <div class="modal-overlay" id="googleAuthModal" onclick="if(event.target===this)this.classList.remove('open')">
-    <div class="modal-box" style="max-width:420px;padding:32px;text-align:center">
-      <button class="modal-close" onclick="document.getElementById('googleAuthModal').classList.remove('open')">✕</button>
-      <div style="width:54px;height:54px;border-radius:50%;background:#fff;box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
-        <svg width="28" height="28" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 21.4 7.4 24 12 24z"/></svg>
-      </div>
-      <h3 style="font-family:'DM Serif Display',serif;font-size:1.55rem;margin-bottom:6px">Entrar com Google</h3>
-      <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:20px">
-        Conecte sua conta Google para sincronizar favoritos, pedidos e acesso ao banco de dados Maker3D.
-      </p>
+  <div class="modal-overlay" id="googleAuthModal" onclick="if(event.target===this)window.makerApp.closeAuthModal()">
+    <div class="modal-box" style="max-width:440px;padding:30px">
+      <button class="modal-close" onclick="window.makerApp.closeAuthModal()">✕</button>
 
-      <!-- Quick 1-click Google Account Cards + Custom Input -->
-      <div style="text-align:left;margin-bottom:16px">
-        <div class="admin-input-group">
-          <label>Seu Nome Completo</label>
-          <input type="text" id="gAuthNameInput" placeholder="Ex: Rossi Pereira" value="Cliente Maker3D">
-        </div>
-        <div class="admin-input-group">
-          <label>Seu E-mail do Google (Gmail)</label>
-          <input type="email" id="gAuthEmailInput" placeholder="seuemail@gmail.com" value="rossipereira2010@gmail.com">
-        </div>
+      <div style="text-align:center;margin-bottom:18px">
+        <img src="logo.png?v=2" alt="Maker3D" style="width:48px;height:48px;object-fit:contain;margin-bottom:8px">
+        <h3 style="font-size:1.35rem;font-weight:800">Conta Maker3D</h3>
+        <p style="font-size:0.83rem;color:var(--text-secondary)">
+          Sincronize suas coleções, modelos curtidos, carrinho e objetos comprados no banco de dados.
+        </p>
       </div>
 
-      <button class="btn-primary" style="width:100%" onclick="window.__confirmGoogleSignIn(document.getElementById('gAuthNameInput').value || 'Usuário Google', document.getElementById('gAuthEmailInput').value || 'cliente@gmail.com')">
-        Continuar com esta Conta Google →
+      <!-- Tabs: Entrar vs Registrar Conta -->
+      <div class="auth-tabs-row">
+        <button type="button" class="auth-tab-btn active" id="authTabBtnLogin" onclick="window.makerApp.switchAuthModalTab('login')">Entrar</button>
+        <button type="button" class="auth-tab-btn" id="authTabBtnRegister" onclick="window.makerApp.switchAuthModalTab('register')">Registrar Conta</button>
+      </div>
+
+      <!-- Google OAuth Button -->
+      <div id="gisiButtonContainer" style="display:flex;justify-content:center;margin-bottom:10px"></div>
+      <button type="button" class="btn-secondary" style="width:100%;margin-bottom:16px;border-color:var(--border-strong);color:var(--text-primary);background:var(--bg-primary)" onclick="window.makerApp.triggerRealGoogleSignIn()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 21.4 7.4 24 12 24z"/></svg>
+        Autenticar com Google
       </button>
+
+      <div style="text-align:center;font-size:0.74rem;color:var(--text-muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.06em">
+        ou acesse manualmente
+      </div>
+
+      <!-- Painel 1: Login -->
+      <div id="authPanelLogin">
+        <div class="admin-input-group">
+          <label>Seu E-mail</label>
+          <input type="email" id="authLoginEmail" placeholder="Digite seu e-mail cadastrado" value="">
+        </div>
+        <div class="admin-input-group">
+          <label>Sua Senha</label>
+          <input type="password" id="authLoginPassword" placeholder="Digite sua senha" value="">
+        </div>
+        <button type="button" class="btn-primary" style="width:100%" onclick="window.makerApp.submitManualLogin()">
+          Entrar na Minha Conta →
+        </button>
+      </div>
+
+      <!-- Painel 2: Registro Obrigatório de Conta (Manual ou Pós-Google) -->
+      <div id="authPanelRegister" style="display:none">
+        <div id="authRegisterNotice" style="display:none;background:var(--brand-pale);border:1px solid var(--brand-primary);color:var(--text-primary);padding:10px 12px;border-radius:8px;font-size:0.8rem;margin-bottom:12px"></div>
+        <div class="admin-input-group">
+          <label>Seu Nome Completo *</label>
+          <input type="text" id="authRegName" placeholder="Digite seu nome e sobrenome" value="">
+        </div>
+        <div class="admin-input-group">
+          <label>Seu E-mail *</label>
+          <input type="email" id="authRegEmail" placeholder="seuemail@gmail.com" value="">
+        </div>
+        <div class="admin-input-group">
+          <label>WhatsApp / Telefone (Opcional)</label>
+          <input type="tel" id="authRegPhone" placeholder="(31) 99999-9999" value="">
+        </div>
+        <div class="admin-input-group">
+          <label>Criar Senha de Acesso *</label>
+          <input type="password" id="authRegPassword" placeholder="Mínimo de 4 caracteres" value="">
+        </div>
+        <button type="button" class="btn-primary" style="width:100%" onclick="window.makerApp.submitAccountRegistration()">
+          Concluir Registro da Conta →
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
-       HIDDEN SECRET ADMIN VAULT CONSOLE ("SITE ADMIN ESCONDIDO")
+       HIDDEN SECRET ADMIN VAULT CONSOLE (ACESSÍVEL SOMENTE VIA /admin OU #admin)
        ═══════════════════════════════════════════════════════════════════════ -->
   <div class="admin-vault-overlay" id="adminVaultOverlay">
-    <!-- PIN / Google Auth Gate -->
     <div id="adminAuthGate" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:20px">
       <div class="modal-box" style="max-width:420px;padding:38px;text-align:center">
         <button class="modal-close" onclick="window.makerApp.closeAdminVault()">✕</button>
-        <div style="width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--brand-primary),var(--brand-deep));display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 16px;color:#fff">
-          🔐
-        </div>
-        <h2 style="font-family:'DM Serif Display',serif;font-size:1.75rem;margin-bottom:6px">Maker3D Secret Admin</h2>
+        <h2 style="font-size:1.55rem;font-weight:800;margin-bottom:6px">Maker3D Admin Console</h2>
         <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:22px">
-          Console oculto de gerenciamento total do site e banco de dados.
+          Acesso restrito ao administrador do sistema.
         </p>
         <div class="admin-input-group" style="text-align:left">
           <label>Senha / PIN Administrativo</label>
           <input type="password" id="adminVaultPinInput" placeholder="Digite a senha admin..." onkeydown="if(event.key==='Enter')window.makerApp.verifyAdminPin()">
         </div>
-        <button class="btn-primary" style="width:100%;margin-bottom:10px" onclick="window.makerApp.verifyAdminPin()">
+        <button class="btn-primary" style="width:100%;margin-bottom:10px" onclick="window.makerApp.verifyAdminPin()" type="button">
           Desbloquear Painel →
         </button>
-        <button class="btn-secondary" style="width:100%" onclick="window.makerApp.loginAdminWithGoogle()">
-          Entrar com Google Admin
+        <button class="btn-secondary" style="width:100%" onclick="window.makerApp.loginAdminWithGoogle()" type="button">
+          Autenticar com Google Admin
         </button>
       </div>
     </div>
 
-    <!-- Full Admin Workspace -->
     <div class="admin-vault-shell" id="adminVaultWorkspace" style="display:none">
       <aside class="admin-vault-sidebar">
         <div class="admin-vault-brand">
           <div class="admin-vault-brand-left">
-            <div class="admin-vault-badge">⚡</div>
+            <div class="admin-vault-badge">3D</div>
             <div>
               <h3>Maker3D</h3>
-              <small>Secret Admin Console</small>
+              <small>Admin Console</small>
             </div>
           </div>
         </div>
 
         <nav class="admin-vault-nav">
-          <button class="admin-nav-btn active" data-tab="dashboard" onclick="window.makerApp.switchAdminTab('dashboard')">📊 Visão Geral & DB</button>
-          <button class="admin-nav-btn" data-tab="products" onclick="window.makerApp.switchAdminTab('products')">📦 Produtos & 3D</button>
-          <button class="admin-nav-btn" data-tab="cms" onclick="window.makerApp.switchAdminTab('cms')">🎨 Editor Visual do Site</button>
-          <button class="admin-nav-btn" data-tab="orders" onclick="window.makerApp.switchAdminTab('orders')">🛍️ Pedidos & Status</button>
-          <button class="admin-nav-btn" data-tab="coupons" onclick="window.makerApp.switchAdminTab('coupons')">🎟️ Cupons & Filamentos</button>
-          <button class="admin-nav-btn" data-tab="calc" onclick="window.makerApp.switchAdminTab('calc')">🧮 Calculadora de Custo</button>
-          <button class="admin-nav-btn" data-tab="cloud" onclick="window.makerApp.switchAdminTab('cloud')">🔥 Firebase & GitHub Sync</button>
+          <button class="admin-nav-btn active" data-tab="dashboard" onclick="window.makerApp.switchAdminTab('dashboard')">Visão Geral & DB</button>
+          <button class="admin-nav-btn" data-tab="products" onclick="window.makerApp.switchAdminTab('products')">Produtos & 3D</button>
+          <button class="admin-nav-btn" data-tab="cms" onclick="window.makerApp.switchAdminTab('cms')">Editor do Site</button>
+          <button class="admin-nav-btn" data-tab="orders" onclick="window.makerApp.switchAdminTab('orders')">Pedidos & Status</button>
+          <button class="admin-nav-btn" data-tab="coupons" onclick="window.makerApp.switchAdminTab('coupons')">Cupons & Filamentos</button>
+          <button class="admin-nav-btn" data-tab="calc" onclick="window.makerApp.switchAdminTab('calc')">Calculadora de Custo</button>
+          <button class="admin-nav-btn" data-tab="cloud" onclick="window.makerApp.switchAdminTab('cloud')">Google / Firebase / GitHub</button>
         </nav>
 
         <div class="admin-vault-footer">
-          <button class="admin-nav-btn" style="color:var(--brand-light)" onclick="window.makerApp.closeAdminVault()">👁️ Voltar para a Loja</button>
+          <button class="admin-nav-btn" style="color:var(--brand-light)" onclick="window.makerApp.closeAdminVault()">Voltar para a Loja</button>
         </div>
       </aside>
 
@@ -641,7 +738,8 @@
     <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
   </a>
 
-  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo">↑</button>
+  <!-- Back to top button with ONLY ^ character as requested -->
+  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo">^</button>
   <div class="toast" id="toast" role="alert"></div>
 
   <!-- Footer -->
@@ -652,21 +750,21 @@
           <img src="logo.png?v=2" alt="Maker3D" style="width:38px;height:38px;object-fit:contain;border-radius:50%;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.35))" onerror="this.style.display='none'">
           <span class="dynamic-brand-name">Maker3D</span>
         </div>
-        <p>Especialistas em impressão 3D de alta definição. Transformando ideias digitais em peças reais com acabamento impecável.</p>
+        <p>Manufatura aditiva de alta precisão. Modelos 3D verificados e impressão sob demanda com PLA, PETG e Trust/TPU.</p>
       </div>
 
       <div class="footer-col">
-        <h4>Explorar</h4>
+        <h4>Navegação</h4>
         <ul>
           <li><a onclick="window.makerApp.showPage('inicio')">Início</a></li>
           <li><a onclick="window.makerApp.showPage('produtos')">Catálogo 3D</a></li>
           <li><a onclick="window.makerApp.showPage('orcamento')">Laboratório STL</a></li>
-          <li><a onclick="window.makerApp.showPage('sobre')">Nossa História</a></li>
+          <li><a onclick="window.makerApp.showPage('sobre')">Engenharia & Materiais</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h4>Atendimento</h4>
+        <h4>Canais</h4>
         <ul>
           <li><a href="https://wa.me/5531984566047" target="_blank">WhatsApp Oficial</a></li>
           <li><a href="https://www.instagram.com/maker3d.oficial" target="_blank">Instagram @maker3d.oficial</a></li>
@@ -675,22 +773,20 @@
       </div>
 
       <div class="footer-col">
-        <h4>Clube Maker3D VIP</h4>
-        <p style="font-size:0.83rem;color:rgba(255,255,255,0.65)">Receba lançamentos 3D e cupons exclusivos:</p>
+        <h4>Boletim Técnico</h4>
+        <p style="font-size:0.83rem;color:rgba(255,255,255,0.65)">Receba novos perfis de impressão e cupons:</p>
         <div class="newsletter-form">
-          <input type="email" id="newsletterEmail" placeholder="Seu melhor e-mail...">
-          <button onclick="document.getElementById('newsletterEmail').value='';window.makerApp.showPage('produtos')">Assinar</button>
+          <input type="email" id="newsletterEmail" placeholder="Seu e-mail...">
+          <button onclick="document.getElementById('newsletterEmail').value='';window.makerApp.showPage('produtos')" type="button">Inscrever</button>
         </div>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <!-- Secret 5-click trigger on copyright too -->
-      <p class="secret-admin-trigger" style="cursor:pointer" title="© Maker3D">© 2026 <span class="dynamic-brand-name">Maker3D</span> — Todos os direitos reservados.</p>
+      <p>© 2026 <span class="dynamic-brand-name">Maker3D</span> — Todos os direitos reservados.</p>
       <div class="footer-bottom-links">
-        <a onclick="window.makerApp.showPage('orcamento')">Enviar STL</a>
-        <a onclick="window.makerApp.handleGoogleButtonClick()">Conta Google</a>
-        <a onclick="window.makerApp.openAdminVault()" style="opacity:0.35">🔒 Vault</a>
+        <a onclick="window.makerApp.showPage('orcamento')">Laboratório STL</a>
+        <a onclick="window.makerApp.handleGoogleButtonClick()">Minha Conta</a>
       </div>
     </div>
   </footer>

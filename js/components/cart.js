@@ -7,7 +7,7 @@ import { toRawUrl } from './viewer3d.js';
 import { showToast, showPage } from './ui.js';
 import { dbService } from '../services/db.js';
 
-export function addToCart(pid) {
+export function addToCart(pid, filamentPolymer = 'PLA') {
   const p = store.state.products.find(x => String(x.id) === String(pid));
   if (!p) return;
 
@@ -22,9 +22,15 @@ export function addToCart(pid) {
     if (defCols.length) chosenColors = [defCols[0]];
   }
 
+  const matMultipliers = { PLA: 1.0, PETG: 0.92, TPU: 1.25 };
+  const mult = matMultipliers[filamentPolymer] || 1.0;
+  const adjustedPrice = p.price ? parseFloat((p.price * mult).toFixed(2)) : null;
+
   const cart = [...store.state.cart];
   const existing = cart.find(
-    c => String(c.id) === String(p.id) && JSON.stringify(c.selectedColors) === JSON.stringify(chosenColors)
+    c => String(c.id) === String(p.id) &&
+         (c.filamentPolymer || 'PLA') === filamentPolymer &&
+         JSON.stringify(c.selectedColors) === JSON.stringify(chosenColors)
   );
 
   if (existing) {
@@ -34,10 +40,11 @@ export function addToCart(pid) {
       id: p.id,
       name: p.name,
       emoji: p.emoji || '📦',
-      price: p.price,
+      price: adjustedPrice,
       discount: p.discount || 0,
       image: p.image,
       qty: 1,
+      filamentPolymer,
       selectedColors: chosenColors
     });
   }

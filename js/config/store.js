@@ -4,24 +4,31 @@
 
 export const DEFAULT_SITE_SETTINGS = {
   brandName: 'Maker3D',
-  brandTagline: 'Impressão 3D Especializada',
-  primaryColor: '#ff9e1b',
+  brandTagline: 'Impressão 3D de Alta Precisão',
+  primaryColor: '#00ae42',
+  accentOrange: '#ff6b00',
   promoBarActive: true,
-  promoBarText: '🔥 FRETE GRÁTIS em pedidos acima de R$ 120! Use o cupom MAKER10 para 10% OFF na 1ª compra',
-  promoPill: 'NOVIDADE 3D',
+  promoBarText: 'FRETE GRÁTIS em pedidos acima de R$ 120 • Use o cupom MAKER10 para 10% OFF na primeira compra',
+  promoPill: 'MAKERWORLD PRO',
   freeShippingThreshold: 120,
-  heroBadge: '🔶 Especialistas em Impressão 3D',
-  heroTitleHtml: 'Transformamos <em>Ideias</em> em Realidade 3D',
-  heroSubtitle: 'Peças articuladas, colecionáveis, utilitários e protótipos sob medida com precisão de 0,1mm e acabamento artesanal.',
+  heroBadge: 'MANUFATURA ADITIVA DE PRECISÃO • BAMBU STUDIO PROFILES',
+  heroTitleHtml: 'Modelos 3D & <em>Peças Técnicas</em> Sob Demanda',
+  heroSubtitle: 'Catálogo profissional de modelos impressos em alta definição (0.12 mm) com filamentos calibrados PLA (R$ 150/kg), PETG (R$ 120/kg) e TPU/Trust (R$ 200/kg).',
   whatsappNumber: '5531984566047',
   instagramHandle: '@maker3d.oficial',
   instagramUrl: 'https://www.instagram.com/maker3d.oficial',
   supportEmail: 'maker3d.suporte@gmail.com',
+  googleClientId: '',
   adminEmails: ['maker3d.suporte@gmail.com', 'rossipereira2010@gmail.com'],
   adminPin: 'maker3d2026',
   githubOwner: 'Maker3D-Shop',
   githubRepo: 'maker3d-shop.github.io',
-  githubBranch: 'main'
+  githubBranch: 'main',
+  filamentPricesPerKg: {
+    PLA: 150,
+    PETG: 120,
+    TPU: 200
+  }
 };
 
 export const DEFAULT_COUPONS = [
@@ -33,28 +40,28 @@ export const DEFAULT_COUPONS = [
 export const DEFAULT_FAQS = [
   {
     id: 'faq-1',
-    q: 'Qual material vocês utilizam nas impressões 3D?',
-    a: 'Trabalhamos principalmente com PLA Premium biodegradável de alta resistência e brilho (Silk/Matte), PETG para peças mecânicas ou expostas ao sol, e TPU para peças flexíveis.'
+    q: 'Quais materiais e tabelas de preço por quilo vocês utilizam?',
+    a: 'Trabalhamos com filamentos industriais calibrados: PLA Premium (R$ 150,00/kg — ideal para detalhes visuais e peças articuladas), PETG (R$ 120,00/kg — alta resistência mecânica e térmica) e TPU / Trust (R$ 200,00/kg — polímero flexível e elástico de alta durabilidade).'
   },
   {
     id: 'faq-2',
     q: 'Posso enviar meu próprio arquivo 3D (.STL / .OBJ / .3MF)?',
-    a: 'Sim! Use nosso Laboratório 3D na aba "Orçamento STL" para arrastar seu arquivo, visualizar em 3D na hora e receber uma estimativa automática de peso e preço.'
+    a: 'Sim! Acesse a aba "Laboratório STL" para enviar seu arquivo, visualizar a malha 3D no navegador e calcular automaticamente o peso em gramas, tempo de impressão e custo baseado no material escolhido.'
   },
   {
     id: 'faq-3',
     q: 'Qual o prazo de produção e envio?',
-    a: 'Peças do catálogo são produzidas e embaladas em 24h a 48h úteis. Enviamos para todo o Brasil com código de rastreio e embalagem reforçada.'
+    a: 'Peças do catálogo são produzidas com perfis otimizados de alta velocidade em 24h a 48h úteis. Enviamos para todo o Brasil com código de rastreio e embalagem técnica.'
   },
   {
     id: 'faq-4',
-    q: 'Como escolho combinações de cores em peças articuladas?',
-    a: 'Em cada produto você pode selecionar as cores por seção (ex: Cor do Corpo e Cor do Cristal). Se desejar uma cor especial, basta avisar ao finalizar o pedido.'
+    q: 'Como funciona o sistema de Contas, Coleções e Curtidas?',
+    a: 'Ao registrar sua conta ou entrar com Google, todas as suas peças curtidas, coleções salvas, itens no carrinho e histórico de objetos comprados ficam vinculados ao seu perfil no banco de dados.'
   },
   {
     id: 'faq-5',
-    q: 'Como funciona o Login com Google e meus pedidos?',
-    a: 'Ao entrar com sua conta Google, sua lista de favoritos, carrinho e histórico de pedidos ficam salvos na nuvem para você acompanhar o status em tempo real.'
+    q: 'Como escolho combinações de cores em peças multicoloridas (AMS)?',
+    a: 'Ao clicar em qualquer produto, a página técnica dedicada mostra os perfis de impressão e permite selecionar a cor exata de cada seção da peça antes de adicionar ao carrinho.'
   }
 ];
 
@@ -62,58 +69,74 @@ export const DEFAULT_GLOBAL_COLORS = [
   { name: 'Laranja Maker3D', hex: '#f07800', priceAdd: 0 },
   { name: 'Avelã', hex: '#bf540d', priceAdd: 0 },
   { name: 'Azul Cobalto', hex: '#0d54bf', priceAdd: 0 },
-  { name: 'Preto', hex: '#1c1c1c', priceAdd: 0 },
+  { name: 'Preto Matte', hex: '#1c1c1c', priceAdd: 0 },
   { name: 'Branco Polar', hex: '#ffffff', priceAdd: 0 },
-  { name: 'Verde Esmeralda', hex: '#27ae60', priceAdd: 0 },
+  { name: 'Verde Bambu', hex: '#00ae42', priceAdd: 0 },
   { name: 'Dourado Silk', hex: '#f0a500', priceAdd: 3 },
   { name: 'Vermelho Rubi', hex: '#c0392b', priceAdd: 2 },
   { name: 'Roxo Galáxia', hex: '#7d3c98', priceAdd: 4 }
 ];
 
-// Merge existing repository products (from data.json + assets/products.json)
 export const FALLBACK_PRODUCTS = [
   {
     id: 9,
-    name: '✨ Peça Customizada Sob Medida',
-    emoji: '⚙️',
+    name: 'Projeto Sob Medida / Impressão STL',
+    emoji: '📐',
     category: 'Customizado',
-    desc: 'Envie seu arquivo STL ou descreva sua ideia. Modelamos e imprimimos qualquer peça do zero com precisão milimétrica!',
+    desc: 'Envie seu arquivo STL/3MF ou link do MakerWorld. Fatiamento profissional com cálculo exato por grama (PLA R$ 150/kg • PETG R$ 120/kg • TPU/Trust R$ 200/kg).',
     price: null,
-    badge: 'Sob Medida',
+    badge: 'Sob Demanda',
     discount: 0,
     rating: 5.0,
     reviewsCount: 42,
+    downloadsCount: 310,
+    printsCount: 198,
+    layerHeight: '0.12 mm',
+    infill: '20% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA / PETG / TPU',
     model3d: 'assets/products/models/p1.glb',
-    image: '',
+    image: 'assets/products/images/P1/p1.png',
     custom: true,
-    gallery: [],
+    gallery: [
+      'assets/products/images/P1/p1.png',
+      'assets/products/images/P1/p2.png'
+    ],
     colorSections: [
       {
         name: 'Cor Principal',
         colors: [
           { name: 'Laranja Maker3D', hex: '#f07800' },
-          { name: 'Preto', hex: '#1c1c1c' },
+          { name: 'Preto Matte', hex: '#1c1c1c' },
           { name: 'Branco Polar', hex: '#ffffff' }
         ]
       }
     ],
     colors: [
       { name: 'Laranja Maker3D', hex: '#f07800' },
-      { name: 'Preto', hex: '#1c1c1c' },
+      { name: 'Preto Matte', hex: '#1c1c1c' },
       { name: 'Branco Polar', hex: '#ffffff' }
     ]
   },
   {
     id: 1779035132088,
-    name: 'Mini Dragão de Cristal 🐉',
+    name: 'Dragão de Cristal Articulado',
     emoji: '🐉',
-    desc: 'Mini Dragão de Cristal articulado💎, impresso em 3D. Cheio de detalhes mágicos✨, cabe na palma da mão e é perfeito para decorar, colecionar ou presentear!🎁💖',
+    desc: 'Modelo articulado print-in-place de alta precisão com cristais facetados ao longo da coluna. Perfil calibrado sem suportes com articulação fluida.',
     category: 'Miniatura',
     price: 15,
-    badge: 'Mágico ✨',
+    badge: 'Verificado',
     discount: 0,
     rating: 4.9,
     reviewsCount: 28,
+    downloadsCount: 1420,
+    printsCount: 860,
+    layerHeight: '0.12 mm',
+    infill: '15% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Silk',
+    weightGrams: 42,
+    printTime: '2h 15m',
     model3d: 'assets/products/models/p5.glb',
     image: 'https://makerworld.bblmw.com/makerworld/model/US62ded14bdbae8c/design/2025-03-03_38aeb2192ab8d8.png?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
     gallery: [
@@ -126,35 +149,43 @@ export const FALLBACK_PRODUCTS = [
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       },
       {
-        name: 'Cor do Cristal',
+        name: 'Cor dos Cristais',
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       }
     ],
     colors: [
       { name: 'Avelã', hex: '#bf540d' },
       { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto', hex: '#000000' }
+      { name: 'Preto Matte', hex: '#000000' }
     ]
   },
   {
     id: 1779036803058,
-    name: 'Mini Polvo Articulado 🐙',
+    name: 'Polvo Articulado Print-in-Place',
     emoji: '🐙',
-    desc: 'Mini Polvo articulado impresso em 3D. Com tentáculos super flexíveis, é divertido de brincar, funciona como um ótimo brinquedo antiestresse e é perfeito para decorar ou presentear!',
+    desc: 'Modelo com 8 tentáculos multi-articulados impressos em uma única peça sem montagem. Excelente acabamento superficial e alta resistência mecânica.',
     category: 'Articulado',
     price: 20,
-    badge: 'Fidget Toy🌊',
+    badge: 'Destaque',
     discount: 0,
     rating: 5.0,
     reviewsCount: 35,
+    downloadsCount: 2150,
+    printsCount: 1290,
+    layerHeight: '0.16 mm',
+    infill: '18% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Premium',
+    weightGrams: 55,
+    printTime: '2h 40m',
     model3d: 'assets/products/models/p1.glb',
     image: 'assets/products/images/P1/p1.png',
     gallery: [
@@ -165,39 +196,47 @@ export const FALLBACK_PRODUCTS = [
     ],
     colorSections: [
       {
-        name: 'Superior',
+        name: 'Seção Superior',
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       },
       {
-        name: 'Inferior',
+        name: 'Seção Inferior',
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       }
     ],
     colors: [
       { name: 'Avelã', hex: '#bf540d' },
       { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto', hex: '#000000' }
+      { name: 'Preto Matte', hex: '#000000' }
     ]
   },
   {
     id: 1779036994512,
-    name: 'O Olho Giroscópio 👀',
+    name: 'Olho Giroscópio Mecânico',
     emoji: '👀',
-    desc: 'Olho Giroscópio impresso em 3D. Com anéis giratórios super divertidos, é o fidget toy perfeito para aliviar o estresse, focar a mente ou usar como um chaveiro super criativo!',
+    desc: 'Mecanismo concêntrico de anéis giratórios com tolerância de 0.15 mm. Movimento livre em 3 eixos, ideal para demonstração de precisão dimensional.',
     category: 'Fidget Toy',
     price: 15,
-    badge: 'Antiestresse',
+    badge: 'Precisão',
     discount: 0,
     rating: 4.8,
     reviewsCount: 19,
+    downloadsCount: 980,
+    printsCount: 610,
+    layerHeight: '0.12 mm',
+    infill: '20% Grid',
+    nozzle: '0.4 mm',
+    material: 'PLA Dual',
+    weightGrams: 34,
+    printTime: '1h 45m',
     model3d: 'assets/products/models/p5.glb',
     image: 'https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_fd01d5858a26a.jpg?x-oss-process=image/resize,w_1000/format,webp',
     gallery: [
@@ -220,15 +259,23 @@ export const FALLBACK_PRODUCTS = [
   },
   {
     id: 1779038443112,
-    name: 'Porta Batom Floral 🌸',
+    name: 'Case Texturizado Porta Batom',
     emoji: '🌸',
-    desc: 'Porta-batom chaveiro super fofo com textura de florzinhas em relevo! 🌸 Perfeito para proteger e levar seu hidratante labial ou batom favorito sempre com você.',
+    desc: 'Suporte cilíndrico com relevo geométrico floral de alta definição e argola reforçada para chaveiro. Encaixe sob pressão calibrado.',
     category: 'Acessórios',
     price: 35,
-    badge: 'Novo✨',
+    badge: 'Novo',
     discount: 0,
     rating: 4.9,
     reviewsCount: 14,
+    downloadsCount: 540,
+    printsCount: 320,
+    layerHeight: '0.12 mm',
+    infill: '25% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PETG / PLA',
+    weightGrams: 48,
+    printTime: '2h 10m',
     model3d: '',
     image: 'https://makerworld.bblmw.com/makerworld/model/US23a8a1f23a9c84/design/8546f96ed132b6bf.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
     gallery: [
@@ -241,30 +288,39 @@ export const FALLBACK_PRODUCTS = [
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       }
     ],
     colors: [
       { name: 'Avelã', hex: '#bf540d' },
       { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto', hex: '#000000' }
+      { name: 'Preto Matte', hex: '#000000' }
     ]
   },
   {
     id: 1779041587144,
-    name: 'Tubarão Articulado 🦈',
+    name: 'Tubarão Articulado Flex',
     emoji: '🦈',
-    desc: 'Tubarão articulado impresso em 3D, super divertido e relaxante para brincar! Com movimentos flexíveis e design incrível.',
+    desc: 'Estrutura segmentada hidrodinâmica impressa em peça única. Articulações internas reforçadas para alta durabilidade.',
     category: 'Articulado',
     price: 23,
-    badge: 'Fidget Toy 🌀',
+    badge: 'Tendência',
     discount: 0,
     rating: 4.9,
     reviewsCount: 22,
+    downloadsCount: 1120,
+    printsCount: 740,
+    layerHeight: '0.16 mm',
+    infill: '15% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Premium',
+    weightGrams: 52,
+    printTime: '2h 30m',
     model3d: 'assets/products/models/p3.glb',
     image: 'https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_51a2cb930b324.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
     gallery: [
+      'https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_51a2cb930b324.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
       'https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_bd87f059d01fd.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
       'https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_b705f236b4828.jpg?x-oss-process=image/resize,w_1000/format,webp'
     ],
@@ -274,30 +330,39 @@ export const FALLBACK_PRODUCTS = [
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       }
     ],
     colors: [
       { name: 'Avelã', hex: '#bf540d' },
       { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto', hex: '#000000' }
+      { name: 'Preto Matte', hex: '#000000' }
     ]
   },
   {
     id: 1779042797608,
-    name: 'Mini Furão Flexível 🦦',
+    name: 'Furão Articulado Multicolor',
     emoji: '🦦',
-    desc: 'Mini furão articulado impresso em 3D, super fofo e perfeito para brincar! Com seu design flexível, ele cabe na palma da mão.',
+    desc: 'Modelo longo articulado com pintura digital multicor via sistema AMS. Segmentos ergonômicos e acabamento acetinado.',
     category: 'Miniatura',
     price: 29,
-    badge: 'Articulado 🤎',
+    badge: 'AMS Multicor',
     discount: 0,
     rating: 5.0,
     reviewsCount: 31,
+    downloadsCount: 1680,
+    printsCount: 920,
+    layerHeight: '0.12 mm',
+    infill: '15% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Matte',
+    weightGrams: 64,
+    printTime: '3h 20m',
     model3d: 'assets/products/models/p4.glb',
     image: 'https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_be4379089642f8.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
     gallery: [
+      'https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_be4379089642f8.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
       'https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_7e37fee09d00d8.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
       'https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_9479d317242068.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp'
     ],
@@ -307,7 +372,7 @@ export const FALLBACK_PRODUCTS = [
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       },
       {
@@ -315,27 +380,35 @@ export const FALLBACK_PRODUCTS = [
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       }
     ],
     colors: [
       { name: 'Avelã', hex: '#bf540d' },
       { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto', hex: '#000000' }
+      { name: 'Preto Matte', hex: '#000000' }
     ]
   },
   {
     id: 1779043350679,
-    name: 'Cone Espiral Ilusão 🌀',
+    name: 'Cone Espiral Pass-Through',
     emoji: '🌀',
-    desc: 'Cone espiral mágico impresso em 3D, o fidget toy perfeito para relaxar e se encantar! Com um design de ilusão de ótica fascinante, as duas peças se encaixam e giram suavemente.',
+    desc: 'Geometria helicoidal dupla com ajuste de folga de 0.1 mm permitindo que uma peça atravesse a outra continuamente sem atrito.',
     category: 'Fidget Toy',
     price: 10,
-    badge: 'Best Seller 🔥',
+    badge: 'Mais Baixado',
     discount: 0,
     rating: 4.9,
     reviewsCount: 47,
+    downloadsCount: 3410,
+    printsCount: 2180,
+    layerHeight: '0.16 mm',
+    infill: '15% Cubic',
+    nozzle: '0.4 mm',
+    material: 'PLA Silk',
+    weightGrams: 38,
+    printTime: '1h 50m',
     model3d: 'assets/products/models/p4.glb',
     image: 'https://makerworld.bblmw.com/makerworld/model/USa85d1c6d202941/design/2024-12-27_f7da9fca8a055.gif?x-oss-process=image/resize,w_1000/format,webp',
     gallery: [
@@ -344,39 +417,47 @@ export const FALLBACK_PRODUCTS = [
     ],
     colorSections: [
       {
-        name: 'Cor do Cone',
+        name: 'Cor Externa',
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       },
       {
-        name: 'Cor do Encaixe',
+        name: 'Cor Interna',
         colors: [
           { name: 'Avelã', hex: '#bf540d' },
           { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto', hex: '#000000' }
+          { name: 'Preto Matte', hex: '#000000' }
         ]
       }
     ],
     colors: [
       { name: 'Avelã', hex: '#bf540d' },
       { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto', hex: '#000000' }
+      { name: 'Preto Matte', hex: '#000000' }
     ]
   },
   {
     id: 1779047822545,
-    name: 'Taça da Copa Escala Real 🏆',
+    name: 'Troféu Copa do Mundo Escala 1:1',
     emoji: '🏆',
-    desc: 'Réplica da Taça do Mundo em escala real impressa em 3D, o item definitivo para os apaixonados por futebol! Com brilho dourado incrível.',
+    desc: 'Réplica em escala real impressa com filamento PLA Silk Dourado de alto brilho e preenchimento interno estrutural reforçado.',
     category: 'Decorativo',
     price: 60,
-    badge: 'Edição Campeã 🥇',
+    badge: 'Edição Pro',
     discount: 10,
     rating: 5.0,
     reviewsCount: 18,
+    downloadsCount: 890,
+    printsCount: 410,
+    layerHeight: '0.12 mm',
+    infill: '25% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Silk Gold',
+    weightGrams: 185,
+    printTime: '6h 40m',
     model3d: '',
     image: 'https://makerworld.bblmw.com/makerworld/comment/20260503/91133529/4bf68873d57c671e.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
     gallery: [
@@ -393,15 +474,23 @@ export const FALLBACK_PRODUCTS = [
   },
   {
     id: 1783942729445,
-    name: 'Estrela do Mar Flexível ⭐',
+    name: 'Estrela do Mar Malha Flexível',
     emoji: '⭐',
-    desc: 'Estrela do mar articulada super fofa com textura de escamas em relevo! Perfeita para se divertir com seus movimentos fluidos ou relaxar em qualquer lugar.',
+    desc: 'Superfície orgânica com micro-escamas articuladas em malha contínua. Movimento fluido multidirecional.',
     category: 'Articulado',
     price: 70,
     badge: 'Popular',
     discount: 20,
     rating: 4.9,
     reviewsCount: 25,
+    downloadsCount: 1230,
+    printsCount: 680,
+    layerHeight: '0.12 mm',
+    infill: '15% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Silk',
+    weightGrams: 110,
+    printTime: '4h 15m',
     model3d: '',
     image: 'https://makerworld.bblmw.com/makerworld/model/US58e8e7fedc0451/design/2025-07-17_736615c4896bc.gif?x-oss-process=image/resize,w_1000/format,webp',
     gallery: [
@@ -412,29 +501,37 @@ export const FALLBACK_PRODUCTS = [
       {
         name: 'Cores disponíveis',
         colors: [
-          { name: 'Preto', hex: '#2c2c2c' },
-          { name: 'Verde', hex: '#27ae60' },
-          { name: 'Dourado', hex: '#f0a500' }
+          { name: 'Preto Matte', hex: '#2c2c2c' },
+          { name: 'Verde Bambu', hex: '#00ae42' },
+          { name: 'Dourado Silk', hex: '#f0a500' }
         ]
       }
     ],
     colors: [
-      { name: 'Preto', hex: '#2c2c2c' },
-      { name: 'Verde', hex: '#27ae60' },
-      { name: 'Dourado', hex: '#f0a500' }
+      { name: 'Preto Matte', hex: '#2c2c2c' },
+      { name: 'Verde Bambu', hex: '#00ae42' },
+      { name: 'Dourado Silk', hex: '#f0a500' }
     ]
   },
   {
     id: 1783942729901,
-    name: 'Porta-Página de Livro 📖',
+    name: 'Suporte Ergonômico de Leitura',
     emoji: '📖',
-    desc: 'Suporte ergonômico de polegar para manter páginas de livros abertas com apenas uma mão. Leve, resistente e indispensável para leitores!',
+    desc: 'Acessório utilitário leve para manter páginas abertas com apenas o polegar. Geometria chanfrada confortável e resistente.',
     category: 'Utilitário',
     price: 14,
-    badge: 'Leitura 📚',
+    badge: 'Utilitário',
     discount: 0,
     rating: 5.0,
     reviewsCount: 33,
+    downloadsCount: 1840,
+    printsCount: 1120,
+    layerHeight: '0.16 mm',
+    infill: '25% Grid',
+    nozzle: '0.4 mm',
+    material: 'PETG / PLA',
+    weightGrams: 18,
+    printTime: '0h 45m',
     model3d: 'assets/products/models/book2.glb',
     image: 'assets/products/images/P7/p1.png',
     gallery: [
@@ -448,27 +545,35 @@ export const FALLBACK_PRODUCTS = [
         colors: [
           { name: 'Laranja Maker3D', hex: '#f07800' },
           { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Preto', hex: '#1c1c1c' }
+          { name: 'Preto Matte', hex: '#1c1c1c' }
         ]
       }
     ],
     colors: [
       { name: 'Laranja Maker3D', hex: '#f07800' },
       { name: 'Avelã', hex: '#bf540d' },
-      { name: 'Preto', hex: '#1c1c1c' }
+      { name: 'Preto Matte', hex: '#1c1c1c' }
     ]
   },
   {
     id: 1783942729902,
-    name: 'Travessa Morcego Decor 🦇',
+    name: 'Bandeja Organizadora Bat-Wing',
     emoji: '🦇',
-    desc: 'Pote decorativo e porta-doces em formato de morcego estilizado. Perfeito para festas temáticas, setups gamer ou organização criativa!',
+    desc: 'Recipiente de bancada com design geométrico de asas para organização de peças, chaves ou setups.',
     category: 'Decorativo',
     price: 26,
-    badge: 'Geek 🦇',
+    badge: 'Setup Desk',
     discount: 0,
     rating: 4.8,
     reviewsCount: 15,
+    downloadsCount: 730,
+    printsCount: 420,
+    layerHeight: '0.16 mm',
+    infill: '20% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Matte',
+    weightGrams: 76,
+    printTime: '3h 10m',
     model3d: 'assets/products/models/p8.glb',
     image: 'assets/products/images/P8/p1.png',
     gallery: [
@@ -480,13 +585,13 @@ export const FALLBACK_PRODUCTS = [
       {
         name: 'Cores disponíveis',
         colors: [
-          { name: 'Preto', hex: '#1c1c1c' },
+          { name: 'Preto Matte', hex: '#1c1c1c' },
           { name: 'Roxo Galáxia', hex: '#7d3c98' }
         ]
       }
     ],
     colors: [
-      { name: 'Preto', hex: '#1c1c1c' },
+      { name: 'Preto Matte', hex: '#1c1c1c' },
       { name: 'Roxo Galáxia', hex: '#7d3c98' }
     ]
   }
@@ -502,12 +607,14 @@ class Store {
       faqs: this.loadLocal('maker3d_faqs', DEFAULT_FAQS),
       cart: this.loadLocal('maker3d_cart', []),
       wishlist: this.loadLocal('maker3d_wishlist', []),
+      collections: this.loadLocal('maker3d_collections', [
+        { id: 'col-default', name: 'Meus Modelos Salvos', items: [] }
+      ]),
       orders: this.loadLocal('maker3d_orders', []),
       reviews: this.loadLocal('maker3d_reviews', {}),
       users: this.loadLocal('maker3d_users', []),
       currentUser: this.loadLocal('maker3d_current_user', null),
-      activeCoupon: null,
-      theme: localStorage.getItem('maker3d_theme') || 'light'
+      activeCoupon: null
     };
     this.listeners = new Set();
   }

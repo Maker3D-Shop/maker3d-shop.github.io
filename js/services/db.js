@@ -37,7 +37,6 @@ class DatabaseService {
         this.firestore = getFirestore(this.firebaseApp);
         this.isCloudActive = true;
 
-        // Real-time listener on main store document
         onSnapshot(doc(this.firestore, 'maker3d_store', 'catalog'), (snap) => {
           if (snap.exists()) {
             const data = snap.data();
@@ -49,7 +48,6 @@ class DatabaseService {
           }
         });
 
-        // Load orders & users if available
         const ordersSnap = await getDoc(doc(this.firestore, 'maker3d_store', 'orders'));
         if (ordersSnap.exists() && ordersSnap.data().list) {
           store.update('orders', ordersSnap.data().list, 'maker3d_orders');
@@ -60,8 +58,14 @@ class DatabaseService {
       }
     }
 
-    // Load from local data.json or GitHub raw if local storage was not customized by Admin
     await this.syncCatalogFromRepo();
+
+    // Auto-sync user data (cart, wishlist, collections, orders) to currentUser profile in DB
+    store.subscribe((state, key) => {
+      if (state.currentUser && ['cart', 'wishlist', 'collections', 'orders'].includes(key)) {
+        this.syncCurrentUserStateToDB();
+      }
+    });
   }
 
   getFirebaseConfig() {
@@ -77,7 +81,6 @@ class DatabaseService {
   }
 
   async syncCatalogFromRepo() {
-    // Only overwrite if admin hasn't locally modified products in this browser session
     const hasAdminOverride = localStorage.getItem('maker3d_admin_modified') === '1';
     if (hasAdminOverride) return;
 
@@ -101,7 +104,6 @@ class DatabaseService {
 
   mergeRepoData(data) {
     if (data && Array.isArray(data.products) && data.products.length > 0) {
-      // Enhance repo products with local 3D models & ratings if missing
       const modelMap = {
         1779035132088: 'assets/products/models/p5.glb',
         1779036803058: 'assets/products/models/p1.glb',
@@ -111,14 +113,25 @@ class DatabaseService {
         1779043350679: 'assets/products/models/p4.glb'
       };
 
-      const enriched = data.products.map(p => ({
-        ...p,
-        rating: p.rating || 4.9,
-        reviewsCount: p.reviewsCount || Math.floor(Math.random() * 25) + 12,
-        model3d: p.model3d || modelMap[p.id] || ''
-      }));
+      const enriched = data.products.map(p => {
+        const fbMatch = FALLBACK_PRODUCTS.find(fp => String(fp.id) === String(p.id));
+        return {
+          ...(fbMatch || {}),
+          ...p,
+          image: p.image || (fbMatch ? fbMatch.image : ''),
+          gallery: (p.gallery && p.gallery.length) ? p.gallery : (fbMatch ? fbMatch.gallery : []),
+          rating: p.rating || (fbMatch ? fbMatch.rating : 4.9),
+          reviewsCount: p.reviewsCount || (fbMatch ? fbMatch.reviewsCount : 18),
+          downloadsCount: p.downloadsCount || (fbMatch ? fbMatch.downloadsCount : 640),
+          printsCount: p.printsCount || (fbMatch ? fbMatch.printsCount : 390),
+          layerHeight: p.layerHeight || (fbMatch ? fbMatch.layerHeight : '0.12 mm'),
+          infill: p.infill || (fbMatch ? fbMatch.infill : '15% Gyroid'),
+          nozzle: p.nozzle || (fbMatch ? fbMatch.nozzle : '0.4 mm'),
+          material: p.material || (fbMatch ? fbMatch.material : 'PLA Premium'),
+          model3d: p.model3d || modelMap[p.id] || (fbMatch ? fbMatch.model3d : '')
+        };
+      });
 
-      // Append extra local 3D products from FALLBACK_PRODUCTS if not already present
       FALLBACK_PRODUCTS.forEach(fp => {
         if (!enriched.some(ep => String(ep.id) === String(fp.id))) {
           enriched.push(fp);
@@ -132,9 +145,6 @@ class DatabaseService {
     }
   }
 
-  /**
-   * Persist full catalog & settings to LocalStorage, BroadcastChannel, Firestore, and optionally GitHub
-   */
   async saveStoreData({ syncGitHub = false, ghToken = '' } = {}) {
     localStorage.setItem('maker3d_admin_modified', '1');
     store.saveLocal('maker3d_products', store.state.products);
@@ -150,7 +160,6 @@ class DatabaseService {
       this.broadcast.postMessage({ key: 'faqs', value: store.state.faqs });
     }
 
-    // Save to Firestore if active
     if (this.isCloudActive && this.firestore) {
       try {
         const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
@@ -167,30 +176,136 @@ class DatabaseService {
       }
     }
 
-    // Save to GitHub repo if requested
     if (syncGitHub && ghToken) {
       await this.pushDataJsonToGitHub(ghToken);
     }
   }
 
   /**
-   * Record user login/profile in database
+   * Synchronize current user's liked items, collections, cart, and purchased objects into their DB record
+   */
+  async syncCurrentUserStateToDB() {
+    const curr = store.state.currentUser;
+    if (!curr || !curr.email) return;
+
+    const users = [...(store.state.users || [])];
+    const idx = users.findIndex(u => (u.email || '').toLowerCase() === curr.email.toLowerCase());
+
+    const myOrders = (store.state.orders || []).filter(
+      o => (o.user?.email || '').toLowerCase() === curr.email.toLowerCase()
+    );
+    const purchasedObjects = myOrders.flatMap(o => (o.items || []).map(it => ({
+      orderId: o.id,
+      date: o.createdAt,
+      status: o.status,
+      id: it.id,
+      name: it.name,
+      qty: it.qty,
+      price: it.price,
+      image: it.image,
+      selectedColors: it.selectedColors || []
+    })));
+
+    const updatedProfile = {
+      ...curr,
+      wishlist: [...(store.state.wishlist || [])],
+      collections: [...(store.state.collections || [])],
+      cart: [...(store.state.cart || [])],
+      purchasedObjects,
+      wishlistCount: (store.state.wishlist || []).length,
+      cartCount: (store.state.cart || []).reduce((s, c) => s + (c.qty || 1), 0),
+      updatedAt: new Date().toISOString()
+    };
+
+    if (idx >= 0) {
+      users[idx] = { ...users[idx], ...updatedProfile };
+    } else {
+      users.unshift(updatedProfile);
+    }
+
+    store.state.users = users;
+    store.state.currentUser = updatedProfile;
+    store.saveLocal('maker3d_users', users);
+    store.saveLocal('maker3d_current_user', updatedProfile);
+
+    if (this.isCloudActive && this.firestore) {
+      try {
+        const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+        await setDoc(doc(this.firestore, 'maker3d_users', updatedProfile.uid || updatedProfile.email), updatedProfile, { merge: true });
+      } catch (e) {}
+    }
+  }
+
+  /**
+   * Record user login/registration in database & restore their saved collections, likes, cart & purchases
    */
   async saveUserRecord(userProfile) {
-    const users = [...store.state.users];
-    const idx = users.findIndex(u => u.email === userProfile.email || u.uid === userProfile.uid);
+    const users = [...(store.state.users || [])];
+    const idx = users.findIndex(u => (u.email || '').toLowerCase() === (userProfile.email || '').toLowerCase());
+    const existing = idx >= 0 ? users[idx] : null;
+
+    // Merge guest cart/wishlist/collections with account's saved data
+    const mergedWishlist = Array.from(new Set([
+      ...(existing?.wishlist || []),
+      ...(store.state.wishlist || [])
+    ]));
+
+    const existingCart = existing?.cart || [];
+    const currentCart = store.state.cart || [];
+    const mergedCart = [...existingCart];
+    currentCart.forEach(item => {
+      const match = mergedCart.find(
+        c => String(c.id) === String(item.id) && JSON.stringify(c.selectedColors) === JSON.stringify(item.selectedColors)
+      );
+      if (match) {
+        match.qty = Math.max(match.qty, item.qty);
+      } else {
+        mergedCart.push(item);
+      }
+    });
+
+    const mergedCollections = existing?.collections && existing.collections.length
+      ? existing.collections
+      : (store.state.collections || [{ id: 'col-default', name: 'Meus Modelos Salvos', items: [] }]);
+
+    const myOrders = (store.state.orders || []).filter(
+      o => (o.user?.email || '').toLowerCase() === (userProfile.email || '').toLowerCase()
+    );
+    const purchasedObjects = myOrders.flatMap(o => (o.items || []).map(it => ({
+      orderId: o.id,
+      date: o.createdAt,
+      status: o.status,
+      id: it.id,
+      name: it.name,
+      qty: it.qty,
+      price: it.price,
+      image: it.image,
+      selectedColors: it.selectedColors || []
+    })));
+
     const record = {
+      ...(existing || {}),
       ...userProfile,
+      registered: true,
       lastLoginAt: new Date().toISOString(),
-      wishlistCount: store.state.wishlist.length,
-      cartCount: store.state.cart.length
+      wishlist: mergedWishlist,
+      collections: mergedCollections,
+      cart: mergedCart,
+      purchasedObjects,
+      wishlistCount: mergedWishlist.length,
+      cartCount: mergedCart.reduce((s, c) => s + (c.qty || 1), 0)
     };
+
     if (idx >= 0) {
-      users[idx] = { ...users[idx], ...record };
+      users[idx] = record;
     } else {
       record.createdAt = new Date().toISOString();
       users.unshift(record);
     }
+
+    store.update('wishlist', mergedWishlist, 'maker3d_wishlist');
+    store.update('collections', mergedCollections, 'maker3d_collections');
+    store.update('cart', mergedCart, 'maker3d_cart');
     store.update('users', users, 'maker3d_users');
     store.update('currentUser', record, 'maker3d_current_user');
 
@@ -205,6 +320,12 @@ class DatabaseService {
     return record;
   }
 
+  findUserByEmail(email) {
+    if (!email) return null;
+    const clean = email.trim().toLowerCase();
+    return (store.state.users || []).find(u => (u.email || '').toLowerCase() === clean) || null;
+  }
+
   /**
    * Save an Order (WhatsApp checkout or Custom STL request) to Database
    */
@@ -212,7 +333,7 @@ class DatabaseService {
     const order = {
       id: 'PED-' + Date.now().toString().slice(-6),
       createdAt: new Date().toISOString(),
-      status: 'pending', // pending | printing | shipped | done
+      status: 'pending',
       user: store.state.currentUser
         ? {
             name: store.state.currentUser.displayName,
@@ -225,6 +346,10 @@ class DatabaseService {
 
     const orders = [order, ...store.state.orders];
     store.update('orders', orders, 'maker3d_orders');
+
+    if (store.state.currentUser) {
+      await this.syncCurrentUserStateToDB();
+    }
 
     if (this.broadcast) {
       this.broadcast.postMessage({ key: 'orders', value: orders });
@@ -240,9 +365,6 @@ class DatabaseService {
     return order;
   }
 
-  /**
-   * Add a product review to Database
-   */
   async addReview(productId, reviewObj) {
     const allReviews = { ...store.state.reviews };
     const list = allReviews[productId] || [];
@@ -256,9 +378,6 @@ class DatabaseService {
     return entry;
   }
 
-  /**
-   * GitHub API synchronization for data.json and images
-   */
   async uploadFileToGitHub(path, contentBase64, commitMessage, token) {
     const { githubOwner, githubRepo, githubBranch } = store.state.settings;
     const url = `https://api.github.com/repos/${githubOwner}/${githubRepo}/contents/${path}`;
@@ -299,9 +418,9 @@ class DatabaseService {
       globalColors: store.state.globalColors,
       updatedAt: new Date().toISOString()
     };
-    const jsonString = JSON.stringify(payload, null, 2);
-    const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-    return await this.uploadFileToGitHub('data.json', base64Content, '⚡ Atualização via Painel Admin Maker3D', token);
+    const jsonStr = JSON.stringify(payload, null, 2);
+    const base64 = btoa(unescape(encodeURIComponent(jsonStr)));
+    return await this.uploadFileToGitHub('data.json', base64, 'chore(cms): update store catalog via Maker3D Admin Vault', token);
   }
 }
 
