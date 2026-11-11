@@ -373,7 +373,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     pathStr.includes('/catalogo') ? 'produtos' :
     pathStr.includes('/produto') ? 'produto' :
     pathStr.includes('/laboratorio-stl') ? 'orcamento' :
-    pathStr.includes('/parceiros') ? 'parceiros' :
     pathStr.includes('/sobre') ? 'sobre' :
     pathStr.includes('/contato') ? 'contato' : null
   );

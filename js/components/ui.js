@@ -45,7 +45,6 @@ const PAGE_ROUTE_MAP = {
   produtos: 'catalogo/',
   produto: 'produto/',
   orcamento: 'laboratorio-stl/',
-  parceiros: 'parceiros/',
   sobre: 'sobre/',
   contato: 'contato/'
 };
