@@ -5,6 +5,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -12,6 +13,7 @@ html {
   font-size: 16px;
   overflow-x: hidden;
   max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -25,6 +27,12 @@ body {
   line-height: 1.6;
   transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
+  min-height: 100dvh;
+  overscroll-behavior-y: none;
+}
+
+button, a, input, select, textarea {
+  touch-action: manipulation;
 }
 
 /* Custom Scrollbar */
@@ -537,10 +545,25 @@ footer.site-footer {
     grid-template-columns: 1fr 1fr;
   }
 }
+/* Native Mobile App Bottom Tab Bar (Hidden on Desktop, Active on Android/iOS) */
+.mobile-bottom-nav {
+  display: none;
+}
+.mobile-product-sticky-bar {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  body {
+    padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+  }
+  /* Prevent iOS Safari auto-zoom when tapping inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
   nav#mainNav {
-    padding: 0 4%;
-    height: 62px;
+    padding: calc(env(safe-area-inset-top, 0px) * 0.4) 4% 0;
+    height: 60px;
     gap: 8px;
   }
   .nav-logo {
@@ -553,7 +576,7 @@ footer.site-footer {
     flex-shrink: 0;
   }
   .nav-logo-brand {
-    font-size: 1.2rem;
+    font-size: 1.28rem;
   }
   .nav-logo-tag {
     display: none;
@@ -563,12 +586,12 @@ footer.site-footer {
     flex-shrink: 0;
   }
   .icon-btn {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     font-size: 0.95rem;
   }
   .user-auth-btn {
-    padding: 6px 10px;
+    padding: 7px 11px;
     font-size: 0.78rem;
   }
   .user-auth-btn span.user-name-label {
@@ -582,20 +605,39 @@ footer.site-footer {
     left: 0;
     right: 0;
     background: var(--bg-secondary);
-    padding: 16px 5% 24px;
-    border-bottom: 1px solid var(--border-subtle);
+    padding: 14px 5% 22px;
+    border-bottom: 1px solid var(--border-strong);
     box-shadow: var(--shadow-lg);
     align-items: stretch;
+    border-radius: 0 0 24px 24px;
   }
   .nav-links.open {
     display: flex;
   }
+  .nav-links a {
+    padding: 12px 16px;
+    font-size: 0.96rem;
+  }
   .hamburger {
     display: flex;
   }
+  .section-header {
+    margin-bottom: 28px;
+    padding: 0 4%;
+  }
+  .section-header h2 {
+    font-size: clamp(1.75rem, 6.5vw, 2.3rem);
+  }
+  .section-header p {
+    font-size: 0.9rem;
+  }
+  footer.site-footer {
+    padding: 44px 5% calc(92px + env(safe-area-inset-bottom, 0px));
+    border-radius: 32px 32px 0 0;
+  }
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 24px;
   }
   .newsletter-form {
     flex-wrap: wrap;
@@ -611,6 +653,135 @@ footer.site-footer {
   }
   .mouse-light {
     display: none;
+  }
+
+  /* Native Android / iOS Bottom Navigation Dock */
+  .mobile-bottom-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(64px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: rgba(252, 250, 246, 0.94);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border-top: 1px solid var(--border-strong);
+    box-shadow: 0 -6px 26px rgba(90, 67, 50, 0.08);
+    z-index: 1350;
+    align-items: center;
+  }
+  .mob-tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 100%;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    position: relative;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  .mob-tab-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+    transition: transform 0.22s ease;
+  }
+  .mob-tab-btn.active {
+    color: var(--brand-deep);
+    font-weight: 700;
+  }
+  .mob-tab-btn.active svg {
+    transform: translateY(-2px) scale(1.06);
+    color: var(--brand-primary);
+  }
+  .mob-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    width: 18px;
+    height: 3px;
+    border-radius: 99px;
+    background: var(--brand-primary);
+  }
+  .mob-tab-badge {
+    position: absolute;
+    top: 6px;
+    right: calc(50% - 18px);
+    background: var(--brand-primary);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 800;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 99px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--bg-secondary);
+  }
+
+  /* Sticky Mobile Product Buy Bar on #page-produto */
+  .mobile-product-sticky-bar.visible {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    background: rgba(252, 250, 246, 0.96);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1.5px solid var(--border-strong);
+    border-radius: 20px;
+    padding: 10px 14px;
+    box-shadow: 0 10px 30px rgba(90, 67, 50, 0.16);
+    z-index: 1320;
+  }
+  .mob-sticky-info {
+    min-width: 0;
+    flex: 1;
+  }
+  .mob-sticky-info small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mob-sticky-info strong {
+    display: block;
+    font-size: 1.08rem;
+    font-weight: 800;
+    color: var(--brand-deep);
+    line-height: 1.15;
+  }
+  .mob-sticky-buy-btn {
+    padding: 11px 18px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-deep));
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-btn);
   }
 }
 @media (max-width: 390px) {

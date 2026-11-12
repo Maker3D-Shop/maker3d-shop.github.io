@@ -335,7 +335,7 @@ export function renderProducts() {
   }
 
   const countEl = document.getElementById('productsCount');
-  if (countEl) countEl.textContent = `${filtered.length} modelo${filtered.length === 1 ? '' : 's'} verificado${filtered.length === 1 ? '' : 's'}`;
+  if (countEl) countEl.textContent = `${filtered.length} peça${filtered.length === 1 ? '' : 's'} na curadoria`;
 
   if (!filtered.length) {
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:64px 20px;color:var(--text-muted)">
@@ -415,7 +415,7 @@ export function renderProducts() {
           <div class="product-footer">
             ${priceHtml}
             <button class="add-cart-btn" onclick="event.stopPropagation(); window.makerApp.openModal('${p.id}')" type="button">
-              ${p.custom ? 'Configurar STL' : 'Ver Página →'}
+              ${p.custom ? 'Personalizar' : 'Ver Peça →'}
             </button>
           </div>
         </div>
@@ -615,7 +615,13 @@ export function selectProductPolymer(mat, btnEl) {
 function updateDetailPriceDisplay() {
   const p = currentDetailProduct;
   const pr = document.getElementById('modalPriceRow');
+  const mobStickyPrice = document.getElementById('mobStickyPrice');
+  const mobStickyName = document.getElementById('mobStickyName');
+  const mobStickyBtn = document.getElementById('mobStickyBtn');
   if (!p || !pr) return;
+
+  if (mobStickyName) mobStickyName.textContent = p.name;
+  if (mobStickyBtn) mobStickyBtn.textContent = p.custom ? 'Orçar no WhatsApp →' : 'Adicionar à Sacola';
 
   const matMultipliers = { PLA: 1.0, PETG: 0.92, TPU: 1.25 };
   const matRates = { PLA: 'R$ 150/kg', PETG: 'R$ 120/kg', TPU: 'R$ 200/kg' };
@@ -629,13 +635,17 @@ function updateDetailPriceDisplay() {
                       <span class="modal-price">R$ ${dp}</span>
                       <span class="section-eyebrow" style="margin:0">-${p.discount}% OFF</span>
                       <span class="polymer-rate-tag">${selectedFilamentMaterial === 'TPU' ? 'Trust / TPU' : selectedFilamentMaterial} (${matRates[selectedFilamentMaterial]})</span>`;
+      if (mobStickyPrice) mobStickyPrice.textContent = `R$ ${dp}`;
     } else {
-      pr.innerHTML = `<span class="modal-price">R$ ${basePrice.toFixed(2).replace('.', ',')}</span>
+      const fp = basePrice.toFixed(2).replace('.', ',');
+      pr.innerHTML = `<span class="modal-price">R$ ${fp}</span>
                       <span class="polymer-rate-tag">${selectedFilamentMaterial === 'TPU' ? 'Trust / TPU' : selectedFilamentMaterial} (${matRates[selectedFilamentMaterial]})</span>`;
+      if (mobStickyPrice) mobStickyPrice.textContent = `R$ ${fp}`;
     }
   } else {
-    pr.innerHTML = `<span class="modal-price">Orçamento Técnico Sob Medida</span>
+    pr.innerHTML = `<span class="modal-price">Orçamento Sob Medida</span>
                     <span class="polymer-rate-tag">${selectedFilamentMaterial === 'TPU' ? 'Trust / TPU' : selectedFilamentMaterial} (${matRates[selectedFilamentMaterial]})</span>`;
+    if (mobStickyPrice) mobStickyPrice.textContent = 'Sob Medida';
   }
 }
 
@@ -708,7 +718,7 @@ export function switchMedia(type) {
   document.getElementById('panel-' + type)?.classList.add('active');
 
   if (type === 'model' && currentDetailProduct) {
-    const firstColor = (selectedColors[currentDetailProduct.id] && selectedColors[currentDetailProduct.id][0]?.hex) || '#ff9e1b';
+    const firstColor = (selectedColors[currentDetailProduct.id] && selectedColors[currentDetailProduct.id][0]?.hex) || '#b08d6e';
     viewer3D.initModal3D(currentDetailProduct.model3d, firstColor);
   } else {
     viewer3D.destroyModal3D();

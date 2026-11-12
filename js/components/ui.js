@@ -68,6 +68,15 @@ export function showPage(id, pushRoute = true, queryParams = '') {
   const nav = document.getElementById('nav-' + navId);
   if (nav) nav.classList.add('active');
 
+  document.querySelectorAll('.mobile-bottom-nav .mob-tab-btn').forEach(b => b.classList.remove('active'));
+  const mobNav = document.getElementById('mob-nav-' + navId);
+  if (mobNav) mobNav.classList.add('active');
+
+  const stickyBuyBar = document.getElementById('mobileProductStickyBar');
+  if (stickyBuyBar) {
+    stickyBuyBar.classList.toggle('visible', id === 'produto');
+  }
+
   if (pushRoute && window.history && window.history.pushState) {
     try {
       const subPath = PAGE_ROUTE_MAP[id] !== undefined ? PAGE_ROUTE_MAP[id] : '';
@@ -127,12 +136,33 @@ export function initParticlesAndScroll() {
   };
 
   if (typeof window !== 'undefined' && 'DeviceOrientationEvent' in window) {
-    window.addEventListener('deviceorientation', (event) => {
-      if (event.gamma === null && event.beta === null) return;
-      const nx = (event.gamma || 0) / 30; // Left/Right tilt (-30 to +30 deg)
-      const ny = ((event.beta || 45) - 45) / 30; // Front/Back tilt centered at 45 deg holding angle
-      applyTilt(nx, ny);
-    }, { passive: true });
+    const startGyroListener = () => {
+      if (window.__gyroBound) return;
+      window.__gyroBound = true;
+      window.addEventListener('deviceorientation', (event) => {
+        if (event.gamma === null && event.beta === null) return;
+        const nx = (event.gamma || 0) / 28; // Left/Right tilt
+        const ny = ((event.beta || 45) - 45) / 28; // Front/Back tilt centered at 45 deg holding angle
+        applyTilt(nx, ny);
+      }, { passive: true });
+    };
+
+    // Android & standard browsers start immediately; iOS 13+ requires permission on first tap
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const requestIosGyroOnFirstTap = () => {
+        DeviceOrientationEvent.requestPermission()
+          .then(state => {
+            if (state === 'granted') startGyroListener();
+          })
+          .catch(() => {});
+        window.removeEventListener('touchend', requestIosGyroOnFirstTap);
+        window.removeEventListener('click', requestIosGyroOnFirstTap);
+      };
+      window.addEventListener('touchend', requestIosGyroOnFirstTap, { once: true, passive: true });
+      window.addEventListener('click', requestIosGyroOnFirstTap, { once: true, passive: true });
+    } else {
+      startGyroListener();
+    }
   }
 
   // Subtle Desktop Pointer Ambient Parallax

@@ -3,7 +3,12 @@
 <head>
   <base href="../">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f8f5ef">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Maker 3D">
+  <meta name="format-detection" content="telephone=no">
   <title>Maker 3D — Decoração Japandi, Edição de Natal, Fidget Toys & Gears Pulseiras</title>
   <meta name="description" content="Maker 3D: Minimalismo orgânico e luxo acessível em impressão 3D. Coleção Japandi (vasos e porta-treco), Coleção de Natal, Fidget Toys sensoriais, Branch Gears × Maker 3D e projetos sob medida.">
   <meta property="og:title" content="Maker 3D — Coleção Japandi & Design Escultural Acessível">
@@ -815,6 +820,42 @@
   <!-- Back to top button with ONLY ^ character as requested -->
   <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo">^</button>
   <div class="toast" id="toast" role="alert"></div>
+
+  <!-- Sticky Mobile Product Purchase Bar (Visible on Android/iOS when viewing a Product Page) -->
+  <div class="mobile-product-sticky-bar" id="mobileProductStickyBar">
+    <div class="mob-sticky-info">
+      <small id="mobStickyName">Peça Selecionada</small>
+      <strong id="mobStickyPrice">R$ 0,00</strong>
+    </div>
+    <button type="button" class="mob-sticky-buy-btn" id="mobStickyBtn" onclick="window.makerApp.addToCartFromModal()">
+      Adicionar à Sacola
+    </button>
+  </div>
+
+  <!-- Native Mobile Bottom Tab Navigation Dock (Android & iOS App Experience) -->
+  <nav class="mobile-bottom-nav" aria-label="Navegação Mobile">
+    <button type="button" class="mob-tab-btn active" id="mob-nav-inicio" onclick="window.makerApp.showPage('inicio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Início</span>
+    </button>
+    <button type="button" class="mob-tab-btn" id="mob-nav-produtos" onclick="window.makerApp.showPage('produtos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span>Coleções</span>
+    </button>
+    <button type="button" class="mob-tab-btn" id="mob-nav-gears" onclick="window.makerApp.showPage('gears')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg>
+      <span>Gears</span>
+    </button>
+    <button type="button" class="mob-tab-btn" id="mob-nav-orcamento" onclick="window.makerApp.showPage('orcamento')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <span>Sob Medida</span>
+    </button>
+    <button type="button" class="mob-tab-btn" id="mob-nav-sacola" onclick="window.makerApp.toggleDrawer('cartDrawer')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="mob-tab-badge" id="mobNavCartCount" style="display:none">0</span>
+      <span>Sacola</span>
+    </button>
+  </nav>
 
   <!-- Footer -->
   <footer class="site-footer">

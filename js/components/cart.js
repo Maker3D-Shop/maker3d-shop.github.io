@@ -123,10 +123,15 @@ export function updateCartUI() {
 
   const countEl = document.getElementById('cartCount');
   const navCountEl = document.getElementById('navCartCount');
+  const mobCountEl = document.getElementById('mobNavCartCount');
   if (countEl) countEl.textContent = count;
   if (navCountEl) {
     navCountEl.textContent = count;
     navCountEl.style.display = count > 0 ? 'flex' : 'none';
+  }
+  if (mobCountEl) {
+    mobCountEl.textContent = count;
+    mobCountEl.style.display = count > 0 ? 'flex' : 'none';
   }
 
   // Free shipping progress bar
