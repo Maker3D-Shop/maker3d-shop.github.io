@@ -1,19 +1,19 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// Maker3D — Reactive State Store & Default Data Configuration
+// Maker3D — Accessible Luxury & Japandi Home Decor, Fidget Toys, Natal & Gears
 // ═══════════════════════════════════════════════════════════════════════════
 
 export const DEFAULT_SITE_SETTINGS = {
-  brandName: 'Maker3D',
-  brandTagline: 'Impressão 3D de Alta Precisão',
-  primaryColor: '#ff9e1b',
-  accentOrange: '#ffb84d',
+  brandName: 'Maker 3D',
+  brandTagline: 'Minimalismo Orgânico & Luxo Acessível',
+  primaryColor: '#8c6d53',
+  accentOrange: '#b08d6e',
   promoBarActive: false,
   promoBarText: '',
-  promoPill: 'MAKER3D PRO',
+  promoPill: 'MAKER 3D ATELIER',
   freeShippingThreshold: 120,
-  heroBadge: 'MANUFATURA ADITIVA DE PRECISÃO • PERFIS CALIBRADOS',
-  heroTitleHtml: 'Modelos 3D & <em>Peças Técnicas</em> Sob Demanda',
-  heroSubtitle: 'Catálogo profissional de modelos impressos em alta definição (0.12 mm) com filamentos calibrados PLA (R$ 150/kg), PETG (R$ 120/kg) e TPU/Trust (R$ 200/kg).',
+  heroBadge: 'COLEÇÃO JAPANDI • LUXO ACESSÍVEL & DESIGN ESCULTURAL',
+  heroTitleHtml: 'Minimalismo orgânico em <em>impressão 3D</em>.',
+  heroSubtitle: 'Peças decorativas autorais para casa, vasos esculturais Japandi, edição especial de Natal, Fidget Toys sensoriais e a linha exclusiva de pulseiras em parceria com a Gears.',
   whatsappNumber: '5531984566047',
   instagramHandle: '@maker3d.oficial',
   instagramUrl: 'https://www.instagram.com/maker3d.oficial',
@@ -24,6 +24,9 @@ export const DEFAULT_SITE_SETTINGS = {
   githubOwner: 'Maker3D-Shop',
   githubRepo: 'maker3d-shop.github.io',
   githubBranch: 'main',
+  gearsBranchActive: true,
+  gearsBrandName: 'Gears × Maker 3D',
+  gearsTagline: 'Linha Autoral de Pulseiras & Acessórios Esculturais',
   filamentPricesPerKg: {
     PLA: 150,
     PETG: 120,
@@ -31,271 +34,331 @@ export const DEFAULT_SITE_SETTINGS = {
   }
 };
 
-export const DEFAULT_PARTNERS = [
-  {
-    id: 'partner-nossa-barbearia',
-    name: 'Nossa Barbearia',
-    location: 'Congonhas, MG',
-    category: 'Barbearia & Lifestyle',
-    piecesProduced: 350,
-    materialUsed: 'PLA Premium & PETG Personalizado',
-    status: 'Parceiro Oficial Verificado',
-    summary: 'Produção em série de aproximadamente 350 brindes personalizados em 3D com a identidade visual da Nossa Barbearia (Congonhas), desenvolvidos com alta precisão dimensional e acabamento exclusivo para clientes.',
-    highlights: [
-      '~350 peças produzidas em lote seriado',
-      'Personalização com identidade da barbearia',
-      'Controle de qualidade individual peça a peça',
-      'Parceria local em Congonhas — MG'
-    ]
-  }
-];
-
 export const DEFAULT_COUPONS = [
-  { code: 'MAKER10', discountPct: 10, minOrder: 0, active: true, desc: '10% OFF de boas-vindas' },
-  { code: 'BEMVINDO15', discountPct: 15, minOrder: 60, active: true, desc: '15% OFF acima de R$ 60' },
-  { code: 'VIP20', discountPct: 20, minOrder: 150, active: true, desc: '20% OFF em compras VIP' }
+  { code: 'JAPANDI10', discountPct: 10, minOrder: 0, active: true, desc: '10% OFF na Coleção Japandi & Casa' },
+  { code: 'NATAL15', discountPct: 15, minOrder: 60, active: true, desc: '15% OFF Especial de Natal' },
+  { code: 'GEARS10', discountPct: 10, minOrder: 40, active: true, desc: '10% OFF Linha Gears Pulseiras' },
+  { code: 'MAKER10', discountPct: 10, minOrder: 0, active: true, desc: '10% OFF de boas-vindas' }
 ];
 
 export const DEFAULT_FAQS = [
   {
     id: 'faq-1',
-    q: 'Quais materiais e tabelas de preço por quilo vocês utilizam?',
-    a: 'Trabalhamos com filamentos industriais calibrados: PLA Premium (R$ 150,00/kg — ideal para detalhes visuais e peças articuladas), PETG (R$ 120,00/kg — alta resistência mecânica e térmica) e TPU / Trust (R$ 200,00/kg — polímero flexível e elástico de alta durabilidade).'
+    q: 'O que define o conceito de Luxo Acessível e Coleção Japandi da Maker 3D?',
+    a: 'Unimos o minimalismo japonês ao aconchego escandinavo (estilo Japandi) com manufatura aditiva de altíssima precisão. Nossas peças decorativas têm acabamento texturizado orgânico em tons de areia, linho, travertino e bronze, com valores acessíveis direto do nosso atelier.'
   },
   {
     id: 'faq-2',
-    q: 'Posso enviar meu próprio arquivo 3D (.STL / .OBJ / .3MF)?',
-    a: 'Sim! Acesse a aba "Laboratório STL" para enviar seu arquivo, visualizar a malha 3D no navegador e calcular automaticamente o peso em gramas, tempo de impressão e custo baseado no material escolhido.'
+    q: 'Como funciona a branch Gears × Maker 3D de pulseiras?',
+    a: 'A Gears é nosso braço especializado em design vestível e acessórios contemporâneos. Na aba "Gears Pulseiras" você encontra pulseiras com elos orgânicos, tramas geométricas e acabamento acetinado desenvolvidas em conjunto com a Maker 3D.'
   },
   {
     id: 'faq-3',
-    q: 'Qual o prazo de produção e envio?',
-    a: 'Peças do catálogo são produzidas com perfis otimizados de alta velocidade em 24h a 48h úteis. Enviamos para todo o Brasil com código de rastreio e embalagem técnica.'
+    q: 'Vocês também fazem peças sob medida ou personalizações?',
+    a: 'Sim! Na aba "Sob Medida" você pode personalizar dimensões, texturas, gravar iniciais ou enviar seu próprio modelo 3D (.STL) com cálculo transparente por material (PLA Matte/Silk R$ 150/kg, PETG R$ 120/kg e Flex/Trust R$ 200/kg).'
   },
   {
     id: 'faq-4',
-    q: 'Como funciona o sistema de Contas, Coleções e Curtidas?',
-    a: 'Ao registrar sua conta ou entrar com Google, todas as suas peças curtidas, coleções salvas, itens no carrinho e histórico de objetos comprados ficam vinculados ao seu perfil no banco de dados.'
+    q: 'Quais as opções das Coleções de Natal e Fidget Toys?',
+    a: 'Nossa Coleção de Natal traz adornos minimalistas em tons champanhe, off-white e dourado acetinado para mesas postas e árvores elegantes. Já nossa linha de Fidget Toys oferece peças táteis silenciosas e articuladas para foco e bem-estar.'
   },
   {
     id: 'faq-5',
-    q: 'Como escolho combinações de cores em peças multicoloridas (AMS)?',
-    a: 'Ao clicar em qualquer produto, a página técnica dedicada mostra os perfis de impressão e permite selecionar a cor exata de cada seção da peça antes de adicionar ao carrinho.'
+    q: 'Como funciona minha Conta, Coleções Salvas e Sincronização?',
+    a: 'Ao entrar com Google ou criar sua conta, todas as suas peças favoritas, coleções salvas, sacola de compras e histórico de encomendas ficam salvos automaticamente no banco de dados.'
   }
 ];
 
 export const DEFAULT_GLOBAL_COLORS = [
-  { name: 'Laranja Maker3D', hex: '#f07800', priceAdd: 0 },
-  { name: 'Avelã', hex: '#bf540d', priceAdd: 0 },
-  { name: 'Azul Cobalto', hex: '#0d54bf', priceAdd: 0 },
-  { name: 'Preto Matte', hex: '#1c1c1c', priceAdd: 0 },
-  { name: 'Branco Polar', hex: '#ffffff', priceAdd: 0 },
-  { name: 'Verde Bambu', hex: '#00ae42', priceAdd: 0 },
-  { name: 'Dourado Silk', hex: '#f0a500', priceAdd: 3 },
-  { name: 'Vermelho Rubi', hex: '#c0392b', priceAdd: 2 },
-  { name: 'Roxo Galáxia', hex: '#7d3c98', priceAdd: 4 }
+  { name: 'Areia Japandi', hex: '#e6dec8', priceAdd: 0 },
+  { name: 'Travertino Off-White', hex: '#f4f0e7', priceAdd: 0 },
+  { name: 'Taupe Orgânico', hex: '#b08d6e', priceAdd: 0 },
+  { name: 'Bronze Espresso', hex: '#5a4332', priceAdd: 0 },
+  { name: 'Champagne Silk', hex: '#d8c3a5', priceAdd: 0 },
+  { name: 'Terracota Suave', hex: '#c87d55', priceAdd: 0 },
+  { name: 'Verde Sálvia', hex: '#7c8c76', priceAdd: 0 },
+  { name: 'Dourado Natal', hex: '#c99b49', priceAdd: 3 },
+  { name: 'Preto Ônix Matte', hex: '#282420', priceAdd: 0 }
 ];
 
 export const FALLBACK_PRODUCTS = [
+  // ─── COLEÇÃO JAPANDI (DECORAÇÃO DE CASA, VASOS & PORTA-TRECOS) ───
   {
-    id: 9,
-    name: 'Projeto Sob Medida / Impressão STL',
-    emoji: '📐',
-    category: 'Customizado',
-    desc: 'Envie seu arquivo STL/3MF ou link do MakerWorld. Fatiamento profissional com cálculo exato por grama (PLA R$ 150/kg • PETG R$ 120/kg • TPU/Trust R$ 200/kg).',
-    price: null,
-    badge: 'Sob Demanda',
+    id: 'japandi-duo-vasos-organicos',
+    name: 'Duo Vasos Esculturais Kanso — Coleção Japandi',
+    emoji: '🏺',
+    category: 'Coleção Japandi',
+    desc: 'Par de vasos arquitetônicos com aletas verticais superiores e base orgânica texturizada em pedra travertino. Design minimalista perfeito para ambientes contemporâneos, aparadores e mesas de centro.',
+    price: 68,
+    badge: 'Coleção Japandi',
     discount: 0,
     rating: 5.0,
-    reviewsCount: 42,
-    downloadsCount: 310,
-    printsCount: 198,
+    reviewsCount: 46,
+    downloadsCount: 1890,
+    printsCount: 940,
+    layerHeight: '0.12 mm Fuzzy Skin',
+    infill: '20% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Matte Stone',
+    weightGrams: 165,
+    printTime: '4h 30m',
+    model3d: 'assets/products/models/p1.glb',
+    image: 'assets/brand/japandi-vases.jpg',
+    gallery: [
+      'assets/brand/japandi-vases.jpg',
+      'assets/brand/japandi-campaign.jpg'
+    ],
+    colorSections: [
+      {
+        name: 'Tonalidade Mineral',
+        colors: [
+          { name: 'Travertino Off-White', hex: '#f4f0e7' },
+          { name: 'Areia Japandi', hex: '#e6dec8' },
+          { name: 'Taupe Orgânico', hex: '#b08d6e' },
+          { name: 'Bronze Espresso', hex: '#5a4332' }
+        ]
+      }
+    ],
+    colors: [
+      { name: 'Travertino Off-White', hex: '#f4f0e7' },
+      { name: 'Areia Japandi', hex: '#e6dec8' },
+      { name: 'Taupe Orgânico', hex: '#b08d6e' },
+      { name: 'Bronze Espresso', hex: '#5a4332' }
+    ]
+  },
+  {
+    id: 'japandi-vaso-solitario-wabi',
+    name: 'Vaso Canelado Wabi-Sabi Individual',
+    emoji: '🌾',
+    category: 'Coleção Japandi',
+    desc: 'Vaso solitário com transição diagonal entre textura de cerâmica rústica e estrias arquitetônicas precisas. Ideal para arranjos secos, ramos de trigo e decoração minimalista.',
+    price: 39,
+    badge: 'Best-Seller Casa',
+    discount: 0,
+    rating: 5.0,
+    reviewsCount: 38,
+    downloadsCount: 1520,
+    printsCount: 810,
+    layerHeight: '0.12 mm',
+    infill: '18% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Matte Areia',
+    weightGrams: 92,
+    printTime: '2h 50m',
+    model3d: 'assets/products/models/p1.glb',
+    image: 'assets/brand/japandi-campaign.jpg',
+    gallery: [
+      'assets/brand/japandi-campaign.jpg',
+      'assets/brand/japandi-vases.jpg'
+    ],
+    colorSections: [
+      {
+        name: 'Acabamento Natural',
+        colors: [
+          { name: 'Areia Japandi', hex: '#e6dec8' },
+          { name: 'Travertino Off-White', hex: '#f4f0e7' },
+          { name: 'Terracota Suave', hex: '#c87d55' }
+        ]
+      }
+    ],
+    colors: [
+      { name: 'Areia Japandi', hex: '#e6dec8' },
+      { name: 'Travertino Off-White', hex: '#f4f0e7' },
+      { name: 'Terracota Suave', hex: '#c87d55' }
+    ]
+  },
+  {
+    id: 'japandi-porta-treco-zen',
+    name: 'Porta-Treco & Bandeja Organizadora Zen Japandi',
+    emoji: '🕯️',
+    category: 'Coleção Japandi',
+    desc: 'Porta-treco e bandeja escultural com curvas orgânicas suaves para organizar joias, chaves, relógios, perfumes ou velas aromáticas com estética de luxo silencioso.',
+    price: 32,
+    badge: 'Decoração & Ordem',
+    discount: 0,
+    rating: 4.9,
+    reviewsCount: 29,
+    downloadsCount: 1140,
+    printsCount: 670,
     layerHeight: '0.12 mm',
     infill: '20% Gyroid',
     nozzle: '0.4 mm',
-    material: 'PLA / PETG / TPU',
-    model3d: 'assets/products/models/p1.glb',
-    image: 'assets/products/images/P1/p1.png',
-    custom: true,
+    material: 'PLA Matte Linho',
+    weightGrams: 78,
+    printTime: '2h 20m',
+    model3d: 'assets/products/models/p8.glb',
+    image: 'assets/products/images/P8/p1.png',
     gallery: [
-      'assets/products/images/P1/p1.png',
-      'assets/products/images/P1/p2.png'
+      'assets/products/images/P8/p1.png',
+      'assets/products/images/P8/p2.png',
+      'assets/products/images/P8/p3.png'
     ],
     colorSections: [
       {
-        name: 'Cor Principal',
+        name: 'Tonalidade Japandi',
         colors: [
-          { name: 'Laranja Maker3D', hex: '#f07800' },
-          { name: 'Preto Matte', hex: '#1c1c1c' },
-          { name: 'Branco Polar', hex: '#ffffff' }
+          { name: 'Travertino Off-White', hex: '#f4f0e7' },
+          { name: 'Areia Japandi', hex: '#e6dec8' },
+          { name: 'Preto Ônix Matte', hex: '#282420' }
         ]
       }
     ],
     colors: [
-      { name: 'Laranja Maker3D', hex: '#f07800' },
-      { name: 'Preto Matte', hex: '#1c1c1c' },
-      { name: 'Branco Polar', hex: '#ffffff' }
+      { name: 'Travertino Off-White', hex: '#f4f0e7' },
+      { name: 'Areia Japandi', hex: '#e6dec8' },
+      { name: 'Preto Ônix Matte', hex: '#282420' }
     ]
   },
   {
-    id: 1779035132088,
-    name: 'Dragão de Cristal Articulado',
-    emoji: '🐉',
-    desc: 'Modelo articulado print-in-place de alta precisão com cristais facetados ao longo da coluna. Perfil calibrado sem suportes com articulação fluida.',
-    category: 'Miniatura',
-    price: 15,
-    badge: 'Verificado',
-    discount: 0,
-    rating: 4.9,
-    reviewsCount: 28,
-    downloadsCount: 1420,
-    printsCount: 860,
-    layerHeight: '0.12 mm',
-    infill: '15% Gyroid',
-    nozzle: '0.4 mm',
-    material: 'PLA Silk',
-    weightGrams: 42,
-    printTime: '2h 15m',
-    model3d: 'assets/products/models/p5.glb',
-    image: 'https://makerworld.bblmw.com/makerworld/model/US62ded14bdbae8c/design/2025-03-03_38aeb2192ab8d8.png?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-    gallery: [
-      'https://makerworld.bblmw.com/makerworld/model/US62ded14bdbae8c/design/2025-03-03_38aeb2192ab8d8.png?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-      'https://makerworld.bblmw.com/makerworld/model/US62ded14bdbae8c/design/2025-03-03_9345fab102962.png?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp'
-    ],
-    colorSections: [
-      {
-        name: 'Cor do Corpo',
-        colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
-        ]
-      },
-      {
-        name: 'Cor dos Cristais',
-        colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
-        ]
-      }
-    ],
-    colors: [
-      { name: 'Avelã', hex: '#bf540d' },
-      { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto Matte', hex: '#000000' }
-    ]
-  },
-  {
-    id: 1779036803058,
-    name: 'Polvo Articulado Print-in-Place',
-    emoji: '🐙',
-    desc: 'Modelo com 8 tentáculos multi-articulados impressos em uma única peça sem montagem. Excelente acabamento superficial e alta resistência mecânica.',
-    category: 'Articulado',
-    price: 20,
-    badge: 'Destaque',
+    id: 1783942729901,
+    name: 'Suporte Escultural de Leitura Koto',
+    emoji: '📖',
+    category: 'Coleção Japandi',
+    desc: 'Peça de design funcional para manter livros abertos com leveza e ergonomia. Acabamento acetinado que complementa mesas de cabeceira e bibliotecas residenciais.',
+    price: 18,
+    badge: 'Design Utilitário',
     discount: 0,
     rating: 5.0,
-    reviewsCount: 35,
-    downloadsCount: 2150,
-    printsCount: 1290,
-    layerHeight: '0.16 mm',
-    infill: '18% Gyroid',
-    nozzle: '0.4 mm',
-    material: 'PLA Premium',
-    weightGrams: 55,
-    printTime: '2h 40m',
-    model3d: 'assets/products/models/p1.glb',
-    image: 'assets/products/images/P1/p1.png',
-    gallery: [
-      'assets/products/images/P1/p1.png',
-      'assets/products/images/P1/p2.png',
-      'assets/products/images/P1/p3.png',
-      'https://makerworld.bblmw.com/makerworld/model/US7275b0b14b2b1b/design/2023-08-16_68wwjqr9j9b0.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp'
-    ],
-    colorSections: [
-      {
-        name: 'Seção Superior',
-        colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
-        ]
-      },
-      {
-        name: 'Seção Inferior',
-        colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
-        ]
-      }
-    ],
-    colors: [
-      { name: 'Avelã', hex: '#bf540d' },
-      { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto Matte', hex: '#000000' }
-    ]
-  },
-  {
-    id: 1779036994512,
-    name: 'Olho Giroscópio Mecânico',
-    emoji: '👀',
-    desc: 'Mecanismo concêntrico de anéis giratórios com tolerância de 0.15 mm. Movimento livre em 3 eixos, ideal para demonstração de precisão dimensional.',
-    category: 'Fidget Toy',
-    price: 15,
-    badge: 'Precisão',
-    discount: 0,
-    rating: 4.8,
-    reviewsCount: 19,
-    downloadsCount: 980,
-    printsCount: 610,
-    layerHeight: '0.12 mm',
-    infill: '20% Grid',
-    nozzle: '0.4 mm',
-    material: 'PLA Dual',
-    weightGrams: 34,
-    printTime: '1h 45m',
-    model3d: 'assets/products/models/p5.glb',
-    image: 'https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_fd01d5858a26a.jpg?x-oss-process=image/resize,w_1000/format,webp',
-    gallery: [
-      'https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_fd01d5858a26a.jpg?x-oss-process=image/resize,w_1000/format,webp',
-      'https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_3f95e2f0fe3ea.jpg?x-oss-process=image/resize,w_1000/format,webp'
-    ],
-    colorSections: [
-      {
-        name: 'Cores disponíveis',
-        colors: [
-          { name: 'Branco & Azul', hex: '#0d54bf' },
-          { name: 'Preto & Laranja', hex: '#f07800' }
-        ]
-      }
-    ],
-    colors: [
-      { name: 'Branco & Azul', hex: '#0d54bf' },
-      { name: 'Preto & Laranja', hex: '#f07800' }
-    ]
-  },
-  {
-    id: 1779038443112,
-    name: 'Case Texturizado Porta Batom',
-    emoji: '🌸',
-    desc: 'Suporte cilíndrico com relevo geométrico floral de alta definição e argola reforçada para chaveiro. Encaixe sob pressão calibrado.',
-    category: 'Acessórios',
-    price: 35,
-    badge: 'Novo',
-    discount: 0,
-    rating: 4.9,
-    reviewsCount: 14,
-    downloadsCount: 540,
-    printsCount: 320,
+    reviewsCount: 33,
+    downloadsCount: 1840,
+    printsCount: 1120,
     layerHeight: '0.12 mm',
     infill: '25% Gyroid',
     nozzle: '0.4 mm',
-    material: 'PETG / PLA',
-    weightGrams: 48,
-    printTime: '2h 10m',
-    model3d: '',
+    material: 'PLA Matte',
+    weightGrams: 22,
+    printTime: '0h 50m',
+    model3d: 'assets/products/models/book2.glb',
+    image: 'assets/products/images/P7/p1.png',
+    gallery: [
+      'assets/products/images/P7/p1.png',
+      'assets/products/images/P7/p2.png',
+      'assets/products/images/P7/p3.png'
+    ],
+    colorSections: [
+      {
+        name: 'Acabamento',
+        colors: [
+          { name: 'Areia Japandi', hex: '#e6dec8' },
+          { name: 'Taupe Orgânico', hex: '#b08d6e' },
+          { name: 'Bronze Espresso', hex: '#5a4332' }
+        ]
+      }
+    ],
+    colors: [
+      { name: 'Areia Japandi', hex: '#e6dec8' },
+      { name: 'Taupe Orgânico', hex: '#b08d6e' },
+      { name: 'Bronze Espresso', hex: '#5a4332' }
+    ]
+  },
+
+  // ─── COLEÇÃO DE NATAL (DECORAÇÃO NATALINA MINIMALISTA & LUXO ACESSÍVEL) ───
+  {
+    id: 'natal-arvore-escultural-nordica',
+    name: 'Pinheiro Escultural Plissado — Coleção de Natal',
+    emoji: '🎄',
+    category: 'Coleção de Natal',
+    desc: 'Árvore de Natal minimalista com lâminas helicoidais orgânicas em estética nórdica. Perfeita para mesas postas de ceia, aparadores e composições natalinas sofisticadas.',
+    price: 44,
+    badge: 'Edição de Natal',
+    discount: 10,
+    rating: 5.0,
+    reviewsCount: 27,
+    downloadsCount: 980,
+    printsCount: 540,
+    layerHeight: '0.12 mm',
+    infill: '15% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Silk Champagne / Matte',
+    weightGrams: 88,
+    printTime: '3h 10m',
+    model3d: 'assets/products/models/p4.glb',
+    image: 'assets/brand/japandi-vases.jpg',
+    gallery: [
+      'assets/brand/japandi-vases.jpg',
+      'assets/brand/japandi-campaign.jpg'
+    ],
+    colorSections: [
+      {
+        name: 'Paleta Festiva Minimalista',
+        colors: [
+          { name: 'Champagne Silk', hex: '#d8c3a5' },
+          { name: 'Travertino Off-White', hex: '#f4f0e7' },
+          { name: 'Dourado Natal', hex: '#c99b49' },
+          { name: 'Verde Sálvia', hex: '#7c8c76' }
+        ]
+      }
+    ],
+    colors: [
+      { name: 'Champagne Silk', hex: '#d8c3a5' },
+      { name: 'Travertino Off-White', hex: '#f4f0e7' },
+      { name: 'Dourado Natal', hex: '#c99b49' },
+      { name: 'Verde Sálvia', hex: '#7c8c76' }
+    ]
+  },
+  {
+    id: 'natal-kit-ornamentos-origami',
+    name: 'Trio Esferas & Estrelas Facetadas — Natal Luxo',
+    emoji: '✨',
+    category: 'Coleção de Natal',
+    desc: 'Conjunto com 3 adornos natalinos de geometria orgânica canelada com laço em camurça. Leves, inquebráveis e desenhados para árvores de Natal de alto padrão.',
+    price: 36,
+    badge: 'Natal 2026',
+    discount: 0,
+    rating: 4.9,
+    reviewsCount: 21,
+    downloadsCount: 790,
+    printsCount: 460,
+    layerHeight: '0.12 mm',
+    infill: '15% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Silk Gold & Off-White',
+    weightGrams: 64,
+    printTime: '2h 30m',
+    model3d: 'assets/products/models/p5.glb',
+    image: 'https://makerworld.bblmw.com/makerworld/comment/20260503/91133529/4bf68873d57c671e.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
+    gallery: [
+      'https://makerworld.bblmw.com/makerworld/comment/20260503/91133529/4bf68873d57c671e.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
+      'https://makerworld.bblmw.com/makerworld/comment/20260503/91133529/80cf929d1e30e1e5.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp'
+    ],
+    colorSections: [
+      {
+        name: 'Tonalidade do Trio',
+        colors: [
+          { name: 'Dourado Natal', hex: '#c99b49' },
+          { name: 'Champagne Silk', hex: '#d8c3a5' },
+          { name: 'Travertino Off-White', hex: '#f4f0e7' }
+        ]
+      }
+    ],
+    colors: [
+      { name: 'Dourado Natal', hex: '#c99b49' },
+      { name: 'Champagne Silk', hex: '#d8c3a5' },
+      { name: 'Travertino Off-White', hex: '#f4f0e7' }
+    ]
+  },
+
+  // ─── BRANCH GEARS × MAKER 3D (LINHA DE PULSEIRAS ESCULTURAIS) ───
+  {
+    id: 'gears-pulseira-aura-link',
+    name: 'Pulseira Escultural Aura Link — Gears × Maker 3D',
+    emoji: '⌚',
+    category: 'Gears Pulseiras',
+    desc: 'Desenvolvida em collab pela branch Gears × Maker 3D: pulseira com elos orgânicos articulados impressos em peça única e polímero flexível Trust/TPU ou PLA Silk acetinado.',
+    price: 38,
+    badge: 'Collab Gears',
+    discount: 0,
+    rating: 5.0,
+    reviewsCount: 34,
+    downloadsCount: 1320,
+    printsCount: 780,
+    layerHeight: '0.10 mm Alta Precisão',
+    infill: '30% Gyroid Flex',
+    nozzle: '0.4 mm',
+    material: 'Trust Flex / PLA Silk',
+    weightGrams: 26,
+    printTime: '1h 20m',
+    model3d: 'assets/products/models/p3.glb',
     image: 'https://makerworld.bblmw.com/makerworld/model/US23a8a1f23a9c84/design/8546f96ed132b6bf.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
     gallery: [
       'https://makerworld.bblmw.com/makerworld/model/US23a8a1f23a9c84/design/8546f96ed132b6bf.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
@@ -303,129 +366,81 @@ export const FALLBACK_PRODUCTS = [
     ],
     colorSections: [
       {
-        name: 'Cores disponíveis',
+        name: 'Acabamento da Pulseira (Gears)',
         colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
+          { name: 'Bronze Espresso', hex: '#5a4332' },
+          { name: 'Champagne Silk', hex: '#d8c3a5' },
+          { name: 'Preto Ônix Matte', hex: '#282420' },
+          { name: 'Dourado Natal', hex: '#c99b49' }
         ]
       }
     ],
     colors: [
-      { name: 'Avelã', hex: '#bf540d' },
-      { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto Matte', hex: '#000000' }
+      { name: 'Bronze Espresso', hex: '#5a4332' },
+      { name: 'Champagne Silk', hex: '#d8c3a5' },
+      { name: 'Preto Ônix Matte', hex: '#282420' },
+      { name: 'Dourado Natal', hex: '#c99b49' }
     ]
   },
   {
-    id: 1779041587144,
-    name: 'Tubarão Articulado Flex',
-    emoji: '🦈',
-    desc: 'Estrutura segmentada hidrodinâmica impressa em peça única. Articulações internas reforçadas para alta durabilidade.',
-    category: 'Articulado',
-    price: 23,
-    badge: 'Tendência',
+    id: 'gears-pulseira-kinetica-wave',
+    name: 'Bracelete Orgânico Kinetic Wave — Linha Gears',
+    emoji: '〰️',
+    category: 'Gears Pulseiras',
+    desc: 'Bracelete anatômico com nervuras fluidas inspirado na estética Japandi e engenharia cinética da marca parceira Gears. Toque aveludado e encaixe sob medida.',
+    price: 42,
+    badge: 'Branch Oficial Gears',
     discount: 0,
     rating: 4.9,
-    reviewsCount: 22,
-    downloadsCount: 1120,
-    printsCount: 740,
-    layerHeight: '0.16 mm',
-    infill: '15% Gyroid',
+    reviewsCount: 19,
+    downloadsCount: 860,
+    printsCount: 490,
+    layerHeight: '0.10 mm',
+    infill: '25% Gyroid',
     nozzle: '0.4 mm',
-    material: 'PLA Premium',
-    weightGrams: 52,
-    printTime: '2h 30m',
-    model3d: 'assets/products/models/p3.glb',
-    image: 'https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_51a2cb930b324.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
+    material: 'PLA Silk / TPU Flex',
+    weightGrams: 29,
+    printTime: '1h 35m',
+    model3d: 'assets/products/models/p5.glb',
+    image: 'https://makerworld.bblmw.com/makerworld/model/US58e8e7fedc0451/design/2025-07-17_736615c4896bc.gif?x-oss-process=image/resize,w_1000/format,webp',
     gallery: [
-      'https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_51a2cb930b324.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-      'https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_bd87f059d01fd.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-      'https://makerworld.bblmw.com/makerworld/model/USfcc6aeeb01981c/design/2024-05-14_b705f236b4828.jpg?x-oss-process=image/resize,w_1000/format,webp'
+      'https://makerworld.bblmw.com/makerworld/model/US58e8e7fedc0451/design/2025-07-17_736615c4896bc.gif?x-oss-process=image/resize,w_1000/format,webp'
     ],
     colorSections: [
       {
-        name: 'Cores disponíveis',
+        name: 'Tonalidade Gears',
         colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
+          { name: 'Champagne Silk', hex: '#d8c3a5' },
+          { name: 'Taupe Orgânico', hex: '#b08d6e' },
+          { name: 'Bronze Espresso', hex: '#5a4332' }
         ]
       }
     ],
     colors: [
-      { name: 'Avelã', hex: '#bf540d' },
-      { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto Matte', hex: '#000000' }
+      { name: 'Champagne Silk', hex: '#d8c3a5' },
+      { name: 'Taupe Orgânico', hex: '#b08d6e' },
+      { name: 'Bronze Espresso', hex: '#5a4332' }
     ]
   },
-  {
-    id: 1779042797608,
-    name: 'Furão Articulado Multicolor',
-    emoji: '🦦',
-    desc: 'Modelo longo articulado com pintura digital multicor via sistema AMS. Segmentos ergonômicos e acabamento acetinado.',
-    category: 'Miniatura',
-    price: 29,
-    badge: 'AMS Multicor',
-    discount: 0,
-    rating: 5.0,
-    reviewsCount: 31,
-    downloadsCount: 1680,
-    printsCount: 920,
-    layerHeight: '0.12 mm',
-    infill: '15% Gyroid',
-    nozzle: '0.4 mm',
-    material: 'PLA Matte',
-    weightGrams: 64,
-    printTime: '3h 20m',
-    model3d: 'assets/products/models/p4.glb',
-    image: 'https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_be4379089642f8.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-    gallery: [
-      'https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_be4379089642f8.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-      'https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_7e37fee09d00d8.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-      'https://makerworld.bblmw.com/makerworld/model/US506c273669d189/design/2025-12-10_9479d317242068.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp'
-    ],
-    colorSections: [
-      {
-        name: 'Cor do Corpo',
-        colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
-        ]
-      },
-      {
-        name: 'Cor da Pelagem',
-        colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
-        ]
-      }
-    ],
-    colors: [
-      { name: 'Avelã', hex: '#bf540d' },
-      { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto Matte', hex: '#000000' }
-    ]
-  },
+
+  // ─── FIDGET TOYS & ESCULTURAS CINÉTICAS DE MESA ───
   {
     id: 1779043350679,
-    name: 'Cone Espiral Pass-Through',
+    name: 'Escultura Cinética Pass-Through (Fidget de Mesa)',
     emoji: '🌀',
-    desc: 'Geometria helicoidal dupla com ajuste de folga de 0.1 mm permitindo que uma peça atravesse a outra continuamente sem atrito.',
-    category: 'Fidget Toy',
-    price: 10,
-    badge: 'Mais Baixado',
+    category: 'Fidget Toys',
+    desc: 'Fidget toy escultural de mesa com geometria helicoidal dupla de precisão (0.10 mm). Além de objeto de alívio sensorial e foco, funciona como peça decorativa em home offices.',
+    price: 24,
+    badge: 'Sensorial & Decor',
     discount: 0,
     rating: 4.9,
     reviewsCount: 47,
     downloadsCount: 3410,
     printsCount: 2180,
-    layerHeight: '0.16 mm',
-    infill: '15% Cubic',
+    layerHeight: '0.12 mm',
+    infill: '18% Gyroid',
     nozzle: '0.4 mm',
-    material: 'PLA Silk',
+    material: 'PLA Silk / Matte',
     weightGrams: 38,
     printTime: '1h 50m',
     model3d: 'assets/products/models/p4.glb',
@@ -438,180 +453,151 @@ export const FALLBACK_PRODUCTS = [
       {
         name: 'Cor Externa',
         colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
+          { name: 'Areia Japandi', hex: '#e6dec8' },
+          { name: 'Taupe Orgânico', hex: '#b08d6e' },
+          { name: 'Bronze Espresso', hex: '#5a4332' }
         ]
       },
       {
         name: 'Cor Interna',
         colors: [
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Azul Cobalto', hex: '#0d54bf' },
-          { name: 'Preto Matte', hex: '#000000' }
+          { name: 'Travertino Off-White', hex: '#f4f0e7' },
+          { name: 'Champagne Silk', hex: '#d8c3a5' },
+          { name: 'Preto Ônix Matte', hex: '#282420' }
         ]
       }
     ],
     colors: [
-      { name: 'Avelã', hex: '#bf540d' },
-      { name: 'Azul Cobalto', hex: '#0d54bf' },
-      { name: 'Preto Matte', hex: '#000000' }
+      { name: 'Areia Japandi', hex: '#e6dec8' },
+      { name: 'Taupe Orgânico', hex: '#b08d6e' },
+      { name: 'Bronze Espresso', hex: '#5a4332' }
     ]
   },
   {
-    id: 1779047822545,
-    name: 'Troféu Copa do Mundo Escala 1:1',
-    emoji: '🏆',
-    desc: 'Réplica em escala real impressa com filamento PLA Silk Dourado de alto brilho e preenchimento interno estrutural reforçado.',
-    category: 'Decorativo',
-    price: 60,
-    badge: 'Edição Pro',
-    discount: 10,
-    rating: 5.0,
-    reviewsCount: 18,
-    downloadsCount: 890,
-    printsCount: 410,
-    layerHeight: '0.12 mm',
-    infill: '25% Gyroid',
-    nozzle: '0.4 mm',
-    material: 'PLA Silk Gold',
-    weightGrams: 185,
-    printTime: '6h 40m',
-    model3d: '',
-    image: 'https://makerworld.bblmw.com/makerworld/comment/20260503/91133529/4bf68873d57c671e.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-    gallery: [
-      'https://makerworld.bblmw.com/makerworld/comment/20260503/91133529/4bf68873d57c671e.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-      'https://makerworld.bblmw.com/makerworld/comment/20260503/91133529/80cf929d1e30e1e5.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp'
-    ],
-    colorSections: [
-      {
-        name: 'Acabamento',
-        colors: [{ name: 'Dourado Silk', hex: '#f0a500' }]
-      }
-    ],
-    colors: [{ name: 'Dourado Silk', hex: '#f0a500' }]
-  },
-  {
-    id: 1783942729445,
-    name: 'Estrela do Mar Malha Flexível',
-    emoji: '⭐',
-    desc: 'Superfície orgânica com micro-escamas articuladas em malha contínua. Movimento fluido multidirecional.',
-    category: 'Articulado',
-    price: 70,
-    badge: 'Popular',
-    discount: 20,
-    rating: 4.9,
-    reviewsCount: 25,
-    downloadsCount: 1230,
-    printsCount: 680,
-    layerHeight: '0.12 mm',
-    infill: '15% Gyroid',
-    nozzle: '0.4 mm',
-    material: 'PLA Silk',
-    weightGrams: 110,
-    printTime: '4h 15m',
-    model3d: '',
-    image: 'https://makerworld.bblmw.com/makerworld/model/US58e8e7fedc0451/design/2025-07-17_736615c4896bc.gif?x-oss-process=image/resize,w_1000/format,webp',
-    gallery: [
-      'https://makerworld.bblmw.com/makerworld/model/US58e8e7fedc0451/design/2025-07-17_736615c4896bc.gif?x-oss-process=image/resize,w_1000/format,webp',
-      'https://makerworld.bblmw.com/makerworld/model/1615537/comment/be6fe350-ee30-11f0-a971-ff817b54094d.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp'
-    ],
-    colorSections: [
-      {
-        name: 'Cores disponíveis',
-        colors: [
-          { name: 'Preto Matte', hex: '#2c2c2c' },
-          { name: 'Verde Bambu', hex: '#00ae42' },
-          { name: 'Dourado Silk', hex: '#f0a500' }
-        ]
-      }
-    ],
-    colors: [
-      { name: 'Preto Matte', hex: '#2c2c2c' },
-      { name: 'Verde Bambu', hex: '#00ae42' },
-      { name: 'Dourado Silk', hex: '#f0a500' }
-    ]
-  },
-  {
-    id: 1783942729901,
-    name: 'Suporte Ergonômico de Leitura',
-    emoji: '📖',
-    desc: 'Acessório utilitário leve para manter páginas abertas com apenas o polegar. Geometria chanfrada confortável e resistente.',
-    category: 'Utilitário',
-    price: 14,
-    badge: 'Utilitário',
-    discount: 0,
-    rating: 5.0,
-    reviewsCount: 33,
-    downloadsCount: 1840,
-    printsCount: 1120,
-    layerHeight: '0.16 mm',
-    infill: '25% Grid',
-    nozzle: '0.4 mm',
-    material: 'PETG / PLA',
-    weightGrams: 18,
-    printTime: '0h 45m',
-    model3d: 'assets/products/models/book2.glb',
-    image: 'assets/products/images/P7/p1.png',
-    gallery: [
-      'assets/products/images/P7/p1.png',
-      'assets/products/images/P7/p2.png',
-      'assets/products/images/P7/p3.png'
-    ],
-    colorSections: [
-      {
-        name: 'Cores disponíveis',
-        colors: [
-          { name: 'Laranja Maker3D', hex: '#f07800' },
-          { name: 'Avelã', hex: '#bf540d' },
-          { name: 'Preto Matte', hex: '#1c1c1c' }
-        ]
-      }
-    ],
-    colors: [
-      { name: 'Laranja Maker3D', hex: '#f07800' },
-      { name: 'Avelã', hex: '#bf540d' },
-      { name: 'Preto Matte', hex: '#1c1c1c' }
-    ]
-  },
-  {
-    id: 1783942729902,
-    name: 'Bandeja Organizadora Bat-Wing',
-    emoji: '🦇',
-    desc: 'Recipiente de bancada com design geométrico de asas para organização de peças, chaves ou setups.',
-    category: 'Decorativo',
-    price: 26,
-    badge: 'Setup Desk',
+    id: 1779036994512,
+    name: 'Esfera Giroscópica Orbital Tátil',
+    emoji: '🪐',
+    category: 'Fidget Toys',
+    desc: 'Anéis concêntricos de giro livre em 3 eixos com toque sedoso e movimento silencioso. Desenvolvida para relaxamento tátil durante reuniões e leitura.',
+    price: 22,
+    badge: 'Fidget Silencioso',
     discount: 0,
     rating: 4.8,
-    reviewsCount: 15,
-    downloadsCount: 730,
-    printsCount: 420,
-    layerHeight: '0.16 mm',
+    reviewsCount: 19,
+    downloadsCount: 980,
+    printsCount: 610,
+    layerHeight: '0.12 mm',
     infill: '20% Gyroid',
     nozzle: '0.4 mm',
     material: 'PLA Matte',
-    weightGrams: 76,
-    printTime: '3h 10m',
-    model3d: 'assets/products/models/p8.glb',
-    image: 'assets/products/images/P8/p1.png',
+    weightGrams: 34,
+    printTime: '1h 45m',
+    model3d: 'assets/products/models/p5.glb',
+    image: 'https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_fd01d5858a26a.jpg?x-oss-process=image/resize,w_1000/format,webp',
     gallery: [
-      'assets/products/images/P8/p1.png',
-      'assets/products/images/P8/p2.png',
-      'assets/products/images/P8/p3.png'
+      'https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_fd01d5858a26a.jpg?x-oss-process=image/resize,w_1000/format,webp',
+      'https://makerworld.bblmw.com/makerworld/model/USe124efe0f13b10/design/2024-08-06_3f95e2f0fe3ea.jpg?x-oss-process=image/resize,w_1000/format,webp'
     ],
     colorSections: [
       {
-        name: 'Cores disponíveis',
+        name: 'Tonalidade',
         colors: [
-          { name: 'Preto Matte', hex: '#1c1c1c' },
-          { name: 'Roxo Galáxia', hex: '#7d3c98' }
+          { name: 'Areia Japandi', hex: '#e6dec8' },
+          { name: 'Taupe Orgânico', hex: '#b08d6e' },
+          { name: 'Preto Ônix Matte', hex: '#282420' }
         ]
       }
     ],
     colors: [
-      { name: 'Preto Matte', hex: '#1c1c1c' },
-      { name: 'Roxo Galáxia', hex: '#7d3c98' }
+      { name: 'Areia Japandi', hex: '#e6dec8' },
+      { name: 'Taupe Orgânico', hex: '#b08d6e' },
+      { name: 'Preto Ônix Matte', hex: '#282420' }
+    ]
+  },
+  {
+    id: 1779036803058,
+    name: 'Escultura Articulada Tátil — Série Orgânica',
+    emoji: '🐙',
+    category: 'Fidget Toys',
+    desc: 'Peça multi-articulada impressa sem emendas com movimento fluido e acabamento acetinado em tons minerais.',
+    price: 25,
+    badge: 'Articulado',
+    discount: 0,
+    rating: 5.0,
+    reviewsCount: 35,
+    downloadsCount: 2150,
+    printsCount: 1290,
+    layerHeight: '0.12 mm',
+    infill: '18% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Matte',
+    weightGrams: 55,
+    printTime: '2h 40m',
+    model3d: 'assets/products/models/p1.glb',
+    image: 'assets/products/images/P1/p1.png',
+    gallery: [
+      'assets/products/images/P1/p1.png',
+      'assets/products/images/P1/p2.png',
+      'assets/products/images/P1/p3.png'
+    ],
+    colorSections: [
+      {
+        name: 'Tonalidade',
+        colors: [
+          { name: 'Areia Japandi', hex: '#e6dec8' },
+          { name: 'Taupe Orgânico', hex: '#b08d6e' },
+          { name: 'Terracota Suave', hex: '#c87d55' }
+        ]
+      }
+    ],
+    colors: [
+      { name: 'Areia Japandi', hex: '#e6dec8' },
+      { name: 'Taupe Orgânico', hex: '#b08d6e' },
+      { name: 'Terracota Suave', hex: '#c87d55' }
+    ]
+  },
+
+  // ─── PROJETO PERSONALIZADO / ENCOMENDA EXCLUSIVA ───
+  {
+    id: 9,
+    name: 'Peça Decorativa ou Projeto Sob Medida (Atelier 3D)',
+    emoji: '📐',
+    category: 'Sob Medida',
+    desc: 'Personalize dimensões, texturas Japandi, cores do seu ambiente ou envie seu arquivo 3D. Produção exclusiva com tabela transparente (PLA R$ 150/kg • PETG R$ 120/kg • Trust/Flex R$ 200/kg).',
+    price: null,
+    badge: 'Atelier Sob Medida',
+    discount: 0,
+    rating: 5.0,
+    reviewsCount: 42,
+    downloadsCount: 310,
+    printsCount: 198,
+    layerHeight: '0.12 mm',
+    infill: '20% Gyroid',
+    nozzle: '0.4 mm',
+    material: 'PLA Matte / Silk / PETG / Trust',
+    model3d: 'assets/products/models/p1.glb',
+    image: 'assets/brand/japandi-campaign.jpg',
+    custom: true,
+    gallery: [
+      'assets/brand/japandi-campaign.jpg',
+      'assets/brand/japandi-vases.jpg'
+    ],
+    colorSections: [
+      {
+        name: 'Tonalidade Principal',
+        colors: [
+          { name: 'Travertino Off-White', hex: '#f4f0e7' },
+          { name: 'Areia Japandi', hex: '#e6dec8' },
+          { name: 'Taupe Orgânico', hex: '#b08d6e' },
+          { name: 'Bronze Espresso', hex: '#5a4332' }
+        ]
+      }
+    ],
+    colors: [
+      { name: 'Travertino Off-White', hex: '#f4f0e7' },
+      { name: 'Areia Japandi', hex: '#e6dec8' },
+      { name: 'Taupe Orgânico', hex: '#b08d6e' },
+      { name: 'Bronze Espresso', hex: '#5a4332' }
     ]
   }
 ];
@@ -619,19 +605,18 @@ export const FALLBACK_PRODUCTS = [
 class Store {
   constructor() {
     this.state = {
-      settings: this.loadLocal('maker3d_settings', DEFAULT_SITE_SETTINGS),
-      products: this.loadLocal('maker3d_products', FALLBACK_PRODUCTS),
-      globalColors: this.loadLocal('maker3d_global_colors', DEFAULT_GLOBAL_COLORS),
-      coupons: this.loadLocal('maker3d_coupons', DEFAULT_COUPONS),
-      faqs: this.loadLocal('maker3d_faqs', DEFAULT_FAQS),
+      settings: this.loadLocal('maker3d_settings_v3', DEFAULT_SITE_SETTINGS),
+      products: this.loadLocal('maker3d_products_v3', FALLBACK_PRODUCTS),
+      globalColors: this.loadLocal('maker3d_global_colors_v3', DEFAULT_GLOBAL_COLORS),
+      coupons: this.loadLocal('maker3d_coupons_v3', DEFAULT_COUPONS),
+      faqs: this.loadLocal('maker3d_faqs_v3', DEFAULT_FAQS),
       cart: this.loadLocal('maker3d_cart', []),
       wishlist: this.loadLocal('maker3d_wishlist', []),
       collections: this.loadLocal('maker3d_collections', [
-        { id: 'col-default', name: 'Meus Modelos Salvos', items: [] }
+        { id: 'col-japandi', name: 'Minha Seleção Japandi', items: [] }
       ]),
       orders: this.loadLocal('maker3d_orders', []),
       reviews: this.loadLocal('maker3d_reviews', {}),
-      partners: this.loadLocal('maker3d_partners', DEFAULT_PARTNERS),
       users: this.loadLocal('maker3d_users', []),
       currentUser: this.loadLocal('maker3d_current_user', null),
       activeCoupon: null

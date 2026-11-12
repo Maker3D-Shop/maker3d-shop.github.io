@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// Maker3D — UI Utilities: Loadscreen, Scroll Progress, Navigation & Toasts
+// Maker3D — UI Utilities: Loadscreen, Gyroscope Tilt Motion, Navigation & Toasts
 // ═══════════════════════════════════════════════════════════════════════════
 import { store } from '../config/store.js';
 
@@ -18,14 +18,16 @@ export function hideSiteLoadscreen() {
   loader.classList.add('fade-out');
   setTimeout(() => {
     loader.style.display = 'none';
-  }, 450);
+  }, 500);
 }
 
 export function applyBrandSettings() {
   const s = store.state.settings;
   if (!s) return;
 
-  const pColor = (!s.primaryColor || s.primaryColor === '#00ae42' || s.primaryColor === '#ff7a00') ? '#ff9e1b' : s.primaryColor;
+  const pColor = (!s.primaryColor || ['#00ae42', '#ff7a00', '#ff9e1b'].includes(s.primaryColor))
+    ? '#8c6d53'
+    : s.primaryColor;
   document.documentElement.style.setProperty('--brand-primary', pColor);
 
   const heroBadge = document.getElementById('heroBadgeText');
@@ -36,7 +38,7 @@ export function applyBrandSettings() {
   if (heroSub && s.heroSubtitle) heroSub.textContent = s.heroSubtitle;
 
   document.querySelectorAll('.dynamic-brand-name').forEach(el => {
-    el.textContent = s.brandName || 'Maker3D';
+    el.textContent = s.brandName || 'Maker 3D';
   });
 }
 
@@ -44,6 +46,7 @@ const PAGE_ROUTE_MAP = {
   inicio: '',
   produtos: 'catalogo/',
   produto: 'produto/',
+  gears: 'gears/',
   orcamento: 'laboratorio-stl/',
   sobre: 'sobre/',
   contato: 'contato/'
@@ -73,9 +76,7 @@ export function showPage(id, pushRoute = true, queryParams = '') {
       if (window.location.href !== targetUrl.href) {
         window.history.pushState({ page: id, queryParams }, '', targetUrl.href);
       }
-    } catch (_) {
-      // Fallback if running on file:// protocol
-    }
+    } catch (_) {}
   }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -98,6 +99,9 @@ export function initReveal() {
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 }
 
+/**
+ * Passive UX Motion: Scroll progress + DeviceOrientation (Phone Tilt Parallax) + Subtle Mouse Parallax
+ */
 export function initParticlesAndScroll() {
   window.addEventListener('scroll', () => {
     const nav = document.getElementById('mainNav');
@@ -111,6 +115,32 @@ export function initParticlesAndScroll() {
       prog.style.width = pct + '%';
     }
   });
+
+  // Phone Gyroscope / Accelerometer Passive Tilt Animation (DeviceOrientation)
+  const applyTilt = (nx, ny) => {
+    const clampedX = Math.max(-1, Math.min(1, nx));
+    const clampedY = Math.max(-1, Math.min(1, ny));
+    document.documentElement.style.setProperty('--tilt-x', `${(clampedX * 14).toFixed(2)}px`);
+    document.documentElement.style.setProperty('--tilt-y', `${(clampedY * 14).toFixed(2)}px`);
+    document.documentElement.style.setProperty('--tilt-rot-x', `${(-clampedY * 4.5).toFixed(2)}deg`);
+    document.documentElement.style.setProperty('--tilt-rot-y', `${(clampedX * 4.5).toFixed(2)}deg`);
+  };
+
+  if (typeof window !== 'undefined' && 'DeviceOrientationEvent' in window) {
+    window.addEventListener('deviceorientation', (event) => {
+      if (event.gamma === null && event.beta === null) return;
+      const nx = (event.gamma || 0) / 30; // Left/Right tilt (-30 to +30 deg)
+      const ny = ((event.beta || 45) - 45) / 30; // Front/Back tilt centered at 45 deg holding angle
+      applyTilt(nx, ny);
+    }, { passive: true });
+  }
+
+  // Subtle Desktop Pointer Ambient Parallax
+  window.addEventListener('mousemove', (e) => {
+    const nx = (e.clientX / (window.innerWidth || 1)) * 2 - 1;
+    const ny = (e.clientY / (window.innerHeight || 1)) * 2 - 1;
+    applyTilt(nx * 0.65, ny * 0.65);
+  }, { passive: true });
 }
 
 export function renderFAQs() {

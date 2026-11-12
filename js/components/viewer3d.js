@@ -57,18 +57,18 @@ class Viewer3DManager {
       this.heroRenderer.setSize(nw, nh, false);
     });
 
-    const amb = new THREE.AmbientLight(0xffffff, 0.75);
+    const amb = new THREE.AmbientLight(0xffffff, 0.85);
     this.heroScene.add(amb);
-    const dir1 = new THREE.DirectionalLight(0xff9e1b, 1.5);
+    const dir1 = new THREE.DirectionalLight(0xb08d6e, 1.45);
     dir1.position.set(4, 6, 5);
     this.heroScene.add(dir1);
-    const dir2 = new THREE.PointLight(0x4facfe, 0.7, 15);
+    const dir2 = new THREE.PointLight(0xd8c7b4, 0.7, 15);
     dir2.position.set(-4, -2, 3);
     this.heroScene.add(dir2);
 
     const group = new THREE.Group();
     const mat = new THREE.MeshStandardMaterial({
-      color: 0xff9e1b,
+      color: 0xb08d6e,
       roughness: 0.25,
       metalness: 0.35
     });
@@ -78,7 +78,7 @@ class Viewer3DManager {
     this.heroMesh = new THREE.Mesh(knotGeo, mat);
     group.add(this.heroMesh);
 
-    const ringMat = new THREE.MeshStandardMaterial({ color: 0xffc96b, roughness: 0.3, metalness: 0.5 });
+    const ringMat = new THREE.MeshStandardMaterial({ color: 0xd8c7b4, roughness: 0.3, metalness: 0.5 });
     [1.35, 1.55].forEach((radius, idx) => {
       const rGeo = new THREE.TorusGeometry(radius, 0.03, 16, 64);
       const rMesh = new THREE.Mesh(rGeo, ringMat);
@@ -86,7 +86,7 @@ class Viewer3DManager {
       group.add(rMesh);
     });
 
-    const grid = new THREE.GridHelper(5, 12, 0xff9e1b, 0x332414);
+    const grid = new THREE.GridHelper(5, 12, 0xb08d6e, 0xe4dcd0);
     grid.position.y = -1.35;
     this.heroScene.add(grid);
     this.heroScene.add(group);
@@ -158,7 +158,7 @@ class Viewer3DManager {
   /**
    * 2. Product Modal 3D Viewer (Supports real .glb/.gltf files + fallback procedural mesh)
    */
-  initModal3D(modelUrl, tintHex = '#ff9e1b') {
+  initModal3D(modelUrl, tintHex = '#b08d6e') {
     const canvas = document.getElementById('modal3dCanvas');
     const loading = document.getElementById('viewer3dLoading');
     if (!canvas || typeof THREE === 'undefined') return;
@@ -171,7 +171,7 @@ class Viewer3DManager {
     const h = canvas.clientHeight || 380;
 
     this.modalScene = new THREE.Scene();
-    this.modalScene.background = new THREE.Color(0xf7f1e6);
+    this.modalScene.background = new THREE.Color(0xf4f0e7);
     this.modalCamera = new THREE.PerspectiveCamera(50, w / h, 0.1, 200);
     this.modalCamera.position.set(0, 1.1, 3.5);
 
@@ -180,11 +180,11 @@ class Viewer3DManager {
     this.modalRenderer.setSize(w, h, false);
 
     this.modalScene.add(new THREE.AmbientLight(0xffffff, 0.92));
-    const dir = new THREE.DirectionalLight(0xffb84d, 1.35);
+    const dir = new THREE.DirectionalLight(0xc8a97e, 1.35);
     dir.position.set(5, 8, 6);
     this.modalScene.add(dir);
 
-    const grid = new THREE.GridHelper(6, 12, 0xffb84d, 0xe5d3b8);
+    const grid = new THREE.GridHelper(6, 12, 0xb08d6e, 0xe4dcd0);
     grid.position.y = -1.2;
     this.modalScene.add(grid);
 
@@ -258,7 +258,7 @@ class Viewer3DManager {
     renderLoop();
   }
 
-  addFallbackModalMesh(tintHex = '#ff9e1b') {
+  addFallbackModalMesh(tintHex = '#b08d6e') {
     if (!this.modalModelGroup) return;
     const mat = new THREE.MeshStandardMaterial({
       color: new THREE.Color(tintHex),
@@ -309,7 +309,7 @@ class Viewer3DManager {
     const h = canvas.clientHeight || 320;
 
     this.stlScene = new THREE.Scene();
-    this.stlScene.background = new THREE.Color(0xf7f1e6);
+    this.stlScene.background = new THREE.Color(0xf4f0e7);
     this.stlCamera = new THREE.PerspectiveCamera(50, w / h, 0.1, 1000);
     this.stlCamera.position.set(0, 45, 110);
     this.stlCamera.lookAt(0, 0, 0);
@@ -327,12 +327,12 @@ class Viewer3DManager {
       this.stlRenderer.setSize(nw, nh, false);
     });
 
-    this.stlScene.add(new THREE.AmbientLight(0xffffff, 0.9));
-    const dLight = new THREE.DirectionalLight(0xff9e1b, 1.35);
+    this.stlScene.add(new THREE.AmbientLight(0xffffff, 0.92));
+    const dLight = new THREE.DirectionalLight(0xb08d6e, 1.35);
     dLight.position.set(60, 100, 80);
     this.stlScene.add(dLight);
 
-    const grid = new THREE.GridHelper(160, 16, 0xff9e1b, 0xe5d3b8);
+    const grid = new THREE.GridHelper(160, 16, 0xb08d6e, 0xe4dcd0);
     grid.position.y = -25;
     this.stlScene.add(grid);
 
@@ -373,7 +373,7 @@ class Viewer3DManager {
     loop();
   }
 
-  setStlGeometry(geometry, colorHex = '#ff9e1b') {
+  setStlGeometry(geometry, colorHex = '#b08d6e') {
     if (!this.stlScene) return;
     if (this.stlMesh) {
       this.stlScene.remove(this.stlMesh);

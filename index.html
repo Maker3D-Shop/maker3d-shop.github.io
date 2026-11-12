@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maker3D — Impressão 3D Profissional & Catálogo de Modelos</title>
-  <meta name="description" content="Manufatura aditiva de precisão: modelos verificados com perfis Bambu Studio, cálculo técnico de filamento PLA (R$ 150/kg), PETG (R$ 120/kg) e TPU/Trust (R$ 200/kg).">
-  <meta property="og:title" content="Maker3D — Manufatura Aditiva & Catálogo 3D">
-  <meta property="og:description" content="Catálogo técnico de modelos impressos em 3D e laboratório STL sob medida.">
+  <title>Maker 3D — Decoração Japandi, Edição de Natal, Fidget Toys & Gears Pulseiras</title>
+  <meta name="description" content="Maker 3D: Minimalismo orgânico e luxo acessível em impressão 3D. Coleção Japandi (vasos e porta-treco), Coleção de Natal, Fidget Toys sensoriais, Branch Gears × Maker 3D e projetos sob medida.">
+  <meta property="og:title" content="Maker 3D — Coleção Japandi & Design Escultural Acessível">
+  <meta property="og:description" content="Peças de decoração minimalista Japandi, edição de Natal, Fidget Toys e a linha de pulseiras Gears × Maker 3D.">
   <meta property="og:type" content="website">
 
   <!-- Favicon / Browser Tab Logo -->
-  <link rel="icon" type="image/png" href="logo.png?v=2">
-  <link rel="shortcut icon" type="image/png" href="logo.png?v=2">
-  <link rel="apple-touch-icon" href="logo.png?v=2">
+  <link rel="icon" type="image/png" href="logo.png?v=3">
+  <link rel="shortcut icon" type="image/png" href="logo.png?v=3">
+  <link rel="apple-touch-icon" href="logo.png?v=3">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Modular CSS Architecture -->
   <link rel="stylesheet" href="css/variables.css">
@@ -38,11 +38,11 @@
   <!-- Full-Page Initial Loadscreen -->
   <div class="site-loadscreen" id="siteLoadscreen">
     <div class="loadscreen-logo-ring">
-      <img src="logo.png?v=2" alt="Maker3D" onerror="this.src='https://raw.githubusercontent.com/Maker3D-Shop/maker3d-shop.github.io/main/logo.png'">
+      <img src="logo.png?v=3" alt="Maker 3D" onerror="this.src='https://raw.githubusercontent.com/Maker3D-Shop/maker3d-shop.github.io/main/logo.png'">
     </div>
     <div style="text-align:center">
-      <strong style="display:block;font-size:1.1rem;letter-spacing:0.06em;color:var(--text-primary)">MAKER3D STUDIO</strong>
-      <small style="color:var(--text-secondary);font-size:0.78rem">Carregando catálogo e perfis de impressão 3D...</small>
+      <strong style="display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.55rem;font-weight:600;letter-spacing:0.12em;color:var(--text-primary)">MAKER 3D</strong>
+      <small style="color:var(--text-secondary);font-size:0.76rem;letter-spacing:0.08em;text-transform:uppercase">Minimalismo orgânico & luxo acessível em impressão 3D</small>
     </div>
     <div class="loadscreen-bar">
       <div class="loadscreen-bar-fill"></div>
@@ -55,22 +55,23 @@
   <!-- Sticky Header & Navigation -->
   <header class="site-header">
     <nav id="mainNav">
-      <div class="nav-logo" onclick="window.makerApp.showPage('inicio')" title="Maker3D">
+      <div class="nav-logo" onclick="window.makerApp.showPage('inicio')" title="Maker 3D">
         <div class="nav-logo-img-wrap">
-          <img src="logo.png?v=2" alt="Maker3D" onerror="this.src='https://raw.githubusercontent.com/Maker3D-Shop/maker3d-shop.github.io/main/logo.png'">
+          <img src="logo.png?v=3" alt="Maker 3D" onerror="this.src='https://raw.githubusercontent.com/Maker3D-Shop/maker3d-shop.github.io/main/logo.png'">
         </div>
         <div class="nav-logo-text">
-          <span class="nav-logo-brand dynamic-brand-name">Maker3D</span>
-          <span class="nav-logo-tag">MakerWorld Studio</span>
+          <span class="nav-logo-brand dynamic-brand-name">Maker 3D</span>
+          <span class="nav-logo-tag">Coleção Japandi & Design</span>
         </div>
       </div>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="./" onclick="window.makerApp.showPage('inicio');return false;" class="active" id="nav-inicio">Início</a></li>
-        <li><a href="catalogo/" onclick="window.makerApp.showPage('produtos');return false;" id="nav-produtos">Catálogo 3D</a></li>
-        <li><a href="laboratorio-stl/" onclick="window.makerApp.showPage('orcamento');return false;" id="nav-orcamento">Laboratório STL</a></li>
-        <li><a href="sobre/" onclick="window.makerApp.showPage('sobre');return false;" id="nav-sobre">Sobre</a></li>
-        <li><a href="contato/" onclick="window.makerApp.showPage('contato');return false;" id="nav-contato">Contato</a></li>
+        <li><a href="catalogo/" onclick="window.makerApp.showPage('produtos');return false;" id="nav-produtos">Coleções & Loja</a></li>
+        <li><a href="gears/" onclick="window.makerApp.showPage('gears');return false;" id="nav-gears">Gears Pulseiras</a></li>
+        <li><a href="laboratorio-stl/" onclick="window.makerApp.showPage('orcamento');return false;" id="nav-orcamento">Sob Medida</a></li>
+        <li><a href="sobre/" onclick="window.makerApp.showPage('sobre');return false;" id="nav-sobre">Atelier</a></li>
+        <li><a href="contato/" onclick="window.makerApp.showPage('contato');return false;" id="nav-contato">Atendimento</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -103,82 +104,90 @@
        ═══════════════════════════════════════════════════════════════════════ -->
   <main>
 
-    <!-- 1. PÁGINA INICIAL (ESTILO MAKERWORLD / BAMBU STUDIO — SEM BLOCO 3D) -->
+    <!-- 1. PÁGINA INICIAL (ESTILO EDITORIAL DE CAMPANHA — LUXO ACESSÍVEL & ANIMAÇÃO PASSIVA DE INCLINAÇÃO) -->
     <section class="page active" id="page-inicio">
       <div class="hero">
         <div class="hero-content">
-          <div class="hero-badge" id="heroBadgeText">MANUFATURA ADITIVA DE PRECISÃO • BAMBU STUDIO PROFILES</div>
-          <h1 id="heroTitleText">Modelos 3D & <em>Peças Técnicas</em> Sob Demanda</h1>
-          <p id="heroSubtitleText">Catálogo profissional de modelos impressos em alta definição (0.12 mm) com filamentos calibrados PLA (R$ 150/kg), PETG (R$ 120/kg) e TPU/Trust (R$ 200/kg).</p>
+          <div class="hero-badge" id="heroBadgeText">COLEÇÃO JAPANDI • LUXO ACESSÍVEL & DESIGN ESCULTURAL</div>
+          <h1 id="heroTitleText">Minimalismo orgânico em <em>impressão 3D</em>.</h1>
+          <p id="heroSubtitleText">Peças autorais de decoração residencial (vasos e porta-treco Japandi), Coleção de Natal, Fidget Toys sensoriais e o branch exclusivo de pulseiras <strong>Gears × Maker 3D</strong> com valores acessíveis e acabamento de atelier.</p>
 
           <div class="hero-buttons">
-            <a href="#produtos" class="btn-primary" onclick="window.makerApp.showPage('produtos');return false;">Explorar Catálogo 3D →</a>
-            <a href="#orcamento" class="btn-secondary" onclick="window.makerApp.showPage('orcamento');return false;">Orçar Arquivo STL</a>
+            <a href="catalogo/" class="btn-primary" onclick="window.makerApp.openCollectionCategory('Coleção Japandi');return false;">Explorar Coleção Japandi →</a>
+            <a href="gears/" class="btn-secondary" onclick="window.makerApp.showPage('gears');return false;">Conhecer Branch Gears × Maker 3D</a>
           </div>
 
           <div class="hero-trust-strip">
             <div class="trust-metric">
-              <div class="trust-metric-icon">0.10</div>
-              <div><strong>Tolerância 0,10 mm</strong><span>Perfis Verificados</span></div>
+              <div class="trust-metric-icon">JP</div>
+              <div><strong>Coleção Japandi</strong><span>Vasos & Porta-Trecos</span></div>
             </div>
             <div class="trust-metric">
-              <div class="trust-metric-icon">AMS</div>
-              <div><strong>Sistema Multicor</strong><span>Até 4 Filamentos</span></div>
+              <div class="trust-metric-icon">GR</div>
+              <div><strong>Branch Gears</strong><span>Linha de Pulseiras 3D</span></div>
             </div>
             <div class="trust-metric">
-              <div class="trust-metric-icon">24h</div>
-              <div><strong>Expedição Rápida</strong><span>Envio para todo o Brasil</span></div>
+              <div class="trust-metric-icon">UX</div>
+              <div><strong>Customização</strong><span>Cores & Sob Medida</span></div>
             </div>
           </div>
         </div>
 
-        <!-- MakerWorld Technical Telemetry & Official Filament Rates Panel -->
-        <div class="hero-showcase">
-          <div class="mw-panel-header">
-            <span class="mw-panel-title">Especificações de Polímeros & Tabela por Kg</span>
-            <span class="mw-live-dot">● Perfis Calibrados</span>
+        <!-- Editorial Campaign Poster with Passive Gyroscope / Tilt Parallax -->
+        <div class="hero-showcase-editorial">
+          <div class="editorial-poster-frame" onclick="window.makerApp.openCollectionCategory('Coleção Japandi')" style="cursor:pointer" title="Clique para explorar a Coleção Japandi">
+            <img src="assets/brand/japandi-campaign.jpg" alt="Maker 3D — Coleção Japandi Minimalismo Orgânico">
+          </div>
+          <div class="editorial-floating-tag">
+            <small>ESTÉTICA DE CAMPANHA • VALORES ACESSÍVEIS</small>
+            <strong>Vasos & Porta-Trecos Japandi a partir de R$ 18</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Curated Luxury Collection Pillars -->
+      <div class="collections-editorial-section">
+        <div class="section-header" style="margin-bottom:28px">
+          <div class="section-eyebrow">Curadoria & Linhas Autorais</div>
+          <h2>Universo <span>Maker 3D</span></h2>
+          <p>Do minimalismo japonês-escandinavo para a sua casa até acessórios esculturais vestíveis e peças sensoriais.</p>
+        </div>
+
+        <div class="collections-editorial-grid">
+          <div class="collection-pillar-card" onclick="window.makerApp.openCollectionCategory('Coleção Japandi')">
+            <div>
+              <span class="collection-pillar-eyebrow">Decoração Residencial</span>
+              <h3>Coleção Japandi</h3>
+              <p>Vasos esculturais canelados, duos em textura de pedra travertino e porta-trecos minimalistas em tons de areia e alabastro.</p>
+            </div>
+            <span class="collection-pillar-cta">Ver Vasos & Porta-Trecos →</span>
           </div>
 
-          <div class="mw-filament-cards">
-            <div class="mw-filament-card">
-              <span class="mw-mat-tag">PLA Premium / Silk</span>
-              <strong>R$ 150<small style="display:inline;font-size:0.75rem;font-weight:500">/kg</small></strong>
-              <small>R$ 0,15 / grama • Alta resolução visual e peças articuladas</small>
+          <div class="collection-pillar-card" onclick="window.makerApp.openCollectionCategory('Coleção de Natal')">
+            <div>
+              <span class="collection-pillar-eyebrow">Edição Sazonal</span>
+              <h3>Coleção de Natal</h3>
+              <p>Pinheiros esculturais plissados e esferas facetadas em champanhe acetinado, branco neve e bronze para mesas postas sofisticadas.</p>
             </div>
-            <div class="mw-filament-card">
-              <span class="mw-mat-tag">PETG Estrutural</span>
-              <strong>R$ 120<small style="display:inline;font-size:0.75rem;font-weight:500">/kg</small></strong>
-              <small>R$ 0,12 / grama • Resistência mecânica, térmica e uso externo</small>
-            </div>
-            <div class="mw-filament-card">
-              <span class="mw-mat-tag">TPU / Trust Flex</span>
-              <strong>R$ 200<small style="display:inline;font-size:0.75rem;font-weight:500">/kg</small></strong>
-              <small>R$ 0,20 / grama • Elastômero industrial de absorção de impacto</small>
-            </div>
+            <span class="collection-pillar-cta">Explorar Edição de Natal →</span>
           </div>
 
-          <div class="mw-specs-grid">
-            <div class="mw-spec-box">
-              <span>Altura de Camada</span>
-              <strong>0.08 – 0.20 mm</strong>
+          <div class="collection-pillar-card" onclick="window.makerApp.openCollectionCategory('Fidget Toys')">
+            <div>
+              <span class="collection-pillar-eyebrow">Design Sensorial & Foco</span>
+              <h3>Fidget Toys de Mesa</h3>
+              <p>Esculturas cinéticas de passagem contínua (pass-through), esferas orbitais silenciosas e peças táteis de estética executiva.</p>
             </div>
-            <div class="mw-spec-box">
-              <span>Preenchimento Padrão</span>
-              <strong>15% – 25% Gyroid</strong>
-            </div>
-            <div class="mw-spec-box">
-              <span>Volume de Construção</span>
-              <strong>256 × 256 × 256 mm</strong>
-            </div>
-            <div class="mw-spec-box">
-              <span>Formatos Aceitos</span>
-              <strong>.STL • .3MF • .STEP</strong>
-            </div>
+            <span class="collection-pillar-cta">Ver Linha Sensorial →</span>
           </div>
 
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border-strong);font-size:0.78rem;color:var(--text-secondary)">
-            <span>Sincronização de Conta: Coleções, Curtidas, Carrinho e Compras</span>
-            <a href="catalogo/" onclick="window.makerApp.showPage('produtos');return false;" style="color:var(--brand-primary);font-weight:800;text-decoration:none">Ver Modelos →</a>
+          <div class="collection-pillar-card" onclick="window.makerApp.showPage('gears')">
+            <div>
+              <span class="collection-pillar-eyebrow">Collab & Branch Oficial</span>
+              <h3>Gears × Maker 3D</h3>
+              <p>Nossa divisão de acessórios vestíveis em parceria com a <strong>Gears</strong>: braceletes e pulseiras esculturais com elos impressos sem emendas.</p>
+            </div>
+            <span class="collection-pillar-cta">Acessar Branch Gears →</span>
           </div>
         </div>
       </div>
@@ -186,9 +195,9 @@
       <!-- Featured Carousel -->
       <div class="carousel-section">
         <div class="section-header" style="margin-bottom:28px">
-          <div class="section-eyebrow">Modelos Verificados</div>
-          <h2>Destaques do <span>Catálogo</span></h2>
-          <p>Clique em qualquer modelo para abrir sua página técnica dedicada com fotos, especificações de camada e visualizador 3D.</p>
+          <div class="section-eyebrow">Peças em Destaque</div>
+          <h2>Curadoria de <span>Luxo Acessível</span></h2>
+          <p>Clique em qualquer peça para abrir sua página dedicada com galeria, opções de personalização de cores e inspeção 3D.</p>
         </div>
         <div class="carousel-wrapper">
           <div class="carousel-track" id="carouselTrack"></div>
@@ -203,30 +212,30 @@
       <!-- Why Maker3D Features -->
       <div class="features">
         <div class="section-header reveal">
-          <div class="section-eyebrow">Engenharia & Qualidade</div>
-          <h2>Padrão Industrial <span>Maker3D</span></h2>
-          <p>Processo de manufatura aditiva controlado por perfis técnicos de fatiamento e polímeros certificados.</p>
+          <div class="section-eyebrow">Atelier & Experiência</div>
+          <h2>A Essência <span>Maker 3D</span></h2>
+          <p>Unimos o olhar de design de interiores com a precisão da manufatura aditiva contemporânea.</p>
         </div>
         <div class="features-grid">
           <div class="feature-card reveal">
-            <div class="feature-icon">0.12</div>
-            <h3>Perfis Calibrados</h3>
-            <p>Camadas uniformes de 0.12 mm e preenchimento Gyroid para máxima resistência isotrópica e articulações precisas.</p>
+            <div class="feature-icon">JP</div>
+            <h3>Textura Pedra & Seda</h3>
+            <p>Acabamento fosco orgânico de inspiração travertino, linho cru e tons champanhe que harmonizam com qualquer ambiente.</p>
           </div>
           <div class="feature-card reveal">
-            <div class="feature-icon">AMS</div>
-            <h3>Multimaterial & Multicor</h3>
-            <p>Troca automatizada de filamentos na mesma impressão com PLA (R$ 150/kg), PETG (R$ 120/kg) e Trust/TPU (R$ 200/kg).</p>
+            <div class="feature-icon">R$</div>
+            <h3>Luxo Acessível</h3>
+            <p>Peças autorais de design escultural com valores acessíveis a partir de R$ 18 e tabela transparente por grama para encomendas.</p>
+          </div>
+          <div class="feature-card reveal">
+            <div class="feature-icon">GR</div>
+            <h3>Branch Gears Pulseiras</h3>
+            <p>Linha conjunta entre a Gears e a Maker 3D trazendo geometria generativa e conforto flexível para o seu pulso.</p>
           </div>
           <div class="feature-card reveal">
             <div class="feature-icon">STL</div>
-            <h3>Fatiamento Online</h3>
-            <p>Envie arquivos do MakerWorld, Printables ou projetos CAD próprios para cálculo instantâneo de volume e massa.</p>
-          </div>
-          <div class="feature-card reveal">
-            <div class="feature-icon">DB</div>
-            <h3>Conta Sincronizada</h3>
-            <p>Suas coleções, modelos curtidos, itens no carrinho e histórico de objetos comprados ficam salvos na sua conta.</p>
+            <h3>Personalização Total</h3>
+            <p>Escolha a paleta da sua peça ou envie seu projeto exclusivo na aba Sob Medida com PLA (R$ 150/kg), PETG (R$ 120/kg) e TPU (R$ 200/kg).</p>
           </div>
         </div>
       </div>
@@ -234,18 +243,75 @@
       <!-- Dynamic FAQ Section -->
       <div class="faq-section">
         <div class="section-header reveal">
-          <div class="section-eyebrow">Especificações & Suporte</div>
+          <div class="section-eyebrow">Dúvidas & Encomendas</div>
           <h2>Perguntas <span>Frequentes</span></h2>
         </div>
         <div class="faq-list" id="faqListContainer"></div>
       </div>
     </section>
 
+    <!-- 1B. PÁGINA DEDICADA DO BRANCH GEARS × MAKER 3D (LINHA DE PULSEIRAS) -->
+    <section class="page" id="page-gears">
+      <div class="products-hero">
+        <div class="section-eyebrow">Branch Oficial & Co-Branding</div>
+        <h1>Gears <span>× Maker 3D</span></h1>
+        <p>A união entre a engenharia vestível da <strong>Gears</strong> e o design orgânico de luxo acessível da <strong>Maker 3D</strong> em uma linha exclusiva de pulseiras e braceletes esculturais.</p>
+      </div>
+
+      <div class="gears-branch-banner">
+        <div class="gears-hero-card">
+          <div>
+            <div class="hero-badge" style="margin-bottom:14px">LINHA AUTORAL DE PULSEIRAS • GEARS BRANCH</div>
+            <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2rem,3.6vw,3rem);color:var(--text-primary);line-height:1.1;margin-bottom:14px">
+              Design escultural para vestir no dia a dia.
+            </h2>
+            <p style="color:var(--text-secondary);line-height:1.75;margin-bottom:22px;font-size:0.96rem">
+              A <strong>Gears</strong> nasce como um braço criativo conectado diretamente à <strong>Maker 3D</strong> para explorar joalheria contemporânea e acessórios táteis impressos em 3D. Cada pulseira é produzida com elos articulados sem costuras ou em ondas paramétricas leves, hipoalergênicas e resistentes à água.
+            </p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <button class="btn-primary" type="button" onclick="window.makerApp.openModal('gears-pulseira-aura-link')">
+                Ver Pulseira Aura Link (R$ 38) →
+              </button>
+              <button class="btn-secondary" type="button" onclick="window.makerApp.openModal('gears-pulseira-kinetica-wave')">
+                Ver Bracelete Kinetic Wave (R$ 42)
+              </button>
+              <button class="btn-secondary" type="button" onclick="window.makerApp.openCollectionCategory('Gears Pulseiras')">
+                Filtrar Toda a Linha na Loja
+              </button>
+            </div>
+          </div>
+
+          <div style="display:grid;gap:16px">
+            <div class="feature-card" style="text-align:left;cursor:pointer;padding:22px" onclick="window.makerApp.openModal('gears-pulseira-aura-link')">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--brand-primary)">GEARS × MAKER 3D • 01</span>
+                <strong style="color:var(--brand-deep);font-size:1.1rem">R$ 38,00</strong>
+              </div>
+              <h3 style="margin-bottom:6px">Pulseira Escultural Aura Link</h3>
+              <p style="margin-bottom:10px">Elos orgânicos entrelaçados impressos em peça única com toque acetinado e ajuste anatômico P, M ou G.</p>
+              <span style="font-size:0.8rem;font-weight:700;color:var(--brand-primary)">Personalizar cor e tamanho →</span>
+            </div>
+
+            <div class="feature-card" style="text-align:left;cursor:pointer;padding:22px" onclick="window.makerApp.openModal('gears-pulseira-kinetica-wave')">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--brand-primary)">GEARS × MAKER 3D • 02</span>
+                <strong style="color:var(--brand-deep);font-size:1.1rem">R$ 42,00</strong>
+              </div>
+              <h3 style="margin-bottom:6px">Bracelete Orgânico Kinetic Wave</h3>
+              <p style="margin-bottom:10px">Geometria fluida inspirada nas dunas Japandi, ultraleve (14g) e disponível em polímero rígido acetinado ou flexível Trust/TPU.</p>
+              <span style="font-size:0.8rem;font-weight:700;color:var(--brand-primary)">Personalizar cor e tamanho →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- 2. PÁGINA CATÁLOGO DE PRODUTOS -->
     <section class="page" id="page-produtos">
       <div class="products-hero">
-        <h1>Catálogo de Modelos 3D</h1>
-        <p>Selecione qualquer cartão para abrir a página completa do produto com galeria, perfil de impressão e modelo 3D.</p>
+        <div class="section-eyebrow">Boutique & Coleções Autorais</div>
+        <h1>Coleções <span>Maker 3D</span></h1>
+        <p>Explore a <strong>Coleção Japandi</strong> (vasos e porta-trecos), <strong>Coleção de Natal</strong>, <strong>Fidget Toys</strong>, <strong>Gears Pulseiras</strong> e projetos sob medida.</p>
       </div>
 
       <div class="products-toolbar">
@@ -385,8 +451,9 @@
     <!-- 3. PÁGINA LABORATÓRIO STL & ORÇAMENTO SOB MEDIDA -->
     <section class="page" id="page-orcamento">
       <div class="products-hero">
-        <h1>Laboratório 3D & Orçamento STL</h1>
-        <p>Envie seu arquivo <strong>.STL</strong> para análise geométrica e cálculo automático baseado na tabela PLA (R$ 150/kg), PETG (R$ 120/kg) e Trust/TPU (R$ 200/kg).</p>
+        <div class="section-eyebrow">Atelier de Customização</div>
+        <h1>Personalização <span>Sob Medida</span> & STL</h1>
+        <p>Personalize dimensões, cores da paleta Japandi ou envie seu arquivo <strong>.STL</strong> para orçamento transparente: PLA (R$ 150/kg), PETG (R$ 120/kg) e Trust/TPU (R$ 200/kg).</p>
       </div>
 
       <div class="stl-lab-section">
@@ -471,27 +538,28 @@
       </div>
     </section>
 
-    <!-- 4. PÁGINA SOBRE NÓS -->
+    <!-- 4. PÁGINA SOBRE NÓS / ATELIER -->
     <section class="page" id="page-sobre">
       <div class="products-hero">
-        <h1>Engenharia & Produção <span class="dynamic-brand-name">Maker3D</span></h1>
-        <p>Manufatura aditiva com controle de qualidade dimensional e materiais de alto desempenho.</p>
+        <div class="section-eyebrow">Nossa Filosofia</div>
+        <h1>Atelier <span class="dynamic-brand-name">Maker 3D</span></h1>
+        <p>Minimalismo orgânico, estética de luxo acessível e manufatura aditiva de alta precisão.</p>
       </div>
       <div style="max-width:1080px;margin:36px auto;padding:0 5%;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:24px">
         <div class="feature-card">
-          <div class="feature-icon">500+</div>
-          <h3>Projetos Entregues</h3>
-          <p>Inspeção individual de tolerância, acabamento superficial e resistência mecânica antes da expedição.</p>
+          <div class="feature-icon">JP</div>
+          <h3>Estética Japandi</h3>
+          <p>Nossas peças de decoração unem a serenidade escandinava e o wabi-sabi japonês em vasos, centros de mesa e porta-trecos texturizados.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">3</div>
-          <h3>Classes de Polímeros</h3>
-          <p>PLA Premium (R$ 150/kg), PETG Estrutural (R$ 120/kg) e Elastômero TPU/Trust (R$ 200/kg).</p>
+          <div class="feature-icon">GR</div>
+          <h3>Collab Gears × Maker 3D</h3>
+          <p>Junto à marca parceira Gears, desenvolvemos pulseiras e braceletes esculturais impressos em 3D com conforto anatômico.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">98%</div>
-          <h3>Índice de Aprovação</h3>
-          <p>Suporte técnico direto para validação de arquivos STL, 3MF e encomendas sob demanda.</p>
+          <div class="feature-icon">R$</div>
+          <h3>Luxo Acessível</h3>
+          <p>Acabamento digno de galeria com preços justos e transparentes, além de suporte completo a encomendas personalizadas.</p>
         </div>
       </div>
     </section>
@@ -499,8 +567,9 @@
     <!-- 5. PÁGINA CONTATO -->
     <section class="page" id="page-contato">
       <div class="products-hero">
-        <h1>Central de Atendimento Técnico</h1>
-        <p>Orçamentos corporativos, lotes seriados ou dúvidas sobre materiais e envio.</p>
+        <div class="section-eyebrow">Concierge & Encomendas</div>
+        <h1>Atendimento <span>Maker 3D</span></h1>
+        <p>Encomendas da Coleção Japandi, Coleção de Natal, linha Gears Pulseiras ou personalizações sob medida via Direct ou WhatsApp.</p>
       </div>
       <div style="max-width:980px;margin:36px auto;padding:0 5%;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px">
         <div style="display:flex;flex-direction:column;gap:14px">
@@ -612,10 +681,10 @@
       <button class="modal-close" onclick="window.makerApp.closeAuthModal()">✕</button>
 
       <div style="text-align:center;margin-bottom:18px">
-        <img src="logo.png?v=2" alt="Maker3D" style="width:48px;height:48px;object-fit:contain;margin-bottom:8px">
-        <h3 style="font-size:1.35rem;font-weight:800">Conta Maker3D</h3>
+        <img src="logo.png?v=3" alt="Maker 3D" style="width:48px;height:48px;object-fit:contain;margin-bottom:8px">
+        <h3 style="font-size:1.35rem;font-weight:800">Conta Maker 3D</h3>
         <p style="font-size:0.83rem;color:var(--text-secondary)">
-          Sincronize suas coleções, modelos curtidos, carrinho e objetos comprados no banco de dados.
+          Sincronize suas coleções favoritas, peças curtidas, sacola e histórico de pedidos.
         </p>
       </div>
 
@@ -751,34 +820,35 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="footer-brand-name">
-          <img src="logo.png?v=2" alt="Maker3D" style="width:38px;height:38px;object-fit:contain;border-radius:50%" onerror="this.style.display='none'">
-          <span class="dynamic-brand-name">Maker3D</span>
+          <img src="logo.png?v=3" alt="Maker 3D" style="width:38px;height:38px;object-fit:contain" onerror="this.style.display='none'">
+          <span class="dynamic-brand-name">Maker 3D</span>
         </div>
-        <p>Manufatura aditiva de alta precisão. Modelos 3D verificados e impressão sob demanda com PLA, PETG e Trust/TPU.</p>
+        <p>Minimalismo orgânico e luxo acessível em impressão 3D. Coleção Japandi, Edição de Natal, Fidget Toys sensoriais e Branch Gears × Maker 3D.</p>
       </div>
 
       <div class="footer-col">
-        <h4>Navegação</h4>
+        <h4>Coleções & Linhas</h4>
         <ul>
-          <li><a href="./" onclick="window.makerApp.showPage('inicio');return false;">Início</a></li>
-          <li><a href="catalogo/" onclick="window.makerApp.showPage('produtos');return false;">Catálogo 3D</a></li>
-          <li><a href="laboratorio-stl/" onclick="window.makerApp.showPage('orcamento');return false;">Laboratório STL</a></li>
-          <li><a href="sobre/" onclick="window.makerApp.showPage('sobre');return false;">Engenharia & Materiais</a></li>
+          <li><a href="catalogo/" onclick="window.makerApp.openCollectionCategory('Coleção Japandi');return false;">Coleção Japandi</a></li>
+          <li><a href="catalogo/" onclick="window.makerApp.openCollectionCategory('Coleção de Natal');return false;">Coleção de Natal</a></li>
+          <li><a href="gears/" onclick="window.makerApp.showPage('gears');return false;">Gears × Maker 3D (Pulseiras)</a></li>
+          <li><a href="catalogo/" onclick="window.makerApp.openCollectionCategory('Fidget Toys');return false;">Fidget Toys Sensoriais</a></li>
+          <li><a href="laboratorio-stl/" onclick="window.makerApp.showPage('orcamento');return false;">Personalizar (Sob Medida)</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h4>Canais</h4>
+        <h4>Atendimento & Direct</h4>
         <ul>
-          <li><a href="https://wa.me/5531984566047" target="_blank">WhatsApp Oficial</a></li>
+          <li><a href="https://wa.me/5531984566047" target="_blank">WhatsApp Concierge</a></li>
           <li><a href="https://www.instagram.com/maker3d.oficial" target="_blank">Instagram @maker3d.oficial</a></li>
           <li><a href="mailto:maker3d.suporte@gmail.com">maker3d.suporte@gmail.com</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h4>Boletim Técnico</h4>
-        <p style="font-size:0.83rem;color:var(--text-secondary)">Receba novos perfis de impressão e cupons:</p>
+        <h4>Novidades & Lançamentos</h4>
+        <p style="font-size:0.83rem;color:var(--text-secondary)">Receba em primeira mão novas peças Japandi e edições limitadas:</p>
         <div class="newsletter-form">
           <input type="email" id="newsletterEmail" placeholder="Seu e-mail...">
           <button onclick="document.getElementById('newsletterEmail').value='';window.makerApp.showPage('produtos')" type="button">Inscrever</button>
@@ -787,9 +857,10 @@
     </div>
 
     <div class="footer-bottom">
-      <p>© 2026 <span class="dynamic-brand-name">Maker3D</span> — Todos os direitos reservados.</p>
+      <p>© 2026 <span class="dynamic-brand-name">Maker 3D</span> & Branch <strong>Gears</strong> — Todos os direitos reservados.</p>
       <div class="footer-bottom-links">
-        <a onclick="window.makerApp.showPage('orcamento')">Laboratório STL</a>
+        <a onclick="window.makerApp.showPage('gears')">Branch Gears</a>
+        <a onclick="window.makerApp.showPage('orcamento')">Sob Medida</a>
         <a onclick="window.makerApp.handleGoogleButtonClick()">Minha Conta</a>
       </div>
     </div>

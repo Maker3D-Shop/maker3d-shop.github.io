@@ -445,11 +445,11 @@ function renderCmsTab() {
         </div>
         <div class="admin-input-group">
           <label>Cor Principal do Tema (Hex)</label>
-          <input type="color" id="cms_primaryColor" value="${s.primaryColor || '#ff9e1b'}" style="height:42px;cursor:pointer">
+          <input type="color" id="cms_primaryColor" value="${s.primaryColor || '#8c6d53'}" style="height:42px;cursor:pointer">
         </div>
         <div class="admin-input-group">
-          <label>Texto da Barra de Anúncio Topo</label>
-          <input type="text" id="cms_promoBarText" value="${s.promoBarText || ''}">
+          <label>Branch Parceira (Ex: Gears × Maker 3D)</label>
+          <input type="text" id="cms_promoBarText" value="${s.gearsBrandName || 'Gears × Maker 3D'}">
         </div>
         <div class="admin-input-group">
           <label>Meta para Frete Grátis (R$)</label>
@@ -495,9 +495,9 @@ function renderCmsTab() {
 export async function saveCmsSettings() {
   const next = {
     ...store.state.settings,
-    brandName: document.getElementById('cms_brandName')?.value.trim() || 'Maker3D',
-    primaryColor: document.getElementById('cms_primaryColor')?.value || '#ff9e1b',
-    promoBarText: document.getElementById('cms_promoBarText')?.value.trim() || '',
+    brandName: document.getElementById('cms_brandName')?.value.trim() || 'Maker 3D',
+    primaryColor: document.getElementById('cms_primaryColor')?.value || '#8c6d53',
+    gearsBrandName: document.getElementById('cms_promoBarText')?.value.trim() || 'Gears × Maker 3D',
     freeShippingThreshold: parseFloat(document.getElementById('cms_freeShip')?.value || '120'),
     heroBadge: document.getElementById('cms_heroBadge')?.value.trim() || '',
     whatsappNumber: document.getElementById('cms_whatsapp')?.value.trim() || '5531984566047',
@@ -671,10 +671,10 @@ function renderCalcTab() {
           <div class="admin-input-group"><label>Potência da Impressora (Watts)</label><input type="number" id="ac_watts" value="200" oninput="window.makerApp.runAdminCalculator()"></div>
           <div class="admin-input-group"><label>Margem de Lucro (%)</label><input type="number" id="ac_margem" value="60" oninput="window.makerApp.runAdminCalculator()"></div>
         </div>
-        <div style="background:linear-gradient(135deg,#111827,#1f2937);border-radius:16px;padding:32px;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-          <span style="font-size:0.9rem;opacity:0.8">Preço de Venda Sugerido</span>
-          <div id="ac_resultPrice" style="font-size:3rem;font-weight:800;color:#ff9e1b;margin:8px 0">R$ 0,00</div>
-          <small id="ac_resultBase" style="opacity:0.8">Custo de produção: R$ 0,00</small>
+        <div style="background:linear-gradient(135deg,var(--bg-logo-base),var(--brand-soft));border:1.5px solid var(--border-strong);border-radius:24px;padding:32px;color:var(--text-primary);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+          <span style="font-size:0.9rem;color:var(--text-secondary)">Preço de Venda Sugerido</span>
+          <div id="ac_resultPrice" style="font-size:3rem;font-weight:800;color:var(--brand-deep);margin:8px 0">R$ 0,00</div>
+          <small id="ac_resultBase" style="color:var(--text-secondary)">Custo de produção: R$ 0,00</small>
         </div>
       </div>
     </div>

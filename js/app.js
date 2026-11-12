@@ -253,9 +253,15 @@ function submitContactForm() {
   }, 500);
 }
 
+function openCollectionCategory(catName) {
+  showPage('produtos');
+  setFilter(catName);
+}
+
 // Expose global API for inline HTML event handlers
 window.makerApp = {
   showPage,
+  openCollectionCategory,
   openModal,
   closeModal,
   switchMedia,
@@ -372,6 +378,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const initialPage = window.__MAKER3D_INITIAL_PAGE || (
     pathStr.includes('/catalogo') ? 'produtos' :
     pathStr.includes('/produto') ? 'produto' :
+    pathStr.includes('/gears') ? 'gears' :
     pathStr.includes('/laboratorio-stl') ? 'orcamento' :
     pathStr.includes('/sobre') ? 'sobre' :
     pathStr.includes('/contato') ? 'contato' : null

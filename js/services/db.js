@@ -134,28 +134,28 @@ class DatabaseService {
 
       FALLBACK_PRODUCTS.forEach(fp => {
         if (!enriched.some(ep => String(ep.id) === String(fp.id))) {
-          enriched.push(fp);
+          enriched.unshift(fp);
         }
       });
 
-      store.update('products', enriched, 'maker3d_products');
+      store.update('products', enriched, 'maker3d_products_v3');
     }
     if (data && data.settings) {
       const mergedSettings = { ...store.state.settings, ...data.settings };
-      if (!mergedSettings.primaryColor || mergedSettings.primaryColor === '#00ae42' || mergedSettings.primaryColor === '#ff7a00') {
-        mergedSettings.primaryColor = '#ff9e1b';
+      if (!mergedSettings.primaryColor || ['#00ae42', '#ff7a00', '#ff9e1b'].includes(mergedSettings.primaryColor)) {
+        mergedSettings.primaryColor = '#8c6d53';
       }
-      store.update('settings', mergedSettings, 'maker3d_settings');
+      store.update('settings', mergedSettings, 'maker3d_settings_v3');
     }
   }
 
   async saveStoreData({ syncGitHub = false, ghToken = '' } = {}) {
     localStorage.setItem('maker3d_admin_modified', '1');
-    store.saveLocal('maker3d_products', store.state.products);
-    store.saveLocal('maker3d_settings', store.state.settings);
-    store.saveLocal('maker3d_coupons', store.state.coupons);
-    store.saveLocal('maker3d_faqs', store.state.faqs);
-    store.saveLocal('maker3d_global_colors', store.state.globalColors);
+    store.saveLocal('maker3d_products_v3', store.state.products);
+    store.saveLocal('maker3d_settings_v3', store.state.settings);
+    store.saveLocal('maker3d_coupons_v3', store.state.coupons);
+    store.saveLocal('maker3d_faqs_v3', store.state.faqs);
+    store.saveLocal('maker3d_global_colors_v3', store.state.globalColors);
 
     if (this.broadcast) {
       this.broadcast.postMessage({ key: 'products', value: store.state.products });

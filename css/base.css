@@ -214,17 +214,18 @@ nav#mainNav.scrolled {
   flex-direction: column;
 }
 .nav-logo-brand {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.45rem;
-  color: var(--brand-primary);
-  letter-spacing: -0.02em;
+  font-family: 'Cormorant Garamond', 'DM Serif Display', serif;
+  font-size: 1.58rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
   line-height: 1.05;
 }
 .nav-logo-tag {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  color: var(--brand-primary);
   font-weight: 700;
 }
 
@@ -392,8 +393,9 @@ main {
   margin-bottom: 12px;
 }
 .section-header h2 {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(1.85rem, 4vw, 2.85rem);
+  font-family: 'Cormorant Garamond', 'DM Serif Display', serif;
+  font-weight: 600;
+  font-size: clamp(2.1rem, 4.2vw, 3.1rem);
   color: var(--text-primary);
   margin-bottom: 12px;
   line-height: 1.15;

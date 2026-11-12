@@ -89,15 +89,16 @@
   text-transform: uppercase;
 }
 .hero h1 {
-  font-size: clamp(2.2rem, 4.8vw, 3.6rem);
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
+  font-family: 'Cormorant Garamond', 'DM Serif Display', serif;
+  font-size: clamp(2.5rem, 5.2vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
   color: var(--text-primary);
   margin-bottom: 16px;
 }
 .hero h1 em {
-  font-style: normal;
+  font-style: italic;
   color: var(--brand-primary);
 }
 .hero p {
@@ -552,6 +553,7 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  transform: translate3d(calc(var(--tilt-x, 0px) * 0.14), calc(var(--tilt-y, 0px) * 0.14), 0);
 }
 .product-card:hover {
   transform: translateY(-7px);
@@ -1595,6 +1597,161 @@
   box-shadow: var(--shadow-xs);
 }
 
+/* ─── EDITORIAL CAMPAIGN SHOWCASE (JAPANDI AESTHETIC & PHONE TILT MOTION) ─── */
+.hero-showcase-editorial {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1100px;
+}
+.editorial-poster-frame {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  border-radius: 36px;
+  overflow: hidden;
+  background: var(--bg-logo-base);
+  border: 1.5px solid var(--border-strong);
+  box-shadow: var(--shadow-lg);
+  transform: translate3d(calc(var(--tilt-x, 0px) * 0.45), calc(var(--tilt-y, 0px) * 0.45), 0)
+             rotateX(var(--tilt-rot-x, 0deg))
+             rotateY(var(--tilt-rot-y, 0deg));
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  will-change: transform;
+}
+.editorial-poster-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+.editorial-floating-tag {
+  position: absolute;
+  bottom: 22px;
+  left: 22px;
+  right: 22px;
+  background: rgba(252, 250, 246, 0.90);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-strong);
+  border-radius: 22px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-md);
+  transform: translate3d(calc(var(--tilt-x, 0px) * -0.35), calc(var(--tilt-y, 0px) * -0.35), 18px);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.editorial-floating-tag strong {
+  display: block;
+  font-family: 'Cormorant Garamond', 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+.editorial-floating-tag span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* ─── LUXURY COLLECTION BANNERS (JAPANDI, NATAL, FIDGETS & GEARS BRANCH) ─── */
+.collections-editorial-section {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 36px 5% 64px;
+}
+.collections-editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+.collection-pillar-card {
+  background: linear-gradient(165deg, var(--bg-secondary) 0%, var(--bg-logo-base) 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: 30px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-bounce);
+  position: relative;
+  overflow: hidden;
+}
+.collection-pillar-card:hover {
+  transform: translateY(-7px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-primary);
+}
+.collection-pillar-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+.collection-pillar-card h3 {
+  font-family: 'Cormorant Garamond', 'DM Serif Display', serif;
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+.collection-pillar-card p {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.collection-pillar-link {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand-deep);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ─── GEARS × MAKER 3D BRANCH PAGE ─── */
+.gears-branch-wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 42px 5% 76px;
+}
+.gears-hero-card {
+  background: linear-gradient(145deg, var(--bg-logo-base) 0%, var(--brand-soft) 55%, var(--bg-secondary) 100%);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 36px;
+  padding: 48px 44px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 36px;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 44px;
+}
+.gears-branch-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--brand-primary);
+  color: var(--brand-deep);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
 /* ─── PARCEIROS B2B & CASES CORPORATIVOS ─── */
 .partners-section {
   max-width: 1220px;
@@ -1702,6 +1859,13 @@
 
 /* Responsive */
 @media (max-width: 960px) {
+  .collections-editorial-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .gears-hero-card {
+    grid-template-columns: 1fr;
+    padding: 32px 24px;
+  }
   .partner-case-card {
     grid-template-columns: 1fr;
   }
@@ -1821,6 +1985,15 @@
   }
   .polymer-selector-grid {
     grid-template-columns: 1fr;
+  }
+  .collections-editorial-grid {
+    grid-template-columns: 1fr;
+  }
+  .editorial-floating-tag {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    padding: 10px 14px;
   }
   .partner-case-visual,
   .partner-case-details {

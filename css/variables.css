@@ -1,62 +1,68 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Maker3D — Light Variations of #ff9e1b, Off-White Surfaces & Organic Geometry
+   Maker3D — Accessible Luxury & Japandi Organic Palette (From Logo #f4f0e7 to Lighter Warm Tones)
    ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --brand-primary: #ff9e1b;
-  --brand-deep:    #f28b00;
-  --brand-mid:     #ffb84d;
-  --brand-light:   #ffd285;
-  --brand-soft:    #ffe6b8;
-  --brand-pale:    #fff5e4;
-  --brand-glow:    rgba(255, 158, 27, 0.22);
+  /* Editorial Warm Taupe, Champagne & Espresso Bronze Accents */
+  --brand-primary: #8c6d53;
+  --brand-deep:    #5a4332;
+  --brand-mid:     #b08d6e;
+  --brand-light:   #d8c7b4;
+  --brand-soft:    #ece5d8;
+  --brand-pale:    #f4f0e7;
+  --brand-glow:    rgba(140, 109, 83, 0.16);
 
-  /* Off-White & Warm Cream Organic Surfaces (No Dark Colors) */
-  --bg-primary:    #fdfaf5;
-  --bg-secondary:  #fffdf9;
-  --bg-tertiary:   #f7f1e6;
-  --bg-glass:      rgba(255, 253, 249, 0.92);
-  --bg-nav:        rgba(253, 250, 245, 0.94);
-  --bg-card:       #fffdf9;
+  /* Palette Variations from Attached Logo (#f4f0e7) to Lighter Off-White Alabaster */
+  --bg-logo-base:  #f4f0e7;
+  --bg-primary:    #f8f5ef;
+  --bg-secondary:  #fcfaf6;
+  --bg-tertiary:   #f1ece1;
+  --bg-glass:      rgba(252, 250, 246, 0.90);
+  --bg-nav:        rgba(248, 245, 239, 0.92);
+  --bg-card:       #fcfaf6;
 
-  /* Warm Organic Typography Colors (No Stark Black or Dark Slate) */
-  --text-primary:   #3d2e1e;
-  --text-secondary: #6e5a44;
-  --text-muted:     #9c856c;
-  --text-inverse:   #fffdf9;
+  /* Editorial Typography Colors (Warm Espresso & Stone — Never Harsh Black) */
+  --text-primary:   #2c221b;
+  --text-secondary: #68594c;
+  --text-muted:     #968677;
+  --text-inverse:   #fcfaf6;
 
-  /* Warm Organic Borders & Dividers */
-  --border-subtle:  #f0e6d6;
-  --border-strong:  #e5d3b8;
-  --border-neutral: rgba(61, 46, 30, 0.08);
+  /* Subtle Architectural Borders */
+  --border-subtle:  #e8e0d3;
+  --border-strong:  #d5c7b4;
+  --border-neutral: rgba(44, 34, 27, 0.08);
 
-  /* Status Colors */
-  --success:       #10b981;
-  --success-bg:    rgba(16, 185, 129, 0.12);
-  --warning:       #f59e0b;
-  --warning-bg:    rgba(245, 158, 11, 0.14);
-  --danger:        #ef4444;
-  --danger-bg:     rgba(239, 68, 68, 0.12);
-  --info:          #ff9e1b;
-  --info-bg:       rgba(255, 158, 27, 0.14);
+  /* Status Colors (Refined Muted Luxury Tones) */
+  --success:       #4d7c5d;
+  --success-bg:    rgba(77, 124, 93, 0.12);
+  --warning:       #b88644;
+  --warning-bg:    rgba(184, 134, 68, 0.14);
+  --danger:        #b95348;
+  --danger-bg:     rgba(185, 83, 72, 0.12);
+  --info:          #8c6d53;
+  --info-bg:       rgba(140, 109, 83, 0.14);
 
-  /* Soft Warm Organic Shadows */
-  --shadow-xs:     0 2px 6px rgba(180, 130, 70, 0.06);
-  --shadow-sm:     0 6px 16px rgba(180, 130, 70, 0.08);
-  --shadow-md:     0 12px 28px rgba(180, 130, 70, 0.10);
-  --shadow-lg:     0 20px 44px rgba(180, 130, 70, 0.13);
-  --shadow-btn:    0 8px 22px rgba(255, 158, 27, 0.30);
+  /* Soft Warm Architectural Shadows */
+  --shadow-xs:     0 2px 8px rgba(90, 67, 50, 0.04);
+  --shadow-sm:     0 8px 22px rgba(90, 67, 50, 0.06);
+  --shadow-md:     0 14px 34px rgba(90, 67, 50, 0.08);
+  --shadow-lg:     0 24px 52px rgba(90, 67, 50, 0.11);
+  --shadow-btn:    0 10px 26px rgba(140, 109, 83, 0.24);
 
   /* Organic Fluid Radii */
   --radius-xs:     12px;
   --radius-sm:     16px;
   --radius-md:     22px;
   --radius-card:   28px;
-  --radius-lg:     34px;
+  --radius-lg:     36px;
   --radius-pill:   999px;
 
-  /* Fluid Spring Transitions */
+  /* Fluid UX Motion & Gyroscope Tilt Variables */
+  --tilt-x:        0px;
+  --tilt-y:        0px;
+  --tilt-rot-x:    0deg;
+  --tilt-rot-y:    0deg;
   --ease-spring:   cubic-bezier(0.22, 1, 0.36, 1);
   --ease-smooth:   cubic-bezier(0.25, 1, 0.5, 1);
-  --transition:    all 0.28s var(--ease-smooth);
-  --transition-bounce: all 0.34s var(--ease-spring);
+  --transition:    all 0.32s var(--ease-smooth);
+  --transition-bounce: all 0.38s var(--ease-spring);
 }
