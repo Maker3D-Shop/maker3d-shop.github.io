@@ -10,18 +10,95 @@ class AuthService {
     this.firebaseAuth = null;
     this.pendingGoogleUser = null;
     this.authMode = 'login'; // 'login' | 'register' | 'complete-google'
+    this.pendingPostAuthAction = null;
+    this.pendingContextLabel = '';
   }
 
   /**
-   * Opens the Auth Modal in clean state (no pre-filled values)
+   * Smart Auth Gate for Likes, Collections, and Cart:
+   * - If user is already logged in -> returns true immediately.
+   * - If not logged in -> checks if the device/DB already has a registered account:
+   *     • If an account already exists -> opens Login tab ("Fazer Login") with email ready.
+   *     • If no account exists yet -> opens Registration tab ("Cadastrar Conta").
+   * - Stores `onAuthenticatedCallback` so as soon as the user logs in or registers, the like/cart action completes automatically!
    */
-  openAuthModal(mode = 'login') {
+  requireAuthForAction(contextLabel = 'continuar', onAuthenticatedCallback = null) {
+    if (store.state.currentUser && store.state.currentUser.email) {
+      return true;
+    }
+
+    this.pendingPostAuthAction = typeof onAuthenticatedCallback === 'function' ? onAuthenticatedCallback : null;
+    this.pendingContextLabel = contextLabel;
+
+    const knownUsers = store.state.users || [];
+    const lastEmail = localStorage.getItem('maker3d_last_known_email') || (knownUsers[0]?.email || '');
+    const hasExistingAccount = Boolean(lastEmail || knownUsers.length > 0);
+
+    if (hasExistingAccount) {
+      this.openAuthModal('login', {
+        prefillEmail: lastEmail,
+        notice: `Identificamos que você já possui cadastro! Faça login para <strong>${contextLabel}</strong>.`
+      });
+      showToast(`Faça login na sua conta para ${contextLabel}.`);
+    } else {
+      this.openAuthModal('register', {
+        notice: `Crie seu cadastro rápido para <strong>${contextLabel}</strong> e salvar tudo na sua conta.`
+      });
+      showToast(`Cadastre sua conta para ${contextLabel}.`);
+    }
+    return false;
+  }
+
+  runPendingActionIfAny() {
+    if (typeof this.pendingPostAuthAction === 'function') {
+      const fn = this.pendingPostAuthAction;
+      this.pendingPostAuthAction = null;
+      this.pendingContextLabel = '';
+      setTimeout(() => {
+        try { fn(); } catch (e) { console.warn('Post-auth callback error:', e); }
+      }, 120);
+    }
+  }
+
+  /**
+   * Called in real time when user types an email in the Register tab:
+   * If our DB detects that email is already registered, automatically switch to Login!
+   */
+  checkEmailDuringRegistration(emailValue) {
+    const clean = (emailValue || '').trim().toLowerCase();
+    if (!clean || !clean.includes('@') || !clean.includes('.')) return;
+    const existing = dbService.findUserByEmail(clean);
+    if (existing && existing.registered) {
+      this.switchAuthModalTab('login');
+      const loginEmailEl = document.getElementById('authLoginEmail');
+      if (loginEmailEl) loginEmailEl.value = clean;
+      const loginPassEl = document.getElementById('authLoginPassword');
+      if (loginPassEl) loginPassEl.focus();
+      const regBanner = document.getElementById('authRegisterNotice');
+      if (regBanner) {
+        regBanner.style.display = 'block';
+        regBanner.innerHTML = `Reconhecemos seu cadastro (<strong>${existing.displayName || clean}</strong>)! Digite sua senha para entrar.`;
+      }
+      showToast(`Cadastro encontrado para ${clean}! Faça login para continuar.`, 'success');
+    }
+  }
+
+  /**
+   * Opens the Auth Modal in clean state (or with smart detection notice)
+   */
+  openAuthModal(mode = 'login', options = {}) {
     this.authMode = mode;
     const modal = document.getElementById('googleAuthModal');
     if (!modal) return;
 
     this.clearAuthInputs();
-    this.switchAuthModalTab(mode);
+    this.switchAuthModalTab(mode, options.notice || '');
+
+    if (options.prefillEmail) {
+      const loginEmailEl = document.getElementById('authLoginEmail');
+      if (loginEmailEl) loginEmailEl.value = options.prefillEmail;
+    }
+
     modal.classList.add('open');
 
     // Render Official Google Identity Services button if Client ID is configured
@@ -48,7 +125,7 @@ class AuthService {
     });
   }
 
-  switchAuthModalTab(mode) {
+  switchAuthModalTab(mode, customNotice = '') {
     this.authMode = mode;
     const tabLogin = document.getElementById('authTabBtnLogin');
     const tabReg = document.getElementById('authTabBtnRegister');
@@ -62,7 +139,10 @@ class AuthService {
     if (panelReg) panelReg.style.display = (mode === 'register' || mode === 'complete-google') ? 'block' : 'none';
 
     if (regBanner) {
-      if (mode === 'complete-google' && this.pendingGoogleUser) {
+      if (customNotice) {
+        regBanner.style.display = 'block';
+        regBanner.innerHTML = customNotice;
+      } else if (mode === 'complete-google' && this.pendingGoogleUser) {
         regBanner.style.display = 'block';
         regBanner.innerHTML = `Conta Google identificada (<strong>${this.pendingGoogleUser.email}</strong>). Conclua o registro da sua conta abaixo para vincular suas coleções, curtidas e pedidos.`;
       } else {
@@ -176,12 +256,14 @@ class AuthService {
   async handleGoogleAuthenticatedUser(googleUser) {
     const existing = dbService.findUserByEmail(googleUser.email);
     if (existing && existing.registered) {
+      localStorage.setItem('maker3d_last_known_email', existing.email);
       const profile = await dbService.saveUserRecord({
         ...existing,
         lastLoginAt: new Date().toISOString()
       });
       this.closeAuthModal();
       showToast(`Bem-vindo de volta, ${profile.displayName}! Dados sincronizados.`, 'success');
+      this.runPendingActionIfAny();
       return profile;
     }
 
@@ -229,12 +311,14 @@ class AuthService {
       return null;
     }
 
+    localStorage.setItem('maker3d_last_known_email', existing.email);
     const profile = await dbService.saveUserRecord({
       ...existing,
       lastLoginAt: new Date().toISOString()
     });
     this.closeAuthModal();
     showToast(`Bem-vindo(a), ${profile.displayName}!`, 'success');
+    this.runPendingActionIfAny();
     return profile;
   }
 
@@ -260,9 +344,20 @@ class AuthService {
       return null;
     }
 
+    const existingAlready = dbService.findUserByEmail(email);
+    if (existingAlready && existingAlready.registered && this.authMode !== 'complete-google') {
+      this.switchAuthModalTab('login', `Reconhecemos que o e-mail <strong>${email}</strong> já possui cadastro! Faça login abaixo.`);
+      const loginEmailEl = document.getElementById('authLoginEmail');
+      if (loginEmailEl) loginEmailEl.value = email;
+      showToast('Você já possui cadastro! Faça login com sua senha.', 'success');
+      return null;
+    }
+
+    localStorage.setItem('maker3d_last_known_email', email);
+
     const uid = this.pendingGoogleUser?.uid || ('usr_' + btoa(email).replace(/[^a-zA-Z0-9]/g, '').slice(0, 12));
     const photoURL = this.pendingGoogleUser?.photoURL ||
-      `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=ff7a00&color=fff&bold=true`;
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=8c6d53&color=fff&bold=true`;
 
     const profile = await dbService.saveUserRecord({
       uid,
@@ -279,6 +374,7 @@ class AuthService {
     this.pendingGoogleUser = null;
     this.closeAuthModal();
     showToast(`Conta registrada com sucesso! Bem-vindo(a), ${profile.displayName}.`, 'success');
+    this.runPendingActionIfAny();
     return profile;
   }
 

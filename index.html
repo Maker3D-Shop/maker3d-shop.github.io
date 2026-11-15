@@ -699,6 +699,8 @@
         <button type="button" class="auth-tab-btn" id="authTabBtnRegister" onclick="window.makerApp.switchAuthModalTab('register')">Registrar Conta</button>
       </div>
 
+      <div id="authRegisterNotice" style="display:none;background:var(--brand-pale);border:1px solid var(--brand-primary);color:var(--text-primary);padding:10px 12px;border-radius:10px;font-size:0.8rem;margin-bottom:14px"></div>
+
       <!-- Google OAuth Button -->
       <div id="gisiButtonContainer" style="display:flex;justify-content:center;margin-bottom:10px"></div>
       <button type="button" class="btn-secondary" style="width:100%;margin-bottom:16px;border-color:var(--border-strong);color:var(--text-primary);background:var(--bg-primary)" onclick="window.makerApp.triggerRealGoogleSignIn()">
@@ -727,14 +729,13 @@
 
       <!-- Painel 2: Registro Obrigatório de Conta (Manual ou Pós-Google) -->
       <div id="authPanelRegister" style="display:none">
-        <div id="authRegisterNotice" style="display:none;background:var(--brand-pale);border:1px solid var(--brand-primary);color:var(--text-primary);padding:10px 12px;border-radius:8px;font-size:0.8rem;margin-bottom:12px"></div>
         <div class="admin-input-group">
           <label>Seu Nome Completo *</label>
           <input type="text" id="authRegName" placeholder="Digite seu nome e sobrenome" value="">
         </div>
         <div class="admin-input-group">
           <label>Seu E-mail *</label>
-          <input type="email" id="authRegEmail" placeholder="seuemail@gmail.com" value="">
+          <input type="email" id="authRegEmail" placeholder="seuemail@gmail.com" value="" onblur="window.makerApp.checkEmailDuringRegistration(this.value)" onchange="window.makerApp.checkEmailDuringRegistration(this.value)">
         </div>
         <div class="admin-input-group">
           <label>WhatsApp / Telefone (Opcional)</label>

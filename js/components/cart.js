@@ -6,6 +6,7 @@ import { getSelectedColorsForProduct, getProductColors, openModal } from './cata
 import { toRawUrl } from './viewer3d.js';
 import { showToast, showPage } from './ui.js';
 import { dbService } from '../services/db.js';
+import { authService } from '../services/auth.js';
 
 export function addToCart(pid, filamentPolymer = 'PLA') {
   const p = store.state.products.find(x => String(x.id) === String(pid));
@@ -13,6 +14,10 @@ export function addToCart(pid, filamentPolymer = 'PLA') {
 
   if (p.custom) {
     openModal(p.id);
+    return;
+  }
+
+  if (!authService.requireAuthForAction('adicionar ao carrinho', () => addToCart(pid, filamentPolymer))) {
     return;
   }
 
@@ -250,6 +255,14 @@ export function toggleDrawer(drawerId, forceState) {
   const ov = document.getElementById('drawerOverlay');
   if (!dr || !ov) return;
   const isOpen = forceState !== undefined ? forceState : !dr.classList.contains('open');
+
+  if (isOpen && (drawerId === 'cartDrawer' || drawerId === 'wishlistDrawer')) {
+    const label = drawerId === 'cartDrawer' ? 'acessar sua sacola' : 'acessar suas curtidas e coleções';
+    if (!authService.requireAuthForAction(label, () => toggleDrawer(drawerId, true))) {
+      return;
+    }
+  }
+
   document.querySelectorAll('.side-drawer').forEach(d => d.classList.remove('open'));
   if (isOpen) {
     dr.classList.add('open');

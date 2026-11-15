@@ -6,6 +6,7 @@ import { viewer3D, toRawUrl } from './viewer3d.js';
 import { addToCart } from './cart.js';
 import { showToast, showPage } from './ui.js';
 import { dbService } from '../services/db.js';
+import { authService } from '../services/auth.js';
 
 let currentFilter = 'todos';
 let currentSort = 'featured';
@@ -43,6 +44,11 @@ export function isSavedInCollection(pid) {
 
 export function toggleWishlist(pid, ev) {
   if (ev) ev.stopPropagation();
+
+  if (!authService.requireAuthForAction('curtir peças', () => toggleWishlist(pid))) {
+    return;
+  }
+
   const list = [...(store.state.wishlist || [])];
   const idx = list.findIndex(id => String(id) === String(pid));
   const prod = store.state.products.find(p => String(p.id) === String(pid));
@@ -51,7 +57,7 @@ export function toggleWishlist(pid, ev) {
     showToast('Removido das curtidas.');
   } else {
     list.push(pid);
-    showToast(`${prod ? prod.name : 'Modelo'} adicionado às suas curtidas!`, 'success');
+    showToast(`${prod ? prod.name : 'Peça'} adicionada às suas curtidas!`, 'success');
   }
   store.update('wishlist', list, 'maker3d_wishlist');
   renderProducts();
@@ -68,6 +74,11 @@ export function toggleWishlist(pid, ev) {
 
 export function toggleSaveToCollection(pid, ev) {
   if (ev) ev.stopPropagation();
+
+  if (!authService.requireAuthForAction('salvar na sua coleção', () => toggleSaveToCollection(pid))) {
+    return;
+  }
+
   const cols = [...(store.state.collections || [{ id: 'col-default', name: 'Meus Modelos Salvos', items: [] }])];
   if (!cols.length) {
     cols.push({ id: 'col-default', name: 'Meus Modelos Salvos', items: [] });

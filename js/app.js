@@ -299,6 +299,7 @@ window.makerApp = {
   openAuthModal: (mode) => authService.openAuthModal(mode),
   closeAuthModal: () => authService.closeAuthModal(),
   switchAuthModalTab: (mode) => authService.switchAuthModalTab(mode),
+  checkEmailDuringRegistration: (emailVal) => authService.checkEmailDuringRegistration(emailVal),
   triggerRealGoogleSignIn: async () => {
     await authService.triggerRealGoogleSignIn();
     renderUserNavbarState();
