@@ -2,6 +2,7 @@
 // Maker3D — UI Utilities: Loadscreen, Gyroscope Tilt Motion, Navigation & Toasts
 // ═══════════════════════════════════════════════════════════════════════════
 import { store } from '../config/store.js';
+import { viewer3D } from './viewer3d.js';
 
 export function showToast(msg, type = '') {
   const t = document.getElementById('toast');
@@ -133,6 +134,7 @@ export function initParticlesAndScroll() {
     document.documentElement.style.setProperty('--tilt-y', `${(clampedY * 14).toFixed(2)}px`);
     document.documentElement.style.setProperty('--tilt-rot-x', `${(-clampedY * 4.5).toFixed(2)}deg`);
     document.documentElement.style.setProperty('--tilt-rot-y', `${(clampedX * 4.5).toFixed(2)}deg`);
+    viewer3D.setDeviceTiltNormalized(clampedX, clampedY);
   };
 
   if (typeof window !== 'undefined' && 'DeviceOrientationEvent' in window) {

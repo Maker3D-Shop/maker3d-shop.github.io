@@ -385,7 +385,7 @@ export function renderProducts() {
     }
 
     return `
-      <article class="product-card ${p.custom ? 'custom-card' : ''}" onclick="window.makerApp.openModal('${p.id}')">
+      <article class="product-card ${p.custom ? 'custom-card' : ''}" onclick="window.makerApp.openModal('${p.id}')" onmousemove="window.makerApp.handleCardSpatial3D(event, this)" onmouseleave="window.makerApp.resetCardSpatial3D(this)">
         ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
         <div class="card-top-actions">
           <button class="wishlist-card-btn ${inCol ? 'liked' : ''}" onclick="window.makerApp.toggleSaveToCollection('${p.id}', event)" title="Salvar na Coleção" type="button">
@@ -730,7 +730,7 @@ export function switchMedia(type) {
 
   if (type === 'model' && currentDetailProduct) {
     const firstColor = (selectedColors[currentDetailProduct.id] && selectedColors[currentDetailProduct.id][0]?.hex) || '#b08d6e';
-    viewer3D.initModal3D(currentDetailProduct.model3d, firstColor);
+    viewer3D.initModal3D(currentDetailProduct.model3d, firstColor, currentDetailProduct.category || '');
   } else {
     viewer3D.destroyModal3D();
   }

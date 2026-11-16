@@ -57,6 +57,9 @@
   <!-- Reading / Scroll Progress Bar -->
   <div id="scrollProgress"></div>
 
+  <!-- Full-Viewport Interactive 3D Spatial Background Stage (Reacts to Scroll & Device Tilt) -->
+  <canvas id="spatialBgCanvas" aria-hidden="true"></canvas>
+
   <!-- Sticky Header & Navigation -->
   <header class="site-header">
     <nav id="mainNav">
@@ -138,14 +141,56 @@
           </div>
         </div>
 
-        <!-- Editorial Campaign Poster with Passive Gyroscope / Tilt Parallax -->
+        <!-- Interactive 3D Sculptural Studio + Editorial Campaign Switcher -->
         <div class="hero-showcase-editorial">
-          <div class="editorial-poster-frame" onclick="window.makerApp.openCollectionCategory('Coleção Japandi')" style="cursor:pointer" title="Clique para explorar a Coleção Japandi">
-            <img src="assets/brand/japandi-campaign.jpg" alt="Maker 3D — Coleção Japandi Minimalismo Orgânico">
+          <div class="hero-3d-mode-switcher">
+            <button type="button" class="hero-mode-tab active" id="heroModeTab3D" onclick="window.makerApp.switchHeroShowcaseMode('3d')">
+              Estúdio 3D Interativo
+            </button>
+            <button type="button" class="hero-mode-tab" id="heroModeTabPoster" onclick="window.makerApp.switchHeroShowcaseMode('poster')">
+              Pôster Campanha Japandi
+            </button>
           </div>
+
+          <!-- Panel A: Real-Time Interactive 3D WebGL Sculptural Stage -->
+          <div class="hero-stage-3d-wrap" id="heroStage3DWrap">
+            <div class="hero-3d-preset-bar">
+              <button type="button" class="hero-3d-preset-pill active" onclick="window.makerApp.selectHero3DPreset('japandi', this)">Vasos Japandi</button>
+              <button type="button" class="hero-3d-preset-pill" onclick="window.makerApp.selectHero3DPreset('natal', this)">Pinheiro Natal</button>
+              <button type="button" class="hero-3d-preset-pill" onclick="window.makerApp.selectHero3DPreset('gears', this)">Pulseira Gears</button>
+              <button type="button" class="hero-3d-preset-pill" onclick="window.makerApp.selectHero3DPreset('fidget', this)">Fidget Cinético</button>
+            </div>
+
+            <div class="hero-3d-canvas-box">
+              <canvas id="hero3dCanvas"></canvas>
+              <div class="hero-3d-gesture-hint">Arraste para girar em 360° • Toque nas cores</div>
+            </div>
+
+            <div class="hero-3d-controls-footer">
+              <div class="hero-3d-swatches" aria-label="Paleta 3D ao vivo">
+                <button type="button" class="hero-3d-swatch active" style="background:#b08d6e" title="Areia Travertino" onclick="window.makerApp.selectHero3DColor('#b08d6e', this)"></button>
+                <button type="button" class="hero-3d-swatch" style="background:#ece5d8" title="Alabastro & Linho" onclick="window.makerApp.selectHero3DColor('#ece5d8', this)"></button>
+                <button type="button" class="hero-3d-swatch" style="background:#c8a97e" title="Champanhe Acetinado" onclick="window.makerApp.selectHero3DColor('#c8a97e', this)"></button>
+                <button type="button" class="hero-3d-swatch" style="background:#8a9a86" title="Verde Sálvia" onclick="window.makerApp.selectHero3DColor('#8a9a86', this)"></button>
+                <button type="button" class="hero-3d-swatch" style="background:#5a4332" title="Bronze Espresso" onclick="window.makerApp.selectHero3DColor('#5a4332', this)"></button>
+              </div>
+              <div class="hero-3d-action-btns">
+                <button type="button" class="viewer-ctrl-btn" onclick="window.makerApp.toggleHeroExplode(this)">Explodir 3D</button>
+                <button type="button" class="viewer-ctrl-btn" onclick="window.makerApp.toggleHeroWireframe(this)">Malha</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel B: Editorial Campaign Poster (Toggleable anytime) -->
+          <div id="heroStagePosterWrap" style="display:none;width:100%">
+            <div class="editorial-poster-frame" onclick="window.makerApp.openCollectionCategory('Coleção Japandi')" style="cursor:pointer;margin:0 auto" title="Clique para explorar a Coleção Japandi">
+              <img src="assets/brand/japandi-campaign.jpg" alt="Maker 3D — Coleção Japandi Minimalismo Orgânico">
+            </div>
+          </div>
+
           <div class="editorial-floating-tag">
-            <small>ESTÉTICA DE CAMPANHA • VALORES ACESSÍVEIS</small>
-            <strong>Vasos & Porta-Trecos Japandi a partir de R$ 18</strong>
+            <small>ESTÚDIO 3D EM TEMPO REAL • VALORES ACESSÍVEIS</small>
+            <strong>Vasos Japandi, Natal, Fidgets & Gears a partir de R$ 18</strong>
           </div>
         </div>
       </div>
@@ -286,24 +331,37 @@
             </div>
           </div>
 
-          <div style="display:grid;gap:16px">
-            <div class="feature-card" style="text-align:left;cursor:pointer;padding:22px" onclick="window.makerApp.openModal('gears-pulseira-aura-link')">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="display:grid;gap:14px">
+            <!-- Interactive 3D Bracelet Customizer on Gears Branch Page -->
+            <div class="gears-3d-stage-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                <span style="font-size:0.7rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--brand-deep)">Provador 3D Interativo • Gears</span>
+                <div style="display:flex;gap:6px">
+                  <button type="button" class="gears-3d-swatch active" style="width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:#c8a97e;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,0.2)" onclick="window.makerApp.selectGears3DColor('#c8a97e', this)" title="Champanhe"></button>
+                  <button type="button" class="gears-3d-swatch" style="width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:#ece5d8;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,0.2)" onclick="window.makerApp.selectGears3DColor('#ece5d8', this)" title="Alabastro"></button>
+                  <button type="button" class="gears-3d-swatch" style="width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:#5a4332;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,0.2)" onclick="window.makerApp.selectGears3DColor('#5a4332', this)" title="Bronze"></button>
+                </div>
+              </div>
+              <canvas id="gears3dCanvas" style="width:100%;height:220px;display:block;border-radius:18px;background:var(--bg-primary);border:1px solid var(--border-subtle);cursor:grab"></canvas>
+            </div>
+
+            <div class="feature-card" style="text-align:left;cursor:pointer;padding:18px" onclick="window.makerApp.openModal('gears-pulseira-aura-link')">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
                 <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--brand-primary)">GEARS × MAKER 3D • 01</span>
                 <strong style="color:var(--brand-deep);font-size:1.1rem">R$ 38,00</strong>
               </div>
-              <h3 style="margin-bottom:6px">Pulseira Escultural Aura Link</h3>
-              <p style="margin-bottom:10px">Elos orgânicos entrelaçados impressos em peça única com toque acetinado e ajuste anatômico P, M ou G.</p>
+              <h3 style="margin-bottom:4px">Pulseira Escultural Aura Link</h3>
+              <p style="margin-bottom:8px">Elos orgânicos entrelaçados impressos em peça única com toque acetinado e ajuste anatômico P, M ou G.</p>
               <span style="font-size:0.8rem;font-weight:700;color:var(--brand-primary)">Personalizar cor e tamanho →</span>
             </div>
 
-            <div class="feature-card" style="text-align:left;cursor:pointer;padding:22px" onclick="window.makerApp.openModal('gears-pulseira-kinetica-wave')">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div class="feature-card" style="text-align:left;cursor:pointer;padding:18px" onclick="window.makerApp.openModal('gears-pulseira-kinetica-wave')">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
                 <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--brand-primary)">GEARS × MAKER 3D • 02</span>
                 <strong style="color:var(--brand-deep);font-size:1.1rem">R$ 42,00</strong>
               </div>
-              <h3 style="margin-bottom:6px">Bracelete Orgânico Kinetic Wave</h3>
-              <p style="margin-bottom:10px">Geometria fluida inspirada nas dunas Japandi, ultraleve (14g) e disponível em polímero rígido acetinado ou flexível Trust/TPU.</p>
+              <h3 style="margin-bottom:4px">Bracelete Orgânico Kinetic Wave</h3>
+              <p style="margin-bottom:8px">Geometria fluida inspirada nas dunas Japandi, ultraleve (14g) e disponível em polímero rígido acetinado ou flexível Trust/TPU.</p>
               <span style="font-size:0.8rem;font-weight:700;color:var(--brand-primary)">Personalizar cor e tamanho →</span>
             </div>
           </div>

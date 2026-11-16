@@ -1597,13 +1597,175 @@
   box-shadow: var(--shadow-xs);
 }
 
-/* ─── EDITORIAL CAMPAIGN SHOWCASE (JAPANDI AESTHETIC & PHONE TILT MOTION) ─── */
+/* ─── FULL-VIEWPORT 3D SPATIAL BACKGROUND & INTERACTIVE 3D HERO STUDIO ─── */
+#spatialBgCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
+}
+
 .hero-showcase-editorial {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   perspective: 1100px;
+  width: 100%;
+}
+
+.hero-3d-mode-switcher {
+  display: inline-flex;
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-xs);
+  z-index: 5;
+}
+.hero-mode-tab {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.hero-mode-tab.active {
+  background: var(--brand-primary);
+  color: #fff;
+  box-shadow: var(--shadow-xs);
+}
+
+.hero-stage-3d-wrap {
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(155deg, rgba(252, 250, 246, 0.94) 0%, rgba(244, 240, 231, 0.96) 100%);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 34px;
+  padding: 16px 16px 76px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transform: translate3d(calc(var(--tilt-x, 0px) * 0.35), calc(var(--tilt-y, 0px) * 0.35), 0)
+             rotateX(var(--tilt-rot-x, 0deg))
+             rotateY(var(--tilt-rot-y, 0deg));
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-3d-preset-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.hero-3d-preset-bar::-webkit-scrollbar {
+  display: none;
+}
+.hero-3d-preset-pill {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.hero-3d-preset-pill.active,
+.hero-3d-preset-pill:hover {
+  background: var(--brand-deep);
+  color: #fff;
+  border-color: var(--brand-deep);
+}
+
+.hero-3d-canvas-box {
+  position: relative;
+  width: 100%;
+  height: 310px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, #fcfaf6 0%, #ece5d8 100%);
+  border: 1px solid var(--border-subtle);
+}
+#hero3dCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+  touch-action: none;
+}
+#hero3dCanvas:active {
+  cursor: grabbing;
+}
+.hero-3d-gesture-hint {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(252, 250, 246, 0.86);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-strong);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.hero-3d-controls-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hero-3d-swatches {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.hero-3d-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px rgba(90, 67, 50, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hero-3d-swatch.active,
+.hero-3d-swatch:hover {
+  transform: scale(1.22);
+  box-shadow: 0 0 0 2.5px var(--brand-deep);
+}
+.hero-3d-action-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.gears-3d-stage-card {
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 24px;
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
 }
 .editorial-poster-frame {
   position: relative;
@@ -1901,6 +2063,15 @@
   .hero-showcase-editorial {
     order: -1;
     width: 100%;
+  }
+  .hero-stage-3d-wrap {
+    max-width: 100%;
+    border-radius: 24px;
+    padding: 12px 12px 68px;
+  }
+  .hero-3d-canvas-box {
+    height: 255px;
+    border-radius: 18px;
   }
   .editorial-poster-frame {
     max-width: 100%;

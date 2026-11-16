@@ -328,6 +328,51 @@ window.makerApp = {
     document.getElementById('ctrl-wireframe')?.classList.toggle('active', active);
   },
   resetModalCamera: () => viewer3D.resetModalCamera(),
+  // Interactive 3D Hero Studio & Gears 3D Customizer methods
+  switchHeroShowcaseMode: (mode) => {
+    const tab3d = document.getElementById('heroModeTab3D');
+    const tabPoster = document.getElementById('heroModeTabPoster');
+    const panel3d = document.getElementById('heroStage3DWrap');
+    const panelPoster = document.getElementById('heroStagePosterWrap');
+    if (tab3d) tab3d.classList.toggle('active', mode === '3d');
+    if (tabPoster) tabPoster.classList.toggle('active', mode === 'poster');
+    if (panel3d) panel3d.style.display = mode === '3d' ? 'flex' : 'none';
+    if (panelPoster) panelPoster.style.display = mode === 'poster' ? 'block' : 'none';
+  },
+  selectHero3DPreset: (preset, btnEl) => {
+    document.querySelectorAll('.hero-3d-preset-pill').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    viewer3D.setHeroPreset(preset);
+  },
+  selectHero3DColor: (hex, btnEl) => {
+    document.querySelectorAll('.hero-3d-swatch').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    viewer3D.setHeroFilamentColor(hex);
+  },
+  toggleHeroExplode: (btnEl) => {
+    const exploded = viewer3D.toggleHeroExplodeView();
+    if (btnEl) btnEl.classList.toggle('active', exploded);
+  },
+  toggleHeroWireframe: (btnEl) => {
+    const wf = viewer3D.toggleHeroWireframe();
+    if (btnEl) btnEl.classList.toggle('active', wf);
+  },
+  selectGears3DColor: (hex, btnEl) => {
+    document.querySelectorAll('.gears-3d-swatch').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    viewer3D.setGearsBraceletColor(hex);
+  },
+  handleCardSpatial3D: (ev, cardEl) => {
+    if (!cardEl || window.innerWidth <= 640) return;
+    const rect = cardEl.getBoundingClientRect();
+    const nx = ((ev.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
+    const ny = ((ev.clientY - rect.top) / (rect.height || 1)) * 2 - 1;
+    cardEl.style.transform = `perspective(900px) rotateX(${(-ny * 6.5).toFixed(2)}deg) rotateY(${(nx * 6.5).toFixed(2)}deg) translateY(-6px)`;
+  },
+  resetCardSpatial3D: (cardEl) => {
+    if (!cardEl) return;
+    cardEl.style.transform = '';
+  },
   // Secret Admin Vault methods (triggered ONLY via URL /admin or #admin)
   openAdminVault,
   closeAdminVault,
@@ -365,12 +410,14 @@ window.addEventListener('DOMContentLoaded', async () => {
   renderUserNavbarState();
   initReveal();
 
-  // Initialize STL Lab 3D (Hero 3D removed per user request)
+  // Initialize Full 3D Interactive WebGL Spatial Engine (Ambient + Hero 3D Studio + Gears 3D + STL Lab)
   setTimeout(() => {
+    viewer3D.initAmbientSpatialStage();
+    viewer3D.initHero3D();
     viewer3D.initStlLab();
     initStlEstimator();
     hideSiteLoadscreen();
-  }, 380);
+  }, 320);
 
   // Check URL deep link (?id=ID or ?product=ID) or Subdirectory Route
   const params = new URLSearchParams(window.location.search);
