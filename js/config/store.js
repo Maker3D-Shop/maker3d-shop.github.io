@@ -11,9 +11,9 @@ export const DEFAULT_SITE_SETTINGS = {
   promoBarText: '',
   promoPill: 'MAKER 3D ATELIER',
   freeShippingThreshold: 120,
-  heroBadge: 'COLEÇÃO JAPANDI • LUXO ACESSÍVEL & DESIGN ESCULTURAL',
-  heroTitleHtml: 'Minimalismo orgânico em <em>impressão 3D</em>.',
-  heroSubtitle: 'Peças decorativas autorais para casa, vasos esculturais Japandi, edição especial de Natal, Fidget Toys sensoriais e a linha exclusiva de pulseiras em parceria com a Gears.',
+  heroBadge: 'DECORAÇÃO JAPANDI, NATAL, FIDGETS & PULSEIRAS 3D • DIRETO DO ATELIER',
+  heroTitleHtml: 'Decoração escultural & <em>luxo acessível</em> para sua casa a partir de R$ 18.',
+  heroSubtitle: 'Para quem busca ambientes sofisticados sem pagar preços de galeria: vasos e porta-trecos Japandi em textura de pedra travertino, adornos de Natal, Fidget Toys silenciosos e pulseiras autorais Gears × Maker 3D enviados para todo o Brasil.',
   whatsappNumber: '5531984566047',
   instagramHandle: '@maker3d.oficial',
   instagramUrl: 'https://www.instagram.com/maker3d.oficial',
@@ -103,10 +103,10 @@ export const FALLBACK_PRODUCTS = [
     weightGrams: 165,
     printTime: '4h 30m',
     model3d: 'assets/products/models/p1.glb',
-    image: 'assets/brand/japandi-vases.jpg',
+    image: 'assets/brand/japandi-vases.webp',
     gallery: [
-      'assets/brand/japandi-vases.jpg',
-      'assets/brand/japandi-campaign.jpg'
+      'assets/brand/japandi-vases.webp',
+      'assets/brand/japandi-campaign.webp'
     ],
     colorSections: [
       {
@@ -146,10 +146,10 @@ export const FALLBACK_PRODUCTS = [
     weightGrams: 92,
     printTime: '2h 50m',
     model3d: 'assets/products/models/p1.glb',
-    image: 'assets/brand/japandi-campaign.jpg',
+    image: 'assets/brand/japandi-campaign.webp',
     gallery: [
-      'assets/brand/japandi-campaign.jpg',
-      'assets/brand/japandi-vases.jpg'
+      'assets/brand/japandi-campaign.webp',
+      'assets/brand/japandi-vases.webp'
     ],
     colorSections: [
       {
@@ -187,11 +187,11 @@ export const FALLBACK_PRODUCTS = [
     weightGrams: 78,
     printTime: '2h 20m',
     model3d: 'assets/products/models/p8.glb',
-    image: 'assets/products/images/P8/p1.png',
+    image: 'assets/products/images/P8/p1.webp',
     gallery: [
-      'assets/products/images/P8/p1.png',
-      'assets/products/images/P8/p2.png',
-      'assets/products/images/P8/p3.png'
+      'assets/products/images/P8/p1.webp',
+      'assets/products/images/P8/p2.webp',
+      'assets/products/images/P8/p3.webp'
     ],
     colorSections: [
       {
@@ -229,11 +229,11 @@ export const FALLBACK_PRODUCTS = [
     weightGrams: 22,
     printTime: '0h 50m',
     model3d: 'assets/products/models/book2.glb',
-    image: 'assets/products/images/P7/p1.png',
+    image: 'assets/products/images/P7/p1.webp',
     gallery: [
-      'assets/products/images/P7/p1.png',
-      'assets/products/images/P7/p2.png',
-      'assets/products/images/P7/p3.png'
+      'assets/products/images/P7/p1.webp',
+      'assets/products/images/P7/p2.webp',
+      'assets/products/images/P7/p3.webp'
     ],
     colorSections: [
       {
@@ -273,10 +273,10 @@ export const FALLBACK_PRODUCTS = [
     weightGrams: 88,
     printTime: '3h 10m',
     model3d: 'assets/products/models/p4.glb',
-    image: 'assets/brand/japandi-vases.jpg',
+    image: 'assets/brand/japandi-vases.webp',
     gallery: [
-      'assets/brand/japandi-vases.jpg',
-      'assets/brand/japandi-campaign.jpg'
+      'assets/brand/japandi-vases.webp',
+      'assets/brand/japandi-campaign.webp'
     ],
     colorSections: [
       {
@@ -534,11 +534,11 @@ export const FALLBACK_PRODUCTS = [
     weightGrams: 55,
     printTime: '2h 40m',
     model3d: 'assets/products/models/p1.glb',
-    image: 'assets/products/images/P1/p1.png',
+    image: 'assets/products/images/P1/p1.webp',
     gallery: [
-      'assets/products/images/P1/p1.png',
-      'assets/products/images/P1/p2.png',
-      'assets/products/images/P1/p3.png'
+      'assets/products/images/P1/p1.webp',
+      'assets/products/images/P1/p2.webp',
+      'assets/products/images/P1/p3.webp'
     ],
     colorSections: [
       {
@@ -576,11 +576,11 @@ export const FALLBACK_PRODUCTS = [
     nozzle: '0.4 mm',
     material: 'PLA Matte / Silk / PETG / Trust',
     model3d: 'assets/products/models/p1.glb',
-    image: 'assets/brand/japandi-campaign.jpg',
+    image: 'assets/brand/japandi-campaign.webp',
     custom: true,
     gallery: [
-      'assets/brand/japandi-campaign.jpg',
-      'assets/brand/japandi-vases.jpg'
+      'assets/brand/japandi-campaign.webp',
+      'assets/brand/japandi-vases.webp'
     ],
     colorSections: [
       {
@@ -605,8 +605,8 @@ export const FALLBACK_PRODUCTS = [
 class Store {
   constructor() {
     this.state = {
-      settings: this.loadLocal('maker3d_settings_v3', DEFAULT_SITE_SETTINGS),
-      products: this.loadLocal('maker3d_products_v3', FALLBACK_PRODUCTS),
+      settings: this.loadLocal('maker3d_settings_v4', DEFAULT_SITE_SETTINGS),
+      products: this.loadLocal('maker3d_products_v4', FALLBACK_PRODUCTS),
       globalColors: this.loadLocal('maker3d_global_colors_v3', DEFAULT_GLOBAL_COLORS),
       coupons: this.loadLocal('maker3d_coupons_v3', DEFAULT_COUPONS),
       faqs: this.loadLocal('maker3d_faqs_v3', DEFAULT_FAQS),

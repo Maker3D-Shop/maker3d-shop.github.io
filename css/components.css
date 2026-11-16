@@ -102,11 +102,40 @@
   color: var(--brand-primary);
 }
 .hero p {
-  font-size: 1.02rem;
+  font-size: 1.03rem;
   color: var(--text-secondary);
+  max-width: 580px;
+  margin-bottom: 18px;
+  line-height: 1.72;
+}
+.hero-benefit-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 26px;
+  padding: 14px 18px;
+  background: rgba(252, 250, 246, 0.85);
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
   max-width: 560px;
-  margin-bottom: 28px;
-  line-height: 1.7;
+}
+.hero-benefit-list li {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.hero-benefit-list li strong {
+  color: var(--text-primary);
+}
+.benefit-check {
+  color: var(--brand-deep);
+  font-weight: 900;
+  font-size: 0.9rem;
+  flex-shrink: 0;
 }
 .hero-buttons {
   display: flex;
@@ -1880,6 +1909,117 @@
   gap: 6px;
 }
 
+/* ─── 8. SOCIAL PROOF, VERIFIED TESTIMONIALS & TRUST SEALS ─── */
+.social-proof-section {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 68px 5% 44px;
+}
+.trust-badges-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.trust-seal-pill {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  padding: 16px 18px;
+  text-align: center;
+  box-shadow: var(--shadow-xs);
+  transition: var(--transition);
+}
+.trust-seal-pill:hover {
+  transform: translateY(-3px);
+  border-color: var(--brand-primary);
+  box-shadow: var(--shadow-sm);
+}
+.trust-seal-pill strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--brand-deep);
+  margin-bottom: 3px;
+}
+.trust-seal-pill span {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.testimonial-card {
+  background: linear-gradient(160deg, var(--bg-secondary) 0%, var(--bg-logo-base) 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: 26px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  transition: var(--transition-bounce);
+}
+.testimonial-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--brand-primary);
+  box-shadow: var(--shadow-md);
+}
+.testimonial-stars {
+  color: #d97706;
+  font-size: 0.95rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.testimonial-stars span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  background: var(--bg-secondary);
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+}
+.testimonial-card p {
+  font-size: 0.92rem;
+  line-height: 1.68;
+  color: var(--text-primary);
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--brand-deep);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.testimonial-author strong {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+.testimonial-author small {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
 /* ─── GEARS × MAKER 3D BRANCH PAGE ─── */
 .gears-branch-wrap {
   max-width: 1240px;
@@ -2024,6 +2164,12 @@
   .collections-editorial-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .trust-badges-bar {
+    grid-template-columns: 1fr 1fr;
+  }
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
   .gears-hero-card {
     grid-template-columns: 1fr;
     padding: 32px 24px;
@@ -2119,7 +2265,39 @@
   .hero p {
     font-size: 0.88rem;
     line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .hero-benefit-list {
+    padding: 12px 14px;
     margin-bottom: 16px;
+    text-align: left;
+  }
+  .hero-benefit-list li {
+    font-size: 0.78rem;
+  }
+  .social-proof-section {
+    padding: 36px 4% 28px;
+  }
+  .trust-badges-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .trust-seal-pill {
+    padding: 12px 10px;
+  }
+  .trust-seal-pill strong {
+    font-size: 0.82rem;
+  }
+  .trust-seal-pill span {
+    font-size: 0.68rem;
+  }
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .testimonial-card {
+    padding: 20px 18px;
   }
   .hero-buttons {
     flex-direction: column;

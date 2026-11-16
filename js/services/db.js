@@ -138,21 +138,21 @@ class DatabaseService {
         }
       });
 
-      store.update('products', enriched, 'maker3d_products_v3');
+      store.update('products', enriched, 'maker3d_products_v4');
     }
     if (data && data.settings) {
       const mergedSettings = { ...store.state.settings, ...data.settings };
       if (!mergedSettings.primaryColor || ['#00ae42', '#ff7a00', '#ff9e1b'].includes(mergedSettings.primaryColor)) {
         mergedSettings.primaryColor = '#8c6d53';
       }
-      store.update('settings', mergedSettings, 'maker3d_settings_v3');
+      store.update('settings', mergedSettings, 'maker3d_settings_v4');
     }
   }
 
   async saveStoreData({ syncGitHub = false, ghToken = '' } = {}) {
     localStorage.setItem('maker3d_admin_modified', '1');
-    store.saveLocal('maker3d_products_v3', store.state.products);
-    store.saveLocal('maker3d_settings_v3', store.state.settings);
+    store.saveLocal('maker3d_products_v4', store.state.products);
+    store.saveLocal('maker3d_settings_v4', store.state.settings);
     store.saveLocal('maker3d_coupons_v3', store.state.coupons);
     store.saveLocal('maker3d_faqs_v3', store.state.faqs);
     store.saveLocal('maker3d_global_colors_v3', store.state.globalColors);

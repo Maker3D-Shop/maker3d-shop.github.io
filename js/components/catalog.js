@@ -426,7 +426,7 @@ export function renderProducts() {
           <div class="product-footer">
             ${priceHtml}
             <button class="add-cart-btn" onclick="event.stopPropagation(); window.makerApp.openModal('${p.id}')" type="button">
-              ${p.custom ? 'Personalizar' : 'Ver Peça →'}
+              ${p.custom ? 'Personalizar →' : 'Garantir Peça →'}
             </button>
           </div>
         </div>
@@ -589,12 +589,12 @@ export function openModal(pid) {
       `;
     }).join('');
     if (modalActionBtn) {
-      modalActionBtn.innerHTML = 'Adicionar ao Carrinho';
+      modalActionBtn.innerHTML = 'Garantir Minha Peça Agora →';
     }
   } else {
     colorsContainer.innerHTML = filamentPolymerHtml;
     if (modalActionBtn) {
-      modalActionBtn.innerHTML = 'Adicionar ao Carrinho';
+      modalActionBtn.innerHTML = 'Garantir Minha Peça Agora →';
     }
   }
 
@@ -632,7 +632,7 @@ function updateDetailPriceDisplay() {
   if (!p || !pr) return;
 
   if (mobStickyName) mobStickyName.textContent = p.name;
-  if (mobStickyBtn) mobStickyBtn.textContent = p.custom ? 'Orçar no WhatsApp →' : 'Adicionar à Sacola';
+  if (mobStickyBtn) mobStickyBtn.textContent = p.custom ? 'Orçar Meu Projeto →' : 'Garantir Minha Peça →';
 
   const matMultipliers = { PLA: 1.0, PETG: 0.92, TPU: 1.25 };
   const matRates = { PLA: 'R$ 150/kg', PETG: 'R$ 120/kg', TPU: 'R$ 200/kg' };
