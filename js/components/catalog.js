@@ -612,6 +612,43 @@ export function openModal(pid) {
 
   switchMedia('gallery');
   renderModalReviews(p.id);
+  renderRelatedCarousel(p);
+}
+
+function renderRelatedCarousel(currentProduct) {
+  const track = document.getElementById('relatedCarouselTrack');
+  if (!track) return;
+
+  const related = store.state.products
+    .filter(p => !p.custom && p.id !== currentProduct.id)
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 6);
+
+  track.innerHTML = related.map(p => {
+    const img = toRawUrl(p.image);
+    const disc = p.discount > 0 ? `<div class="discount-badge">-${p.discount}%</div>` : '';
+    return `
+      <div class="carousel-card" onclick="window.makerApp.openModal('${p.id}')">
+        <div class="carousel-card-img img-loader-wrap">
+          <div class="img-spinner"></div>
+          ${img ? `<img src="${img}" alt="${p.name}" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="this.parentElement.classList.add('loaded');this.style.display='none'">` : ''}
+          ${disc}
+        </div>
+        <div class="carousel-card-body">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;font-weight:700;text-transform:uppercase">
+            <span>${p.category || 'Modelo 3D'}</span>
+            <span>${p.layerHeight || '0.12 mm'}</span>
+          </div>
+          <h3>${p.name}</h3>
+          <p>${(p.desc || '').substring(0, 64)}…</p>
+          <div class="carousel-card-price">
+            <span>${p.price ? 'R$ ' + Number(p.price).toFixed(2).replace('.', ',') : 'Sob Demanda'}</span>
+            <span style="font-size:0.78rem;color:var(--text-secondary)">★ ${p.rating || '4.9'}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 export function selectProductPolymer(mat, btnEl) {
@@ -673,20 +710,23 @@ function buildGallery(p) {
   const thumbs = document.getElementById('galleryThumbs');
   if (!main || !thumbs) return;
 
+  currentGalleryIdx = 0;
+
   if (currentGalleryImages.length) {
-    const hasMany = currentGalleryImages.length > 1;
+    const total = currentGalleryImages.length;
+    const hasMany = total > 1;
     main.className = 'gallery-main img-loader-wrap';
     main.innerHTML = `
       <div class="img-spinner"></div>
       <img id="galleryMainImg" src="${currentGalleryImages[0]}" alt="${p.name}" onload="this.parentElement.classList.add('loaded')" onerror="this.parentElement.classList.add('loaded');this.style.display='none'">
       ${hasMany ? `
-        <div class="gallery-nav">
-          <button class="gallery-nav-btn" onclick="event.stopPropagation(); window.makerApp.setGalleryImg(window.makerApp.getGalleryIdx() - 1)" aria-label="Foto anterior" type="button">‹</button>
-          <button class="gallery-nav-btn" onclick="event.stopPropagation(); window.makerApp.setGalleryImg(window.makerApp.getGalleryIdx() + 1)" aria-label="Próxima foto" type="button">›</button>
+        <div class="gallery-progress-track">
+          <div class="gallery-progress-bar" id="galleryProgressBar" style="width:${(100 / total).toFixed(1)}%"></div>
         </div>
-        <div id="galleryCounterBadge" style="position:absolute;bottom:12px;right:14px;background:rgba(255,253,249,0.92);color:var(--text-primary);border:1px solid var(--border-strong);padding:4px 12px;border-radius:99px;font-size:0.75rem;font-weight:800;backdrop-filter:blur(4px)">1 / ${currentGalleryImages.length}</div>
+        <div class="gallery-fraction-badge" id="galleryCounterBadge">1 / ${total}</div>
       ` : ''}
     `;
+
     thumbs.style.display = hasMany ? 'flex' : 'none';
     thumbs.innerHTML = currentGalleryImages.map((url, i) => `
       <div class="gallery-thumb img-loader-wrap ${i === 0 ? 'active' : ''}" onclick="window.makerApp.setGalleryImg(${i})">
@@ -694,6 +734,43 @@ function buildGallery(p) {
         <img src="${url}" alt="Miniatura ${i + 1}" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="this.parentElement.classList.add('loaded')">
       </div>
     `).join('');
+
+    // Touch swipe gesture listener for mobile swipe
+    if (hasMany && !main.dataset.swipeBound) {
+      main.dataset.swipeBound = '1';
+      let startX = 0;
+      let startY = 0;
+      let curX = 0;
+      let isSwiping = false;
+
+      main.addEventListener('touchstart', e => {
+        if (!e.touches.length) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        curX = startX;
+        isSwiping = true;
+      }, { passive: true });
+
+      main.addEventListener('touchmove', e => {
+        if (!isSwiping || !e.touches.length) return;
+        curX = e.touches[0].clientX;
+      }, { passive: true });
+
+      main.addEventListener('touchend', e => {
+        if (!isSwiping) return;
+        isSwiping = false;
+        const diffX = startX - curX;
+        if (Math.abs(diffX) > 40) {
+          if (diffX > 0) {
+            // swipe left -> next image
+            setGalleryImg(currentGalleryIdx + 1);
+          } else {
+            // swipe right -> previous image
+            setGalleryImg(currentGalleryIdx - 1);
+          }
+        }
+      });
+    }
   } else {
     main.className = 'gallery-main';
     main.innerHTML = `<div style="font-size:1.2rem;font-weight:700;color:var(--text-muted);display:flex;align-items:center;justify-content:center;height:100%">Sem imagem disponível</div>`;
@@ -708,7 +785,8 @@ export function getGalleryIdx() {
 
 export function setGalleryImg(i) {
   if (!currentGalleryImages.length) return;
-  currentGalleryIdx = (i + currentGalleryImages.length) % currentGalleryImages.length;
+  const total = currentGalleryImages.length;
+  currentGalleryIdx = (i + total) % total;
   const main = document.getElementById('galleryMain');
   const img = document.getElementById('galleryMainImg');
   if (img && main) {
@@ -716,7 +794,15 @@ export function setGalleryImg(i) {
     img.src = currentGalleryImages[currentGalleryIdx];
   }
   const counter = document.getElementById('galleryCounterBadge');
-  if (counter) counter.textContent = `${currentGalleryIdx + 1} / ${currentGalleryImages.length}`;
+  if (counter) counter.textContent = `${currentGalleryIdx + 1} / ${total}`;
+
+  const progBar = document.getElementById('galleryProgressBar');
+  if (progBar) {
+    const segWidth = 100 / total;
+    progBar.style.width = `${segWidth}%`;
+    progBar.style.transform = `translateX(${currentGalleryIdx * 100}%)`;
+  }
+
   document.querySelectorAll('.gallery-thumb').forEach((t, idx) => t.classList.toggle('active', idx === currentGalleryIdx));
 }
 

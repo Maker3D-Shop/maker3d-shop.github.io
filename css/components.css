@@ -1094,33 +1094,38 @@
 }
 .media-switcher-tabs {
   position: absolute;
-  top: 12px;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
   display: flex;
-  background: var(--bg-glass);
+  background: rgba(255, 255, 255, 0.82);
   border-radius: var(--radius-pill);
-  padding: 4px;
-  gap: 4px;
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
+  padding: 2px 3px;
+  gap: 2px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
 .media-tab {
-  padding: 6px 15px;
+  padding: 3px 10px;
   border-radius: var(--radius-pill);
   border: none;
   background: transparent;
   font-family: 'Outfit', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.70rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.2s ease;
+  line-height: 1.2;
 }
 .media-tab.active {
-  background: var(--brand-primary);
-  color: #fff;
+  background: #ffffff;
+  color: var(--text-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 .media-panel { display: none; }
 .media-panel.active { display: block; }
@@ -1128,39 +1133,60 @@
 .gallery-main {
   position: relative;
   width: 100%;
-  height: 320px;
+  height: 380px;
   overflow: hidden;
   background: var(--bg-tertiary);
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+  user-select: none;
+}
+.gallery-main:active {
+  cursor: grabbing;
 }
 .gallery-main img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-.gallery-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0 12px;
+  transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
 }
-.gallery-nav-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--bg-secondary);
+/* Arrow buttons removed as requested */
+.gallery-nav {
+  display: none !important;
+}
+/* Progress track & bar moving with photo index */
+.gallery-progress-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.06);
+  z-index: 15;
+}
+.gallery-progress-bar {
+  height: 100%;
+  background: var(--brand-primary);
+  width: 33%;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Sleek fraction indicator in bottom right (e.g. 1/3) */
+.gallery-fraction-badge {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--text-primary);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  box-shadow: var(--shadow-sm);
-  pointer-events: all;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  z-index: 15;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 .gallery-thumbs {
   display: flex;
@@ -1170,16 +1196,18 @@
   background: var(--bg-secondary);
 }
 .gallery-thumb {
-  width: 54px;
-  height: 54px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
   flex-shrink: 0;
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .gallery-thumb.active {
   border-color: var(--brand-primary);
+  transform: scale(1.04);
 }
 .gallery-thumb img {
   width: 100%;
@@ -2699,45 +2727,3 @@
     grid-template-columns: 1fr;
   }
 }
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   FLIP & FOLDABLE DEVICE POSTURE (Samsung Galaxy Z Flip / Fold / Flex Mode)
-   ═══════════════════════════════════════════════════════════════════════════ */
-@media (device-posture: folded), (vertical-viewport-segments: 2) {
-  /* Flex Mode: device folded halfway like a laptop */
-  .hero-showcase-editorial {
-    padding-bottom: 24px;
-    border-bottom: 2px dashed var(--border-subtle);
-  }
-  .product-modal-grid {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  .product-modal-gallery {
-    max-height: 44vh;
-    border-bottom: 1.5px solid var(--border-subtle);
-  }
-  .product-modal-info {
-    overflow-y: auto;
-    padding-top: 14px;
-  }
-  .mobile-product-sticky-bar {
-    bottom: env(safe-area-inset-bottom, 0px);
-  }
-}
-
-@media (horizontal-viewport-segments: 2) {
-  /* Book Posture: two vertical halves side by side */
-  .product-modal-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-  .hero {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-}
-
