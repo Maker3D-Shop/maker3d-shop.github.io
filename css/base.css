@@ -651,13 +651,23 @@ footer.site-footer {
     flex-shrink: 0;
   }
   .icon-btn {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     font-size: 0.95rem;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
   }
   .user-auth-btn {
-    padding: 7px 11px;
+    width: 36px;
+    height: 36px;
+    padding: 0 !important;
     font-size: 0.78rem;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
   }
   .user-auth-btn span.user-name-label {
     display: none;
