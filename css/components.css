@@ -2699,3 +2699,45 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FLIP & FOLDABLE DEVICE POSTURE (Samsung Galaxy Z Flip / Fold / Flex Mode)
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (device-posture: folded), (vertical-viewport-segments: 2) {
+  /* Flex Mode: device folded halfway like a laptop */
+  .hero-showcase-editorial {
+    padding-bottom: 24px;
+    border-bottom: 2px dashed var(--border-subtle);
+  }
+  .product-modal-grid {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .product-modal-gallery {
+    max-height: 44vh;
+    border-bottom: 1.5px solid var(--border-subtle);
+  }
+  .product-modal-info {
+    overflow-y: auto;
+    padding-top: 14px;
+  }
+  .mobile-product-sticky-bar {
+    bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+@media (horizontal-viewport-segments: 2) {
+  /* Book Posture: two vertical halves side by side */
+  .product-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+

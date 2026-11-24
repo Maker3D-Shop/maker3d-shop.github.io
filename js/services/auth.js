@@ -61,25 +61,47 @@ class AuthService {
   }
 
   /**
-   * Called in real time when user types an email in the Register tab:
-   * If our DB detects that email is already registered, automatically switch to Login!
+   * Called in real time when user types an email in either tab:
+   * - If user is on Register tab and email already exists in DB -> immediately switches to Login!
+   * - If user is on Login tab and email does NOT exist in DB -> switches to Register!
    */
   checkEmailDuringRegistration(emailValue) {
     const clean = (emailValue || '').trim().toLowerCase();
     if (!clean || !clean.includes('@') || !clean.includes('.')) return;
     const existing = dbService.findUserByEmail(clean);
     if (existing && existing.registered) {
-      this.switchAuthModalTab('login');
-      const loginEmailEl = document.getElementById('authLoginEmail');
-      if (loginEmailEl) loginEmailEl.value = clean;
-      const loginPassEl = document.getElementById('authLoginPassword');
-      if (loginPassEl) loginPassEl.focus();
+      if (this.authMode !== 'login') {
+        this.switchAuthModalTab('login');
+        const loginEmailEl = document.getElementById('authLoginEmail');
+        if (loginEmailEl) loginEmailEl.value = clean;
+        const loginPassEl = document.getElementById('authLoginPassword');
+        if (loginPassEl) loginPassEl.focus();
+        const regBanner = document.getElementById('authRegisterNotice');
+        if (regBanner) {
+          regBanner.style.display = 'block';
+          regBanner.innerHTML = `Identificamos seu cadastro (<strong>${existing.displayName || clean}</strong>)! Digite sua senha para entrar.`;
+        }
+        showToast(`Conta encontrada para ${clean}! Faça login para continuar.`, 'success');
+      }
+    }
+  }
+
+  checkEmailDuringLogin(emailValue) {
+    const clean = (emailValue || '').trim().toLowerCase();
+    if (!clean || !clean.includes('@') || !clean.includes('.')) return;
+    const existing = dbService.findUserByEmail(clean);
+    if (!existing) {
+      this.switchAuthModalTab('register');
+      const regEmail = document.getElementById('authRegEmail');
+      if (regEmail) regEmail.value = clean;
+      const regName = document.getElementById('authRegName');
+      if (regName) regName.focus();
       const regBanner = document.getElementById('authRegisterNotice');
       if (regBanner) {
         regBanner.style.display = 'block';
-        regBanner.innerHTML = `Reconhecemos seu cadastro (<strong>${existing.displayName || clean}</strong>)! Digite sua senha para entrar.`;
+        regBanner.innerHTML = `E-mail não cadastrado ainda. Conclua seu cadastro rápido abaixo!`;
       }
-      showToast(`Cadastro encontrado para ${clean}! Faça login para continuar.`, 'success');
+      showToast(`Conta não encontrada. Cadastre-se para continuar.`, 'info');
     }
   }
 

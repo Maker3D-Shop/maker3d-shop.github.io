@@ -225,6 +225,40 @@ async function handleGoogleButtonClick() {
   }
 }
 
+function showOrderStatusModal() {
+  document.getElementById('navLinks')?.classList.remove('open');
+  if (store.state.currentUser) {
+    toggleDrawer('profileDrawer', true);
+  } else {
+    authService.requireAuthForAction('consultar o status do seu pedido', () => {
+      toggleDrawer('profileDrawer', true);
+    });
+  }
+}
+
+function showReferralModal() {
+  document.getElementById('navLinks')?.classList.remove('open');
+  const shareData = {
+    title: 'Maker 3D — Minimalismo & Design Autoral',
+    text: 'Conheça o atelier Maker 3D: coleções exclusivas de decoração Japandi e peças autorais.',
+    url: window.location.origin + window.location.pathname
+  };
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareData.url).then(() => {
+      showToast('Link da Maker 3D copiado para compartilhar!', 'success');
+    });
+  } else {
+    showToast('Indique a Maker 3D: compartilhe nosso site com amigos!', 'info');
+  }
+}
+
+function showCommunityModal() {
+  document.getElementById('navLinks')?.classList.remove('open');
+  window.open('https://www.instagram.com/maker3d.oficial', '_blank');
+}
+
 async function signOutGoogle() {
   await authService.signOut();
   renderUserNavbarState();
@@ -300,10 +334,14 @@ window.makerApp = {
   updateStlParams,
   sendStlQuoteToWhatsApp,
   handleGoogleButtonClick,
+  showOrderStatusModal,
+  showReferralModal,
+  showCommunityModal,
   openAuthModal: (mode) => authService.openAuthModal(mode),
   closeAuthModal: () => authService.closeAuthModal(),
   switchAuthModalTab: (mode) => authService.switchAuthModalTab(mode),
   checkEmailDuringRegistration: (emailVal) => authService.checkEmailDuringRegistration(emailVal),
+  checkEmailDuringLogin: (emailVal) => authService.checkEmailDuringLogin(emailVal),
   triggerRealGoogleSignIn: async () => {
     await authService.triggerRealGoogleSignIn();
     renderUserNavbarState();

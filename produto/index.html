@@ -67,18 +67,17 @@
         <div class="nav-logo-img-wrap">
           <img src="logo.webp?v=4" alt="Maker 3D" width="44" height="44" onerror="this.src='logo.png'">
         </div>
-        <div class="nav-logo-text">
-          <span class="nav-logo-brand dynamic-brand-name">Maker 3D</span>
-          <span class="nav-logo-tag">Coleção Japandi & Design</span>
-        </div>
       </div>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="./" onclick="window.makerApp.showPage('inicio');return false;" class="active" id="nav-inicio">Início</a></li>
-        <li><a href="catalogo/" onclick="window.makerApp.showPage('produtos');return false;" id="nav-produtos">Coleções</a></li>
-        <li><a href="laboratorio-stl/" onclick="window.makerApp.showPage('orcamento');return false;" id="nav-orcamento">Sob Medida</a></li>
-        <li><a href="sobre/" onclick="window.makerApp.showPage('sobre');return false;" id="nav-sobre">Sobre</a></li>
-        <li><a href="contato/" onclick="window.makerApp.showPage('contato');return false;" id="nav-contato">Atendimento</a></li>
+        <li class="nav-item-main"><a href="./" onclick="window.makerApp.showPage('inicio');return false;" class="active" id="nav-inicio">Início</a></li>
+        <li class="nav-item-main"><a href="catalogo/" onclick="window.makerApp.showPage('produtos');return false;" id="nav-produtos">Coleções</a></li>
+        <li class="nav-item-main"><a href="sobre/" onclick="window.makerApp.showPage('sobre');return false;" id="nav-sobre">Sobre</a></li>
+        <li class="nav-item-divider"></li>
+        <li class="nav-item-sub"><a href="#" onclick="window.makerApp.showOrderStatusModal();return false;">Status do pedido</a></li>
+        <li class="nav-item-sub"><a href="#" onclick="window.makerApp.showReferralModal();return false;">Indique a Maker3D</a></li>
+        <li class="nav-item-sub"><a href="contato/" onclick="window.makerApp.showPage('contato');return false;">Central de ajuda</a></li>
+        <li class="nav-item-sub"><a href="#" onclick="window.makerApp.showCommunityModal();return false;">Entre para a comunidade maker</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -670,7 +669,7 @@
       <div id="authPanelLogin">
         <div class="admin-input-group">
           <label>Seu E-mail</label>
-          <input type="email" id="authLoginEmail" placeholder="Digite seu e-mail cadastrado" value="">
+          <input type="email" id="authLoginEmail" placeholder="Digite seu e-mail cadastrado" value="" onblur="window.makerApp.checkEmailDuringLogin(this.value)">
         </div>
         <div class="admin-input-group">
           <label>Sua Senha</label>
@@ -712,8 +711,7 @@
   <div class="modal-overlay" id="newsletterModal" onclick="if(event.target===this)window.makerApp.closeNewsletterModal()">
     <div class="modal-box newsletter-popup-box">
       <button class="modal-close" onclick="window.makerApp.closeNewsletterModal()" aria-label="Fechar popup">✕</button>
-      <div class="newsletter-popup-badge">Acesso Antecipado</div>
-      <h3 class="newsletter-popup-title">Fique por dentro</h3>
+            <h3 class="newsletter-popup-title">Fique por dentro</h3>
       <p class="newsletter-popup-subtitle">
         Fique por dentro das últimas novidades e do lançamento da marca antes de todo mundo e aproveite descontos exclusivos.
       </p>
