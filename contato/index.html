@@ -4,15 +4,15 @@
   <base href="../">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#f8f5ef">
+  <meta name="theme-color" content="#fafafa">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Maker 3D">
   <meta name="format-detection" content="telephone=no">
-  <title>Maker 3D — Decoração Japandi, Edição de Natal, Fidget Toys & Gears Pulseiras</title>
-  <meta name="description" content="Maker 3D: Minimalismo orgânico e luxo acessível em impressão 3D. Coleção Japandi (vasos e porta-treco), Coleção de Natal, Fidget Toys sensoriais, Branch Gears × Maker 3D e projetos sob medida.">
-  <meta property="og:title" content="Maker 3D — Coleção Japandi & Design Escultural Acessível">
-  <meta property="og:description" content="Peças de decoração minimalista Japandi, edição de Natal, Fidget Toys e a linha de pulseiras Gears × Maker 3D.">
+  <title>Maker 3D — Minimalismo Orgânico, Coleção Japandi & Design Autoral</title>
+  <meta name="description" content="Maker 3D: Minimalismo orgânico e design autoral em impressão 3D. Coleção Japandi (vasos e porta-trecos), Coleção de Natal, Fidget Toys sensoriais e projetos sob medida.">
+  <meta property="og:title" content="Maker 3D — Coleção Japandi & Design Escultural">
+  <meta property="og:description" content="Peças de decoração minimalista Japandi, edição de Natal, Fidget Toys e projetos exclusivos.">
   <meta property="og:type" content="website">
 
   <!-- Favicon / Browser Tab Logo -->
@@ -49,8 +49,8 @@
       <img src="logo.webp?v=4" alt="Maker 3D" width="68" height="68" fetchpriority="high" onerror="this.src='logo.png'">
     </div>
     <div style="text-align:center">
-      <strong style="display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.55rem;font-weight:600;letter-spacing:0.12em;color:var(--text-primary)">MAKER 3D</strong>
-      <small style="color:var(--text-secondary);font-size:0.76rem;letter-spacing:0.08em;text-transform:uppercase">Minimalismo orgânico & luxo acessível em impressão 3D</small>
+      <strong style="display:block;font-family:'Eurostile Bold Extended','Eurostile',sans-serif;font-size:1.25rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-primary)">MAKER 3D</strong>
+      <small style="color:var(--text-secondary);font-size:0.76rem;letter-spacing:0.08em;text-transform:uppercase">Minimalismo orgânico & design contemporâneo</small>
     </div>
     <div class="loadscreen-bar">
       <div class="loadscreen-bar-fill"></div>
@@ -59,9 +59,6 @@
 
   <!-- Reading / Scroll Progress Bar -->
   <div id="scrollProgress"></div>
-
-  <!-- Full-Viewport Interactive 3D Spatial Background Stage (Reacts to Scroll & Device Tilt) -->
-  <canvas id="spatialBgCanvas" aria-hidden="true"></canvas>
 
   <!-- Sticky Header & Navigation -->
   <header class="site-header">
@@ -79,27 +76,30 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="./" onclick="window.makerApp.showPage('inicio');return false;" class="active" id="nav-inicio">Início</a></li>
         <li><a href="catalogo/" onclick="window.makerApp.showPage('produtos');return false;" id="nav-produtos">Coleções</a></li>
-        <li><a href="gears/" onclick="window.makerApp.showPage('gears');return false;" id="nav-gears">Gears Pulseiras</a></li>
         <li><a href="laboratorio-stl/" onclick="window.makerApp.showPage('orcamento');return false;" id="nav-orcamento">Sob Medida</a></li>
+        <li><a href="sobre/" onclick="window.makerApp.showPage('sobre');return false;" id="nav-sobre">Sobre</a></li>
         <li><a href="contato/" onclick="window.makerApp.showPage('contato');return false;" id="nav-contato">Atendimento</a></li>
       </ul>
 
       <div class="nav-actions">
         <!-- Saved Collections & Likes Drawer Button (SVG Heart Silhouette) -->
         <button class="icon-btn" onclick="window.makerApp.toggleDrawer('wishlistDrawer')" title="Coleções & Curtidas" aria-label="Coleções e Curtidas">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           <span class="badge-counter" id="wishlistBadgeCount" style="display:none">0</span>
         </button>
 
         <!-- Cart Drawer Button (SVG Shopping Bag Silhouette) -->
         <button class="icon-btn" onclick="window.makerApp.toggleDrawer('cartDrawer')" title="Minha Sacola" aria-label="Sacola de Compras">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span class="badge-counter" id="navCartCount" style="display:none">0</span>
         </button>
 
-        <!-- Google Login & Account Button -->
-        <button class="user-auth-btn" id="navGoogleAuthBtn" onclick="window.makerApp.handleGoogleButtonClick()">
-          <span class="user-name-label">Entrar / Conta</span>
+        <!-- User Profile Silhouette Button (Opens Drawer / Login on Click) -->
+        <button class="user-auth-btn" id="navGoogleAuthBtn" onclick="window.makerApp.handleGoogleButtonClick()" title="Entrar / Conta" aria-label="Minha Conta">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="user-silhouette-icon">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
         </button>
 
         <button class="hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open');this.classList.toggle('open')" aria-label="Menu">
@@ -114,34 +114,34 @@
        ═══════════════════════════════════════════════════════════════════════ -->
   <main>
 
-    <!-- 1. PÁGINA INICIAL (REGRA DOS 5 SEGUNDOS + HIERARQUIA Z + CTAS DE BENEFÍCIO + ESTÚDIO 3D) -->
+    <!-- 1. PÁGINA INICIAL (EDITORIAL JAPANDI & DESIGN MINIMALISTA) -->
     <section class="page active" id="page-inicio">
       <div class="hero">
         <div class="hero-content">
-          <div class="hero-badge" id="heroBadgeText">DECORAÇÃO JAPANDI, NATAL, FIDGETS & PULSEIRAS 3D • DIRETO DO ATELIER</div>
-          <h1 id="heroTitleText">Decoração escultural & <em>luxo acessível</em> para sua casa a partir de R$ 18.</h1>
-          <p id="heroSubtitleText">Para quem busca ambientes sofisticados sem pagar preços de galeria: vasos e porta-trecos Japandi em textura de pedra travertino, adornos de Natal, Fidget Toys silenciosos e pulseiras autorais <strong>Gears × Maker 3D</strong> enviados para todo o Brasil.</p>
+          <div class="hero-badge" id="heroBadgeText">DECORAÇÃO JAPANDI, NATAL & FIDGETS 3D • DIRETO DO ATELIER</div>
+          <h1 id="heroTitleText">Decoração escultural & <em>design autoral</em> para sua casa a partir de R$ 18.</h1>
+          <p id="heroSubtitleText">Para quem busca ambientes sofisticados com estética de galeria: vasos e porta-trecos Japandi em textura de pedra travertino, adornos de Natal e Fidget Toys silenciosos enviados para todo o Brasil.</p>
 
           <!-- Value Checklist (Escaneabilidade em Padrão F/Z) -->
           <ul class="hero-benefit-list">
-            <li><span class="benefit-check">✓</span> <strong>O que é:</strong> Loja de peças decorativas Japandi, Fidgets e acessórios impressos em 3D de alta precisão (0.12 mm).</li>
-            <li><span class="benefit-check">✓</span> <strong>Para quem:</strong> Apaixonados por arquitetura minimalista, presentes criativos de Natal e design autoral.</li>
-            <li><span class="benefit-check">✓</span> <strong>Por que escolher:</strong> Acabamento orgânico de boutique por valores entre <strong>R$ 18 e R$ 68</strong> + frete grátis acima de R$ 120.</li>
+            <li><span class="benefit-check">✓</span> <strong>O que é:</strong> Peças decorativas Japandi, Fidgets e acessórios impressos em 3D de alta precisão (0.12 mm).</li>
+            <li><span class="benefit-check">✓</span> <strong>Para quem:</strong> Apaixonados por arquitetura minimalista, presentes criativos de Natal e design contemporâneo.</li>
+            <li><span class="benefit-check">✓</span> <strong>Por que escolher:</strong> Acabamento orgânico de atelier com valores acessíveis a partir de <strong>R$ 18</strong> + frete grátis acima de R$ 120.</li>
           </ul>
 
           <div class="hero-buttons">
             <a href="catalogo/" class="btn-primary" onclick="window.makerApp.openCollectionCategory('Coleção Japandi');return false;">Escolher Minha Peça Japandi →</a>
-            <a href="laboratorio-stl/" class="btn-secondary" onclick="window.makerApp.showPage('orcamento');return false;">Simular Meu Projeto Sob Medida</a>
+            <a href="laboratorio-stl/" class="btn-secondary" onclick="window.makerApp.showPage('orcamento');return false;">Simular Projeto Sob Medida</a>
           </div>
 
           <div class="hero-trust-strip">
             <div class="trust-metric">
-              <div class="trust-metric-icon">4.9★</div>
-              <div><strong>+500 Peças Entregues</strong><span>Avaliação 4.9/5 verificada</span></div>
+              <div class="trust-metric-icon">✦</div>
+              <div><strong>Design Autoral</strong><span>Minimalismo orgânico & atemporal</span></div>
             </div>
             <div class="trust-metric">
               <div class="trust-metric-icon">R$18</div>
-              <div><strong>Luxo Acessível</strong><span>Direto da nossa produção</span></div>
+              <div><strong>Produção Própria</strong><span>Valores justos direto do atelier</span></div>
             </div>
             <div class="trust-metric">
               <div class="trust-metric-icon">PIX</div>
@@ -150,66 +150,27 @@
           </div>
         </div>
 
-        <!-- Interactive 3D Sculptural Studio + Editorial Campaign Switcher -->
+        <!-- Clean Editorial Japandi Visual (Items 1 & 5: Clean High-Res Image, No Heavy 3D, No Switcher) -->
         <div class="hero-showcase-editorial">
-          <div class="hero-3d-mode-switcher">
-            <button type="button" class="hero-mode-tab active" id="heroModeTab3D" onclick="window.makerApp.switchHeroShowcaseMode('3d')">
-              Estúdio 3D Interativo
-            </button>
-            <button type="button" class="hero-mode-tab" id="heroModeTabPoster" onclick="window.makerApp.switchHeroShowcaseMode('poster')">
-              Pôster Campanha Japandi
-            </button>
-          </div>
-
-          <!-- Panel A: Real-Time Interactive 3D WebGL Sculptural Stage -->
-          <div class="hero-stage-3d-wrap" id="heroStage3DWrap">
-            <div class="hero-3d-preset-bar">
-              <button type="button" class="hero-3d-preset-pill active" onclick="window.makerApp.selectHero3DPreset('japandi', this)">Vasos Japandi</button>
-              <button type="button" class="hero-3d-preset-pill" onclick="window.makerApp.selectHero3DPreset('natal', this)">Pinheiro Natal</button>
-              <button type="button" class="hero-3d-preset-pill" onclick="window.makerApp.selectHero3DPreset('gears', this)">Pulseira Gears</button>
-              <button type="button" class="hero-3d-preset-pill" onclick="window.makerApp.selectHero3DPreset('fidget', this)">Fidget Cinético</button>
-            </div>
-
-            <div class="hero-3d-canvas-box">
-              <canvas id="hero3dCanvas"></canvas>
-              <div class="hero-3d-gesture-hint">Arraste para girar em 360° • Toque nas cores</div>
-            </div>
-
-            <div class="hero-3d-controls-footer">
-              <div class="hero-3d-swatches" aria-label="Paleta 3D ao vivo">
-                <button type="button" class="hero-3d-swatch active" style="background:#b08d6e" title="Areia Travertino" onclick="window.makerApp.selectHero3DColor('#b08d6e', this)"></button>
-                <button type="button" class="hero-3d-swatch" style="background:#ece5d8" title="Alabastro & Linho" onclick="window.makerApp.selectHero3DColor('#ece5d8', this)"></button>
-                <button type="button" class="hero-3d-swatch" style="background:#c8a97e" title="Champanhe Acetinado" onclick="window.makerApp.selectHero3DColor('#c8a97e', this)"></button>
-                <button type="button" class="hero-3d-swatch" style="background:#8a9a86" title="Verde Sálvia" onclick="window.makerApp.selectHero3DColor('#8a9a86', this)"></button>
-                <button type="button" class="hero-3d-swatch" style="background:#5a4332" title="Bronze Espresso" onclick="window.makerApp.selectHero3DColor('#5a4332', this)"></button>
+          <div class="hero-editorial-image-frame" onclick="window.makerApp.openCollectionCategory('Coleção Japandi')" style="cursor:pointer" title="Explorar Coleção Japandi">
+            <img src="assets/brand/japandi-campaign.webp" alt="Maker 3D — Coleção Japandi Minimalismo Orgânico" fetchpriority="high" onerror="this.src='assets/brand/japandi-vases.webp'">
+            <div class="hero-editorial-floating-badge">
+              <div>
+                <small style="text-transform:uppercase;letter-spacing:0.12em;font-size:0.68rem;color:var(--brand-primary);font-weight:700">Coleção Japandi • Edição Autoral</small>
+                <strong>Vasos, Adornos & Peças a partir de R$ 18</strong>
               </div>
-              <div class="hero-3d-action-btns">
-                <button type="button" class="viewer-ctrl-btn" onclick="window.makerApp.toggleHeroExplode(this)">Explodir 3D</button>
-                <button type="button" class="viewer-ctrl-btn" onclick="window.makerApp.toggleHeroWireframe(this)">Malha</button>
-              </div>
+              <span style="font-size:0.8rem;font-weight:700;color:var(--brand-primary)">Explorar →</span>
             </div>
-          </div>
-
-          <!-- Panel B: Editorial Campaign Poster (Toggleable anytime) -->
-          <div id="heroStagePosterWrap" style="display:none;width:100%">
-            <div class="editorial-poster-frame" onclick="window.makerApp.openCollectionCategory('Coleção Japandi')" style="cursor:pointer;margin:0 auto" title="Clique para explorar a Coleção Japandi">
-              <img src="assets/brand/japandi-campaign.webp" alt="Maker 3D — Coleção Japandi Minimalismo Orgânico" loading="eager" onerror="this.src='assets/brand/japandi-campaign.jpg'">
-            </div>
-          </div>
-
-          <div class="editorial-floating-tag">
-            <small>ESTÚDIO 3D EM TEMPO REAL • VALORES ACESSÍVEIS</small>
-            <strong>Vasos Japandi, Natal, Fidgets & Gears a partir de R$ 18</strong>
           </div>
         </div>
       </div>
 
-      <!-- 4 Curated Luxury Collection Pillars -->
+      <!-- Curated Collection Pillars -->
       <div class="collections-editorial-section">
         <div class="section-header" style="margin-bottom:28px">
           <div class="section-eyebrow">Curadoria & Linhas Autorais</div>
           <h2>Universo <span>Maker 3D</span></h2>
-          <p>Do minimalismo japonês-escandinavo para a sua casa até acessórios esculturais vestíveis e peças sensoriais.</p>
+          <p>Do minimalismo japonês-escandinavo para a sua casa até peças sensoriais táteis de alta precisão.</p>
         </div>
 
         <div class="collections-editorial-grid">
@@ -240,13 +201,13 @@
             <span class="collection-pillar-cta">Escolher Meu Fidget 3D →</span>
           </div>
 
-          <div class="collection-pillar-card" onclick="window.makerApp.showPage('gears')">
+          <div class="collection-pillar-card" onclick="window.makerApp.showPage('orcamento')">
             <div>
-              <span class="collection-pillar-eyebrow">Collab & Branch Oficial</span>
-              <h3>Gears × Maker 3D</h3>
-              <p>Nossa divisão de acessórios vestíveis em parceria com a <strong>Gears</strong>: braceletes e pulseiras esculturais com elos impressos sem emendas.</p>
+              <span class="collection-pillar-eyebrow">Atelier Sob Medida</span>
+              <h3>Projetos Personalizados</h3>
+              <p>Envie seu modelo 3D ou peça sob medida com orçamento instantâneo e escolha de materiais de engenharia de precisão.</p>
             </div>
-            <span class="collection-pillar-cta">Personalizar Minha Pulseira →</span>
+            <span class="collection-pillar-cta">Simular Projeto Sob Medida →</span>
           </div>
         </div>
       </div>
@@ -255,7 +216,7 @@
       <div class="carousel-section">
         <div class="section-header" style="margin-bottom:28px">
           <div class="section-eyebrow">Peças em Destaque</div>
-          <h2>Curadoria de <span>Luxo Acessível</span></h2>
+          <h2>Curadoria <span>Autoral</span></h2>
           <p>Clique em qualquer peça para abrir sua página dedicada com galeria, opções de personalização de cores e inspeção 3D.</p>
         </div>
         <div class="carousel-wrapper">
@@ -282,86 +243,20 @@
             <p>Acabamento fosco orgânico de inspiração travertino, linho cru e tons champanhe que harmonizam com qualquer ambiente.</p>
           </div>
           <div class="feature-card reveal">
-            <div class="feature-icon">R$</div>
-            <h3>Luxo Acessível</h3>
-            <p>Peças autorais de design escultural com valores acessíveis a partir de R$ 18 e tabela transparente por grama para encomendas.</p>
+            <div class="feature-icon">✦</div>
+            <h3>Design Autoral</h3>
+            <p>Peças autorais de design escultural com valores justos a partir de R$ 18 e produção própria direto do atelier.</p>
           </div>
           <div class="feature-card reveal">
-            <div class="feature-icon">GR</div>
-            <h3>Branch Gears Pulseiras</h3>
-            <p>Linha conjunta entre a Gears e a Maker 3D trazendo geometria generativa e conforto flexível para o seu pulso.</p>
+            <div class="feature-icon">3D</div>
+            <h3>Precisão Micrométrica</h3>
+            <p>Camadas ultra-finas de 0.12 mm que garantem toque suave, acabamento contínuo e resistência estrutural.</p>
           </div>
           <div class="feature-card reveal">
             <div class="feature-icon">STL</div>
             <h3>Personalização Total</h3>
             <p>Escolha a paleta da sua peça ou envie seu projeto exclusivo na aba Sob Medida com PLA (R$ 150/kg), PETG (R$ 120/kg) e TPU (R$ 200/kg).</p>
           </div>
-        </div>
-      </div>
-
-      <!-- 8. PROVA SOCIAL, DEPOIMENTOS VERIFICADOS & SINAIS DE CONFIANÇA -->
-      <div class="social-proof-section">
-        <div class="section-header reveal">
-          <div class="section-eyebrow">Prova Social & Sinais de Confiança</div>
-          <h2>Quem recebe, <span>se apaixona</span></h2>
-          <p>Mais de 500 peças decorativas, fidgets e pulseiras enviadas com nota 4.9/5 em acabamento e atendimento.</p>
-        </div>
-
-        <div class="trust-badges-bar reveal">
-          <div class="trust-seal-pill">
-            <strong>4.9 / 5.0 ★★★★★</strong>
-            <span>Média de 280+ avaliações reais</span>
-          </div>
-          <div class="trust-seal-pill">
-            <strong>Inspeção Camada 0.12 mm</strong>
-            <span>Textura orgânica sem rebarbas</span>
-          </div>
-          <div class="trust-seal-pill">
-            <strong>Collab Oficial Gears</strong>
-            <span>Parceira em acessórios vestíveis</span>
-          </div>
-          <div class="trust-seal-pill">
-            <strong>Pagamento & Envio Seguro</strong>
-            <span>PIX, Cartão e rastreio nacional</span>
-          </div>
-        </div>
-
-        <div class="testimonials-grid">
-          <article class="testimonial-card reveal">
-            <div class="testimonial-stars">★★★★★ <span>Compra Verificada • Coleção Japandi</span></div>
-            <p>“O Duo de Vasos Kanso parece cerâmica esculpida à mão em pedra travertino. Coloquei no aparador da sala e todas as visitas perguntam de qual galeria comprei.”</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">MC</div>
-              <div>
-                <strong>Mariana Costa</strong>
-                <small>Arquiteta de Interiores — Belo Horizonte, MG</small>
-              </div>
-            </div>
-          </article>
-
-          <article class="testimonial-card reveal">
-            <div class="testimonial-stars">★★★★★ <span>Compra Verificada • Branch Gears</span></div>
-            <p>“Comprei a Pulseira Aura Link da linha Gears × Maker 3D em tom Champagne Silk. É super leve, não incomoda no pulso e os elos impressos sem emenda são impressionantes.”</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">RL</div>
-              <div>
-                <strong>Rafael Linhares</strong>
-                <small>Designer de Produto — São Paulo, SP</small>
-              </div>
-            </div>
-          </article>
-
-          <article class="testimonial-card reveal">
-            <div class="testimonial-stars">★★★★★ <span>Compra Verificada • Natal & Fidgets</span></div>
-            <p>“Garanti o Pinheiro Plissado de Natal e a Escultura Cinética de mesa. Chegou super rápido, embalado com cuidado de boutique e por um preço muito justo!”</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">CS</div>
-              <div>
-                <strong>Camila Silveira</strong>
-                <small>Cliente Verificada — Curitiba, PR</small>
-              </div>
-            </div>
-          </article>
         </div>
       </div>
 
@@ -375,81 +270,12 @@
       </div>
     </section>
 
-    <!-- 1B. PÁGINA DEDICADA DO BRANCH GEARS × MAKER 3D (LINHA DE PULSEIRAS) -->
-    <section class="page" id="page-gears">
-      <div class="products-hero">
-        <div class="section-eyebrow">Branch Oficial & Co-Branding</div>
-        <h1>Gears <span>× Maker 3D</span></h1>
-        <p>A união entre a engenharia vestível da <strong>Gears</strong> e o design orgânico de luxo acessível da <strong>Maker 3D</strong> em uma linha exclusiva de pulseiras e braceletes esculturais.</p>
-      </div>
-
-      <div class="gears-branch-banner">
-        <div class="gears-hero-card">
-          <div>
-            <div class="hero-badge" style="margin-bottom:14px">LINHA AUTORAL DE PULSEIRAS • GEARS BRANCH</div>
-            <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2rem,3.6vw,3rem);color:var(--text-primary);line-height:1.1;margin-bottom:14px">
-              Design escultural para vestir no dia a dia.
-            </h2>
-            <p style="color:var(--text-secondary);line-height:1.75;margin-bottom:22px;font-size:0.96rem">
-              A <strong>Gears</strong> nasce como um braço criativo conectado diretamente à <strong>Maker 3D</strong> para explorar joalheria contemporânea e acessórios táteis impressos em 3D. Cada pulseira é produzida com elos articulados sem costuras ou em ondas paramétricas leves, hipoalergênicas e resistentes à água.
-            </p>
-            <div style="display:flex;gap:12px;flex-wrap:wrap">
-              <button class="btn-primary" type="button" onclick="window.makerApp.openModal('gears-pulseira-aura-link')">
-                Garantir Minha Pulseira Aura Link (R$ 38) →
-              </button>
-              <button class="btn-secondary" type="button" onclick="window.makerApp.openModal('gears-pulseira-kinetica-wave')">
-                Escolher Bracelete Kinetic Wave (R$ 42)
-              </button>
-              <button class="btn-secondary" type="button" onclick="window.makerApp.openCollectionCategory('Gears Pulseiras')">
-                Ver Coleção Completa Gears
-              </button>
-            </div>
-          </div>
-
-          <div style="display:grid;gap:14px">
-            <!-- Interactive 3D Bracelet Customizer on Gears Branch Page -->
-            <div class="gears-3d-stage-card">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-                <span style="font-size:0.7rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--brand-deep)">Provador 3D Interativo • Gears</span>
-                <div style="display:flex;gap:6px">
-                  <button type="button" class="gears-3d-swatch active" style="width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:#c8a97e;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,0.2)" onclick="window.makerApp.selectGears3DColor('#c8a97e', this)" title="Champanhe"></button>
-                  <button type="button" class="gears-3d-swatch" style="width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:#ece5d8;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,0.2)" onclick="window.makerApp.selectGears3DColor('#ece5d8', this)" title="Alabastro"></button>
-                  <button type="button" class="gears-3d-swatch" style="width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:#5a4332;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,0.2)" onclick="window.makerApp.selectGears3DColor('#5a4332', this)" title="Bronze"></button>
-                </div>
-              </div>
-              <canvas id="gears3dCanvas" style="width:100%;height:220px;display:block;border-radius:18px;background:var(--bg-primary);border:1px solid var(--border-subtle);cursor:grab"></canvas>
-            </div>
-
-            <div class="feature-card" style="text-align:left;cursor:pointer;padding:18px" onclick="window.makerApp.openModal('gears-pulseira-aura-link')">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-                <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--brand-primary)">GEARS × MAKER 3D • 01</span>
-                <strong style="color:var(--brand-deep);font-size:1.1rem">R$ 38,00</strong>
-              </div>
-              <h3 style="margin-bottom:4px">Pulseira Escultural Aura Link</h3>
-              <p style="margin-bottom:8px">Elos orgânicos entrelaçados impressos em peça única com toque acetinado e ajuste anatômico P, M ou G.</p>
-              <span style="font-size:0.8rem;font-weight:700;color:var(--brand-primary)">Personalizar cor e tamanho →</span>
-            </div>
-
-            <div class="feature-card" style="text-align:left;cursor:pointer;padding:18px" onclick="window.makerApp.openModal('gears-pulseira-kinetica-wave')">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-                <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--brand-primary)">GEARS × MAKER 3D • 02</span>
-                <strong style="color:var(--brand-deep);font-size:1.1rem">R$ 42,00</strong>
-              </div>
-              <h3 style="margin-bottom:4px">Bracelete Orgânico Kinetic Wave</h3>
-              <p style="margin-bottom:8px">Geometria fluida inspirada nas dunas Japandi, ultraleve (14g) e disponível em polímero rígido acetinado ou flexível Trust/TPU.</p>
-              <span style="font-size:0.8rem;font-weight:700;color:var(--brand-primary)">Personalizar cor e tamanho →</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- 2. PÁGINA CATÁLOGO DE PRODUTOS -->
     <section class="page" id="page-produtos">
       <div class="products-hero">
         <div class="section-eyebrow">Boutique & Coleções Autorais</div>
         <h1>Coleções <span>Maker 3D</span></h1>
-        <p>Explore a <strong>Coleção Japandi</strong> (vasos e porta-trecos), <strong>Coleção de Natal</strong>, <strong>Fidget Toys</strong>, <strong>Gears Pulseiras</strong> e projetos sob medida.</p>
+        <p>Explore a <strong>Coleção Japandi</strong> (vasos e porta-trecos), <strong>Coleção de Natal</strong>, <strong>Fidget Toys</strong> e projetos sob medida.</p>
       </div>
 
       <div class="products-toolbar">
@@ -467,11 +293,6 @@
             <option value="discount">Maior Desconto</option>
             <option value="name">Ordem A–Z</option>
           </select>
-
-          <div class="price-filter-wrap">
-            <span>Faixa de Preço: <strong id="priceFilterVal">Todos</strong></span>
-            <input type="range" id="priceFilterRange" min="10" max="200" step="5" value="200" oninput="window.makerApp.setMaxPrice(this.value)">
-          </div>
 
           <button class="icon-btn" onclick="window.makerApp.toggleGridDensity()" title="Alternar densidade da grade">⊞</button>
         </div>
@@ -681,7 +502,7 @@
       <div class="products-hero">
         <div class="section-eyebrow">Nossa Filosofia</div>
         <h1>Atelier <span class="dynamic-brand-name">Maker 3D</span></h1>
-        <p>Minimalismo orgânico, estética de luxo acessível e manufatura aditiva de alta precisão.</p>
+        <p>Minimalismo orgânico, design escultural contemporâneo e manufatura aditiva de alta precisão.</p>
       </div>
       <div style="max-width:1080px;margin:36px auto;padding:0 5%;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:24px">
         <div class="feature-card">
@@ -690,14 +511,14 @@
           <p>Nossas peças de decoração unem a serenidade escandinava e o wabi-sabi japonês em vasos, centros de mesa e porta-trecos texturizados.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">GR</div>
-          <h3>Collab Gears × Maker 3D</h3>
-          <p>Junto à marca parceira Gears, desenvolvemos pulseiras e braceletes esculturais impressos em 3D com conforto anatômico.</p>
+          <div class="feature-icon">3D</div>
+          <h3>Precisão Micrométrica</h3>
+          <p>Impressão 3D de alta densidade em camadas finas de 0.12 mm, com toque suave e acabamento artesanal refinado.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">R$</div>
-          <h3>Luxo Acessível</h3>
-          <p>Acabamento digno de galeria com preços justos e transparentes, além de suporte completo a encomendas personalizadas.</p>
+          <div class="feature-icon">✦</div>
+          <h3>Produção Própria</h3>
+          <p>Acabamento digno de galeria com valores justos e transparentes, além de suporte completo a encomendas sob medida.</p>
         </div>
       </div>
     </section>
@@ -707,7 +528,7 @@
       <div class="products-hero">
         <div class="section-eyebrow">Concierge & Encomendas</div>
         <h1>Atendimento <span>Maker 3D</span></h1>
-        <p>Encomendas da Coleção Japandi, Coleção de Natal, linha Gears Pulseiras ou personalizações sob medida via Direct ou WhatsApp.</p>
+        <p>Encomendas da Coleção Japandi, Coleção de Natal ou personalizações sob medida via Direct ou WhatsApp.</p>
       </div>
       <div style="max-width:980px;margin:36px auto;padding:0 5%;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px">
         <div style="display:flex;flex-direction:column;gap:14px">
@@ -886,6 +707,29 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
+       POPUP "FIQUE POR DENTRO" (NEWSLETTER & LANÇAMENTOS ANTECIPADOS) — Item 11
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="newsletterModal" onclick="if(event.target===this)window.makerApp.closeNewsletterModal()">
+    <div class="modal-box newsletter-popup-box">
+      <button class="modal-close" onclick="window.makerApp.closeNewsletterModal()" aria-label="Fechar popup">✕</button>
+      <div class="newsletter-popup-badge">Acesso Antecipado</div>
+      <h3 class="newsletter-popup-title">Fique por dentro</h3>
+      <p class="newsletter-popup-subtitle">
+        Fique por dentro das últimas novidades e do lançamento da marca antes de todo mundo e aproveite descontos exclusivos.
+      </p>
+      <form class="newsletter-popup-form" onsubmit="window.makerApp.submitNewsletterModal(event)">
+        <div class="newsletter-input-group">
+          <input type="email" id="popupNewsletterEmail" placeholder="Digite seu melhor e-mail..." required autocomplete="email">
+          <button type="submit" class="btn-primary">Quero Receber Novidades →</button>
+        </div>
+      </form>
+      <p class="newsletter-privacy-disclaimer">
+        Ao cadastrar seu e-mail, você concorda com nossas Políticas de Privacidade e autoriza o envio de novidades, lançamentos e promoções exclusivas da marca. Você pode cancelar sua inscrição a qualquer momento.
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
        HIDDEN SECRET ADMIN VAULT CONSOLE (ACESSÍVEL SOMENTE VIA /admin OU #admin)
        ═══════════════════════════════════════════════════════════════════════ -->
   <div class="admin-vault-overlay" id="adminVaultOverlay">
@@ -965,28 +809,41 @@
     </button>
   </div>
 
-  <!-- Native Mobile Bottom Tab Navigation Dock (Android & iOS App Experience) -->
-  <nav class="mobile-bottom-nav" aria-label="Navegação Mobile">
-    <button type="button" class="mob-tab-btn active" id="mob-nav-inicio" onclick="window.makerApp.showPage('inicio')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Início</span>
+  <!-- Native Mobile Bottom Tab Navigation Dock (Item 12: Exactly 4 Silhouette Icons, No Separation Bars) -->
+  <nav class="mobile-bottom-nav" aria-label="Navegação Rápida">
+    <!-- 1. Lupa (Search) -->
+    <button type="button" class="mob-tab-btn" id="mob-nav-search" onclick="window.makerApp.handleBottomNavSearch()" aria-label="Buscar Produtos" title="Buscar">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
     </button>
-    <button type="button" class="mob-tab-btn" id="mob-nav-produtos" onclick="window.makerApp.showPage('produtos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
-      <span>Coleções</span>
-    </button>
-    <button type="button" class="mob-tab-btn" id="mob-nav-gears" onclick="window.makerApp.showPage('gears')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg>
-      <span>Gears</span>
-    </button>
-    <button type="button" class="mob-tab-btn" id="mob-nav-orcamento" onclick="window.makerApp.showPage('orcamento')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      <span>Sob Medida</span>
-    </button>
-    <button type="button" class="mob-tab-btn" id="mob-nav-sacola" onclick="window.makerApp.toggleDrawer('cartDrawer')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+
+    <!-- 2. Sacola (Shopping Bag Silhouette) -->
+    <button type="button" class="mob-tab-btn" id="mob-nav-sacola" onclick="window.makerApp.toggleDrawer('cartDrawer')" aria-label="Sacola de Compras" title="Sacola">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
       <span class="mob-tab-badge" id="mobNavCartCount" style="display:none">0</span>
-      <span>Sacola</span>
+    </button>
+
+    <!-- 3. Silhueta de Usuário (Person Silhouette) -->
+    <button type="button" class="mob-tab-btn" id="mob-nav-user" onclick="window.makerApp.handleGoogleButtonClick()" aria-label="Minha Conta" title="Minha Conta">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </button>
+
+    <!-- 4. 3 Tracinhos (Hamburger Menu Silhouette) -->
+    <button type="button" class="mob-tab-btn" id="mob-nav-menu" onclick="document.getElementById('navLinks').classList.toggle('open');this.classList.toggle('active')" aria-label="Menu Navegação" title="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <rect x="3" y="5" width="18" height="2.2" rx="1.1"/>
+        <rect x="3" y="11" width="18" height="2.2" rx="1.1"/>
+        <rect x="3" y="17" width="18" height="2.2" rx="1.1"/>
+      </svg>
     </button>
   </nav>
 
@@ -998,7 +855,7 @@
           <img src="logo.png?v=3" alt="Maker 3D" style="width:38px;height:38px;object-fit:contain" onerror="this.style.display='none'">
           <span class="dynamic-brand-name">Maker 3D</span>
         </div>
-        <p>Minimalismo orgânico e luxo acessível em impressão 3D. Coleção Japandi, Edição de Natal, Fidget Toys sensoriais e Branch Gears × Maker 3D.</p>
+        <p>Minimalismo orgânico e design autoral em impressão 3D de alta precisão. Coleção Japandi, Edição de Natal, Fidget Toys sensoriais e projetos sob medida.</p>
       </div>
 
       <div class="footer-col">
@@ -1006,9 +863,9 @@
         <ul>
           <li><a href="catalogo/" onclick="window.makerApp.openCollectionCategory('Coleção Japandi');return false;">Coleção Japandi</a></li>
           <li><a href="catalogo/" onclick="window.makerApp.openCollectionCategory('Coleção de Natal');return false;">Coleção de Natal</a></li>
-          <li><a href="gears/" onclick="window.makerApp.showPage('gears');return false;">Gears × Maker 3D (Pulseiras)</a></li>
           <li><a href="catalogo/" onclick="window.makerApp.openCollectionCategory('Fidget Toys');return false;">Fidget Toys Sensoriais</a></li>
           <li><a href="laboratorio-stl/" onclick="window.makerApp.showPage('orcamento');return false;">Personalizar (Sob Medida)</a></li>
+          <li><a href="sobre/" onclick="window.makerApp.showPage('sobre');return false;">Atelier Maker 3D</a></li>
         </ul>
       </div>
 
@@ -1031,11 +888,53 @@
       </div>
     </div>
 
+    <!-- Social Media Silhouette Icons Strip (Item 13: Facebook, Instagram, TikTok, X, YouTube) -->
+    <div class="footer-social-strip">
+      <span class="footer-social-label">Siga a Maker 3D</span>
+      <div class="footer-social-icons">
+        <!-- Facebook -->
+        <a href="#social-facebook" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Facebook Maker3D" title="Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/maker3d.oficial" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Instagram Maker3D" title="Instagram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+        </a>
+
+        <!-- TikTok -->
+        <a href="#social-tiktok" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="TikTok Maker3D" title="TikTok">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.89 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.35 0 .69.06 1 .17V9.45a6.34 6.34 0 00-1-.08A6.34 6.34 0 003.15 15.7a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V9.05a8.27 8.27 0 004.76 1.5V7.1a4.84 4.84 0 01-1-.41z"/>
+          </svg>
+        </a>
+
+        <!-- X (formerly Twitter) -->
+        <a href="#social-x" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="X Maker3D" title="X">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+
+        <!-- YouTube -->
+        <a href="#social-youtube" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="YouTube Maker3D" title="YouTube">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
     <div class="footer-bottom">
-      <p>© 2026 <span class="dynamic-brand-name">Maker 3D</span> & Branch <strong>Gears</strong> — Todos os direitos reservados.</p>
+      <p>© 2026 <span class="dynamic-brand-name">Maker 3D</span> — Todos os direitos reservados.</p>
       <div class="footer-bottom-links">
-        <a onclick="window.makerApp.showPage('gears')">Branch Gears</a>
+        <a onclick="window.makerApp.showPage('produtos')">Coleções</a>
         <a onclick="window.makerApp.showPage('orcamento')">Sob Medida</a>
+        <a onclick="window.makerApp.showPage('sobre')">Sobre</a>
         <a onclick="window.makerApp.handleGoogleButtonClick()">Minha Conta</a>
       </div>
     </div>

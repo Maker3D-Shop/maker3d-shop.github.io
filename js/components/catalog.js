@@ -303,9 +303,9 @@ export function setSort(val) {
 }
 
 export function setMaxPrice(val) {
-  maxPriceFilter = parseFloat(val) || 200;
+  maxPriceFilter = parseFloat(val) || 999999;
   const lbl = document.getElementById('priceFilterVal');
-  if (lbl) lbl.textContent = maxPriceFilter >= 200 ? 'Todos' : `Até R$ ${maxPriceFilter}`;
+  if (lbl) lbl.textContent = 'Todos';
   renderProducts();
 }
 
@@ -330,9 +330,7 @@ export function renderProducts() {
       (p.name || '').toLowerCase().includes(q) ||
       (p.desc || '').toLowerCase().includes(q) ||
       (p.category || '').toLowerCase().includes(q);
-    const effectivePrice = p.price ? p.price * (1 - (p.discount || 0) / 100) : 0;
-    const matchPrice = maxPriceFilter >= 200 || !p.price || effectivePrice <= maxPriceFilter;
-    return matchCat && matchSearch && matchPrice;
+    return matchCat && matchSearch;
   });
 
   if (currentSort === 'price-asc') {

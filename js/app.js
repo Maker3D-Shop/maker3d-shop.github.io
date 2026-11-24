@@ -88,14 +88,20 @@ function renderUserNavbarState() {
   if (authBtn) {
     if (user) {
       authBtn.innerHTML = `
-        <img src="${user.photoURL}" class="user-avatar" alt="${user.displayName}" onerror="this.style.display='none'">
-        <span class="user-name-label">${user.displayName.split(' ')[0]}</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="user-silhouette-icon">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
       `;
+      authBtn.title = user.displayName || 'Minha Conta';
     } else {
       authBtn.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 21.4 7.4 24 12 24z"/></svg>
-        <span class="user-name-label">Entrar / Conta</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="user-silhouette-icon">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
       `;
+      authBtn.title = 'Entrar / Conta';
     }
   }
 
@@ -228,9 +234,7 @@ async function signOutGoogle() {
 function resetCatalogFilters() {
   const s = document.getElementById('searchInput');
   if (s) s.value = '';
-  const pr = document.getElementById('priceFilterRange');
-  if (pr) pr.value = '200';
-  setMaxPrice(200);
+  setMaxPrice(999999);
   setFilter('todos');
 }
 
@@ -373,6 +377,46 @@ window.makerApp = {
     if (!cardEl) return;
     cardEl.style.transform = '';
   },
+  // Newsletter "Fique por dentro" Popup (Item 11)
+  openNewsletterModal: () => {
+    const modal = document.getElementById('newsletterModal');
+    if (modal) modal.classList.add('open');
+  },
+  closeNewsletterModal: () => {
+    const modal = document.getElementById('newsletterModal');
+    if (modal) modal.classList.remove('open');
+    try {
+      localStorage.setItem('maker3d_newsletter_closed', String(Date.now()));
+    } catch (_) {}
+  },
+  submitNewsletterModal: (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const inp = document.getElementById('popupNewsletterEmail');
+    const email = inp?.value?.trim();
+    if (!email || !email.includes('@')) {
+      showToast('Por favor, informe um e-mail válido.', 'error');
+      return;
+    }
+    try {
+      const subs = JSON.parse(localStorage.getItem('maker3d_subscribers') || '[]');
+      if (!subs.includes(email)) subs.push(email);
+      localStorage.setItem('maker3d_subscribers', JSON.stringify(subs));
+      localStorage.setItem('maker3d_newsletter_closed', String(Date.now()));
+    } catch (_) {}
+    const modal = document.getElementById('newsletterModal');
+    if (modal) modal.classList.remove('open');
+    showToast('Inscrição confirmada! Bem-vindo(a) à Maker 3D.', 'success');
+  },
+  handleBottomNavSearch: () => {
+    showPage('produtos');
+    setTimeout(() => {
+      const inp = document.getElementById('searchInput');
+      if (inp) {
+        inp.focus();
+        inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 200);
+  },
   // Secret Admin Vault methods (triggered ONLY via URL /admin or #admin)
   openAdminVault,
   closeAdminVault,
@@ -410,14 +454,24 @@ window.addEventListener('DOMContentLoaded', async () => {
   renderUserNavbarState();
   initReveal();
 
-  // Initialize Full 3D Interactive WebGL Spatial Engine (Ambient + Hero 3D Studio + Gears 3D + STL Lab)
+  // Initialize STL Lab for Custom Orders & Estimator
   setTimeout(() => {
-    viewer3D.initAmbientSpatialStage();
-    viewer3D.initHero3D();
     viewer3D.initStlLab();
     initStlEstimator();
     hideSiteLoadscreen();
-  }, 320);
+  }, 200);
+
+  // Auto-trigger Newsletter "Fique por dentro" Popup after 6s on first visit
+  try {
+    const closed = localStorage.getItem('maker3d_newsletter_closed');
+    // Cooldown 7 days (604800000ms)
+    if (!closed || (Date.now() - Number(closed) > 604800000)) {
+      setTimeout(() => {
+        const modal = document.getElementById('newsletterModal');
+        if (modal) modal.classList.add('open');
+      }, 5500);
+    }
+  } catch (_) {}
 
   // Check URL deep link (?id=ID or ?product=ID) or Subdirectory Route
   const params = new URLSearchParams(window.location.search);

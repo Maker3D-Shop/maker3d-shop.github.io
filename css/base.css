@@ -1,6 +1,14 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    Maker3D — Base, Reset, Typography & Layout Architecture
    ═══════════════════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'Eurostile Bold Extended';
+  src: url('../assets/fonts/eurostile-bold-extended.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -197,10 +205,8 @@ nav#mainNav.scrolled {
   cursor: pointer;
 }
 .nav-logo-img-wrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  overflow: hidden;
+  width: auto;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -209,11 +215,12 @@ nav#mainNav.scrolled {
   transition: var(--transition-bounce);
 }
 .nav-logo:hover .nav-logo-img-wrap {
-  transform: rotate(-6deg) scale(1.06);
+  transform: rotate(-3deg) scale(1.05);
 }
 .nav-logo-img-wrap img {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: 42px;
+  max-width: 48px;
   object-fit: contain;
   display: block;
 }
@@ -222,11 +229,12 @@ nav#mainNav.scrolled {
   flex-direction: column;
 }
 .nav-logo-brand {
-  font-family: 'Cormorant Garamond', 'DM Serif Display', serif;
-  font-size: 1.58rem;
-  font-weight: 600;
+  font-family: 'Eurostile Bold Extended', 'Eurostile', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
   color: var(--text-primary);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
   line-height: 1.05;
 }
 .nav-logo-tag {
@@ -269,76 +277,85 @@ nav#mainNav.scrolled {
 
 .icon-btn {
   position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--border-subtle);
-  background: var(--bg-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 0;
+  border: none;
+  background: transparent;
   color: var(--text-primary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 1.05rem;
-  transition: var(--transition-bounce);
+  transition: color 0.2s ease, transform 0.2s ease;
+  padding: 0;
+  box-shadow: none;
 }
 .icon-btn:hover {
-  border-color: var(--brand-primary);
+  background: transparent;
+  border: none;
   color: var(--brand-primary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: none;
 }
 .icon-btn .badge-counter {
   position: absolute;
   top: -4px;
-  right: -4px;
+  right: -6px;
   background: var(--brand-primary);
   color: #fff;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 800;
-  min-width: 19px;
-  height: 19px;
-  padding: 0 5px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
   border-radius: var(--radius-pill);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--bg-secondary);
+  border: 1.5px solid var(--bg-primary);
 }
 
-/* Google Auth User Pill */
+/* User Profile Silhouette Button (Border-free / Bubble-free) */
 .user-auth-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 14px 6px 8px;
-  border-radius: var(--radius-pill);
-  border: 1.5px solid var(--border-strong);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.84rem;
-  font-weight: 600;
+  justify-content: center;
   cursor: pointer;
-  transition: var(--transition);
+  padding: 0;
+  box-shadow: none;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 .user-auth-btn:hover {
-  background: var(--brand-pale);
-  border-color: var(--brand-primary);
-  transform: translateY(-1px);
+  background: transparent;
+  border: none;
+  color: var(--brand-primary);
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: none;
 }
-.user-avatar {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: var(--brand-primary);
-  color: #fff;
+.user-silhouette-icon {
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 0.75rem;
+}
+.user-auth-btn .user-name-label {
+  display: none;
+}
+.user-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 /* Hamburger */
@@ -421,12 +438,12 @@ main {
 
 /* Footer (Warm Off-White & Organic Cream Structure — No Dark Colors) */
 footer.site-footer {
-  background: linear-gradient(180deg, var(--bg-tertiary) 0%, var(--brand-pale) 100%);
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
   color: var(--text-secondary);
   padding: 68px 5% 32px;
   position: relative;
   z-index: 1;
-  border-top: 1px solid var(--border-strong);
+  border-top: 1px solid var(--border-subtle);
   border-radius: 44px 44px 0 0;
   margin-top: 32px;
 }
@@ -511,8 +528,56 @@ footer.site-footer {
 .newsletter-form button:hover {
   background: var(--brand-deep);
 }
+
+/* Social Media Silhouette Icons Strip (Item 13) */
+.footer-social-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 28px 0 22px;
+  border-top: 1px solid var(--border-subtle);
+  margin-bottom: 22px;
+}
+.footer-social-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+.footer-social-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+.social-icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  transition: color 0.2s ease, transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.social-icon-link:hover {
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: var(--shadow-sm);
+}
+.social-icon-link svg {
+  width: 18px;
+  height: 18px;
+}
+
 .footer-bottom {
-  border-top: 1px solid var(--border-strong);
+  border-top: 1px solid var(--border-subtle);
   padding-top: 22px;
   max-width: 1240px;
   margin: 0 auto;
@@ -655,21 +720,21 @@ footer.site-footer {
     display: none;
   }
 
-  /* Native Android / iOS Bottom Navigation Dock */
+  /* Native Mobile Bottom Navigation Dock (Item 12: 4 Silhouettes, No Separation Bars) */
   .mobile-bottom-nav {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: calc(64px + env(safe-area-inset-bottom, 0px));
+    height: calc(58px + env(safe-area-inset-bottom, 0px));
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: rgba(252, 250, 246, 0.94);
-    backdrop-filter: blur(22px) saturate(180%);
-    -webkit-backdrop-filter: blur(22px) saturate(180%);
-    border-top: 1px solid var(--border-strong);
-    box-shadow: 0 -6px 26px rgba(90, 67, 50, 0.08);
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-top: 1px solid var(--border-subtle);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
     z-index: 1350;
     align-items: center;
   }
@@ -678,49 +743,35 @@ footer.site-footer {
     border: none;
     color: var(--text-muted);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
     height: 100%;
     cursor: pointer;
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
     position: relative;
-    transition: color 0.2s ease, transform 0.2s ease;
+    transition: color 0.2s ease, transform 0.18s ease;
+    padding: 0;
   }
   .mob-tab-btn svg {
-    width: 20px;
-    height: 20px;
-    stroke-width: 2;
-    transition: transform 0.22s ease;
+    width: 23px;
+    height: 23px;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  .mob-tab-btn:active svg {
+    transform: scale(0.92);
   }
   .mob-tab-btn.active {
-    color: var(--brand-deep);
-    font-weight: 700;
-  }
-  .mob-tab-btn.active svg {
-    transform: translateY(-2px) scale(1.06);
     color: var(--brand-primary);
   }
   .mob-tab-btn.active::after {
-    content: '';
-    position: absolute;
-    top: 4px;
-    width: 18px;
-    height: 3px;
-    border-radius: 99px;
-    background: var(--brand-primary);
+    display: none;
   }
   .mob-tab-badge {
     position: absolute;
-    top: 6px;
-    right: calc(50% - 18px);
+    top: 10px;
+    right: calc(50% - 16px);
     background: var(--brand-primary);
     color: #fff;
-    font-size: 0.62rem;
+    font-size: 0.60rem;
     font-weight: 800;
     min-width: 16px;
     height: 16px;

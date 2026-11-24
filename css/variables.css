@@ -1,52 +1,52 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Maker3D — Accessible Luxury & Japandi Organic Palette (From Logo #f4f0e7 to Lighter Warm Tones)
+   Maker3D — Clean Minimalist & Japandi Organic Palette (Luminous Near-White)
    ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  /* Editorial Warm Taupe, Champagne & Espresso Bronze Accents */
-  --brand-primary: #8c6d53;
-  --brand-deep:    #5a4332;
-  --brand-mid:     #b08d6e;
-  --brand-light:   #d8c7b4;
-  --brand-soft:    #ece5d8;
-  --brand-pale:    #f4f0e7;
-  --brand-glow:    rgba(140, 109, 83, 0.16);
+  /* Refined Taupe, Espresso Bronze & Warm Slate Accents */
+  --brand-primary: #7a5c43;
+  --brand-deep:    #433226;
+  --brand-mid:     #9a785d;
+  --brand-light:   #cbd5e1;
+  --brand-soft:    #e5e7eb;
+  --brand-pale:    #f0f2f4;
+  --brand-glow:    rgba(122, 92, 67, 0.14);
 
-  /* Palette Variations from Attached Logo (#f4f0e7) to Lighter Off-White Alabaster */
-  --bg-logo-base:  #f4f0e7;
-  --bg-primary:    #f8f5ef;
-  --bg-secondary:  #fcfaf6;
-  --bg-tertiary:   #f1ece1;
-  --bg-glass:      rgba(252, 250, 246, 0.90);
-  --bg-nav:        rgba(248, 245, 239, 0.92);
-  --bg-card:       #fcfaf6;
+  /* Clean Luminous Near-White Aesthetic */
+  --bg-logo-base:  #f8f9fa;
+  --bg-primary:    #fafafa;
+  --bg-secondary:  #ffffff;
+  --bg-tertiary:   #f3f4f6;
+  --bg-glass:      rgba(255, 255, 255, 0.88);
+  --bg-nav:        rgba(255, 255, 255, 0.92);
+  --bg-card:       #ffffff;
 
-  /* Editorial Typography Colors (Warm Espresso & Stone — Never Harsh Black) */
-  --text-primary:   #2c221b;
-  --text-secondary: #68594c;
-  --text-muted:     #968677;
-  --text-inverse:   #fcfaf6;
+  /* Editorial Typography Colors (Deep Charcoal & Neutral Slate) */
+  --text-primary:   #1f2421;
+  --text-secondary: #4b5563;
+  --text-muted:     #9ca3af;
+  --text-inverse:   #ffffff;
 
-  /* Subtle Architectural Borders */
-  --border-subtle:  #e8e0d3;
-  --border-strong:  #d5c7b4;
-  --border-neutral: rgba(44, 34, 27, 0.08);
+  /* Subtle Architectural Borders (Clean Neutral Slate/Stone) */
+  --border-subtle:  #e9ecef;
+  --border-strong:  #dee2e6;
+  --border-neutral: rgba(0, 0, 0, 0.06);
 
-  /* Status Colors (Refined Muted Luxury Tones) */
-  --success:       #4d7c5d;
-  --success-bg:    rgba(77, 124, 93, 0.12);
-  --warning:       #b88644;
-  --warning-bg:    rgba(184, 134, 68, 0.14);
-  --danger:        #b95348;
-  --danger-bg:     rgba(185, 83, 72, 0.12);
-  --info:          #8c6d53;
-  --info-bg:       rgba(140, 109, 83, 0.14);
+  /* Status Colors */
+  --success:       #3e7552;
+  --success-bg:    rgba(62, 117, 82, 0.12);
+  --warning:       #b07d35;
+  --warning-bg:    rgba(176, 125, 53, 0.14);
+  --danger:        #b34035;
+  --danger-bg:     rgba(179, 64, 53, 0.12);
+  --info:          #7a5c43;
+  --info-bg:       rgba(122, 92, 67, 0.14);
 
-  /* Soft Warm Architectural Shadows */
-  --shadow-xs:     0 2px 8px rgba(90, 67, 50, 0.04);
-  --shadow-sm:     0 8px 22px rgba(90, 67, 50, 0.06);
-  --shadow-md:     0 14px 34px rgba(90, 67, 50, 0.08);
-  --shadow-lg:     0 24px 52px rgba(90, 67, 50, 0.11);
-  --shadow-btn:    0 10px 26px rgba(140, 109, 83, 0.24);
+  /* Soft Neutral Shadows (Clean, No Terracotta Mud) */
+  --shadow-xs:     0 2px 8px rgba(0, 0, 0, 0.03);
+  --shadow-sm:     0 8px 20px rgba(0, 0, 0, 0.05);
+  --shadow-md:     0 14px 30px rgba(0, 0, 0, 0.07);
+  --shadow-lg:     0 22px 48px rgba(0, 0, 0, 0.09);
+  --shadow-btn:    0 10px 24px rgba(122, 92, 67, 0.20);
 
   /* Organic Fluid Radii */
   --radius-xs:     12px;

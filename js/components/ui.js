@@ -47,7 +47,7 @@ const PAGE_ROUTE_MAP = {
   inicio: '',
   produtos: 'catalogo/',
   produto: 'produto/',
-  gears: 'gears/',
+  gears: 'catalogo/',
   orcamento: 'laboratorio-stl/',
   sobre: 'sobre/',
   contato: 'contato/'
@@ -60,6 +60,9 @@ function getRepoBaseUrl() {
 }
 
 export function showPage(id, pushRoute = true, queryParams = '') {
+  // If requested page is gears, redirect to produtos
+  if (id === 'gears') id = 'produtos';
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + id);
   if (target) target.classList.add('active');

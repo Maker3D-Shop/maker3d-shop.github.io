@@ -1,19 +1,19 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// Maker3D — Accessible Luxury & Japandi Home Decor, Fidget Toys, Natal & Gears
+// Maker3D — Japandi Home Decor, Fidget Toys & Adornos de Natal
 // ═══════════════════════════════════════════════════════════════════════════
 
 export const DEFAULT_SITE_SETTINGS = {
   brandName: 'Maker 3D',
-  brandTagline: 'Minimalismo Orgânico & Luxo Acessível',
-  primaryColor: '#8c6d53',
-  accentOrange: '#b08d6e',
+  brandTagline: 'Minimalismo Orgânico & Design Contemporâneo',
+  primaryColor: '#7a5c43',
+  accentOrange: '#9a785d',
   promoBarActive: false,
   promoBarText: '',
   promoPill: 'MAKER 3D ATELIER',
   freeShippingThreshold: 120,
-  heroBadge: 'DECORAÇÃO JAPANDI, NATAL, FIDGETS & PULSEIRAS 3D • DIRETO DO ATELIER',
-  heroTitleHtml: 'Decoração escultural & <em>luxo acessível</em> para sua casa a partir de R$ 18.',
-  heroSubtitle: 'Para quem busca ambientes sofisticados sem pagar preços de galeria: vasos e porta-trecos Japandi em textura de pedra travertino, adornos de Natal, Fidget Toys silenciosos e pulseiras autorais Gears × Maker 3D enviados para todo o Brasil.',
+  heroBadge: 'DECORAÇÃO JAPANDI, NATAL & FIDGETS 3D • DIRETO DO ATELIER',
+  heroTitleHtml: 'Decoração escultural & <em>design autoral</em> para sua casa a partir de R$ 18.',
+  heroSubtitle: 'Para quem busca ambientes sofisticados com estética de galeria: vasos e porta-trecos Japandi em textura de pedra travertino, adornos de Natal e Fidget Toys silenciosos enviados para todo o Brasil.',
   whatsappNumber: '5531984566047',
   instagramHandle: '@maker3d.oficial',
   instagramUrl: 'https://www.instagram.com/maker3d.oficial',
@@ -24,9 +24,6 @@ export const DEFAULT_SITE_SETTINGS = {
   githubOwner: 'Maker3D-Shop',
   githubRepo: 'maker3d-shop.github.io',
   githubBranch: 'main',
-  gearsBranchActive: true,
-  gearsBrandName: 'Gears × Maker 3D',
-  gearsTagline: 'Linha Autoral de Pulseiras & Acessórios Esculturais',
   filamentPricesPerKg: {
     PLA: 150,
     PETG: 120,
@@ -37,20 +34,14 @@ export const DEFAULT_SITE_SETTINGS = {
 export const DEFAULT_COUPONS = [
   { code: 'JAPANDI10', discountPct: 10, minOrder: 0, active: true, desc: '10% OFF na Coleção Japandi & Casa' },
   { code: 'NATAL15', discountPct: 15, minOrder: 60, active: true, desc: '15% OFF Especial de Natal' },
-  { code: 'GEARS10', discountPct: 10, minOrder: 40, active: true, desc: '10% OFF Linha Gears Pulseiras' },
   { code: 'MAKER10', discountPct: 10, minOrder: 0, active: true, desc: '10% OFF de boas-vindas' }
 ];
 
 export const DEFAULT_FAQS = [
   {
     id: 'faq-1',
-    q: 'O que define o conceito de Luxo Acessível e Coleção Japandi da Maker 3D?',
-    a: 'Unimos o minimalismo japonês ao aconchego escandinavo (estilo Japandi) com manufatura aditiva de altíssima precisão. Nossas peças decorativas têm acabamento texturizado orgânico em tons de areia, linho, travertino e bronze, com valores acessíveis direto do nosso atelier.'
-  },
-  {
-    id: 'faq-2',
-    q: 'Como funciona a branch Gears × Maker 3D de pulseiras?',
-    a: 'A Gears é nosso braço especializado em design vestível e acessórios contemporâneos. Na aba "Gears Pulseiras" você encontra pulseiras com elos orgânicos, tramas geométricas e acabamento acetinado desenvolvidas em conjunto com a Maker 3D.'
+    q: 'O que define a Coleção Japandi e o design da Maker 3D?',
+    a: 'Unimos o minimalismo japonês ao aconchego escandinavo (estilo Japandi) com manufatura aditiva de altíssima precisão. Nossas peças decorativas têm acabamento texturizado orgânico em tons de areia, linho, travertino e bronze, direto do nosso atelier.'
   },
   {
     id: 'faq-3',
@@ -252,7 +243,7 @@ export const FALLBACK_PRODUCTS = [
     ]
   },
 
-  // ─── COLEÇÃO DE NATAL (DECORAÇÃO NATALINA MINIMALISTA & LUXO ACESSÍVEL) ───
+  // ─── COLEÇÃO DE NATAL (DECORAÇÃO NATALINA MINIMALISTA & DESIGN AUTORAL) ───
   {
     id: 'natal-arvore-escultural-nordica',
     name: 'Pinheiro Escultural Plissado — Coleção de Natal',
@@ -338,90 +329,7 @@ export const FALLBACK_PRODUCTS = [
     ]
   },
 
-  // ─── BRANCH GEARS × MAKER 3D (LINHA DE PULSEIRAS ESCULTURAIS) ───
-  {
-    id: 'gears-pulseira-aura-link',
-    name: 'Pulseira Escultural Aura Link — Gears × Maker 3D',
-    emoji: '⌚',
-    category: 'Gears Pulseiras',
-    desc: 'Desenvolvida em collab pela branch Gears × Maker 3D: pulseira com elos orgânicos articulados impressos em peça única e polímero flexível Trust/TPU ou PLA Silk acetinado.',
-    price: 38,
-    badge: 'Collab Gears',
-    discount: 0,
-    rating: 5.0,
-    reviewsCount: 34,
-    downloadsCount: 1320,
-    printsCount: 780,
-    layerHeight: '0.10 mm Alta Precisão',
-    infill: '30% Gyroid Flex',
-    nozzle: '0.4 mm',
-    material: 'Trust Flex / PLA Silk',
-    weightGrams: 26,
-    printTime: '1h 20m',
-    model3d: 'assets/products/models/p3.glb',
-    image: 'https://makerworld.bblmw.com/makerworld/model/US23a8a1f23a9c84/design/8546f96ed132b6bf.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-    gallery: [
-      'https://makerworld.bblmw.com/makerworld/model/US23a8a1f23a9c84/design/8546f96ed132b6bf.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp',
-      'https://makerworld.bblmw.com/makerworld/model/US23a8a1f23a9c84/design/e9011f9744d8c675.jpg?x-oss-process=image%2Fresize%2Cw_400%2Fformat%2Cwebp'
-    ],
-    colorSections: [
-      {
-        name: 'Acabamento da Pulseira (Gears)',
-        colors: [
-          { name: 'Bronze Espresso', hex: '#5a4332' },
-          { name: 'Champagne Silk', hex: '#d8c3a5' },
-          { name: 'Preto Ônix Matte', hex: '#282420' },
-          { name: 'Dourado Natal', hex: '#c99b49' }
-        ]
-      }
-    ],
-    colors: [
-      { name: 'Bronze Espresso', hex: '#5a4332' },
-      { name: 'Champagne Silk', hex: '#d8c3a5' },
-      { name: 'Preto Ônix Matte', hex: '#282420' },
-      { name: 'Dourado Natal', hex: '#c99b49' }
-    ]
-  },
-  {
-    id: 'gears-pulseira-kinetica-wave',
-    name: 'Bracelete Orgânico Kinetic Wave — Linha Gears',
-    emoji: '〰️',
-    category: 'Gears Pulseiras',
-    desc: 'Bracelete anatômico com nervuras fluidas inspirado na estética Japandi e engenharia cinética da marca parceira Gears. Toque aveludado e encaixe sob medida.',
-    price: 42,
-    badge: 'Branch Oficial Gears',
-    discount: 0,
-    rating: 4.9,
-    reviewsCount: 19,
-    downloadsCount: 860,
-    printsCount: 490,
-    layerHeight: '0.10 mm',
-    infill: '25% Gyroid',
-    nozzle: '0.4 mm',
-    material: 'PLA Silk / TPU Flex',
-    weightGrams: 29,
-    printTime: '1h 35m',
-    model3d: 'assets/products/models/p5.glb',
-    image: 'https://makerworld.bblmw.com/makerworld/model/US58e8e7fedc0451/design/2025-07-17_736615c4896bc.gif?x-oss-process=image/resize,w_1000/format,webp',
-    gallery: [
-      'https://makerworld.bblmw.com/makerworld/model/US58e8e7fedc0451/design/2025-07-17_736615c4896bc.gif?x-oss-process=image/resize,w_1000/format,webp'
-    ],
-    colorSections: [
-      {
-        name: 'Tonalidade Gears',
-        colors: [
-          { name: 'Champagne Silk', hex: '#d8c3a5' },
-          { name: 'Taupe Orgânico', hex: '#b08d6e' },
-          { name: 'Bronze Espresso', hex: '#5a4332' }
-        ]
-      }
-    ],
-    colors: [
-      { name: 'Champagne Silk', hex: '#d8c3a5' },
-      { name: 'Taupe Orgânico', hex: '#b08d6e' },
-      { name: 'Bronze Espresso', hex: '#5a4332' }
-    ]
-  },
+
 
   // ─── FIDGET TOYS & ESCULTURAS CINÉTICAS DE MESA ───
   {

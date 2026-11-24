@@ -224,85 +224,8 @@ class Viewer3DManager {
    * Reacts to scroll depth and phone tilt / mouse position
    */
   initAmbientSpatialStage() {
-    const canvas = document.getElementById('spatialBgCanvas');
-    if (!canvas || typeof THREE === 'undefined') return;
-
-    this.ambientScene = new THREE.Scene();
-    this.ambientCamera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-    this.ambientCamera.position.set(0, 0, 9);
-
-    this.ambientRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    this.ambientRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    this.ambientRenderer.setSize(window.innerWidth, window.innerHeight, false);
-
-    const ambLight = new THREE.AmbientLight(0xfffcf7, 0.9);
-    this.ambientScene.add(ambLight);
-    const dirLight = new THREE.DirectionalLight(0xc8a97e, 1.1);
-    dirLight.position.set(6, 10, 8);
-    this.ambientScene.add(dirLight);
-
-    this.ambientGroup = new THREE.Group();
-    this.ambientScene.add(this.ambientGroup);
-
-    const ringMat = new THREE.MeshStandardMaterial({
-      color: 0xd8c7b4,
-      roughness: 0.45,
-      metalness: 0.2,
-      transparent: true,
-      opacity: 0.28
-    });
-    const pebbleMat = new THREE.MeshStandardMaterial({
-      color: 0xb08d6e,
-      roughness: 0.5,
-      metalness: 0.15,
-      transparent: true,
-      opacity: 0.22
-    });
-
-    const shapes = [
-      { geo: new THREE.TorusGeometry(1.6, 0.025, 16, 64), pos: [-4.2, 2.2, -3], rot: [0.6, 0.4, 0], mat: ringMat },
-      { geo: new THREE.TorusGeometry(2.1, 0.02, 16, 64), pos: [4.5, -1.8, -4], rot: [-0.5, 0.8, 0.2], mat: ringMat },
-      { geo: new THREE.OctahedronGeometry(0.55, 0), pos: [-3.6, -2.6, -2], rot: [0.2, 0.5, 0.1], mat: pebbleMat },
-      { geo: new THREE.IcosahedronGeometry(0.48, 1), pos: [3.8, 2.6, -2.5], rot: [0.4, -0.3, 0.2], mat: pebbleMat },
-      { geo: new THREE.TorusKnotGeometry(0.5, 0.08, 64, 12), pos: [0.2, -3.4, -4.5], rot: [0.3, 0.7, 0], mat: ringMat }
-    ];
-
-    shapes.forEach((s, idx) => {
-      const m = new THREE.Mesh(s.geo, s.mat);
-      m.position.set(...s.pos);
-      m.rotation.set(...s.rot);
-      m.userData = { baseY: s.pos[1], speed: 0.002 + idx * 0.0008, phase: idx * 1.3 };
-      this.ambientGroup.add(m);
-    });
-
-    window.addEventListener('resize', () => {
-      if (!this.ambientRenderer || !this.ambientCamera) return;
-      this.ambientCamera.aspect = window.innerWidth / window.innerHeight;
-      this.ambientCamera.updateProjectionMatrix();
-      this.ambientRenderer.setSize(window.innerWidth, window.innerHeight, false);
-    });
-
-    window.addEventListener('scroll', () => {
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      this.scrollProgress = window.scrollY / maxScroll;
-    }, { passive: true });
-
-    let t = 0;
-    const animateAmbient = () => {
-      requestAnimationFrame(animateAmbient);
-      t += 0.012;
-      if (this.ambientGroup) {
-        this.ambientGroup.rotation.y = this.scrollProgress * Math.PI * 0.65 + this.tiltX * 0.18;
-        this.ambientGroup.rotation.x = this.tiltY * 0.14;
-        this.ambientGroup.children.forEach(child => {
-          child.rotation.y += child.userData.speed;
-          child.rotation.x += child.userData.speed * 0.6;
-          child.position.y = child.userData.baseY + Math.sin(t + child.userData.phase) * 0.22;
-        });
-      }
-      this.ambientRenderer.render(this.ambientScene, this.ambientCamera);
-    };
-    animateAmbient();
+    // Disabled per Item 7 (remove floating geometric background shadows)
+    return;
   }
 
   setDeviceTiltNormalized(nx, ny) {
